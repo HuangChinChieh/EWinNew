@@ -51,6 +51,8 @@ const Main = () => {
   const [userInfo, setUserInfo] = useState([]);
   const [CT, setCT] = useState('');
   const [cookies, setCookie] = useCookies(['CT']);
+  const [Favos, setFavos] = useState([]);
+  const [newInstance, setNewInstance] = useState([]);
 
   useEffect(() => {
     // 開發時設定每5分鐘打一次api來獲取有效的 CT
@@ -81,13 +83,16 @@ const Main = () => {
 
 
   useEffect(() => {
+
     const instance = EWinGameLobbyClient.getInstance(CT, EWinUrl);
+
 
     if (instance !== null) {
 
-      // 設置相應的處理函數
-      instance.handleConnected(() => {
-        console.log('connected');
+      setNewInstance(instance);
+
+      const handleConnected = () => {
+        console.log('已連結');
 
         // 監聽連線狀態
         instance.HeartBeat(Echo);
@@ -97,11 +102,9 @@ const Main = () => {
         });
 
         if (tiList.length === 0 || userInfo === 0) {
-
           // 獲取使用者資料
           instance.GetUserInfo(CT, GUID, (userInfo) => {
             if (userInfo) {
-              // console.log('User information:', userInfo);
               setUserInfo(userInfo);
             } else {
               console.log('Failed to get user information.');
@@ -112,32 +115,48 @@ const Main = () => {
           instance.GetTableInfoList(CT, GUID, '', 0, (tabinfo) => {
             if (tabinfo && tabinfo.TableInfoList) {
               setTiList(tabinfo);
-              setIsLoading(false)
-              console.log('Table information:', tabinfo);
+              setIsLoading(false);
+              // console.log('Table information:', tabinfo);
             } else {
               console.error('tabInfoList is not an array:', tabinfo);
             }
           });
 
 
+          instance.GetUserAccountProperty(CT, GUID, "EWinGame.Favor", function (o) {
+            if (o) {
+              if (o.ResultCode == 0) {
+                setFavos(JSON.parse(o.PropertyValue));
+                // setIsLoading(false)
+              }
+            }
+          });
+
         } else {
           setIsLoading(false);
         }
+      };
 
-      });
-      instance.handleDisconnect(() => {
+      const handleDisconnect = () => {
         console.log('EWinHub 連結失效');
-      });
+      };
 
-      instance.handleReconnecting(() => {
+      const handleReconnecting = () => {
         console.log('重新連結 EWinHub');
-      });
+      };
 
-      instance.handleReconnected(() => {
+      const handleReconnected = () => {
         console.log('已重新連結 EWinHub');
-      });
+      };
+
+      instance.handleConnected(handleConnected);
+      instance.handleDisconnect(handleDisconnect);
+      instance.handleReconnecting(handleReconnecting);
+      instance.handleReconnected(handleReconnected);
+
       // 初始化連接
       instance.initializeConnection();
+
     }
   }, [CT, EWinUrl]);
 
@@ -158,7 +177,7 @@ const Main = () => {
       }
       <Switch>
         <Route path='/Gamefavorite'>
-          <Gamefavorite />
+          <Gamefavorite newInstance={newInstance} CT={CT} GUID={GUID} tiList={tiList} Favos={Favos} userInfo={userInfo} />
         </Route>
         <Route path='/games/:gameId'>
           <GameView
