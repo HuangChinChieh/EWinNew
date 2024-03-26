@@ -208,6 +208,46 @@ export class EWinGameLobbyClient {
      * F=和+莊對+閒對(1111)  
      */
 
+    /**
+    * 每日注單統計
+    * @typedef {Object} HistorySummary
+    * @param {string} SummaryDate 統計日期  
+    * @param {string} GameCode  遊戲代碼 
+    * @param {string} CurrencyType 幣別  
+    * @param {number} OrderCount 該日投注筆數
+    * @param {number} OrderValue 該日投注額度  
+    * @param {number} RewardValue 該日輸贏數
+    * @param {number} ValidBetValue 該日有效投注/轉碼數    
+    */
+
+    /**
+     * 每日注單統計
+     * @typedef {Object} HistoryDetail
+     * @param {string} RoundInfo 桌-靴-局
+     * @param {number} OrderID  投注流水號
+     * @param {number} OrderType 0=電投/1=快速電投/2=網投  
+     * @param {string} CurrencyType 幣別
+     * @param {number} GameSetID 工單號碼  
+     * @param {string} Result 該日輸贏數
+     * @param {number} OrderBanker 庄投注
+     * @param {number} OrderPlayer 閒投注
+     * @param {number} OrderTie 和投注
+     * @param {number} OrderBankerPair 庄對下注
+     * @param {number} OrderPlayerPair 閒對下注  
+     * @param {number} WinValue 贏數 
+     * @param {number} LoseValue 輸數
+     * @param {number} LendChipTax 放碼抽稅    
+     * @param {number} RewardValue 輸贏數    
+     * @param {number} BuyChipValue 轉碼數
+     * @param {number} AddChip 實際加彩金額
+     * @param {number} TipsValue 小費       
+     * @param {number} TableChip 桌台數 
+     * @param {number} BeforePoint 投注前餘額
+     * @param {string} CardInfo 開牌結果
+     * @param {string} SnapshotName 開牌結圖檔名
+     * @param {string} CreateDate 下注日期
+     */
+
     //#endregion
 
     //#endregion
@@ -256,6 +296,18 @@ export class EWinGameLobbyClient {
      * @param {TableInfo[]} TableInfoList 桌台資訊列表            
      */
 
+    /**
+     * 回傳，取得桌台資訊列表
+     * @typedef {APIResult} HistorySummaryResult
+     * @param {HistorySummary[]} SummaryList 桌台資訊列表            
+     */
+
+    /**
+    * 回傳，取得桌台資訊列表
+    * @typedef {APIResult} HistoryDetailResult
+    * @param {HistoryDetail[]} DetailList 桌台資訊列表            
+    */
+
     //#endregion
 
     /**
@@ -280,40 +332,36 @@ export class EWinGameLobbyClient {
       */
 
 
-    
+
 
     // 獲取使用者資料
-        /**
-    * 取得會員Info
-    * 
-    * @param {string} CT 用戶Token
-    * @param {string} GUID 請求驗證戳    
-    * @param {UserInfoResultCB} cb  callback
-    * 
-    * cb 回傳結果
-    * 
-    * @callback UserInfoResultCB
-    * @param {boolean} success 請求本身成功,失敗
-    * @param {UserInfoResult} o //回傳資料   
-    * @returns {void}
-    * 
-    * @description 
-    * 取得會員Info
-    *       
-    * @returns {void}
-    */
+    /**
+* 取得會員Info
+* 
+* @param {string} CT 用戶Token
+* @param {string} GUID 請求驗證戳    
+* @param {UserInfoResultCB} cb  callback
+* 
+* cb 回傳結果
+* 
+* @callback UserInfoResultCB
+* @param {boolean} success 請求本身成功,失敗
+* @param {UserInfoResult} o //回傳資料   
+* @returns {void}
+* 
+* @description 
+* 取得會員Info
+*       
+* @returns {void}
+*/
     GetUserInfo(CT, GUID, cb) {
         // console.log('Calling GetUserInfo method...');
         this.EWinHub.invoke("GetUserInfo", CT, GUID).done(function (o) {
-            console.log('GetUserInfo response:', o);
-            if (cb) {
-                cb(o);
-            }
+            if (cb)
+            cb(true, o);   
         }).fail(function (err) {
-            console.error('GetUserInfo failed:', err);
-            if (cb) {
-                cb(null);
-            }
+        if (cb)
+            cb(false, err);    
         });
     }
 
@@ -341,39 +389,34 @@ export class EWinGameLobbyClient {
       */
     GetUserAccountProperty(CT, GUID, PropertyName, cb) {
         this.EWinHub.invoke("GetUserAccountProperty", CT, GUID, PropertyName).done(function (o) {
-            console.log('GetUserAccountProperty response:', o);
-            if (cb) {
-                cb(o);
-            }
+            if (cb)
+                cb(true, o);   
         }).fail(function (err) {
-            console.error('GetUserAccountProperty failed:', err);
-            if (cb) {
-                cb(null);
-            }
-        })
+        if (cb)
+            cb(false, err);    
+        });
     }
 
     // 設定會員特定資料
-        /**
-     * 設定會員特定資料 
-     * 
-     * @param {string} CT 用戶Token
-     * @param {string} GUID 請求驗證戳
-     * @param {string} PropertyName 特定資料屬性名稱
-     * @param {string} PropertyValue //屬性值  
-     * @param {APIResultCB} cb  callback
-     * cb 回傳結果
-     * @callback APIResultCB
-     * @param {number} ResultCode 0=OK/1=ERR
-     * @param {boolean} success 請求本身成功,失敗
-     * @param {APIResult} o //回傳資料   
-     * @returns {void}
-     * 
-     * 
-     * @description 設定會員特定資料 
-     * 
-     * @returns {void}
-     */
+    /**
+ * 設定會員特定資料 
+ * 
+ * @param {string} CT 用戶Token
+ * @param {string} GUID 請求驗證戳
+ * @param {string} PropertyName 特定資料屬性名稱
+ * @param {string} PropertyValue //屬性值  
+ * @param {APIResultCB} cb  callback
+ * cb 回傳結果
+ * @callback APIResultCB
+ * @param {boolean} success 請求本身成功,失敗
+ * @param {APIResult} o //回傳資料   
+ * @returns {void}
+ * 
+ * 
+ * @description 設定會員特定資料 
+ * 
+ * @returns {void}
+ */
     SetUserAccountProperty(CT, GUID, PropertyName, PropertyValue, cb) {
         this.EWinHub.invoke("SetUserAccountProperty", CT, GUID, PropertyName, PropertyValue).done(function (o) {
             if (cb)
@@ -386,26 +429,25 @@ export class EWinGameLobbyClient {
 
 
 
-        /**
-     * 設定會員特定資料 
-     * 
-     * @param {string} CT 用戶Token
-     * @param {string} GUID 請求驗證戳
-     * @param {string} PropertyName 特定資料屬性名稱
-     * @param {string} PropertyValue //屬性值  
-     * @param {APIResultCB} cb  callback
-     * cb 回傳結果
-     * @callback APIResultCB
-     * @param {number} ResultCode 0=OK/1=ERR
-     * @param {boolean} success 請求本身成功,失敗
-     * @param {APIResult} o //回傳資料   
-     * @returns {void}
-     * 
-     * 
-     * @description 設定會員特定資料 
-     * 
-     * @returns {void}
-     */
+    /**
+ * 設定會員特定資料 
+ * 
+ * @param {string} CT 用戶Token
+ * @param {string} GUID 請求驗證戳
+ * @param {string} PropertyName 特定資料屬性名稱
+ * @param {string} PropertyValue //屬性值  
+ * @param {APIResultCB} cb  callback
+ * cb 回傳結果
+ * @callback APIResultCB
+ * @param {boolean} success 請求本身成功,失敗
+ * @param {APIResult} o //回傳資料   
+ * @returns {void}
+ * 
+ * 
+ * @description 設定會員特定資料 
+ * 
+ * @returns {void}
+ */
     RemoveUserAccountProperty(CT, GUID, PropertyName, cb) {
         this.EWinHub.invoke("RemoveUserAccountProperty", CT, GUID, PropertyName).done(function (o) {
             if (cb)
@@ -417,25 +459,25 @@ export class EWinGameLobbyClient {
     }
 
     // 設定會員多個特定資料 
-        /**
-    * 設定會員多個特定資料 
-    * 
-    * @param {string} CT 用戶Token
-    * @param {string} GUID 請求驗證戳
-    * @param {PropertySet[]} PS 資料屬性集合
-    * @param {APIResultCB} cb  callback
-    * cb 回傳結果
-    * @callback APIResultCB
-    * @param {number} ResultCode 0=OK/1=ERR
-    * @param {boolean} success 請求本身成功,失敗
-    * @param {APIResult} o //回傳資料   
-    * @returns {void}
-    * 
-    * 
-    * @description 設定會員多個特定資料 
-    * 
-    * @returns {void}
-    */
+    /**
+* 設定會員多個特定資料 
+* 
+* @param {string} CT 用戶Token
+* @param {string} GUID 請求驗證戳
+* @param {PropertySet[]} PS 資料屬性集合
+* @param {APIResultCB} cb  callback
+* cb 回傳結果
+* @callback APIResultCB
+* @param {number} ResultCode 0=OK/1=ERR
+* @param {boolean} success 請求本身成功,失敗
+* @param {APIResult} o //回傳資料   
+* @returns {void}
+* 
+* 
+* @description 設定會員多個特定資料 
+* 
+* @returns {void}
+*/
     UpdateProperty(CT, GUID, PS, cb) {
         this.EWinHub.invoke("UpdateProperty", CT, GUID, PS).done(function (o) {
             if (cb)
@@ -449,32 +491,32 @@ export class EWinGameLobbyClient {
 
 
     // 設定會員裝置資訊
-        /**
-    * 設定會員裝置資訊
-    * 
-    * @param {string} CT 用戶Token
-    * @param {string} GUID 請求驗證戳
-    * @param {string} DeviceGUID 裝置識別碼
-    * @param {string} PushType 推播類型 0=None,1=FCM,2=JPush
-    * @param {string} DeviceName 裝置名稱
-    * @param {string} DeviceKey 裝置Key(可能是搭配fingerPrint使用)
-    * @param {string} DeviceType 0=未知,1=PC,2=Mobile
-    * @param {string} NotifyToken 推播Token
-    * @param {string} GPSPosition GPS位置
-    * @param {string} UserAgent Http UserAgent
-    * @param {APIResultCB} cb  callback
-    * cb 回傳結果
-    * @callback APIResultCB
-    * @param {number} ResultCode 0=OK/1=ERR
-    * @param {boolean} success 請求本身成功,失敗
-    * @param {APIResult} o //回傳資料   
-    * @returns {void}
-    * 
-    * 
-    * @description 設定會員裝置資訊 
-    * 
-    * @returns {void}
-    */
+    /**
+* 設定會員裝置資訊
+* 
+* @param {string} CT 用戶Token
+* @param {string} GUID 請求驗證戳
+* @param {string} DeviceGUID 裝置識別碼
+* @param {string} PushType 推播類型 0=None,1=FCM,2=JPush
+* @param {string} DeviceName 裝置名稱
+* @param {string} DeviceKey 裝置Key(可能是搭配fingerPrint使用)
+* @param {string} DeviceType 0=未知,1=PC,2=Mobile
+* @param {string} NotifyToken 推播Token
+* @param {string} GPSPosition GPS位置
+* @param {string} UserAgent Http UserAgent
+* @param {APIResultCB} cb  callback
+* cb 回傳結果
+* @callback APIResultCB
+* @param {number} ResultCode 0=OK/1=ERR
+* @param {boolean} success 請求本身成功,失敗
+* @param {APIResult} o //回傳資料   
+* @returns {void}
+* 
+* 
+* @description 設定會員裝置資訊 
+* 
+* @returns {void}
+*/
     UpdateDeviceInfo(CT, GUID, DeviceGUID, PushType, DeviceName, DeviceKey, DeviceType, NotifyToken, GPSPosition, UserAgent, cb) {
         this.EWinHub.invoke("UpdateDeviceInfo", CT, GUID, DeviceGUID, PushType, DeviceName, DeviceKey, DeviceType, NotifyToken, GPSPosition, UserAgent).done(function (o) {
             if (cb)
@@ -485,50 +527,34 @@ export class EWinGameLobbyClient {
         });
     }
 
-    
+
 
 
     // 獲取首頁相關桌台資訊
-        /**
-    * 取得桌台資訊
-    * 
-    * @param {string} CT 用戶Token
-    * @param {string} GUID 請求驗證戳    
-    * @param {string} AreaCode 查詢地區，空白=所有地區    
-    * @param {number} GameSetID 額外綁定工單號，沒有傳0
-    * @param {TableInfoListResultCB} cb  callback
-    * 
-    * cb 回傳結果
-    * 
-    * @callback TableInfoListResultCB
-    * @param {boolean} success 請求本身成功,失敗
-    * @param {TableInfoListResult} o //回傳資料   
-    * @returns {void}
-    * 
-    * @description 
-    * 取得會員特定資料 
-    *       
-    * @returns {void}
-    */
+    /**
+* 取得桌台資訊
+* 
+* @param {string} CT 用戶Token
+* @param {string} GUID 請求驗證戳    
+* @param {string} AreaCode 查詢地區，空白=所有地區    
+* @param {number} GameSetID 額外綁定工單號，沒有傳0
+* @param {TableInfoListResultCB} cb  callback
+* 
+* cb 回傳結果
+* 
+* @callback TableInfoListResultCB
+* @param {boolean} success 請求本身成功,失敗
+* @param {TableInfoListResult} o //回傳資料   
+* @returns {void}
+* 
+* @description 
+* 取得會員特定資料 
+*       
+* @returns {void}
+*/
     GetTableInfoList(CT, GUID, AreaCode, GameSetID, cb) {
         // console.log('Calling GetTableInfoList method...');
         this.EWinHub.invoke("GetTableInfoList", CT, GUID, AreaCode, GameSetID).done(function (o) {
-            // console.log('webClient', o)
-            if (cb) {
-                cb(o);
-            }
-        }).fail(function (err) {
-            console.error('GetTableInfoList failed:', err);
-            if (cb) {
-                cb(null);
-            }
-        });
-    }
-
-
-
-    GetSIDParam(CT, GUID, ParamName, cb) {
-        this.EWinHub.invoke("GetSIDParam", CT, GUID, ParamName).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -537,8 +563,31 @@ export class EWinGameLobbyClient {
         });
     }
 
-    SetSIDParam(CT, GUID, ParamName, ParamValue, cb) {
-        this.EWinHub.invoke("SetSIDParam", CT, GUID, ParamName, ParamValue).done(function (o) {
+    // 查詢遊戲每日統計
+    /**
+* 查詢遊戲每日統計
+* 
+* @param {string} CT 用戶Token
+* @param {string} GUID 請求驗證戳    
+* @param {string} BeginDate 起始日期，(有效日期字串,ex:2023/01/01 00:00:00)    
+* @param {string} EndDate 結束日期，(有效日期字串,ex:2023/01/01 00:00:00)    
+* @param {HistorySummaryResultCB} cb  callback
+* 
+* cb 回傳結果
+* 
+* @callback HistorySummaryResultCB
+* @param {boolean} success 請求本身成功,失敗
+* @param {HistorySummaryResult} o //回傳資料   
+* @returns {void}
+* 
+* @description 
+* 查詢遊戲每日統計
+*       
+* @returns {void}
+*/
+    GetHistorySummary(CT, GUID, BeginDate, EndDate, cb) {
+        // console.log('Calling GetTableInfoList method...');
+        this.EWinHub.invoke("GetHistorySummary", CT, GUID, BeginDate, EndDate).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -547,9 +596,31 @@ export class EWinGameLobbyClient {
         });
     }
 
-
-    SetPeekingCard(CT, GUID, GameSetID, CurrencyType, RoadMapNumber, ShoeNumber, RoundNumber, CardId, Action, x, y, cb) {
-        this.EWinHub.invoke("SetPeekingCard", CT, GUID, GameSetID, CurrencyType, RoadMapNumber, ShoeNumber, RoundNumber, CardId, Action, x, y).done(function (o) {
+    // 查詢遊戲詳細記錄
+    /**
+* 查詢遊戲詳細記錄
+* 
+* @param {string} CT 用戶Token
+* @param {string} GUID 請求驗證戳    
+* @param {string} GameCode 遊戲代碼    
+* @param {string} QueryDate 查詢日期，(有效日期字串,ex:2023/01/01 00:00:00)   
+* @param {HistoryDetailResultCB} cb  callback
+* 
+* cb 回傳結果
+* 
+* @callback HistoryDetailResultCB
+* @param {boolean} success 請求本身成功,失敗
+* @param {HistoryDetailResult} o //回傳資料   
+* @returns {void}
+* 
+* @description 
+* 查詢遊戲詳細記錄
+*       
+* @returns {void}
+*/
+    GetHistoryDetail(CT, GUID, GameCode, QueryDate, cb) {
+        // console.log('Calling GetTableInfoList method...');
+        this.EWinHub.invoke("GetHistoryDetail", CT, GUID, GameCode, QueryDate).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -558,9 +629,29 @@ export class EWinGameLobbyClient {
         });
     }
 
-
-    SetGameSetID = function (CT, GUID, GameSetID, cb) {
-        this.EWinHub.invoke("SetGameSetID", CT, GUID, GameSetID).done(function (o) {
+    // Keep Token
+    /**
+* Keep Token
+* 
+* @param {string} CT 用戶Token
+* @param {string} GUID 請求驗證戳    
+* @param {APIResultCB} cb  callback
+* 
+* cb 回傳結果
+* 
+* @param {number} ResultCode 0=OK/1=ERR
+* @param {boolean} success 請求本身成功,失敗
+* @param {APIResult} o //回傳資料  
+* @returns {void}
+* 
+* @description 
+* Keep Token 
+*       
+* @returns {void}
+*/
+    KeepSID(CT, GUID, cb) {
+        // console.log('Calling GetTableInfoList method...');
+        this.EWinHub.invoke("KeepSID", CT, GUID).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -569,35 +660,6 @@ export class EWinGameLobbyClient {
         });
     }
 
-    AddSubscribe(CT, GUID, RoadMapNumberList, ResetSubscribe, cb) {
-        this.EWinHub.invoke("AddSubscribe", CT, GUID, RoadMapNumberList, ResetSubscribe).done(function (o) {
-            if (cb)
-                cb(true, o);
-        }).fail(function (err) {
-            if (cb)
-                cb(false, err);
-        });
-    }
-
-    ClearSubscribe(CT, GUID, cb) {
-        this.EWinHub.invoke("ClearSubscribe", CT, GUID).done(function (o) {
-            if (cb)
-                cb(true, o);
-        }).fail(function (err) {
-            if (cb)
-                cb(false, err);
-        });
-    }
-
-    RefreshSubscribe(CT, GUID, GameSetID, RoadMapNumber, StreamType, cb) {
-        this.EWinHub.invoke("RefreshSubscribe", CT, GUID, GameSetID, RoadMapNumber, StreamType).done(function (o) {
-            if (cb)
-                cb(true, o);
-        }).fail(function (err) {
-            if (cb)
-                cb(false, err);
-        });
-    }
 
     state() {
         return this.currentState;
