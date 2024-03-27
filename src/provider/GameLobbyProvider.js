@@ -15,7 +15,6 @@ const GameLobbyProvider = ({ children }) => {
     const { t } = useLanguage();
 
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
-    const [isLoading, setIsLoading] = useState(true);
     const [CT, setCT] = useState('');
     const [cookies, setCookie] = useCookies(['CT']);
     const GUID = generateUUIDv4();
@@ -24,6 +23,7 @@ const GameLobbyProvider = ({ children }) => {
 
     // Lobby 相關資料
 
+    const [isLoading, setIsLoading] = useState(true);
     const [newInstance, setNewInstance] = useState([]);
 
     // 列表資料
@@ -76,72 +76,78 @@ const GameLobbyProvider = ({ children }) => {
                     console.log('處理接收訊息', Msg);
                 });
 
-                if (tiList.length === 0 || userInfo === 0) {
-                    // 獲取使用者資料
+                // if (tiList.length === 0 || userInfo === 0) {
+                //    
+                // } else {
+                //     setIsLoading(true);
+                // }
 
-                    instance.GetUserInfo(CT, GUID, (s, o) => {
-                        if (s) {
-                            if (o.ResultCode == 0) {
-                                //資料處理
-                                // console.log('UserInfo', o);
-                                setUserInfo(o);
-                            } else {
-                                //系統錯誤處理
-                                console.log('系統錯誤處理');
-
-                            }
+                // 獲取使用者資料
+                instance.GetUserInfo(CT, GUID, (s, o) => {
+                    if (s) {
+                        if (o.ResultCode == 0) {
+                            //資料處理
+                            // console.log('UserInfo', o);
+                            setUserInfo(o);
                         } else {
-                            //傳輸等例外問題處理
-                            console.log('傳輸等例外問題處理');
+                            //系統錯誤處理
+                            console.log('GetUserInfo: 系統錯誤處理');
+                            setIsLoading(true);
+
                         }
-                    });
+                    } else {
+                        //傳輸等例外問題處理
+                        console.log('GetUserInfo: 傳輸等例外問題處理');
+                        setIsLoading(true);
+                    }
+                });
 
 
 
-                    // 獲取LOBBY 頁面的 table list相關資料
+                // 獲取LOBBY 頁面的 table list相關資料
 
-                    instance.GetTableInfoList(CT, GUID, '', 0, (s, o) => {
-                        if (s) {
-                            if (o.ResultCode == 0) {
-                                //資料處理
-                                // console.log('TableList', o);
-                                setTiList(o);
-                                setIsLoading(false);
-                            } else {
-                                //系統錯誤處理
-                                console.log('系統錯誤處理');
-
-                            }
+                instance.GetTableInfoList(CT, GUID, '', 0, (s, o) => {
+                    if (s) {
+                        if (o.ResultCode == 0) {
+                            //資料處理
+                            // console.log('TableList', o);
+                            setTiList(o);
+                            setIsLoading(false);
                         } else {
-                            //傳輸等例外問題處理
-                            console.log('傳輸等例外問題處理');
+                            //系統錯誤處理
+                            console.log('GetTableInfoList: 系統錯誤處理');
+                            setIsLoading(true);
+
                         }
-                    });
+                    } else {
+                        //傳輸等例外問題處理
+                        console.log('GetTableInfoList: 傳輸等例外問題處理');
+                        setIsLoading(true);
+                    }
+                });
 
 
-                    instance.GetUserAccountProperty(CT, GUID, 'EWinGame.Favor', (s, o) => {
-                        if (s) {
-                            if (o.ResultCode == 0) {
-                                //資料處理
-                                // console.log('tUserAccountProperty', o);
-                                setFavos(JSON.parse(o.PropertyValue));
+                instance.GetUserAccountProperty(CT, GUID, 'EWinGame.Favor', (s, o) => {
+                    if (s) {
+                        if (o.ResultCode == 0) {
+                            //資料處理
+                            // console.log('tUserAccountProperty', o);
+                            setFavos(JSON.parse(o.PropertyValue));
 
-                            } else {
-                                //系統錯誤處理
-                                console.log('系統錯誤處理');
-
-                            }
                         } else {
-                            //傳輸等例外問題處理
-                            console.log('傳輸等例外問題處理');
+                            //系統錯誤處理
+                            console.log('GetUserAccountProperty: 系統錯誤處理');
+                            setIsLoading(true);
                         }
-                    });
+                    } else {
+                        //傳輸等例外問題處理
+                        console.log('GetUserAccountProperty: 傳輸等例外問題處理');
+                        setIsLoading(true);
+                    }
+                });
 
 
 
-                } else {
-                    setIsLoading(false);
-                }
             };
 
             const handleDisconnect = () => {
@@ -183,9 +189,9 @@ const GameLobbyProvider = ({ children }) => {
             Echo,
             newInstance,
             Favos,
-            setFavos,
             tiList,
-            userInfo
+            userInfo,
+            setFavos
 
         }}>
             {children}

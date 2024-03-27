@@ -43,7 +43,7 @@ const GameHeader = (props) => {
                 {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
                 <span className='user-icon' />
                 <HowToPlayButton />
-                <GameFavorite url={props.url} />
+                <GameFavorite />
             </div>
             <div className='game-middle-box'>
                 <Marquee />
