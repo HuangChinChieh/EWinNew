@@ -1,7 +1,8 @@
 ﻿import { hubConnection } from 'signalr-no-jquery';
+
 export class EWinGameBaccaratClient {
     constructor(CT, eWinUrl) {
-        this.conn = $.hubConnection();
+        this.conn = hubConnection();
         this.CT = CT;
         if (eWinUrl) {
             this.EWinUrl = eWinUrl;
@@ -330,7 +331,6 @@ export class EWinGameBaccaratClient {
       * cb 回傳結果
       * 
       * @callback APIResultCB
-      * @param {number} ResultCode 0=OK/1=ERR
       * @param {boolean} success 請求本身成功,失敗
       * @param {APIResult} o //回傳資料   
       * @returns {void}
@@ -360,7 +360,6 @@ export class EWinGameBaccaratClient {
      * @param {APIResultCB} cb  callback
      * cb 回傳結果
      * @callback APIResultCB
-     * @param {number} ResultCode 0=OK/1=ERR
      * @param {boolean} success 請求本身成功,失敗
      * @param {APIResult} o //回傳資料   
      * @returns {void}
@@ -388,7 +387,6 @@ export class EWinGameBaccaratClient {
      * @param {APIResultCB} cb  callback
      * cb 回傳結果
      * @callback APIResultCB
-     * @param {number} ResultCode 0=OK/1=ERR
      * @param {boolean} success 請求本身成功,失敗
      * @param {APIResult} o //回傳資料   
      * @returns {void}
@@ -423,7 +421,6 @@ export class EWinGameBaccaratClient {
     * @param {APIResultCB} cb  callback
     * cb 回傳結果
     * @callback APIResultCB
-    * @param {number} ResultCode 0=OK/1=ERR
     * @param {boolean} success 請求本身成功,失敗
     * @param {APIResult} o //回傳資料   
     * @returns {void}
@@ -456,7 +453,6 @@ export class EWinGameBaccaratClient {
     * @param {UserAccountBetLimitListResultCB} cb  callback
     * cb 回傳結果
     * @callback UserAccountBetLimitListResultCB
-    * @param {number} ResultCode 0=OK/1=ERR
     * @param {boolean} success 請求本身成功,失敗
     * @param {UserAccountBetLimitListResult} o //回傳資料   
     * @returns {void}
