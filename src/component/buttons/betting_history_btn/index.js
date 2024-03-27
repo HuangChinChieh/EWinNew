@@ -1,14 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from 'hooks';
 import './index.scss';
-
+import { useLobbyContext } from 'provider/GameLobbyProvider';
+import { select } from 'react-cookies';
+import { event } from 'jquery';
 const BettingHistory = () => {
-
+    const { CT }= useLobbyContext();
     const { t } = useLanguage();
     const [hoveredItem, setHoveredItem] = useState(null);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const [isSet, setIsSet] = useState(false);
     const settingsRef = useRef(null);
+    const [selectBeginDate,setSelectBeginDate]=useState('');
+    const [selectEndDate,setSelectEndDate]=useState('');
+
+
+
 
     // const tableHeaders = ['日期', '類型', '上下數', '詳細內容'];
     const tableHeaders = [t("Global.date"), t("Global.type"), t('Global.win_lose'), t("Global.details")];
@@ -35,10 +42,17 @@ const BettingHistory = () => {
         }
     };
 
+    const handleBeginDate=(event)=>{
+        setSelectBeginDate(event.target.value)
+    }
+    const handleEndDate=(event)=>{
+        setSelectEndDate(event.target.value)
+    }
+
     useEffect(() => {
         // 在 component mount 時加入 click 事件監聽器
         document.addEventListener('click', handleDocumentClick);
-
+        console.log('2U2',CT);
         // 在 component unmount 時移除 click 事件監聽器
         return () => {
             document.removeEventListener('click', handleDocumentClick);
@@ -55,6 +69,16 @@ const BettingHistory = () => {
 
                 <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                     <div className='title'>{t('Global.bet_history')}</div>
+                    
+                    {/* <div className='flex-box'>
+                        <div>{t('Global.begindate')}
+                            <input type="date" id="begindate" value={selectBeginDate} onChange={handleBeginDate} name="begindate"/>
+                        </div>
+                        <div>{t('Global.enddate')}
+                            <input type="date" id="enddate" value={selectEndDate} onChange={handleEndDate} name="enddate"/>
+                        </div>
+                    </div> */}
+                    
                     <div className='dis'>
                         <table>
                             <thead>

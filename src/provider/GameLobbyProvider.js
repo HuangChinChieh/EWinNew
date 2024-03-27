@@ -22,6 +22,7 @@ const GameLobbyProvider = ({ children }) => {
     const Echo = 'Test_Echo';
     const [Favos, setFavos] = useState([]);
 
+
     // Lobby 相關資料
 
     const [newInstance, setNewInstance] = useState([]);
@@ -136,6 +137,25 @@ const GameLobbyProvider = ({ children }) => {
                             console.log('傳輸等例外問題處理');
                         }
                     });
+
+                    instance.GetHistorySummary(CT, GUID, '','', (s, o) => {
+                        if (s) {
+                            if (o.ResultCode == 0) {
+                                //資料處理
+                                console.log(o);
+
+                            } else {
+                                //系統錯誤處理
+                                console.log('系統錯誤處理');
+
+                            }
+                        } else {
+                            //傳輸等例外問題處理
+                            console.log('傳輸等例外問題處理');
+                        }
+                    });
+
+
 
 
 

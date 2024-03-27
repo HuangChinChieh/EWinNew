@@ -27,8 +27,22 @@
 
             .flex-box {
                 display: flex;
-                justify-content: space-between;
+                justify-content: space-around;
                 align-items: center;
+                margin: 10px 0px;
+                input{
+                    margin-left: 5px;
+                    max-width: 100px;
+                    font-size: 13.5px;
+                    color: #fff;
+                    border-radius: 5px;
+                    background-color: rgba(180, 180, 180, 0.199);
+                    
+                }
+                input::-webkit-calendar-picker-indicator{
+                    filter: invert(1);
+
+                }
             }
 
             &.visible {
