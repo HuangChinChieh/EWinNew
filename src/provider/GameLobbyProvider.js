@@ -1,5 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
+import {
+    BrowserRouter as Router,
+    useHistory,
+    useLocation
+} from "react-router-dom";
 import { useLanguage } from 'hooks';
 import { generateUUIDv4 } from 'utils/guid';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
@@ -13,14 +18,17 @@ export const useLobbyContext = () => useContext(GameLobbyContext);
 // 最上層的元件，設置各初始值
 const GameLobbyProvider = ({ children }) => {
     const { t } = useLanguage();
-
+    const location = useLocation();
+    const history = useHistory();
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
+    const [domain, setDomain] = useState('');
     const [CT, setCT] = useState('');
     const [cookies, setCookie] = useCookies(['CT']);
     const GUID = generateUUIDv4();
     const Echo = 'Test_Echo';
     const [Favos, setFavos] = useState([]);
     const [shoeResults, setShoeResults] = useState('');
+    const [isFavorited, setIsFavorited] = useState(false);
 
     // Lobby 相關資料
 
@@ -31,6 +39,8 @@ const GameLobbyProvider = ({ children }) => {
     const [tiList, setTiList] = useState([]);
     // 使用者資料
     const [userInfo, setUserInfo] = useState([]);
+
+
 
     useEffect(() => {
         // 開發時設定每5分鐘打一次api來獲取有效的 CT
@@ -184,6 +194,7 @@ const GameLobbyProvider = ({ children }) => {
         <GameLobbyContext.Provider value={{
             t,
             EWinUrl,
+            domain,
             isLoading,
             CT,
             cookies,
@@ -194,6 +205,8 @@ const GameLobbyProvider = ({ children }) => {
             tiList,
             userInfo,
             shoeResults,
+            isFavorited,
+            setIsFavorited,
             setShoeResults,
             setFavos
 

@@ -81,19 +81,26 @@ const Section = (props) => {
 
     useEffect(() => {
         if (newInstance !== null) {
-            newInstance.GetUserAccountProperty(CT, GUID, "EWinGame.Favor", function (o) {
-                if (o) {
+            newInstance.GetUserAccountProperty(CT, GUID, "EWinGame.Favor", function (s, o) {
+                if (s) {
                     if (o.ResultCode == 0) {
                         setstrFavo(o.PropertyValue);
                         setFavos(JSON.parse(o.PropertyValue));
                         // props.toggleFavorite(JSON.parse(o.PropertyValue));
+                    } else {
+                        //系統錯誤處理
+                        console.log('GetUserAccountProperty: 系統錯誤處理');
                     }
+                } else {
+                    //傳輸等例外問題處理
+                    console.log('GetUserAccountProperty: 傳輸等例外問題處理');
                 }
             });
             // eWinGameLobbyClient.handleConnected(() => {
             // })
         }
     }, []);
+
 
 
     const toggleMute = async (TableNumber) => {
