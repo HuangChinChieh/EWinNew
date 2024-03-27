@@ -83,7 +83,7 @@ const GameLobbyProvider = ({ children }) => {
                         if (s) {
                             if (o.ResultCode == 0) {
                                 //資料處理
-                                console.log('UserInfo', o);
+                                // console.log('UserInfo', o);
                                 setUserInfo(o);
                             } else {
                                 //系統錯誤處理
@@ -146,14 +146,17 @@ const GameLobbyProvider = ({ children }) => {
 
             const handleDisconnect = () => {
                 console.log('EWinHub 連結失效');
+                setIsLoading(true);
             };
 
             const handleReconnecting = () => {
                 console.log('重新連結 EWinHub');
+                setIsLoading(true);
             };
 
             const handleReconnected = () => {
                 console.log('已重新連結 EWinHub');
+                setIsLoading(true);
             };
 
             instance.handleConnected(handleConnected);
