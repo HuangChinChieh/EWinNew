@@ -1,8 +1,11 @@
-import { useLanguage } from 'hooks';
+
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
-function Footer(props) {
-    const { t } = useLanguage();
-    const userInfo = props.userInfo;
+
+function Footer() {
+    const { t, userInfo } = useLobbyContext();
+
+
     return (
         <div className='footer-box aniFooterAction'>
             <div className='user-wallet'>{t("Global.balance")}：

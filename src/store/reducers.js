@@ -83,7 +83,6 @@ export const rootReducer = (state = initialState, action) => {
         //     };
 
         // 顯示tips相關訊息
-
         case 'SHOW_MESSAGE':
             return {
                 ...state,

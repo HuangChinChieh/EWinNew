@@ -9,7 +9,7 @@ const GameFavorite = (props) => {
     const [getNewGameId, setGetNewGameId] = useState('');
 
     useEffect(() => {
-        setGetNewGameId(props.url.split('/').pop())
+        setGetNewGameId(props.url.split('/').pop());
     }, [])
 
     const handleClick = async (TableNumber) => {

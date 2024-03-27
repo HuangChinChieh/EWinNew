@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Logo from 'component/logo';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import FullscreenButton from 'component/buttons/fs_btn';
 import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
@@ -14,9 +15,9 @@ import './index.scss';
 
 
 const Header = (props) => {
-  const { t } = useLanguage();
+
+  const { t, userInfo } = useLobbyContext();
   const { favorites } = props;
-  const userInfo = props.userInfo;
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
@@ -106,7 +107,7 @@ const Header = (props) => {
                   i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                 ))}
               </span>
-                              <span><a className="user-favorite" href='/Gamefavorite'></a></span>
+              <span><a className="user-favorite" href='/Gamefavorite'></a></span>
             </div>
           )}
         </div>

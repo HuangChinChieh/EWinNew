@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import { useLanguage } from 'hooks';
 import { Link } from "react-router-dom";
 import {
     toggleFavorite,
@@ -8,13 +7,13 @@ import {
     toggleMute,
     getGameTitle
 } from 'store/actions';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
-import Loading from 'component/loading';
 import './index.scss';
 
 function Gamefavorite(props) {
-    const { t } = useLanguage();
+    const { t, userInfo, tiList, newInstance, Favos, CT, GUID } = useLobbyContext();
 
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
@@ -33,17 +32,17 @@ function Gamefavorite(props) {
 
     const handleClick = async (TableNumber) => {
 
-        if (props.Favos.includes(TableNumber)) {
-            var index = props.Favos.indexOf(TableNumber);
+        if (Favos.includes(TableNumber)) {
+            var index = Favos.indexOf(TableNumber);
             props.showMessage(`移除收藏 ${TableNumber}`);
 
 
             if (index > -1) {
-                props.Favos.splice(index, 1);
+                Favos.splice(index, 1);
             }
         }
 
-        props.newInstance.SetUserAccountProperty(props.CT, props.GUID, "EWinGame.Favor", JSON.stringify(props.Favos), function (success, o) {
+        newInstance.SetUserAccountProperty(CT, GUID, "EWinGame.Favor", JSON.stringify(Favos), function (success, o) {
             if (success) {
                 // console.log("SetUserAccountProperty", o);
             }
@@ -54,21 +53,21 @@ function Gamefavorite(props) {
     return (
         <div className='favorite_box'>
             <div className="section_box" style={{ width: '100%' }}>
-                {props.Favos.length === 0 ? (
+                {Favos.length === 0 ? (
                     <div className='without_favorite'>
                         <h2>{t("Global.without_favorite")}</h2>
                     </div>
                 ) : (
                     <ul>
-                        {props.tiList && props.tiList.TableInfoList && props.tiList.TableInfoList.map((i, index) => {
-                            if (props.Favos.includes(i.TableNumber)) {
+                        {tiList && tiList.TableInfoList && tiList.TableInfoList.map((i, index) => {
+                            if (Favos.includes(i.TableNumber)) {
                                 return (
                                     <li key={index}
                                         onMouseEnter={() => setHoveredItem(i.TableNumber)}
                                         onMouseLeave={mouseleave}
                                         className='li-box'
                                     >
-                                        <span className={`${props.Favos.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
+                                        <span className={`${Favos.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
                                         <div className={`games ${i.TableNumber}`}>
                                             {/* 獲取ImageType為1的ImageUrl */}
                                             {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
@@ -80,10 +79,10 @@ function Gamefavorite(props) {
                                             {i.TableNumber}
                                         </p>
                                         <p className='game-wallet'>
-                                            <span>{props.userInfo.BetLimitCurrencyType}</span>
+                                            <span>{userInfo.BetLimitCurrencyType}</span>
                                             <span>
-                                                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
-                                                    i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span> : ''
+                                                {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
+                                                    i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span> : ''
                                                 ))}
                                             </span>
                                         </p>
@@ -101,10 +100,10 @@ function Gamefavorite(props) {
                                                     {i.TableNumber}
                                                 </p>
                                                 <p className='game-wallet'>
-                                                    <span>{props.userInfo.BetLimitCurrencyType}</span>
+                                                    <span>{userInfo.BetLimitCurrencyType}</span>
                                                     <span>
-                                                        {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
-                                                            i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                                                        {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
+                                                            i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                                                         ))}
                                                     </span>
                                                 </p>
@@ -133,7 +132,7 @@ function Gamefavorite(props) {
                                                 </div>
                                                 <div className='favorites-box'>
                                                     <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} />
-                                                    <span onClick={() => handleClick(i.TableNumber)} className={props.Favos.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
+                                                    <span onClick={() => handleClick(i.TableNumber)} className={Favos.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
 
                                                 </div>
                                             </div>

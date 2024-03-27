@@ -12,22 +12,17 @@ import CountdownCircle from 'games_component/game_count_down_circle';
 import GameBettingAction from 'games_component/game_betting_action';
 import GameBettingArea from 'games_component/game_betting_area';
 // import GameBettingAreaNew from 'games_component/game_betting_area/newStyle';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import Loading from 'component/loading';
 import './index.scss';
 
 
 const GameView = (props) => {
 
+    const { isLoading, tiList, userInfo } = useLobbyContext();
     const [seconds, setSeconds] = useState(777);
     const [firstSeconds, setFirstSeconds] = useState(777);
 
-
-    // const [isLoading, setIsLoading] = useState(true);
-
-    const userInfo = props.userInfo;
-
-    // const isLoading = props.isLoading;
-    const isLoading = false; // 開發時先這樣用
 
 
     const numDots = 8;
@@ -49,7 +44,12 @@ const GameView = (props) => {
     //     return () => clearTimeout(loadingTimeout);
     // }, []);
 
+    const [newFavo, setNewFavo] = useState('');
 
+
+    useEffect(() => {
+        setNewFavo(props.Favos)
+    }, [props.Favos])
 
     const localTableTitle = localStorage.getItem('getLocalTableTitle');
 
@@ -91,7 +91,7 @@ const GameView = (props) => {
             ) : (
                 <div className='game-view-box'>
                     {/* url={props.url} 這邊可以拿到實際遊戲id 再根據id做相關判斷 可以這樣寫 url={props.url.split('/').pop()} 例如收藏就需要當下id */}
-                    <GameHeader url={props.url} />
+                    <GameHeader url={props.url} newInstance={props.newInstance} Favos={props.Favos} />
                     <div className="game-content">
                         <CountdownCircle seconds={seconds} firstSeconds={firstSeconds} />
                     </div>

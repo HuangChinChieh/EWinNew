@@ -10,32 +10,35 @@ import {
     setSeconds,
     setFirstSeconds
 } from 'store/actions';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
 import './index.scss';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import { generateUUIDv4 } from 'utils/guid';
 
+
 const Section = (props) => {
-    const { t } = useLanguage();
+    const { t, userInfo, tiList, Favos, setFavos, EWinUrl, CT, GUID, } = useLobbyContext();
     const listItems = props.listItems || [];
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
-    const tiList = props.tiList || [];
-    const userInfo = props.userInfo || [];
-    const [strFavo, setstrFavo] = useState('');
-    const [Favos, setFavos] = useState([]);
+    // const tiList = props.tiList || [];
+    // const userInfo = props.userInfo || [];
 
-    const EWinUrl = localStorage.getItem('EWinUrl');
-    const CT = localStorage.getItem('CT');
+    const [strFavo, setstrFavo] = useState('');
+    // const [Favos, setFavos] = useState([]);
+
+    // const EWinUrl = localStorage.getItem('EWinUrl');
+    // const CT = localStorage.getItem('CT');
     const [shoeResults, setShoeResults] = useState('');
-    const GUID = generateUUIDv4();
+    // const GUID = generateUUIDv4();
 
 
     useEffect(() => {
         // 取 TableInfoList 底下的 shoeResults 值
-        if (props.tiList && props.tiList.TableInfoList) {
-            const shoeResults = props.tiList.TableInfoList.map(info => info.ShoeResult);
+        if (tiList && tiList.TableInfoList) {
+            const shoeResults = tiList.TableInfoList.map(info => info.ShoeResult);
             setShoeResults(shoeResults);
             // console.log('shoeResults', shoeResults)
         }
@@ -96,8 +99,8 @@ const Section = (props) => {
                     }
                 }
             });
-            eWinGameLobbyClient.handleConnected(() => {
-            })
+            // eWinGameLobbyClient.handleConnected(() => {
+            // })
         }
     }, []);
 
