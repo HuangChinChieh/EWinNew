@@ -62,10 +62,7 @@ const GameLobbyProvider = ({ children }) => {
 
         const instance = EWinGameLobbyClient.getInstance(CT, EWinUrl);
 
-
         if (instance !== null) {
-
-            setNewInstance(instance);
 
             const handleConnected = () => {
                 console.log('已連結');
@@ -156,6 +153,7 @@ const GameLobbyProvider = ({ children }) => {
             const handleDisconnect = () => {
                 console.log('EWinHub 連結失效');
                 setIsLoading(true);
+                window.location.reload();
             };
 
             const handleReconnecting = () => {
@@ -175,6 +173,7 @@ const GameLobbyProvider = ({ children }) => {
 
             // 初始化連接
             instance.initializeConnection();
+            setNewInstance(instance);
 
         }
     }, [CT, EWinUrl]);
