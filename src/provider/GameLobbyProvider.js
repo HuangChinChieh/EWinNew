@@ -20,6 +20,7 @@ const GameLobbyProvider = ({ children }) => {
     const GUID = generateUUIDv4();
     const Echo = 'Test_Echo';
     const [Favos, setFavos] = useState([]);
+    const [shoeResults, setShoeResults] = useState('');
 
     // Lobby 相關資料
 
@@ -112,17 +113,19 @@ const GameLobbyProvider = ({ children }) => {
                             //資料處理
                             // console.log('TableList', o);
                             setTiList(o);
+                            setShoeResults(o.TableInfoList.map(info => info.ShoeResult));
                             setIsLoading(false);
                         } else {
                             //系統錯誤處理
                             console.log('GetTableInfoList: 系統錯誤處理');
                             setIsLoading(true);
-
+                            window.location.reload();
                         }
                     } else {
                         //傳輸等例外問題處理
                         console.log('GetTableInfoList: 傳輸等例外問題處理');
                         setIsLoading(true);
+                        window.location.reload();
                     }
                 });
 
@@ -191,6 +194,8 @@ const GameLobbyProvider = ({ children }) => {
             Favos,
             tiList,
             userInfo,
+            shoeResults,
+            setShoeResults,
             setFavos
 
         }}>
