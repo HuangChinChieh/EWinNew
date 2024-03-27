@@ -19,7 +19,9 @@ import './index.scss';
 
 const GameView = (props) => {
 
-    const { isLoading, tiList, userInfo } = useLobbyContext();
+    // const { isLoading } = useLobbyContext();
+    const isBaccaratLoading = false;
+
     const [seconds, setSeconds] = useState(777);
     const [firstSeconds, setFirstSeconds] = useState(777);
 
@@ -44,12 +46,12 @@ const GameView = (props) => {
     //     return () => clearTimeout(loadingTimeout);
     // }, []);
 
-    const [newFavo, setNewFavo] = useState('');
+    // const [newFavo, setNewFavo] = useState('');
 
 
-    useEffect(() => {
-        setNewFavo(props.Favos)
-    }, [props.Favos])
+    // useEffect(() => {
+    //     setNewFavo(props.Favos)
+    // }, [props.Favos])
 
     const localTableTitle = localStorage.getItem('getLocalTableTitle');
 
@@ -86,7 +88,7 @@ const GameView = (props) => {
 
     return (
         <div className="game-view-wrap">
-            {isLoading ? (
+            {isBaccaratLoading ? (
                 <Loading />
             ) : (
                 <div className='game-view-box'>

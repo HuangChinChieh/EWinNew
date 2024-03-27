@@ -1,4 +1,5 @@
 
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import Section from 'component/section';
 import DefaultVedio from 'component/default_vedio';
 import Titlebar from 'component/title_bar';
@@ -7,14 +8,10 @@ import Loading from 'component/loading';
 
 import './index.scss';
 
-function Gamelobby(props) {
+function Gamelobby() {
 
-    const tiList = props.tiList;
-    const userInfo = props.userInfo;
+    const { t, isLoading } = useLobbyContext();
 
-    // hardcode demo用
-    // const isLoading = false;
-    const isLoading = props.isLoading;
 
 
     return (
@@ -36,8 +33,7 @@ function Gamelobby(props) {
                                                     defaultActiveKey="yourgames"
                                                 >
                                                     <CustomTab eventKey="yourgames" title="屬於您">
-                                                        <Section tiList={tiList} userInfo={userInfo} />
-
+                                                        <Section />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
                                                     </CustomTab>
@@ -68,7 +64,7 @@ function Gamelobby(props) {
                                                         <Titlebar title="全部遊戲" />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
-                                                        <Section tiList={tiList} userInfo={userInfo} />
+                                                        <Section />
                                                     </CustomTab>
                                                     <CustomTab eventKey="baccarat" title="百家樂">
                                                         <Titlebar title="百家樂" />
