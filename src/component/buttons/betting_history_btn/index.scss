@@ -29,7 +29,7 @@
                 display: flex;
                 justify-content: space-around;
                 align-items: center;
-                margin: 10px 0px;
+                margin: 10px;
                 input{
                     margin-left: 5px;
                     max-width: 100px;
@@ -129,6 +129,13 @@
                             }
                         }
                     }
+                }
+                .noData{
+                    font-size: 15px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 50px;
                 }
             }
 

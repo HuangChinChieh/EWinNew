@@ -1,26 +1,71 @@
 
-import { useState, useEffect } from 'react';
+import {
+    BrowserRouter as Router,
+    useLocation
+} from "react-router-dom";
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import { connect } from 'react-redux';
-import { toggleFavorite, showMessage } from 'store/actions';
+import { showMessage } from 'store/actions';
 import './index.scss';
 
 const GameFavorite = (props) => {
+    const {
+        CT,
+        GUID,
+        newInstance,
+        Favos,
+        isFavorited,
+        setIsFavorited
+    } = useLobbyContext();
 
-    const [getNewGameId, setGetNewGameId] = useState('');
+    const location = useLocation();
 
-    useEffect(() => {
-        setGetNewGameId(localStorage.getItem('currentUrl').split('/').pop());
-        console.log('currentUrl::', localStorage.getItem('currentUrl').split('/').pop())
-    }, [])
+    const getNewGameId = location.pathname.split('/').pop();
 
     const handleClick = async (TableNumber) => {
-        await props.toggleFavorite(TableNumber);
-        props.showMessage();
+
+        if (newInstance !== null) {
+
+            var index = Favos.indexOf(TableNumber);
+            if (Favos.includes(TableNumber)) {
+                props.showMessage(`移除收藏 ${TableNumber}`);
+                setIsFavorited(false);
+                if (index > -1) {
+                    Favos.splice(index, 1);
+                }
+            } else {
+                props.showMessage(`新增收藏 ${TableNumber}`);
+                setIsFavorited(true);
+                Favos.push(TableNumber);
+            }
+
+            newInstance.SetUserAccountProperty(CT, GUID, "EWinGame.Favor", JSON.stringify(Favos), function (s, o) {
+                if (s) {
+                    if (o.ResultCode == 0) {
+
+                    } else {
+                        //系統錯誤處理
+                        console.log('GetUserAccountProperty: 系統錯誤處理');
+                    }
+                } else {
+                    //傳輸等例外問題處理
+                    console.log('GetUserAccountProperty: 傳輸等例外問題處理');
+                }
+            });
+
+        }
+
+
+
+
     };
 
     return (
         <div className='game-favorite-box'>
-            <span onClick={() => handleClick(getNewGameId)} className={props.favorites.includes(getNewGameId) ? 'remove-to-favorites' : 'add-to-favorites'} />
+            <span onClick={() => {
+                handleClick(getNewGameId);
+                setIsFavorited(!isFavorited);
+            }} className={Favos.includes(getNewGameId) ? 'remove-to-favorites' : 'add-to-favorites'} />
         </div>
     )
 }
@@ -29,12 +74,11 @@ const GameFavorite = (props) => {
 const mapStateToProps = (state) => {
 
     return {
-        favorites: state.root.favorites || []
+
     };
 };
 
 const mapDispatchToProps = {
-    toggleFavorite,
     showMessage
 };
 

@@ -1,0 +1,30 @@
+.game-add-table-box {
+    border: 1px solid #46465B;
+    border-radius: 23px;
+    padding: 10px 16px;
+    display: inline-block;
+
+    span {
+        color: #fff;
+        font-weight: 100;
+        font-size: 0.9rem;
+        opacity: 0.75;
+
+        &.icon-box {
+            position: relative;
+            padding-left: 18px;
+            display: inline-block;
+
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                width: 22px;
+                height: 17px;
+                background: url('../../img/global/add.png') no-repeat center center/contain;
+                left: -8px;
+                top: 0;
+            }
+        }
+    }
+}

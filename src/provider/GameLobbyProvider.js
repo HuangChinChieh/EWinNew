@@ -3,6 +3,7 @@ import { useCookies } from 'react-cookie';
 import { useLanguage } from 'hooks';
 import { generateUUIDv4 } from 'utils/guid';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
+import BettingHistory from 'component/buttons/betting_history_btn'
 
 // 建立一個 Context
 const GameLobbyContext = createContext();
@@ -13,8 +14,8 @@ export const useLobbyContext = () => useContext(GameLobbyContext);
 // 最上層的元件，設置各初始值
 const GameLobbyProvider = ({ children }) => {
     const { t } = useLanguage();
-
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
+    const [domain, setDomain] = useState('');
     const [CT, setCT] = useState('');
     const [cookies, setCookie] = useCookies(['CT']);
     const GUID = generateUUIDv4();
@@ -32,6 +33,7 @@ const GameLobbyProvider = ({ children }) => {
     const [tiList, setTiList] = useState([]);
     // 使用者資料
     const [userInfo, setUserInfo] = useState([]);
+
 
     useEffect(() => {
         // 開發時設定每5分鐘打一次api來獲取有效的 CT
@@ -66,7 +68,6 @@ const GameLobbyProvider = ({ children }) => {
         if (instance !== null) {
 
             const handleConnected = () => {
-                console.log('已連結');
 
                 // 監聽連線狀態
                 instance.HeartBeat(Echo);
@@ -86,7 +87,7 @@ const GameLobbyProvider = ({ children }) => {
                     if (s) {
                         if (o.ResultCode == 0) {
                             //資料處理
-                            // console.log('UserInfo', o);
+                            console.log('UserInfo', o);
                             setUserInfo(o);
                         } else {
                             //系統錯誤處理
@@ -167,7 +168,6 @@ const GameLobbyProvider = ({ children }) => {
 
 
 
-
             };
 
             const handleDisconnect = () => {
@@ -204,6 +204,7 @@ const GameLobbyProvider = ({ children }) => {
         <GameLobbyContext.Provider value={{
             t,
             EWinUrl,
+            domain,
             isLoading,
             CT,
             cookies,
