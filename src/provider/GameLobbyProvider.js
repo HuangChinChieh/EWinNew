@@ -22,8 +22,7 @@ const GameLobbyProvider = ({ children }) => {
     const Echo = 'Test_Echo';
     const [Favos, setFavos] = useState([]);
     const [shoeResults, setShoeResults] = useState('');
-    const [BeginDate, setBeginDate] = useState('');
-    const [EndDate, setEndDate] = useState('');
+
     // Lobby 相關資料
 
     const [isLoading, setIsLoading] = useState(true);
@@ -147,25 +146,6 @@ const GameLobbyProvider = ({ children }) => {
                         setIsLoading(true);
                     }
                 });
-
-
-                // instance.GetHistorySummary(CT, GUID, BeginDate, EndDate, (s, o) => {
-                //     if (s) {
-                //         if (o.ResultCode === 0) {
-                //             // 更新历史数据
-                //             setHistoryData(o.Data); // 假设 o.Data 包含所需的历史数据
-                //         } else {
-                //             console.log('GetHistorySummary: 系統錯誤處理');
-                //             setIsLoading(true);
-                //         }
-                //     } else {
-                //         console.log('GetHistorySummary: 傳輸等例外問題處理');
-                //         setIsLoading(true);
-                //     }
-                // });
-                
-
-
 
 
             };

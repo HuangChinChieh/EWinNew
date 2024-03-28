@@ -1,22 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
-import { useLanguage } from 'hooks';
 import './index.scss';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import { useLobbyContext } from "provider/GameLobbyProvider";
 
 
 const BettingHistory = () => {
-
-    const { t } = useLanguage();
     const [hoveredItem, setHoveredItem] = useState(null);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const [isSet, setIsSet] = useState(false);
-    const [beginDate,setBeginDate]=useState('');
-    const [endDate,setEndDate]=useState('');
-    const [tableData,setTableData]=useState([]);
-    const { CT , GUID, EWinUrl,setIsLoading}=useLobbyContext();
-    const instance = EWinGameLobbyClient.getInstance(CT, EWinUrl);
-    console.log(instance);
+    const [beginDate, setBeginDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [tableData, setTableData] = useState([]);
+    const {
+        t,
+        newInstance,
+        CT,
+        GUID
+    } = useLobbyContext();
     const settingsRef = useRef(null);
     // const tableHeaders = ['日期', '類型', '上下數', '詳細內容'];
     const tableHeaders = [t("Global.date"), t("Global.type"), t('Global.win_lose'), t("Global.details")];
@@ -32,13 +32,13 @@ const BettingHistory = () => {
         }
     };
 
-    
+
     // 設置起始日與終止日變動時變更參數值並重新取得投注資料
-    const handleBeginDateChange=(event)=>{
+    const handleBeginDateChange = (event) => {
         setBeginDate(event.target.value);
         bettingHistoryClick()
     }
-    const handleEndDateChange=(event)=>{
+    const handleEndDateChange = (event) => {
         setEndDate(event.target.value);
         bettingHistoryClick()
     }
@@ -68,9 +68,9 @@ const BettingHistory = () => {
     }, []); // 設置起始日(當日前七天)與終止日(當日)
 
     // 顯示投注紀錄並取得投注資料
-    const bettingHistoryClick=()=>{
+    const bettingHistoryClick = () => {
         setHoveredItem(1)
-        instance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
+        newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
             if (s) {
                 if (o.ResultCode === 0) {
                     setTableData(o.SummaryList);
@@ -95,24 +95,24 @@ const BettingHistory = () => {
                     <div className='title'>{t('Global.bet_history')}</div>
                     <div className='flex-box'>
                         <div>{t('Global.begindate')}
-                            <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate"/>
+                            <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
                         </div>
                         <div>{t('Global.enddate')}
-                            <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate"/>
+                            <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
                         </div>
                     </div>
 
                     <div className='dis'>
                         <table>
-                            {tableData.length>0?(
+                            {tableData.length > 0 ? (
                                 <><thead>
                                     <tr>
                                         {tableHeaders.map((header, index) => (
                                             <th key={index}>{header}</th>
                                         ))}
                                     </tr>
-                                  </thead>
-                                  <tbody>
+                                </thead>
+                                    <tbody>
                                         {tableData.map((data, index) => (
                                             <tr key={index}>
                                                 <td>{data.SummaryDate}</td>
@@ -123,13 +123,13 @@ const BettingHistory = () => {
                                                 </td>
                                             </tr>
                                         ))}
-                                  </tbody>
+                                    </tbody>
                                 </>
-                                ):(
-                                    <div className='noData'>{t("Global.no_data")}</div>
-                             )
+                            ) : (
+                                <div className='noData'>{t("Global.no_data")}</div>
+                            )
 
-                            }            
+                            }
 
                         </table>
                     </div>
