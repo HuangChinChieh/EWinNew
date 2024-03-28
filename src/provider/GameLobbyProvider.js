@@ -3,7 +3,6 @@ import { useCookies } from 'react-cookie';
 import { useLanguage } from 'hooks';
 import { generateUUIDv4 } from 'utils/guid';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-import BettingHistory from 'component/buttons/betting_history_btn'
 
 // 建立一個 Context
 const GameLobbyContext = createContext();
@@ -22,6 +21,7 @@ const GameLobbyProvider = ({ children }) => {
     const Echo = 'Test_Echo';
     const [Favos, setFavos] = useState([]);
     const [shoeResults, setShoeResults] = useState('');
+    const [isFavorited, setIsFavorited] = useState(false);
 
     // Lobby 相關資料
 
@@ -148,6 +148,7 @@ const GameLobbyProvider = ({ children }) => {
                 });
 
 
+
             };
 
             const handleDisconnect = () => {
@@ -195,6 +196,8 @@ const GameLobbyProvider = ({ children }) => {
             tiList,
             userInfo,
             shoeResults,
+            isFavorited,
+            setIsFavorited,
             setShoeResults,
             setFavos
 

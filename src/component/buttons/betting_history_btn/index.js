@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import './index.scss';
-import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import { useLobbyContext } from "provider/GameLobbyProvider";
 
 
 const BettingHistory = () => {
-    const [hoveredItem, setHoveredItem] = useState(null);
+    const [hoveredItem, setHoveredItem] = useState(0);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const [isSet, setIsSet] = useState(false);
     const [beginDate, setBeginDate] = useState('');
@@ -28,7 +27,7 @@ const BettingHistory = () => {
     const handleDocumentClick = (e) => {
         if (settingsRef.current && !settingsRef.current.contains(e.target)) {
             // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
-            setHoveredItem(null);
+            setHoveredItem(0);
         }
     };
 
@@ -103,8 +102,8 @@ const BettingHistory = () => {
                     </div>
 
                     <div className='dis'>
-                        <table>
-                            {tableData.length > 0 ? (
+                        {tableData.length > 0 ? (
+                            <table>
                                 <><thead>
                                     <tr>
                                         {tableHeaders.map((header, index) => (
@@ -125,13 +124,13 @@ const BettingHistory = () => {
                                         ))}
                                     </tbody>
                                 </>
-                            ) : (
-                                <div className='noData'>{t("Global.no_data")}</div>
-                            )
+                            </table>
+                        ) : (
+                            <div className='noData'>{t("Global.no_data")}</div>
+                        )
 
-                            }
+                        }
 
-                        </table>
                     </div>
                 </div>
             </div>
