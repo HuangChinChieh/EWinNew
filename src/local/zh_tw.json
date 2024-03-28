@@ -26,11 +26,14 @@
         "start_games": "開始遊戲",
         "tie": "和",
         "type": "類型",
+        "total_bet": "總投注額",
+        "tips": "打賞小費",
         "win_lose": "上下數",
         "total_betting": "總投注額",
         "without_favorite": "目前沒有收藏的項目, 趕快去大廳新增吧",
         "EWin.BAC.1":"快速電投",
-        "EWin.BAC.2":"網投"
+        "EWin.BAC.2":"網投",
+        "table": "賭桌"
     },
     "Setting": {
         "title": "遊戲大廳個性化",
