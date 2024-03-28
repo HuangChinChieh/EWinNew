@@ -1,10 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import {
-    BrowserRouter as Router,
-    useHistory,
-    useLocation
-} from "react-router-dom";
 import { useLanguage } from 'hooks';
 import { generateUUIDv4 } from 'utils/guid';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
@@ -18,8 +13,6 @@ export const useLobbyContext = () => useContext(GameLobbyContext);
 // 最上層的元件，設置各初始值
 const GameLobbyProvider = ({ children }) => {
     const { t } = useLanguage();
-    const location = useLocation();
-    const history = useHistory();
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
     const [domain, setDomain] = useState('');
     const [CT, setCT] = useState('');
@@ -39,7 +32,6 @@ const GameLobbyProvider = ({ children }) => {
     const [tiList, setTiList] = useState([]);
     // 使用者資料
     const [userInfo, setUserInfo] = useState([]);
-
 
 
     useEffect(() => {
@@ -75,7 +67,6 @@ const GameLobbyProvider = ({ children }) => {
         if (instance !== null) {
 
             const handleConnected = () => {
-                console.log('已連結');
 
                 // 監聽連線狀態
                 instance.HeartBeat(Echo);
@@ -95,7 +86,7 @@ const GameLobbyProvider = ({ children }) => {
                     if (s) {
                         if (o.ResultCode == 0) {
                             //資料處理
-                            // console.log('UserInfo', o);
+                            console.log('UserInfo', o);
                             setUserInfo(o);
                         } else {
                             //系統錯誤處理

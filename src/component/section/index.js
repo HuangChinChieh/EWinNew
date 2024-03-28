@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { useLanguage } from 'hooks';
 import { Link, useHistory } from "react-router-dom";
 import {
     toggleFavorite,
@@ -14,8 +13,6 @@ import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
 import './index.scss';
-// import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-import { generateUUIDv4 } from 'utils/guid';
 
 
 const Section = (props) => {
