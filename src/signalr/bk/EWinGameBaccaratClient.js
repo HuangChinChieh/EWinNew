@@ -465,7 +465,7 @@ export class EWinGameBaccaratClient {
     * 
     * @returns {void}
     */
-    UserAccountGetBetLimitListByRoadMap(CT, GUID, RoadMapNumber, CurrencyType, GameSetID, cb) {
+    UserAccountGetBetLimitListByRoadMap(CT, GUID, DeviceGUID, RoadMapNumber, CurrencyType, GameSetID, cb) {
         this.EWinHub.invoke("UserAccountGetBetLimitListByRoadMap", CT, GUID, DeviceGUID, RoadMapNumber, CurrencyType, GameSetID).done(function (o) {
             if (cb)
                 cb(true, o);
@@ -559,7 +559,7 @@ export class EWinGameBaccaratClient {
     *       
     * @returns {void}
     */
-    UserAccountClearBetLimit(CT, GUIDcb) {
+    UserAccountClearBetLimit(CT, GUID, cb) {
         this.EWinHub.invoke("UserAccountClearBetLimit", CT, GUID).done(function (o) {
             if (cb)
                 cb(true, o);
@@ -1194,13 +1194,13 @@ export class EWinGameBaccaratClient {
     //#endregion
 
     state() {
-        return currentState;
+        return this.currentState;
     }
 
     initializeConnection() {
         const connectServer = (c, events) => {
-            
-            c.start({ withCredentials: false})
+
+            c.start({ withCredentials: false })
                 .done((function () {
                     //這邊的this有問題，由於使用箭頭函式，無法使用call or bind，採用傳入解決
                     if (this.onConnected != null)
@@ -1243,7 +1243,7 @@ export class EWinGameBaccaratClient {
         });
 
         this.conn.reconnecting(function () {
-            if (ths.onReconnecting != null)
+            if (this.onReconnecting != null)
                 this.oinReconnecting();
         });
 
