@@ -5,7 +5,7 @@ import { useLobbyContext } from "provider/GameLobbyProvider";
 
 
 const BettingHistory = () => {
-    const [hoveredItem, setHoveredItem] = useState(null);
+    const [hoveredItem, setHoveredItem] = useState(0);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const [isSet, setIsSet] = useState(false);
     const [beginDate, setBeginDate] = useState('');
@@ -19,7 +19,7 @@ const BettingHistory = () => {
     } = useLobbyContext();
     const settingsRef = useRef(null);
     // const tableHeaders = ['日期', '類型', '上下數', '詳細內容'];
-    const tableHeaders = [t("Global.date"), t("Global.type"), t('Global.win_lose'), t("Global.details")];
+    const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'),t('Global.rolling'), t("Global.details")];
 
     const handleSliderClick = () => {
         setIsSet(!isSet);
@@ -47,7 +47,6 @@ const BettingHistory = () => {
     useEffect(() => {
         // 在 component mount 時加入 click 事件監聽器
         document.addEventListener('click', handleDocumentClick);
-        console.log('2U2',CT);
         // 在 component unmount 時移除 click 事件監聽器
         return () => {
             document.removeEventListener('click', handleDocumentClick);
@@ -60,12 +59,40 @@ const BettingHistory = () => {
         const today = new Date();
         const sevenDaysAgo = new Date(today);
         sevenDaysAgo.setDate(today.getDate() - 7);
-
         const formattedSevenDaysAgo = sevenDaysAgo.toISOString().split('T')[0];
         setBeginDate(formattedSevenDaysAgo);
         setEndDate(today.toISOString().split('T')[0]);
 
     }, []); // 設置起始日(當日前七天)與終止日(當日)
+
+    //點擊到下個月
+    const haddleAddMonth=()=>{
+        //增加起始日月份
+         const nowBeginDate= new Date(beginDate);
+         nowBeginDate.setMonth(nowBeginDate.getMonth()+1);
+         setBeginDate(nowBeginDate.toISOString().split('T')[0]);
+         console.log(nowBeginDate);
+        //增加終止日月份
+        const nowEndDate= new Date(endDate);
+        nowEndDate.setMonth(nowEndDate.getMonth()+1);
+        setEndDate(nowEndDate.toISOString().split('T')[0]);
+        console.log(nowEndDate);
+        //依照新日期重新搜尋
+        bettingHistoryClick()
+    }
+    
+    const haddleSubtractMonth=()=>{
+        //減少起始日月份
+         const nowBeginDate= new Date(beginDate);
+         nowBeginDate.setMonth(nowBeginDate.getMonth()-1);
+         setBeginDate(nowBeginDate.toISOString().split('T')[0]);
+        //減少終止日月份
+        const nowEndDate= new Date(endDate);
+        nowEndDate.setMonth(nowEndDate.getMonth()-1);
+        setEndDate(nowEndDate.toISOString().split('T')[0]);
+        //依照新日期重新搜尋
+        bettingHistoryClick()
+    }
 
     // 顯示投注紀錄並取得投注資料
     const bettingHistoryClick = () => {
@@ -74,6 +101,7 @@ const BettingHistory = () => {
             if (s) {
                 if (o.ResultCode === 0) {
                     setTableData(o.SummaryList);
+                    console.log(o);
                 } else {
                     console.log('GetHistorySummary: 系統錯誤處理');
                 }
@@ -82,6 +110,8 @@ const BettingHistory = () => {
             }
         });
     }
+    
+    
 
 
     return (
@@ -101,7 +131,17 @@ const BettingHistory = () => {
                             <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
                         </div>
                     </div>
-
+                    <div className='month-container'>
+                        <button onClick={haddleSubtractMonth}>
+                            <span>＜</span>
+                            {t("Global.last_month")}
+                        </button>
+                        <button onClick={haddleAddMonth}>
+                            {t("Global.next_month")}
+                            <span>＞</span>
+                        </button>
+                        
+                    </div>
                     <div className='dis'>
                         <table>
                             {tableData.length > 0 ? (
@@ -116,8 +156,10 @@ const BettingHistory = () => {
                                         {tableData.map((data, index) => (
                                             <tr key={index}>
                                                 <td>{data.SummaryDate}</td>
+                                                <td>{data.CurrencyType}</td>
                                                 <td>{t(`Global.${data.GameCode}`)}</td>
                                                 <td>{data.RewardValue}</td>
+                                                <td>{data.ValidBetValue}</td>
                                                 <td className='detail'>
                                                     <button>{t("Global.details")}</button>
                                                 </td>
