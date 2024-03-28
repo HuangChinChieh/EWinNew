@@ -12,7 +12,7 @@ import CountdownCircle from 'games_component/game_count_down_circle';
 import GameBettingAction from 'games_component/game_betting_action';
 import GameBettingArea from 'games_component/game_betting_area';
 // import GameBettingAreaNew from 'games_component/game_betting_area/newStyle';
-import { useLobbyContext } from 'provider/GameLobbyProvider';
+import { useBaccaratContext } from 'provider/GameBaccaratProvider';
 import Loading from 'component/loading';
 import './index.scss';
 
@@ -20,7 +20,10 @@ import './index.scss';
 const GameView = (props) => {
 
     // const { isLoading } = useLobbyContext();
-    const isBaccaratLoading = false;
+    // const isBaccaratLoading = false;
+    const {
+        isBaccaratLoading
+    } = useBaccaratContext();
 
     const [seconds, setSeconds] = useState(777);
     const [firstSeconds, setFirstSeconds] = useState(777);

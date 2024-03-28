@@ -24,6 +24,11 @@ export class EWinGameBaccaratClient {
     EWinUrl = null;
     conn;
 
+
+    componentDidMount() {
+        this.initializeConnection();
+    }
+
     handleReceiveMsg(handle) {
         this.onReceive = handle;
     }

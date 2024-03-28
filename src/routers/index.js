@@ -15,6 +15,7 @@ import GameFooter from 'games_component/game_footer';
 import Tips from 'component/tips';
 import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
+import GameBaccaratProvider from 'provider/GameBaccaratProvider';
 
 import './index.scss';
 
@@ -54,7 +55,9 @@ const Main = () => {
           <Gamefavorite />
         </Route>
         <Route path='/games/:gameId'>
-          <GameView url={getUrl} />
+          <GameBaccaratProvider>
+            <GameView url={getUrl} />
+          </GameBaccaratProvider>
         </Route>
         <Route path='/'>
           <Gamelobby />

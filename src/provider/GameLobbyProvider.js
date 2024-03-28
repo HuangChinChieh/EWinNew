@@ -86,7 +86,7 @@ const GameLobbyProvider = ({ children }) => {
                     if (s) {
                         if (o.ResultCode == 0) {
                             //資料處理
-                            console.log('UserInfo', o);
+                            // console.log('UserInfo', o);
                             setUserInfo(o);
                         } else {
                             //系統錯誤處理
