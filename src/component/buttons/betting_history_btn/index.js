@@ -65,35 +65,36 @@ const BettingHistory = () => {
 
     }, []); // 設置起始日(當日前七天)與終止日(當日)
 
-    //點擊到下個月
-    const haddleAddMonth=()=>{
-        //增加起始日月份
-         const nowBeginDate= new Date(beginDate);
-         nowBeginDate.setMonth(nowBeginDate.getMonth()+1);
-         setBeginDate(nowBeginDate.toISOString().split('T')[0]);
-         console.log(nowBeginDate);
-        //增加終止日月份
-        const nowEndDate= new Date(endDate);
-        nowEndDate.setMonth(nowEndDate.getMonth()+1);
-        setEndDate(nowEndDate.toISOString().split('T')[0]);
-        console.log(nowEndDate);
-        //依照新日期重新搜尋
-        bettingHistoryClick()
-    }
-    
-    const haddleSubtractMonth=()=>{
-        //減少起始日月份
-         const nowBeginDate= new Date(beginDate);
-         nowBeginDate.setMonth(nowBeginDate.getMonth()-1);
-         setBeginDate(nowBeginDate.toISOString().split('T')[0]);
-        //減少終止日月份
-        const nowEndDate= new Date(endDate);
-        nowEndDate.setMonth(nowEndDate.getMonth()-1);
-        setEndDate(nowEndDate.toISOString().split('T')[0]);
-        //依照新日期重新搜尋
-        bettingHistoryClick()
-    }
+    // 更新日期並執行搜索
+    const updateDatesAndSearch = (updateFunction) => {
+        // 更新起始日
+        const nowBeginDate = new Date(beginDate);
+        updateFunction(nowBeginDate, setBeginDate);
 
+        // 更新終止日
+        const nowEndDate = new Date(endDate);
+        updateFunction(nowEndDate, setEndDate);
+
+        // 依照新日期重新搜尋
+        bettingHistoryClick();
+    };
+
+    // 增加一個月
+    const handleAddMonth = () => {
+        updateDatesAndSearch((date, setDate) => {
+            date.setMonth(date.getMonth() + 1);
+            setDate(date.toISOString().split('T')[0]);
+        });
+    };
+
+    // 減少一個月
+    const handleSubtractMonth = () => {
+        updateDatesAndSearch((date, setDate) => {
+            date.setMonth(date.getMonth() - 1);
+            setDate(date.toISOString().split('T')[0]);
+        });
+    };
+    
     // 顯示投注紀錄並取得投注資料
     const bettingHistoryClick = () => {
         setHoveredItem(1)
@@ -132,11 +133,11 @@ const BettingHistory = () => {
                         </div>
                     </div>
                     <div className='month-container'>
-                        <button onClick={haddleSubtractMonth}>
+                        <button onClick={handleSubtractMonth}>
                             <span>＜</span>
                             {t("Global.last_month")}
                         </button>
-                        <button onClick={haddleAddMonth}>
+                        <button onClick={handleAddMonth}>
                             {t("Global.next_month")}
                             <span>＞</span>
                         </button>
