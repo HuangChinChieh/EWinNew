@@ -215,8 +215,6 @@ const GameLobbyProvider = ({ children }) => {
             tiList,
             userInfo,
             shoeResults,
-            isFavorited,
-            setIsFavorited,
             setShoeResults,
             setFavos
 
