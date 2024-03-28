@@ -33,6 +33,17 @@
             }
         }
 
+        .right-box {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+
+            .box-area {
+                width: 30%;
+            }
+        }
+
         .middle-box {
             width: 50%;
             height: 90px;
