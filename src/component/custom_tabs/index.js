@@ -7,10 +7,13 @@ export const CustomTabs = ({ defaultActiveKey, children }) => {
         setActiveTab(key);
     };
 
+    // 如果 children 不是數组，就把它轉換成數組
+    const childrenArray = Array.isArray(children) ? children : [children];
+
     return (
         <div className="custom-tabs">
             <div className="tab-list">
-                {children.map((child) => {
+                {childrenArray.map((child) => {
                     const { eventKey, title } = child.props;
                     return (
                         <div
@@ -24,7 +27,7 @@ export const CustomTabs = ({ defaultActiveKey, children }) => {
                 })}
             </div>
             <div className="tab-content">
-                {children.map((child) => {
+                {childrenArray.map((child) => {
                     const { eventKey, children: tabChildren } = child.props;
                     return activeTab === eventKey ? <div key={eventKey}>{tabChildren}</div> : null;
                 })}
