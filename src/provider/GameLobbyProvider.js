@@ -23,6 +23,7 @@ const GameLobbyProvider = ({ children }) => {
     const [shoeResults, setShoeResults] = useState('');
     const [isFavorited, setIsFavorited] = useState(false);
 
+
     // Lobby 相關資料
 
     const [isLoading, setIsLoading] = useState(true);
@@ -146,6 +147,25 @@ const GameLobbyProvider = ({ children }) => {
                         setIsLoading(true);
                     }
                 });
+
+                    instance.GetHistorySummary(CT, GUID, '','', (s, o) => {
+                        if (s) {
+                            if (o.ResultCode == 0) {
+                                //資料處理
+                                console.log(o);
+
+                            } else {
+                                //系統錯誤處理
+                                console.log('系統錯誤處理');
+
+                            }
+                        } else {
+                            //傳輸等例外問題處理
+                            console.log('傳輸等例外問題處理');
+                        }
+                    });
+
+
 
 
 

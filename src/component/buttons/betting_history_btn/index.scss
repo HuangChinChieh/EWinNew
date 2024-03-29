@@ -9,7 +9,7 @@
 
         .hover-box {
             position: fixed;
-            right: -30rem;
+            right: -36rem;
             background: rgba(29, 29, 38, 0.8);
             // padding: 20px 35px;
             border-top-left-radius: 12px;
@@ -20,10 +20,31 @@
             animation-duration: 1s;
             animation-timing-function: ease;
             transition: all 1s ease;
-            min-width: 350px;
+            min-width: 450px;
             z-index: 8;
             visibility: hidden;
-
+            .month-container{
+                display: flex;
+                justify-content: end;
+                margin:0.3rem 2.2rem;
+                button {
+                    background: #46465B;
+                    display: flex;
+                    border: none;
+                    font-size: 1rem;
+                    color: #fff;
+                    border-radius: 30px;
+                    padding: 3px 10px;
+                    margin-right: 10px;
+                    cursor: pointer;
+                    span{
+                        margin: 0 2px;
+                        font-weight: 800;
+                        line-height: normal;
+                        font-size: 13px;
+                    }
+                }
+            }
 
             .flex-box {
                 display: flex;
