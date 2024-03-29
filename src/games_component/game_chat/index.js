@@ -49,7 +49,7 @@ const GameChat = () => {
                         onChange={handleInputChange}
                         placeholder={t('Chat.placeholder')}
                     />
-                    <span className='chat-icon' />
+                    <span className='chat-icon' onClick={handleSubmit} />
                 </div>
             </form>
             <div className='chat-list'>
