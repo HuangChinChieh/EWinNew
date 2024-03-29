@@ -5,8 +5,6 @@ import { useLobbyContext } from "provider/GameLobbyProvider";
 
 const BettingHistory = () => {
     const [hoveredItem, setHoveredItem] = useState(0);
-    const [mbhoveredItem, setMbHoveredItem] = useState(null);
-    const [isSet, setIsSet] = useState(false);
     const [beginDate, setBeginDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [tableData, setTableData] = useState([]);
@@ -20,9 +18,6 @@ const BettingHistory = () => {
     // const tableHeaders = ['日期', '類型', '上下數', '詳細內容'];
     const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'), t('Global.rolling'), t("Global.details")];
 
-    const handleSliderClick = () => {
-        setIsSet(!isSet);
-    };
 
     const handleDocumentClick = (e) => {
         if (settingsRef.current && !settingsRef.current.contains(e.target)) {
@@ -31,15 +26,12 @@ const BettingHistory = () => {
         }
     };
 
-    // 設置起始日與終止日變動時變更參數值並重新取得投注資料
-
+    // 變更起始日與終止日
     const handleBeginDateChange = (event) => {
         setBeginDate(event.target.value);
-        bettingHistoryClick(event.target.value)
     }
     const handleEndDateChange = (event) => {
         setEndDate(event.target.value);
-        bettingHistoryClick(event.target.value)
     }
 
 
@@ -75,16 +67,11 @@ const BettingHistory = () => {
 
     // 顯示投注紀錄並取得投注資料
     const bettingHistoryClick = (o) => {
-        setHoveredItem(1)
-
-        console.log('bettingHistoryClick', o)
-
         if (newInstance.length !== 0) {
             newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
                 if (s) {
                     if (o.ResultCode === 0) {
                         setTableData(o.SummaryList);
-                        console.log('篩選時間', o);
                     } else {
                         console.log('GetHistorySummary: 系統錯誤處理');
                     }
@@ -95,13 +82,18 @@ const BettingHistory = () => {
         }
     }
 
+    // 起始日與終止日變動時再次執行搜尋
+    useEffect(()=>{
+        bettingHistoryClick()
+    },[beginDate,endDate])
+
+
     useEffect(() => {
         if (newInstance.length !== 0) {
             newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
                 if (s) {
                     if (o.ResultCode === 0) {
                         setTableData(o.SummaryList);
-                        console.log('初始API呼叫一次', o);
                     } else {
                         console.log('GetHistorySummary: 系統錯誤處理');
                     }
@@ -123,7 +115,7 @@ const BettingHistory = () => {
 
     }, []);
 
-
+    // 設置起始日(當日前七天)與終止日(當日)
     useEffect(() => {
         const today = new Date();
         const sevenDaysAgo = new Date(today);
@@ -132,15 +124,11 @@ const BettingHistory = () => {
         setBeginDate(formattedSevenDaysAgo);
         setEndDate(today.toISOString().split('T')[0]);
 
-    }, []); // 設置起始日(當日前七天)與終止日(當日)
+    }, []); 
 
 
     return (
         <div className='betting-history-box forpc'>
-            <div>
-                <span>beginDate: {beginDate}</span>
-                <span>endDate: {endDate}</span>
-            </div>
             <div
                 className='betting-history'
                 onClick={() => setHoveredItem(1)}
