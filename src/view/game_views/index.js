@@ -11,6 +11,7 @@ import GameFooterBG from 'games_component/game_footer_bg';
 import CountdownCircle from 'games_component/game_count_down_circle';
 import GameBettingAction from 'games_component/game_betting_action';
 import GameBettingArea from 'games_component/game_betting_area';
+import GameChat from 'games_component/game_chat';
 // import GameBettingAreaNew from 'games_component/game_betting_area/newStyle';
 import { useBaccaratContext } from 'provider/GameBaccaratProvider';
 import Loading from 'component/loading';
@@ -100,6 +101,7 @@ const GameView = (props) => {
                     <div className="game-content">
                         <CountdownCircle seconds={seconds} firstSeconds={firstSeconds} />
                     </div>
+                    <GameChat />
                     <GameBettingAction action={bettingAction} />
                     <GameFooterArea />
                     <GameBettingArea seconds={seconds} />

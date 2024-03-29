@@ -48,5 +48,8 @@
     },
     "HowToPlay": {
         "title": "玩法說明"
+    },
+    "Chat": {
+        "placeholder": "點擊以聊天"
     }
 }
