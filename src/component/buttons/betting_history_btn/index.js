@@ -165,20 +165,21 @@ const BettingHistory = () => {
                                         ))}
                                     </tr>
                                 </thead>
-                                    <tbody>
-                                        {tableData.map((data, index) => (
-                                            <tr key={index}>
-                                                <td>{data.SummaryDate}</td>
-                                                <td>{data.CurrencyType}</td>
-                                                <td>{t(`Global.${data.GameCode}`)}</td>
-                                                <td>{data.RewardValue}</td>
-                                                <td>{data.ValidBetValue}</td>
-                                                <td className='detail'>
-                                                    <button>{t("Global.details")}</button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
+                                <tbody>
+                                    {tableData.map((data, index) => (
+                                        <tr key={index}>
+                                            <td>{data.SummaryDate}</td>
+                                            <td>{data.CurrencyType}</td>
+                                            <td>{t(`Global.${data.GameCode}`)}</td>
+                                            <td>{data.RewardValue}</td>
+                                            <td>{data.ValidBetValue}</td>
+                                            <td className='detail'>
+                                                <button>{t("Global.details")}</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+
                                 </>
                             </table>
                         ) : (
