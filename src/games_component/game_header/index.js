@@ -44,6 +44,7 @@ const GameHeader = (props) => {
                 <span className='user-icon' />
                 <HowToPlayButton />
                 <GameFavorite />
+                <GameLimitButton />
             </div>
             <div className='game-middle-box'>
                 <Marquee />
@@ -53,7 +54,6 @@ const GameHeader = (props) => {
                 <GameHDSDButton />
                 <GameFullscreenButton />
                 <GameMuteButton />
-                <GameLimitButton />
                 <GameBettingHistoryButton />
                 <GameGoodTrendNoticeButton />
                 <GameSettingButton />

@@ -87,7 +87,7 @@ const GameLobbyProvider = ({ children }) => {
                     if (s) {
                         if (o.ResultCode == 0) {
                             //資料處理
-                            // console.log('UserInfo', o);
+                            console.log('UserInfo', o);
                             setUserInfo(o);
                         } else {
                             //系統錯誤處理
@@ -110,7 +110,7 @@ const GameLobbyProvider = ({ children }) => {
                     if (s) {
                         if (o.ResultCode == 0) {
                             //資料處理
-                            // console.log('TableList', o);
+                            console.log('TableList', o);
                             setTiList(o);
                             setShoeResults(o.TableInfoList.map(info => info.ShoeResult));
                             setIsLoading(false);
@@ -133,7 +133,7 @@ const GameLobbyProvider = ({ children }) => {
                     if (s) {
                         if (o.ResultCode == 0) {
                             //資料處理
-                            // console.log('tUserAccountProperty', o);
+                            console.log('tUserAccountProperty', o);
                             setFavos(JSON.parse(o.PropertyValue));
 
                         } else {

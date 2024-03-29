@@ -1,9 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { useLanguage } from 'hooks';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
 
 const GameLimitButton = () => {
-    const { t } = useLanguage();
+    const {
+        t,
+        userInfo
+    } = useLobbyContext();
     const [hoveredItem, setHoveredItem] = useState(null);
     const settingsRef = useRef(null);
 
@@ -31,7 +34,7 @@ const GameLimitButton = () => {
                 onClick={() => setHoveredItem(1)}
                 ref={settingsRef}
             >
-
+                <p>{userInfo.BetLimitCurrencyType} </p>
                 <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                     <div className='title'>{t("Global.choose_bet_limit")}</div>
                     <div className='dis'>

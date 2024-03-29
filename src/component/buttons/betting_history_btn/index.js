@@ -83,9 +83,9 @@ const BettingHistory = () => {
     }
 
     // 起始日與終止日變動時再次執行搜尋
-    useEffect(()=>{
+    useEffect(() => {
         bettingHistoryClick()
-    },[beginDate,endDate])
+    }, [beginDate, endDate])
 
 
     useEffect(() => {
@@ -124,7 +124,7 @@ const BettingHistory = () => {
         setBeginDate(formattedSevenDaysAgo);
         setEndDate(today.toISOString().split('T')[0]);
 
-    }, []); 
+    }, []);
 
 
     return (

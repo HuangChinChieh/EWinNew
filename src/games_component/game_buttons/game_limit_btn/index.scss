@@ -1,19 +1,20 @@
 .game-limit-box {
     .game-limit {
         position: relative;
-        width: 33px;
+        width: 133px;
         height: 33px;
         cursor: pointer;
         margin-left: 25px;
-        background: url('../../../img/games/limit.png') no-repeat center center/contain;
+        font-size: 1rem;
+        color: #DBC165;
 
         .hover-box {
             position: fixed;
-            right: -30rem;
+            left: -30rem;
             background: rgba(29, 29, 38, 0.8);
             padding: 20px 35px;
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
             top: 6rem;
             box-shadow: 0 0 7px rgba(0, 0, 0, 0.7);
             animation-name: anibettingout;
@@ -32,7 +33,7 @@
             }
 
             &.visible {
-                right: 0rem;
+                left: 0rem;
                 animation-name: anibettingin;
                 animation-duration: 1s;
                 animation-timing-function: ease;
@@ -42,22 +43,22 @@
 
             @keyframes anisettingout {
                 0% {
-                    right: 0rem;
+                    left: 0rem;
                 }
 
                 100% {
-                    right: -30rem;
+                    left: -30rem;
                 }
             }
 
 
             @keyframes anisettingin {
                 0% {
-                    right: -30rem;
+                    left: -30rem;
                 }
 
                 100% {
-                    right: 0rem;
+                    left: 0rem;
                 }
             }
 
