@@ -18,7 +18,7 @@ const BettingHistory = () => {
     } = useLobbyContext();
     const settingsRef = useRef(null);
     // const tableHeaders = ['日期', '類型', '上下數', '詳細內容'];
-    const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'),t('Global.rolling'), t("Global.details")];
+    const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'), t('Global.rolling'), t("Global.details")];
 
     const handleSliderClick = () => {
         setIsSet(!isSet);
@@ -31,38 +31,17 @@ const BettingHistory = () => {
         }
     };
 
-
     // 設置起始日與終止日變動時變更參數值並重新取得投注資料
+
     const handleBeginDateChange = (event) => {
         setBeginDate(event.target.value);
-        bettingHistoryClick()
+        bettingHistoryClick(event.target.value)
     }
     const handleEndDateChange = (event) => {
         setEndDate(event.target.value);
-        bettingHistoryClick()
+        bettingHistoryClick(event.target.value)
     }
 
-
-    useEffect(() => {
-        // 在 component mount 時加入 click 事件監聽器
-        document.addEventListener('click', handleDocumentClick);
-        // 在 component unmount 時移除 click 事件監聽器
-        return () => {
-            document.removeEventListener('click', handleDocumentClick);
-        };
-
-    }, []);
-
-
-    useEffect(() => {
-        const today = new Date();
-        const sevenDaysAgo = new Date(today);
-        sevenDaysAgo.setDate(today.getDate() - 7);
-        const formattedSevenDaysAgo = sevenDaysAgo.toISOString().split('T')[0];
-        setBeginDate(formattedSevenDaysAgo);
-        setEndDate(today.toISOString().split('T')[0]);
-
-    }, []); // 設置起始日(當日前七天)與終止日(當日)
 
     // 更新日期並執行搜索
     const updateDatesAndSearch = (updateFunction) => {
@@ -93,32 +72,78 @@ const BettingHistory = () => {
             setDate(date.toISOString().split('T')[0]);
         });
     };
-    
+
     // 顯示投注紀錄並取得投注資料
-    const bettingHistoryClick = () => {
+    const bettingHistoryClick = (o) => {
         setHoveredItem(1)
-        newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
-            if (s) {
-                if (o.ResultCode === 0) {
-                    setTableData(o.SummaryList);
-                    console.log(o);
+
+        console.log('bettingHistoryClick', o)
+
+        if (newInstance.length !== 0) {
+            newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
+                if (s) {
+                    if (o.ResultCode === 0) {
+                        setTableData(o.SummaryList);
+                        console.log('篩選時間', o);
+                    } else {
+                        console.log('GetHistorySummary: 系統錯誤處理');
+                    }
                 } else {
-                    console.log('GetHistorySummary: 系統錯誤處理');
+                    console.log('GetHistorySummary: 傳輸等例外問題處理');
                 }
-            } else {
-                console.log('GetHistorySummary: 傳輸等例外問題處理');
-            }
-        });
+            });
+        }
     }
-    
-    
+
+    useEffect(() => {
+        if (newInstance.length !== 0) {
+            newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
+                if (s) {
+                    if (o.ResultCode === 0) {
+                        setTableData(o.SummaryList);
+                        console.log('初始API呼叫一次', o);
+                    } else {
+                        console.log('GetHistorySummary: 系統錯誤處理');
+                    }
+                } else {
+                    console.log('GetHistorySummary: 傳輸等例外問題處理');
+                }
+            });
+        }
+    }, [])
+
+
+    useEffect(() => {
+        // 在 component mount 時加入 click 事件監聽器
+        document.addEventListener('click', handleDocumentClick);
+        // 在 component unmount 時移除 click 事件監聽器
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+
+    }, []);
+
+
+    useEffect(() => {
+        const today = new Date();
+        const sevenDaysAgo = new Date(today);
+        sevenDaysAgo.setDate(today.getDate() - 7);
+        const formattedSevenDaysAgo = sevenDaysAgo.toISOString().split('T')[0];
+        setBeginDate(formattedSevenDaysAgo);
+        setEndDate(today.toISOString().split('T')[0]);
+
+    }, []); // 設置起始日(當日前七天)與終止日(當日)
 
 
     return (
         <div className='betting-history-box forpc'>
+            <div>
+                <span>beginDate: {beginDate}</span>
+                <span>endDate: {endDate}</span>
+            </div>
             <div
                 className='betting-history'
-                onClick={bettingHistoryClick}
+                onClick={() => setHoveredItem(1)}
                 ref={settingsRef}
             >
                 <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
@@ -140,7 +165,7 @@ const BettingHistory = () => {
                             {t("Global.next_month")}
                             <span>＞</span>
                         </button>
-                        
+
                     </div>
                     <div className='dis'>
                         {tableData.length > 0 ? (

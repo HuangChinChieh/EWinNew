@@ -148,22 +148,22 @@ const GameLobbyProvider = ({ children }) => {
                     }
                 });
 
-                    instance.GetHistorySummary(CT, GUID, '','', (s, o) => {
-                        if (s) {
-                            if (o.ResultCode == 0) {
-                                //資料處理
-                                console.log(o);
+                instance.GetHistorySummary(CT, GUID, '', '', (s, o) => {
+                    if (s) {
+                        if (o.ResultCode == 0) {
+                            //資料處理
+                            console.log('server cb', o);
 
-                            } else {
-                                //系統錯誤處理
-                                console.log('系統錯誤處理');
-
-                            }
                         } else {
-                            //傳輸等例外問題處理
-                            console.log('傳輸等例外問題處理');
+                            //系統錯誤處理
+                            console.log('系統錯誤處理');
+
                         }
-                    });
+                    } else {
+                        //傳輸等例外問題處理
+                        console.log('傳輸等例外問題處理');
+                    }
+                });
 
 
 
