@@ -358,7 +358,7 @@ export class EWinGameLobbyClient {
         // console.log('Calling GetUserInfo method...');
         this.EWinHub.invoke("GetUserInfo", CT, GUID).done(function (o) {
             if (cb)
-            cb(true, o);   
+                cb(true, o);   
         }).fail(function (err) {
         if (cb)
             cb(false, err);    
