@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { useLanguage } from 'hooks';
 import { Link, useHistory } from "react-router-dom";
 import {
     toggleFavorite,
@@ -10,39 +9,31 @@ import {
     setSeconds,
     setFirstSeconds
 } from 'store/actions';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
 import './index.scss';
-import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-import { generateUUIDv4 } from 'utils/guid';
+
 
 const Section = (props) => {
-    const { t } = useLanguage();
+    const {
+        t,
+        newInstance,
+        userInfo,
+        tiList,
+        Favos,
+        setFavos,
+        EWinUrl,
+        CT,
+        GUID,
+        shoeResults,
+        setShoeResults
+    } = useLobbyContext();
     const listItems = props.listItems || [];
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
-    const tiList = props.tiList || [];
-    const userInfo = props.userInfo || [];
+
     const [strFavo, setstrFavo] = useState('');
-    const [Favos, setFavos] = useState([]);
-
-    const EWinUrl = localStorage.getItem('EWinUrl');
-    const CT = localStorage.getItem('CT');
-    const [shoeResults, setShoeResults] = useState('');
-    const GUID = generateUUIDv4();
-
-
-    useEffect(() => {
-        // 取 TableInfoList 底下的 shoeResults 值
-        if (props.tiList && props.tiList.TableInfoList) {
-            const shoeResults = props.tiList.TableInfoList.map(info => info.ShoeResult);
-            setShoeResults(shoeResults);
-            // console.log('shoeResults', shoeResults)
-        }
-    }, []);
-
-    const eWinGameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
-
     const [isMuted, setIsMuted] = useState(false);
 
     const history = useHistory();
@@ -69,7 +60,7 @@ const Section = (props) => {
             }
         }
 
-        eWinGameLobbyClient.SetUserAccountProperty(CT, GUID, "EWinGame.Favor", JSON.stringify(Favos), function (success, o) {
+        newInstance.SetUserAccountProperty(CT, GUID, "EWinGame.Favor", JSON.stringify(Favos), function (success, o) {
             if (success) {
                 console.log("SetUserAccountProperty", o);
             }
@@ -86,20 +77,27 @@ const Section = (props) => {
     }
 
     useEffect(() => {
-        if (eWinGameLobbyClient !== null) {
-            eWinGameLobbyClient.GetUserAccountProperty(CT, GUID, "EWinGame.Favor", function (o) {
-                if (o) {
+        if (newInstance !== null) {
+            newInstance.GetUserAccountProperty(CT, GUID, "EWinGame.Favor", function (s, o) {
+                if (s) {
                     if (o.ResultCode == 0) {
                         setstrFavo(o.PropertyValue);
                         setFavos(JSON.parse(o.PropertyValue));
                         // props.toggleFavorite(JSON.parse(o.PropertyValue));
+                    } else {
+                        //系統錯誤處理
+                        console.log('GetUserAccountProperty: 系統錯誤處理');
                     }
+                } else {
+                    //傳輸等例外問題處理
+                    console.log('GetUserAccountProperty: 傳輸等例外問題處理');
                 }
             });
-            eWinGameLobbyClient.handleConnected(() => {
-            })
+            // eWinGameLobbyClient.handleConnected(() => {
+            // })
         }
     }, []);
+
 
 
     const toggleMute = async (TableNumber) => {
@@ -131,7 +129,7 @@ const Section = (props) => {
                             {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
                                 <img src={i.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
                             )}
-                            <RoadMap shoeResults={shoeResults} />
+                            <RoadMap />
                         </div>
                         <p className='game-title'>
                             {i.TableNumber}
@@ -190,7 +188,7 @@ const Section = (props) => {
                                     <SimilarGames />
                                 </div>
                                 <div className='favorites-box'>
-                                    <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} />
+                                    {/* <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} /> */}
                                     <span onClick={() => handleClick(i.TableNumber)} className={Favos.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
 
                                 </div>

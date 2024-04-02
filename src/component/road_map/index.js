@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
 
-const RoadMap = (props) => {
+const RoadMap = () => {
+    const { t, shoeResults } = useLobbyContext();
+
     // 露單樣式，須看實際資料再作調整
     // 生成表格的列和行
     const columns = Array.from({ length: 35 }, (_, index) => index + 1);
@@ -11,7 +14,6 @@ const RoadMap = (props) => {
     // const [backendData, setBackendData] = useState([]);
 
 
-    const backendData = props.shoeResults
 
     return (
         <div className="table-container">
@@ -21,7 +23,7 @@ const RoadMap = (props) => {
                         <tr key={row}>
                             {columns.map((col, colIndex) => {
                                 const index = colIndex * rows.length + (row - 1);
-                                const value = backendData.length > index ? backendData[index] : null;
+                                const value = shoeResults.length > index ? shoeResults[index] : null;
                                 return (
                                     <td key={col}>
                                         {value !== null && (

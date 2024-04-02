@@ -1,21 +1,21 @@
-
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
 
-function Footer() {
-    const { t, userInfo } = useLobbyContext();
-
-
+const GameBalance = () => {
+    const {
+        t,
+        userInfo
+    } = useLobbyContext();
     return (
-        <div className='footer-box aniFooterAction'>
-            <div className='user-wallet'>{t("Global.balance")}：
-                {userInfo.BetLimitCurrencyType}&nbsp;
+        <div className='game-balance-box'>
+            <span className='icon-box'>{t("Global.balance")}: </span>
+            <span>
                 {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
                     i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                 ))}
-            </div>
+            </span>
         </div>
     )
 }
 
-export default Footer;
+export default GameBalance;

@@ -1,4 +1,5 @@
 
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import Section from 'component/section';
 import DefaultVedio from 'component/default_vedio';
 import Titlebar from 'component/title_bar';
@@ -7,14 +8,10 @@ import Loading from 'component/loading';
 
 import './index.scss';
 
-function Gamelobby(props) {
+function Gamelobby() {
 
-    const tiList = props.tiList;
-    const userInfo = props.userInfo;
+    const { t, isLoading } = useLobbyContext();
 
-    // hardcode demo用
-    // const isLoading = false;
-    const isLoading = props.isLoading;
 
 
     return (
@@ -33,18 +30,16 @@ function Gamelobby(props) {
                                         <div className='col'>
                                             <div className='list-box'>
                                                 <CustomTabs
-                                                    defaultActiveKey="yourgames"
+                                                    defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="yourgames" title="屬於您">
-                                                        <Section tiList={tiList} userInfo={userInfo} />
-
+                                                    <CustomTab eventKey="baccarat" title={t("Global.ba")}>
+                                                        <Section />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
                                                     </CustomTab>
-                                                    <CustomTab eventKey="baccarat" title="百家樂">
-                                                        {/* hardcode demo用 */}
-                                                        {/* <Section listItems={listItems2} /> */}
-                                                    </CustomTab>
+                                                    {/* <CustomTab eventKey="baccarat" title="百家樂">
+                                                     
+                                                        </CustomTab> */}
                                                 </CustomTabs>
                                             </div>
                                         </div>
@@ -61,20 +56,19 @@ function Gamelobby(props) {
                                         <div className='col'>
                                             <div className='list-box'>
                                                 <CustomTabs
-                                                    defaultActiveKey="yourgames"
+                                                    defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="yourgames" title="屬於您">
+                                                    <CustomTab eventKey="baccarat" title={t("Global.ba")}>
                                                         <DefaultVedio />
                                                         <Titlebar title="全部遊戲" />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
-                                                        <Section tiList={tiList} userInfo={userInfo} />
+                                                        <Section />
                                                     </CustomTab>
-                                                    <CustomTab eventKey="baccarat" title="百家樂">
+                                                    {/* <CustomTab eventKey="baccarat" title="百家樂">
                                                         <Titlebar title="百家樂" />
-                                                        {/* hardcode demo用 */}
-                                                        {/* <Section listItems={listItems2} /> */}
-                                                    </CustomTab>
+                                    
+                                                    </CustomTab> */}
                                                 </CustomTabs>
                                             </div>
                                         </div>

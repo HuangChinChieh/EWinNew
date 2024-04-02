@@ -1,8 +1,8 @@
-import { useLanguage } from 'hooks';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
-function GameFooter(props) {
-    const { t } = useLanguage();
-    const userInfo = props.userInfo;
+
+function GameFooter() {
+    const { t, userInfo } = useLobbyContext();
     return (
         <div className='game-footer-box aniFooterAction'>
             <div className='total-betting'>

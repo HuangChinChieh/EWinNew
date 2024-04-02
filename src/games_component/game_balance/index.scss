@@ -1,0 +1,29 @@
+.game-balance-box {
+    border: 1px solid #46465B;
+    border-radius: 23px;
+    padding: 10px 16px;
+
+    span {
+        color: #fff;
+        font-weight: 100;
+        font-size: 0.9rem;
+        opacity: 0.75;
+
+        &.icon-box {
+            position: relative;
+            padding-left: 15px;
+            display: inline-block;
+
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                width: 25px;
+                height: 20px;
+                background: url('../../img/header/wallet.png') no-repeat center center/contain;
+                left: -10px;
+                top: -1px;
+            }
+        }
+    }
+}

@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
+import { useLobbyContext } from 'provider/GameLobbyProvider';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import './index.scss';
 import Videos from 'img/videoplayback.mp4';
 const VideoBox = (props) => {
-    const { t } = useTranslation();
+    const { t } = useLobbyContext();
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);

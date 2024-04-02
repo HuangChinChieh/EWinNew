@@ -358,10 +358,10 @@ export class EWinGameLobbyClient {
         // console.log('Calling GetUserInfo method...');
         this.EWinHub.invoke("GetUserInfo", CT, GUID).done(function (o) {
             if (cb)
-                cb(true, o);   
+            cb(true, o);   
         }).fail(function (err) {
-        if (cb)
-            cb(false, err);    
+            if (cb)
+                cb(false, err);
         });
     }
 
@@ -390,10 +390,10 @@ export class EWinGameLobbyClient {
     GetUserAccountProperty(CT, GUID, PropertyName, cb) {
         this.EWinHub.invoke("GetUserAccountProperty", CT, GUID, PropertyName).done(function (o) {
             if (cb)
-                cb(true, o);   
+                cb(true, o);
         }).fail(function (err) {
-        if (cb)
-            cb(false, err);    
+            if (cb)
+                cb(false, err);
         });
     }
 

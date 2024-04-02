@@ -1,0 +1,75 @@
+.game-chat-box {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(41, 41, 51, 0.5);
+    z-index: 9;
+    left: 30px;
+    top: 10rem;
+    border-radius: 30px;
+
+    form {
+        .chat-wrap {
+            position: relative;
+
+            input {
+                width: 200px;
+                background: rgba(0, 0, 0, 0);
+                padding: 12px 25px;
+                border: none;
+                color: rgba(255, 255, 255, 0.6);
+                border-radius: 30px;
+
+                &::placeholder {
+                    color: rgba(255, 255, 255, 0.6);
+                }
+
+                &:focus {
+                    outline: none !important;
+                    animation: inputani 2.5s ease-in infinite;
+                }
+
+                @keyframes inputani {
+                    0% {
+                        box-shadow: 0 0 13px rgba(255, 255, 255, 0);
+                    }
+
+                    50% {
+                        box-shadow: 0 0 13px rgba(255, 255, 255, 1);
+                    }
+
+                    100% {
+                        box-shadow: 0 0 13px rgba(255, 255, 255, 0);
+                    }
+                }
+            }
+
+            span {
+                display: inline-block;
+                position: absolute;
+                right: 19px;
+                top: 9px;
+                width: 25px;
+                height: 25px;
+                background: url('../../img/games/chat.png') no-repeat center center/contain;
+            }
+        }
+    }
+
+    .chat-list {
+        position: absolute;
+        width: 230px;
+
+        div {
+            background: rgba(0, 0, 0, 0.5);
+            margin: 7px 0;
+            padding: 12px 25px;
+            border-radius: 30px;
+            color: rgba(255, 255, 255, 0.4);
+
+            span {
+                color: rgba(255, 255, 255, 1);
+            }
+        }
+    }
+
+}
