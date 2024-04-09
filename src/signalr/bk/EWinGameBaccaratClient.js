@@ -1,28 +1,48 @@
 ﻿import { hubConnection } from 'signalr-no-jquery';
 
 export class EWinGameBaccaratClient {
+    // constructor(CT, eWinUrl) {
+    //     this.conn = hubConnection();
+    //     this.CT = CT;
+    //     if (eWinUrl) {
+    //         this.EWinUrl = eWinUrl;
+    //     }
+    // }
+
+    // CT;
+    // EWinHub;
+    // currentState = 4;  //0=connecting, 1=connected, 2=reconnecting, 4=disconnected
+    // onReceive;
+    // onReconnected;
+    // onReconnecting;
+    // onConnected;
+    // onDisconnect;
+    // CONNECTING = 0;
+    // CONNECTED = 1;
+    // RECONNECTING = 2;
+    // DISCONNECTED = 4;
+    // EWinUrl = null;
+    // conn;
+
     constructor(CT, eWinUrl) {
-        this.conn = hubConnection();
+        this.EWinHub = null;
+        this.currentState = 4;  //0=connecting, 1=connected, 2=reconnecting, 4=disconnected
+        this.onReceive = null;
+        this.onReconnected = null;
+        this.onReconnecting = null;
+        this.onConnected = null;
+        this.onDisconnect = null;
+        this.CONNECTING = 0;
+        this.CONNECTED = 1;
+        this.RECONNECTING = 2;
+        this.DISCONNECTED = 4;
         this.CT = CT;
+        this.conn = hubConnection();
+
         if (eWinUrl) {
             this.EWinUrl = eWinUrl;
         }
     }
-
-    CT;
-    EWinHub;
-    currentState = 4;  //0=connecting, 1=connected, 2=reconnecting, 4=disconnected
-    onReceive;
-    onReconnected;
-    onReconnecting;
-    onConnected;
-    onDisconnect;
-    CONNECTING = 0;
-    CONNECTED = 1;
-    RECONNECTING = 2;
-    DISCONNECTED = 4;
-    EWinUrl = null;
-    conn;
 
 
     componentDidMount() {
@@ -1381,7 +1401,8 @@ export class EWinGameBaccaratClient {
             Ret = EWinGameBaccaratClient.instance;
         } else {
             if (CT) {
-                this.instance = new EWinGameBaccaratClient(CT, eWinUrl);
+                // this.instance = new EWinGameBaccaratClient(CT, eWinUrl);
+                EWinGameBaccaratClient.instance = new EWinGameBaccaratClient(CT, eWinUrl);
                 Ret = EWinGameBaccaratClient.instance;
             } else {
                 Ret = null;

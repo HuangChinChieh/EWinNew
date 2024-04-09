@@ -15,11 +15,14 @@ const GameBaccaratProvider = ({ children }) => {
         CT,
         EWinUrl,
         Echo,
+        GUID,
         newInstance
     } = useLobbyContext();
 
     const [isBaccaratLoading, setIsBaccaratLoading] = useState(true);
     const [newBaccaratInstance, setNewBaccaratInstance] = useState([]);
+    const [userBetlimitList, setUserBetlimitList] = useState([]);
+
 
     useEffect(() => {
         const baccaratInstance = EWinGameBaccaratClient.getInstance(CT, EWinUrl);
@@ -29,6 +32,27 @@ const GameBaccaratProvider = ({ children }) => {
                 // 監聽連線狀態
                 baccaratInstance.HeartBeat(Echo);
                 setIsBaccaratLoading(false);
+                console.log('EWinHub 連結成功');
+
+                baccaratInstance.UserAccountGetBetLimitList(CT, GUID, localStorage.getItem('CurrencyType'), (s, o) => {
+                    if (s) {
+                        if (o.ResultCode == 0) {
+                            //資料處理
+                            console.log('取得會員個人限紅資料', o);
+                            setUserBetlimitList(o);
+
+                        } else {
+                            //系統錯誤處理
+                            console.log('UserAccountGetBetLimitList: 系統錯誤處理');
+
+
+                        }
+                    } else {
+                        //傳輸等例外問題處理
+                        console.log('UserAccountGetBetLimitList: 傳輸等例外問題處理');
+
+                    }
+                });
 
             }
             const handleDisconnect = () => {
@@ -61,7 +85,8 @@ const GameBaccaratProvider = ({ children }) => {
     return (
         <GameBaccaratContext.Provider value={{
             isBaccaratLoading,
-            newBaccaratInstance
+            newBaccaratInstance,
+            userBetlimitList
         }}>
             {children}
         </GameBaccaratContext.Provider>

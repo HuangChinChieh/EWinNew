@@ -89,6 +89,7 @@ const GameLobbyProvider = ({ children }) => {
                             //資料處理
                             console.log('UserInfo', o);
                             setUserInfo(o);
+                            localStorage.setItem('CurrencyType', o.BetLimitCurrencyType);
                         } else {
                             //系統錯誤處理
                             console.log('GetUserInfo: 系統錯誤處理');
