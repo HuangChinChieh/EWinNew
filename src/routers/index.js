@@ -18,13 +18,9 @@ import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
 import GameBaccaratProvider from 'provider/GameBaccaratProvider';
 
-import { useLobbyContext } from 'provider/GameLobbyProvider';
-
-import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-
 import './index.scss';
 
-const Main = (props) => {
+const Main = () => {
 
   const location = useLocation();
   const isGameView = location.pathname.includes('/games/');
@@ -32,16 +28,7 @@ const Main = (props) => {
   const history = useHistory();
 
   localStorage.setItem('currentUrl', '');
-  const [isLoading, setIsLoading] = useState(true);
 
-
-  const {
-    t,
-    CT,
-    EWinUrl,
-    Echo,
-    GUID
-  } = useLobbyContext();
 
   useEffect(() => {
     const currentPath = history.location.pathname;
