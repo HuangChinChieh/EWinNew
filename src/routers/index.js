@@ -6,6 +6,7 @@ import {
   useLocation,
   useHistory
 } from "react-router-dom";
+
 import Header from 'component/header';
 import Gamelobby from 'view/game_lobby';
 import Gamefavorite from 'view/game_favorite';
@@ -17,24 +18,38 @@ import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
 import GameBaccaratProvider from 'provider/GameBaccaratProvider';
 
+import { useLobbyContext } from 'provider/GameLobbyProvider';
+
+import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
+
 import './index.scss';
 
-const Main = () => {
+const Main = (props) => {
 
   const location = useLocation();
   const isGameView = location.pathname.includes('/games/');
   const [getUrl, setGetUrl] = useState('');
   const history = useHistory();
 
-  localStorage.setItem('currentUrl', '')
+  localStorage.setItem('currentUrl', '');
+  const [isLoading, setIsLoading] = useState(true);
 
+
+  const {
+    t,
+    CT,
+    EWinUrl,
+    Echo,
+    GUID
+  } = useLobbyContext();
 
   useEffect(() => {
     const currentPath = history.location.pathname;
     localStorage.setItem('currentUrl', currentPath);
     setGetUrl(localStorage.getItem('currentUrl'))
 
-  }, [history.location.pathname])
+  }, [history.location.pathname]);
+
 
   return (
     <div className="wrap-box">

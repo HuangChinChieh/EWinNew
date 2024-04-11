@@ -52,6 +52,22 @@ export const demoReducer = (state = initDemoState, action) => {
 }
 
 
+const initGameLobbyState = {
+    GlobalEWinGameLobbyClient: null,  // gameLobby連線建立
+}
+
+export const gameLobbyReducer = (state = initGameLobbyState, action) => {
+    switch (action.type) {
+        case 'GLOBAL_GAME_LOBBY_CLIENT':
+            return {
+                ...state,
+                GlobalEWinGameLobbyClient: action.payload.GlobalEWinGameLobbyClient
+            }
+        default:
+            return state;
+    }
+}
+
 
 // 目前需要傳遞資料的事件不多, 所以都寫在 rootReducer裡面, 如果事件變多, 最好拆分多個 reducer 比較好管理
 
