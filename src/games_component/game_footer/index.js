@@ -1,7 +1,8 @@
 import { useLobbyContext } from 'provider/GameLobbyProvider';
+import { connect } from 'react-redux';
 import './index.scss';
 
-function GameFooter() {
+function GameFooter(props) {
     const { t, userInfo } = useLobbyContext();
     return (
         <div className='game-footer-box aniFooterAction'>
@@ -10,7 +11,7 @@ function GameFooter() {
                     {t('Global.total_betting')}：
                 </span>
                 <span>
-                    {userInfo.BetLimitCurrencyType}&nbsp;
+                    {userInfo.BetLimitCurrencyType}&nbsp;{props.totalChips1 + props.totalChips2 + props.totalChips3 + props.totalChips4 + props.totalChips5}
                 </span>
             </div>
             <div className='user-wallet'>
@@ -26,4 +27,14 @@ function GameFooter() {
     )
 }
 
-export default GameFooter;
+const mapStateToProps = (state) => {
+    return {
+        totalChips1: state.root.totalChips1,
+        totalChips2: state.root.totalChips2,
+        totalChips3: state.root.totalChips3,
+        totalChips4: state.root.totalChips4,
+        totalChips5: state.root.totalChips5,
+    };
+};
+
+export default connect(mapStateToProps)(GameFooter);
