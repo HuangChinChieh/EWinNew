@@ -73,3 +73,41 @@
     }
 
 }
+
+@media screen and (max-width: 916px) {
+    .game-chat-box {
+        top: 3rem;
+
+        form {
+            .chat-wrap {
+                input {
+                    width: 150px;
+                    padding: 6px 25px;
+                }
+
+                span {
+                    top: 5px;
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+
+        .chat-list {
+            width: 200px;
+
+            div {
+                background: rgba(0, 0, 0, 0.5);
+                margin: 7px 0;
+                padding: 6px 25px;
+                border-radius: 30px;
+                color: rgba(255, 255, 255, 0.4);
+
+                span {
+                    color: rgba(255, 255, 255, 1);
+                }
+            }
+        }
+
+    }
+}

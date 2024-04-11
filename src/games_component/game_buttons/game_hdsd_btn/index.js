@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { useLanguage } from 'hooks';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
 
