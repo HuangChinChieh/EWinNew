@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
-// import {
-//     setSeconds,
-//     setFirstSeconds
-// } from 'store/actions';
 import {
     actIsGameBaccarLoading,
     actUserBetlimitList
@@ -16,15 +12,11 @@ import CountdownCircle from 'games_component/game_count_down_circle';
 import GameBettingAction from 'games_component/game_betting_action';
 import GameBettingArea from 'games_component/game_betting_area';
 import GameChat from 'games_component/game_chat';
-// import GameBettingAreaNew from 'games_component/game_betting_area/newStyle';
 import Loading from 'component/loading';
 import './index.scss';
 
 
 const GameView = (props) => {
-
-    // const { isLoading } = useLobbyContext();
-    // const isBaccaratLoading = false;
 
 
     const [seconds, setSeconds] = useState(777);
@@ -52,13 +44,6 @@ const GameView = (props) => {
     // }, []);
 
     // const [newFavo, setNewFavo] = useState('');
-
-
-    // useEffect(() => {
-    //     setNewFavo(props.Favos)
-    // }, [props.Favos])
-
-    const localTableTitle = localStorage.getItem('getLocalTableTitle');
 
 
     useEffect(() => {

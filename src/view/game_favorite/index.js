@@ -24,8 +24,6 @@ function Gamefavorite(props) {
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
 
-    const [shoeResults, setShoeResults] = useState('');
-
     const mouseleave = () => {
         setHoveredItem(null);
         setMoreScale('');
@@ -35,29 +33,6 @@ function Gamefavorite(props) {
         props.getGameTitle(TableNumber);
         localStorage.setItem('getLocalTableTitle', TableNumber);
     };
-
-    // const handleClick = async (TableNumber) => {
-
-    //     if (props.favo.includes(TableNumber)) {
-    //         var index = props.favo.indexOf(TableNumber);
-    //         props.showMessage(`移除收藏 ${TableNumber}`);
-
-
-    //         if (index > -1) {
-    //             props.favo.splice(index, 1);
-    //         }
-    //     }
-
-    //     if (instance !== null) {
-    //         instance.SetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", JSON.stringify(props.favo), function (success, o) {
-    //             if (success) {
-    //                 // console.log("SetUserAccountProperty", o);
-    //             }
-    //         });
-    //     }
-
-
-    // };
 
 
     const handleClick = async (TableNumber) => {

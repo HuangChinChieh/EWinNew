@@ -27,7 +27,6 @@ const GameFavorite = (props) => {
 
         if (gameLobbyClient !== null) {
 
-            // var index = props.favo.indexOf(TableNumber);
             let newFavo = [...props.favo];
             const index = newFavo.indexOf(TableNumber);
 
@@ -35,13 +34,13 @@ const GameFavorite = (props) => {
                 props.showMessage(`移除收藏 ${TableNumber}`);
                 props.actIsFavorited(false);
                 if (index > -1) {
-                    newFavo.splice(index, 1); // 修改這裡
+                    newFavo.splice(index, 1);
                     props.actFavo(newFavo);
                 }
             } else {
                 props.showMessage(`新增收藏 ${TableNumber}`);
                 props.actIsFavorited(true);
-                newFavo.push(TableNumber); // 修改這裡
+                newFavo.push(TableNumber);
                 props.actFavo(newFavo);
             }
 
