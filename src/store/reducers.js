@@ -1,4 +1,5 @@
 
+
 // 這邊是個參數的init值設定
 
 const initialState = {
@@ -45,23 +46,6 @@ export const demoReducer = (state = initDemoState, action) => {
             return {
                 ...state,
                 demoState: action.payload.demoState
-            }
-        default:
-            return state;
-    }
-}
-
-
-const initGameLobbyState = {
-    GlobalEWinGameLobbyClient: null,  // gameLobby連線建立
-}
-
-export const gameLobbyReducer = (state = initGameLobbyState, action) => {
-    switch (action.type) {
-        case 'GLOBAL_GAME_LOBBY_CLIENT':
-            return {
-                ...state,
-                GlobalEWinGameLobbyClient: action.payload.GlobalEWinGameLobbyClient
             }
         default:
             return state;

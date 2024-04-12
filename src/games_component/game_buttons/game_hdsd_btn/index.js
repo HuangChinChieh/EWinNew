@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
 
-const GameHDSDButton = () => {
+const GameHDSDButton = (props) => {
     const {
-        t,
-        tiList
+        t
     } = useLobbyContext();
     const [hoveredItem, setHoveredItem] = useState(null);
     const settingsRef = useRef(null);
@@ -25,13 +25,13 @@ const GameHDSDButton = () => {
     };
 
     useEffect(() => {
-        if (tiList && tiList.TableInfoList) {
-            const tableInfo = tiList.TableInfoList.find(table => table.TableNumber === localTitle);
+        if (props.tiList && props.tiList.TableInfoList) {
+            const tableInfo = props.tiList.TableInfoList.find(table => table.TableNumber === localTitle);
             if (tableInfo && tableInfo.Stream && tableInfo.Stream.length > 0) {
                 setSelectedLimit(tableInfo.Stream[0].StreamName);
             }
         }
-    }, [tiList, localTitle]);
+    }, [props.tiList, localTitle]);
 
 
     useEffect(() => {
@@ -55,7 +55,7 @@ const GameHDSDButton = () => {
                 <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                     <div className='title'>{t("VideoLine.title")}</div>
                     <div className='dis'>
-                        {tiList && tiList.TableInfoList && tiList.TableInfoList.map((tableInfo, tableIndex) => (
+                        {props.tiList && props.tiList.TableInfoList && props.tiList.TableInfoList.map((tableInfo, tableIndex) => (
                             (tableInfo.TableNumber === localTitle) && (
                                 <div
                                     key={tableIndex}
@@ -79,4 +79,10 @@ const GameHDSDButton = () => {
     )
 }
 
-export default GameHDSDButton;
+const mapStateToProps = (state) => {
+    return {
+        tiList: state.gameLobby.tiList,
+    };
+};
+
+export default connect(mapStateToProps)(GameHDSDButton);

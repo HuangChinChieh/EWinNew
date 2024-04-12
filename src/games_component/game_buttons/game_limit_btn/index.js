@@ -1,17 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
-import { useBaccaratContext } from 'provider/GameBaccaratProvider';
 import './index.scss';
 
-const GameLimitButton = () => {
+const GameLimitButton = (props) => {
     const {
-        t,
-        userInfo
+        t
     } = useLobbyContext();
-    const {
-        newBaccaratInstance,
-        userBetlimitList
-    } = useBaccaratContext();
+
     const [hoveredItem, setHoveredItem] = useState(null);
     const [selectedLimit, setSelectedLimit] = useState(null);
     const [min, setMin] = useState('');
@@ -19,13 +15,13 @@ const GameLimitButton = () => {
     const settingsRef = useRef(null);
 
     useEffect(() => {
-        if (userBetlimitList && userBetlimitList.BetLimitList && userBetlimitList.BetLimitList.length > 0) {
-            const { BetLimitID, Banker } = userBetlimitList.BetLimitList[0];
+        if (props.userBetlimitList && props.userBetlimitList.BetLimitList && props.userBetlimitList.BetLimitList.length > 0) {
+            const { BetLimitID, Banker } = props.userBetlimitList.BetLimitList[0];
             setMin(Banker.Min);
             setMax(Banker.Max);
             handleOptionClick(BetLimitID, Banker.Min, Banker.Max);
         }
-    }, [userBetlimitList]);
+    }, [props.userBetlimitList]);
 
     const handleDocumentClick = (e) => {
         if (settingsRef.current && !settingsRef.current.contains(e.target)) {
@@ -60,13 +56,13 @@ const GameLimitButton = () => {
                 onClick={() => setHoveredItem(1)}
                 ref={settingsRef}
             >
-                <p>{userInfo.BetLimitCurrencyType} {min} ~ {max} </p>
+                <p>{props.userInfo.BetLimitCurrencyType} {min} ~ {max} </p>
                 <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                     <div className='title'>{t("Global.choose_bet_limit")}</div>
                     <div className='dis'>
-                        {userBetlimitList && userBetlimitList.BetLimitList && (
+                        {props.userBetlimitList && props.userBetlimitList.BetLimitList && (
                             <div className='dis'>
-                                {userBetlimitList.BetLimitList.map(limit => (
+                                {props.userBetlimitList.BetLimitList.map(limit => (
                                     <div
                                         key={limit.BetLimitID}
                                         onClick={() => handleOptionClick(limit.BetLimitID, limit.Banker.Min, limit.Banker.Max)}
@@ -84,4 +80,11 @@ const GameLimitButton = () => {
     )
 }
 
-export default GameLimitButton;
+const mapStateToProps = (state) => {
+    return {
+        userInfo: state.gameLobby.userInfo,
+        userBetlimitList: state.gameBaccar.userBetlimitList
+    };
+};
+
+export default connect(mapStateToProps)(GameLimitButton);

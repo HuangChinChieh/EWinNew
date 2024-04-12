@@ -4,13 +4,6 @@ export const demostate = (demoState) => ({
 });
 
 
-// GameLobby相關
-export const globalGameLobbyClient = (GlobalEWinGameLobbyClient) => ({
-    type: 'GLOBAL_GAME_LOBBY_CLIENT',
-    payload: { GlobalEWinGameLobbyClient }
-})
-
-
 // 收藏相關
 export const toggleFavorite = (TableNumber) => async (dispatch, getState) => {
     // const isFavorite = getState().root.favorites.includes(gameId);

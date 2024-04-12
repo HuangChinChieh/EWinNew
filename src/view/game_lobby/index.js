@@ -1,6 +1,7 @@
 
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import Section from 'component/section';
+import { connect } from 'react-redux';
 import DefaultVedio from 'component/default_vedio';
 import Titlebar from 'component/title_bar';
 import { CustomTabs, CustomTab } from 'component/custom_tabs';
@@ -8,15 +9,15 @@ import Loading from 'component/loading';
 
 import './index.scss';
 
-function Gamelobby() {
+function Gamelobby(props) {
 
-    const { t, isLoading } = useLobbyContext();
+    const { t } = useLobbyContext();
 
 
 
     return (
         <div className='game-lobby-wrap'>
-            {isLoading ? (
+            {props.isGameLobbyLoading ? (
                 <Loading />
             ) : (
 
@@ -84,4 +85,14 @@ function Gamelobby() {
     )
 }
 
-export default Gamelobby;
+// export default Gamelobby;
+
+const mapStateToProps = (state) => {
+    return {
+        isGameLobbyLoading: state.gameLobby.isGameLobbyLoading,
+    };
+};
+
+
+
+export default connect(mapStateToProps)(Gamelobby);

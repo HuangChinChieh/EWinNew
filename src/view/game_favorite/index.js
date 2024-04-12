@@ -7,6 +7,10 @@ import {
     toggleMute,
     getGameTitle
 } from 'store/actions';
+import {
+    actFavo
+} from 'store/gamelobbyActions';
+import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
@@ -14,7 +18,8 @@ import Loading from 'component/loading';
 import './index.scss';
 
 function Gamefavorite(props) {
-    const { t, isLoading, userInfo, tiList, newInstance, Favos, CT, GUID } = useLobbyContext();
+    const { t } = useLobbyContext();
+    const instance = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
 
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
@@ -31,61 +36,84 @@ function Gamefavorite(props) {
         localStorage.setItem('getLocalTableTitle', TableNumber);
     };
 
+    // const handleClick = async (TableNumber) => {
+
+    //     if (props.favo.includes(TableNumber)) {
+    //         var index = props.favo.indexOf(TableNumber);
+    //         props.showMessage(`移除收藏 ${TableNumber}`);
+
+
+    //         if (index > -1) {
+    //             props.favo.splice(index, 1);
+    //         }
+    //     }
+
+    //     if (instance !== null) {
+    //         instance.SetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", JSON.stringify(props.favo), function (success, o) {
+    //             if (success) {
+    //                 // console.log("SetUserAccountProperty", o);
+    //             }
+    //         });
+    //     }
+
+
+    // };
+
+
     const handleClick = async (TableNumber) => {
-
-        if (Favos.includes(TableNumber)) {
-            var index = Favos.indexOf(TableNumber);
+        let newFavo = [...props.favo];
+        const index = newFavo.indexOf(TableNumber);
+        if (index !== -1) {
+            newFavo.splice(index, 1);
+            props.actFavo(newFavo);
             props.showMessage(`移除收藏 ${TableNumber}`);
-
-
-            if (index > -1) {
-                Favos.splice(index, 1);
+            if (instance !== null) {
+                instance.SetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", JSON.stringify(newFavo), function (success, o) {
+                    if (success) {
+                        // console.log("SetUserAccountProperty", o);
+                    }
+                });
             }
         }
-
-        newInstance.SetUserAccountProperty(CT, GUID, "EWinGame.Favor", JSON.stringify(Favos), function (success, o) {
-            if (success) {
-                // console.log("SetUserAccountProperty", o);
-            }
-        });
-
     };
+
+
 
     return (
         <div className='favorite_box'>
             <div className="section_box" style={{ width: '100%' }}>
-                {isLoading ? (<Loading />) : (
+                {props.isGameLobbyLoading ? (<Loading />) : (
                     <div>
-                        {Favos.length === 0 ? (
+                        {props.favo && props.favo.length === 0 ? (
                             <div className='without_favorite'>
                                 <h2>{t("Global.without_favorite")}</h2>
                             </div>
                         ) : (
                             <ul>
-                                {tiList && tiList.TableInfoList && tiList.TableInfoList.map((i, index) => {
-                                    if (Favos.includes(i.TableNumber)) {
+                                {props.tiList && props.tiList.TableInfoList && props.tiList.TableInfoList.map((i, index) => {
+                                    if (props.favo && props.favo.includes(i.TableNumber)) {
                                         return (
                                             <li key={index}
                                                 onMouseEnter={() => setHoveredItem(i.TableNumber)}
                                                 onMouseLeave={mouseleave}
                                                 className='li-box'
                                             >
-                                                <span className={`${Favos.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
+                                                <span className={`${props.favo && props.favo.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
                                                 <div className={`games ${i.TableNumber}`}>
                                                     {/* 獲取ImageType為1的ImageUrl */}
                                                     {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
                                                         <img src={i.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
                                                     )}
-                                                    <RoadMap shoeResults={shoeResults} />
+                                                    <RoadMap />
                                                 </div>
                                                 <p className='game-title'>
                                                     {i.TableNumber}
                                                 </p>
                                                 <p className='game-wallet'>
-                                                    <span>{userInfo.BetLimitCurrencyType}</span>
+                                                    <span>{props.userInfo.BetLimitCurrencyType}</span>
                                                     <span>
-                                                        {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
-                                                            i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span> : ''
+                                                        {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                                                            i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span> : ''
                                                         ))}
                                                     </span>
                                                 </p>
@@ -103,10 +131,10 @@ function Gamefavorite(props) {
                                                             {i.TableNumber}
                                                         </p>
                                                         <p className='game-wallet'>
-                                                            <span>{userInfo.BetLimitCurrencyType}</span>
+                                                            <span>{props.userInfo.BetLimitCurrencyType}</span>
                                                             <span>
-                                                                {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
-                                                                    i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                                                                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                                                                    i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                                                                 ))}
                                                             </span>
                                                         </p>
@@ -114,7 +142,7 @@ function Gamefavorite(props) {
                                                             <Link to={`/games/${i.TableNumber}`} onClick={getGameName(i.TableNumber, i.TableTimeoutSecond)}>{t("Global.start_games")}</Link>
                                                         </div>
                                                         <div className='game-table-wrap'>
-                                                            <RoadMap shoeResults={shoeResults} />
+                                                            <RoadMap />
                                                         </div>
                                                         <p className='game-dis'>
                                                             {i.Status}
@@ -135,7 +163,7 @@ function Gamefavorite(props) {
                                                         </div>
                                                         <div className='favorites-box'>
                                                             <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} />
-                                                            <span onClick={() => handleClick(i.TableNumber)} className={Favos.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
+                                                            <span onClick={() => handleClick(i.TableNumber)} className={props.favo && props.favo.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
 
                                                         </div>
                                                     </div>
@@ -163,7 +191,15 @@ const mapStateToProps = (state) => {
     return {
         favorites: state.root.favorites || [],
         mutes: state.root.mutes || [],
-        message: state.root.message
+        message: state.root.message,
+        ct: state.gameLobby.ct,
+        guid: state.gameLobby.guid,
+        echo: state.gameLobby.echo,
+        ewinurl: state.gameLobby.ewinurl,
+        isGameLobbyLoading: state.gameLobby.isGameLobbyLoading,
+        tiList: state.gameLobby.tiList,
+        userInfo: state.gameLobby.userInfo,
+        favo: state.gameLobby.favo
     };
 };
 
@@ -172,6 +208,7 @@ const mapDispatchToProps = {
     showMessage,
     toggleMute,
     getGameTitle,
+    actFavo
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Gamefavorite);

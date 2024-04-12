@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
+import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import {
     toggleFavorite,
     showMessage,
@@ -9,6 +10,7 @@ import {
     setSeconds,
     setFirstSeconds
 } from 'store/actions';
+import { actFavo } from 'store/gamelobbyActions';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
@@ -17,56 +19,52 @@ import './index.scss';
 
 const Section = (props) => {
     const {
-        t,
-        newInstance,
-        userInfo,
-        tiList,
-        Favos,
-        setFavos,
-        EWinUrl,
-        CT,
-        GUID,
-        shoeResults,
-        setShoeResults
+        t
     } = useLobbyContext();
     const listItems = props.listItems || [];
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
 
-    const [strFavo, setstrFavo] = useState('');
-    const [isMuted, setIsMuted] = useState(false);
+    const instance = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
 
     const history = useHistory();
 
     const handleClick = async (TableNumber) => {
         // await props.toggleFavorite(TableNumber);
 
-        if (Favos.includes(TableNumber)) {
-            var index = Favos.indexOf(TableNumber);
-            const updatedFavos = Favos.filter(num => num !== TableNumber);
+        if (props.favo.includes(TableNumber)) {
+            var index = props.favo.indexOf(TableNumber);
+            const updatedFavos = props.favo.filter(num => num !== TableNumber);
             props.showMessage(`移除收藏 ${TableNumber}`);
-            setFavos(updatedFavos);
+            props.actFavo(updatedFavos);
 
 
             if (index > -1) {
-                Favos.splice(index, 1);
+                props.favo.splice(index, 1);
             }
         } else {
-            var index = Favos.indexOf(TableNumber);
-            setFavos([...Favos, TableNumber]);
+            var index = props.favo.indexOf(TableNumber);
+            props.actFavo([...props.favo, TableNumber]);
             props.showMessage(`新增收藏 ${TableNumber}`);
             if (index == -1) {
-                Favos.push(TableNumber);
+                props.favo.push(TableNumber);
             }
         }
 
-        newInstance.SetUserAccountProperty(CT, GUID, "EWinGame.Favor", JSON.stringify(Favos), function (success, o) {
-            if (success) {
-                console.log("SetUserAccountProperty", o);
-            }
-        });
 
-        console.log("Favos", Favos);
+        if (instance !== null) {
+            instance.SetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", JSON.stringify(props.favo), function (success, o) {
+                if (success) {
+                    console.log("SetUserAccountProperty", o);
+                }
+            });
+        }
+
+
+
+
+
+        // console.log("Favos", props.favo);
 
         // props.showMessage();
     };
@@ -76,13 +74,15 @@ const Section = (props) => {
         setMoreScale('');
     }
 
+
+
     useEffect(() => {
-        if (newInstance !== null) {
-            newInstance.GetUserAccountProperty(CT, GUID, "EWinGame.Favor", function (s, o) {
+        if (instance !== null) {
+            instance.GetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", function (s, o) {
                 if (s) {
                     if (o.ResultCode == 0) {
-                        setstrFavo(o.PropertyValue);
-                        setFavos(JSON.parse(o.PropertyValue));
+                        // setstrFavo(o.PropertyValue);
+                        props.actFavo(JSON.parse(o.PropertyValue));
                         // props.toggleFavorite(JSON.parse(o.PropertyValue));
                     } else {
                         //系統錯誤處理
@@ -117,13 +117,13 @@ const Section = (props) => {
     return (
         <div className="section_box">
             <ul>
-                {tiList && tiList.TableInfoList && tiList.TableInfoList.map((i, index) => (
+                {props.tiList && props.tiList.TableInfoList && props.tiList.TableInfoList.map((i, index) => (
                     <li key={index}
                         onMouseEnter={() => setHoveredItem(i.TableNumber)}
                         onMouseLeave={mouseleave}
                         className='li-box'
                     >
-                        <span className={`${Favos.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
+                        <span className={`${props.favo && props.favo.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
                         <div className={`games ${i.TableNumber}`}>
                             {/* 獲取ImageType為1的ImageUrl */}
                             {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
@@ -135,10 +135,10 @@ const Section = (props) => {
                             {i.TableNumber}
                         </p>
                         <p className='game-wallet'>
-                            <span>{userInfo.BetLimitCurrencyType}</span>
+                            <span>{props.userInfo.BetLimitCurrencyType}</span>
                             <span>
-                                {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
-                                    i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span> : ''
+                                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                                    i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span> : ''
                                 ))}
                             </span>
                         </p>
@@ -156,10 +156,10 @@ const Section = (props) => {
                                     {i.TableNumber}
                                 </p>
                                 <p className='game-wallet'>
-                                    <span>{userInfo.BetLimitCurrencyType}</span>
+                                    <span>{props.userInfo.BetLimitCurrencyType}</span>
                                     <span>
-                                        {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
-                                            i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                                        {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                                            i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                                         ))}
                                     </span>
                                 </p>
@@ -168,7 +168,7 @@ const Section = (props) => {
                                     <Link to={`/games/${i.TableNumber}`} onClick={getGameName(i.TableNumber, i.TableTimeoutSecond)}>{t("Global.start_games")}</Link>
                                 </div>
                                 <div className='game-table-wrap'>
-                                    <RoadMap shoeResults={shoeResults} />
+                                    <RoadMap />
                                 </div>
                                 <p className='game-dis'>
                                     {i.Status}
@@ -189,7 +189,7 @@ const Section = (props) => {
                                 </div>
                                 <div className='favorites-box'>
                                     {/* <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} /> */}
-                                    <span onClick={() => handleClick(i.TableNumber)} className={Favos.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
+                                    <span onClick={() => handleClick(i.TableNumber)} className={`${props.favo && props.favo.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'}`} />
 
                                 </div>
                             </div>
@@ -279,7 +279,13 @@ const mapStateToProps = (state) => {
         mutes: state.root.mutes || [],
         seconds: state.root.seconds,
         firstSeconds: state.root.firstSeconds,
-        message: state.root.message
+        message: state.root.message,
+        ct: state.gameLobby.ct,
+        guid: state.gameLobby.guid,
+        globalEWinGameLobbyClient: state.gameLobby.globalEWinGameLobbyClient,
+        tiList: state.gameLobby.tiList,
+        userInfo: state.gameLobby.userInfo,
+        favo: state.gameLobby.favo
     };
 };
 
@@ -289,7 +295,8 @@ const mapDispatchToProps = {
     toggleMute,
     getGameTitle,
     setSeconds,
-    setFirstSeconds
+    setFirstSeconds,
+    actFavo
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Section);
