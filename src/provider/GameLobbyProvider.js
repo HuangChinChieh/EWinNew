@@ -22,7 +22,7 @@ const GameLobbyProvider = ({ children }) => {
     const [Favos, setFavos] = useState([]);
     const [shoeResults, setShoeResults] = useState('');
     const [isFavorited, setIsFavorited] = useState(false);
-
+    const [isTradition,setIsTradition]=useState(false);
 
     // Lobby 相關資料
 
@@ -110,8 +110,9 @@ const GameLobbyProvider = ({ children }) => {
                     if (s) {
                         if (o.ResultCode == 0) {
                             //資料處理
-                            // console.log('TableList', o);
+                            console.log('TableList', o);
                             setTiList(o);
+                            setIsTradition(o.TableType)
                             setShoeResults(o.TableInfoList.map(info => info.ShoeResult));
                             setIsLoading(false);
                         } else {

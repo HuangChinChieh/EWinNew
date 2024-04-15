@@ -79,6 +79,16 @@
             &.li-box {
                 position: relative;
 
+                .has-tradition {
+                    position: absolute;
+                    left: -4px;
+                    top: -10px;
+                    display: block;
+                    width: 22px;
+                    height: 22px;
+                    background: url('../../img/global/tradition.png') no-repeat center center/contain;
+                }
+
                 .has-favorites {
                     position: absolute;
                     left: -4px;

@@ -21,6 +21,8 @@ const Section = (props) => {
         newInstance,
         userInfo,
         tiList,
+        isTradition,
+        setIsTradition,
         Favos,
         setFavos,
         EWinUrl,
@@ -124,6 +126,7 @@ const Section = (props) => {
                         className='li-box'
                     >
                         <span className={`${Favos.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
+                        <span className={`${isTradition.includes(i.TableNumber) ? 'has-tradition' : ''}`} />
                         <div className={`games ${i.TableNumber}`}>
                             {/* 獲取ImageType為1的ImageUrl */}
                             {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
