@@ -119,7 +119,7 @@ const Header = (props) => {
         <div className="toolbar">
           <FullscreenButton />
           <MuteButton />
-          {/* <BettingHistory /> */}
+          <BettingHistory />
           <GoodTrendNotice />
           <SettingButton />
         </div>
