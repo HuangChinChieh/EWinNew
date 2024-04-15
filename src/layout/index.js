@@ -135,22 +135,22 @@ const Layout = (props) => {
           }
         });
 
-        gameLobbyClient.GetHistorySummary(props.ct, props.guid, '', '', (s, o) => {
-          if (s) {
-            if (o.ResultCode == 0) {
-              //資料處理
-              console.log('server cb', o);
+        // gameLobbyClient.GetHistorySummary(props.ct, props.guid, '', '', (s, o) => {
+        //   if (s) {
+        //     if (o.ResultCode == 0) {
+        //       //資料處理
+        //       console.log('GetHistorySummary server cb', o);
 
-            } else {
-              //系統錯誤處理
-              console.log('系統錯誤處理');
+        //     } else {
+        //       //系統錯誤處理
+        //       console.log('GetHistorySummary 系統錯誤處理');
 
-            }
-          } else {
-            //傳輸等例外問題處理
-            console.log('傳輸等例外問題處理');
-          }
-        });
+        //     }
+        //   } else {
+        //     //傳輸等例外問題處理
+        //     console.log('GetHistorySummary 傳輸等例外問題處理');
+        //   }
+        // });
 
 
 
