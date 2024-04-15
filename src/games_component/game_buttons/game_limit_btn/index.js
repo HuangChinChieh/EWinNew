@@ -14,6 +14,7 @@ const GameLimitButton = (props) => {
     const [max, setMax] = useState('');
     const settingsRef = useRef(null);
 
+
     useEffect(() => {
         if (props.userBetlimitList && props.userBetlimitList.BetLimitList && props.userBetlimitList.BetLimitList.length > 0) {
             const { BetLimitID, Banker } = props.userBetlimitList.BetLimitList[0];

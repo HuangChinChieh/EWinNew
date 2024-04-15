@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
-import './index.scss';
+import { connect } from 'react-redux';
+import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import { useLobbyContext } from "provider/GameLobbyProvider";
-import { use } from 'i18next';
-import snapshot from '../../../img/tabs/snapshot.png';
 
-const BettingHistory = () => {
+import './index.scss';
+
+const BettingHistory = (props) => {
+
+    const gameLobbyClient = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
+
     const [hoveredItem, setHoveredItem] = useState(0);
     const [beginDate, setBeginDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -17,9 +21,6 @@ const BettingHistory = () => {
     const settingsRef = useRef(null);
     const {
         t,
-        newInstance,
-        CT,
-        GUID
     } = useLobbyContext();
     const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'), t('Global.rolling'), t("Global.details")];
     const detailTableHeaders = [t("Global.order_id"), t("Global.round_info"), t('Global.currency'), t('Global.bet'),
@@ -82,8 +83,8 @@ const BettingHistory = () => {
 
     // 顯示投注紀錄並取得投注資料
     const bettingHistoryClick = (o) => {
-        if (newInstance.length !== 0) {
-            newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
+        if (gameLobbyClient !== null) {
+            gameLobbyClient.GetHistorySummary(props.ct, props.guid, beginDate, endDate, (s, o) => {
                 if (s) {
                     console.log(o);
                     if (o.ResultCode === 0) {
@@ -101,8 +102,8 @@ const BettingHistory = () => {
 
     //顯示投注紀錄並取得投注資料
     const reacquireHistoryDetail = (GameCode, QueryDate) => {
-        if (newInstance.length !== 0) {
-            newInstance.GetHistoryDetail(CT, GUID, GameCode, QueryDate, (s, o) => {
+        if (gameLobbyClient !== null) {
+            gameLobbyClient.GetHistoryDetail(props.ct, props.guid, GameCode, QueryDate, (s, o) => {
 
                 if (s) {
                     if (o.ResultCode === 0) {
@@ -120,8 +121,8 @@ const BettingHistory = () => {
     }
 
     const toHistoryDetail = (GameCode, QueryDate) => {
-        if (newInstance.length !== 0) {
-            newInstance.GetHistoryDetail(CT, GUID, GameCode, QueryDate, (s, o) => {
+        if (gameLobbyClient !== null) {
+            gameLobbyClient.GetHistoryDetail(props.ct, props.guid, GameCode, QueryDate, (s, o) => {
 
                 if (s) {
                     if (o.ResultCode === 0) {
@@ -141,13 +142,13 @@ const BettingHistory = () => {
 
     // 起始日與終止日變動時再次執行搜尋
     useEffect(() => {
-        bettingHistoryClick()
+        bettingHistoryClick();
     }, [beginDate, endDate])
 
 
     useEffect(() => {
-        if (newInstance.length !== 0) {
-            newInstance.GetHistorySummary(CT, GUID, beginDate, endDate, (s, o) => {
+        if (gameLobbyClient !== null) {
+            gameLobbyClient.GetHistorySummary(props.ct, props.guid, beginDate, endDate, (s, o) => {
                 if (s) {
                     if (o.ResultCode === 0) {
                         setTableData(o.SummaryList);
@@ -181,6 +182,7 @@ const BettingHistory = () => {
         setBeginDate(formattedSevenDaysAgo);
         setEndDate(today.toISOString().split('T')[0]);
     }, []);
+
 
 
     return (
@@ -417,4 +419,12 @@ const BettingHistory = () => {
     )
 }
 
-export default BettingHistory;
+const mapStateToProps = (state) => {
+    return {
+        ewinurl: state.gameLobby.ewinurl,
+        ct: state.gameLobby.ct,
+        guid: state.gameLobby.guid
+    };
+};
+
+export default connect(mapStateToProps)(BettingHistory);
