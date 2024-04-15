@@ -6,6 +6,7 @@ import {
   useLocation,
   useHistory
 } from "react-router-dom";
+
 import Header from 'component/header';
 import Gamelobby from 'view/game_lobby';
 import Gamefavorite from 'view/game_favorite';
@@ -26,7 +27,7 @@ const Main = () => {
   const [getUrl, setGetUrl] = useState('');
   const history = useHistory();
 
-  localStorage.setItem('currentUrl', '')
+  localStorage.setItem('currentUrl', '');
 
 
   useEffect(() => {
@@ -34,7 +35,8 @@ const Main = () => {
     localStorage.setItem('currentUrl', currentPath);
     setGetUrl(localStorage.getItem('currentUrl'))
 
-  }, [history.location.pathname])
+  }, [history.location.pathname]);
+
 
   return (
     <div className="wrap-box">

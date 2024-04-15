@@ -3,11 +3,11 @@
         "b_pair": "庄對",
         "balance": "餘額",
         "banker": "庄",
-        "begindate":"起始日",
-        "enddate":"終止日",
-        "last_month":"上個月",
-        "next_month":"下個月",
-        "no_data":"尚無資料",
+        "begindate": "起始日",
+        "enddate": "終止日",
+        "last_month": "上個月",
+        "next_month": "下個月",
+        "no_data": "尚無資料",
         "bet_history": "投注紀錄",
         "work_order_history":"工單紀錄",
         "choose_bet_limit": "選擇限紅",
@@ -48,9 +48,10 @@
         "win_lose": "上下數",
         "total_betting": "總投注額",
         "without_favorite": "目前沒有收藏的項目, 趕快去大廳新增吧",
-        "EWin.BAC.1":"EWin.BAC.1",
-        "EWin.BAC.2":"EWin.BAC.2",
-        "table": "賭桌"
+        "EWin.BAC.1": "EWin.BAC.1",
+        "EWin.BAC.2": "EWin.BAC.2",
+        "table": "賭桌",
+        "ba": "百家樂"
     },
     "Setting": {
         "title": "遊戲大廳個性化",
@@ -62,5 +63,8 @@
     },
     "HowToPlay": {
         "title": "玩法說明"
+    },
+    "Chat": {
+        "placeholder": "點擊以聊天"
     }
 }

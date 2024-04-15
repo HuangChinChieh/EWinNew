@@ -1,21 +1,30 @@
 
 import { useLobbyContext } from 'provider/GameLobbyProvider';
+import { connect } from 'react-redux';
 import './index.scss';
 
-function Footer() {
-    const { t, userInfo } = useLobbyContext();
+function Footer(props) {
+    const { t } = useLobbyContext();
 
 
     return (
         <div className='footer-box aniFooterAction'>
             <div className='user-wallet'>{t("Global.balance")}：
-                {userInfo.BetLimitCurrencyType}&nbsp;
-                {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
-                    i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                {props.userInfo.BetLimitCurrencyType}&nbsp;
+                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                    i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                 ))}
             </div>
         </div>
     )
 }
 
-export default Footer;
+// export default Footer;
+
+const mapStateToProps = (state) => {
+    return {
+        userInfo: state.gameLobby.userInfo
+    };
+};
+
+export default connect(mapStateToProps)(Footer);

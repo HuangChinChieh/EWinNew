@@ -7,7 +7,7 @@ import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
-import { useLanguage } from 'hooks';
+
 
 import './index.scss';
 
@@ -16,7 +16,7 @@ import './index.scss';
 
 const Header = (props) => {
 
-  const { t, userInfo } = useLobbyContext();
+  const { t } = useLobbyContext();
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -92,7 +92,7 @@ const Header = (props) => {
             <div className='tool-box-left'>
               {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
               <span><span className='user-icon' /></span>
-              <span className='forpc'><span className='user-wallet' />{userInfo.BetLimitCurrencyType} 0</span>
+              <span className='forpc'><span className='user-wallet' />{props.userInfo.BetLimitCurrencyType} 0</span>
               <span className='forpc'><span>{t("Global.favorites")}({favorites.length}) </span></span>
               <span className='formb'><a className="user-favorite" href='/'></a></span>
 
@@ -102,9 +102,9 @@ const Header = (props) => {
               <span><span className='user-icon' /></span>
               <span className='forpc'>
                 <span className='user-wallet' />
-                {userInfo.BetLimitCurrencyType}&nbsp;
-                {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
-                  i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                {props.userInfo.BetLimitCurrencyType}&nbsp;
+                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                  i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                 ))}
               </span>
               <span><a className="user-favorite" href='/Gamefavorite'></a></span>
@@ -119,7 +119,7 @@ const Header = (props) => {
         <div className="toolbar">
           <FullscreenButton />
           <MuteButton />
-          <BettingHistory />
+          {/* <BettingHistory /> */}
           <GoodTrendNotice />
           <SettingButton />
         </div>
@@ -172,7 +172,7 @@ const Header = (props) => {
 
 
 const mapStateToProps = (state) => ({
-  favorites: state.root.favorites,
+  userInfo: state.gameLobby.userInfo,
 });
 
 export default connect(mapStateToProps)(Header);

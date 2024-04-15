@@ -8,11 +8,11 @@ const BettingHistory = () => {
     const [hoveredItem, setHoveredItem] = useState(0);
     const [beginDate, setBeginDate] = useState('');
     const [endDate, setEndDate] = useState('');
-    const [betHistory,setBetHistory]=useState(1);
-    const [orderHistory,setOrderHistory]=useState(0);
+    const [betHistory, setBetHistory] = useState(1);
+    const [orderHistory, setOrderHistory] = useState(0);
     const [tableData, setTableData] = useState([]);
-    const [detailList,setDetailList]=useState([]);
-    const [hoverdetail,setHoverDetail]=useState(0)
+    const [detailList, setDetailList] = useState([]);
+    const [hoverdetail, setHoverDetail] = useState(0)
     const [activeTab, setActiveTab] = useState('betHistory');
     const settingsRef = useRef(null);
     const {
@@ -22,14 +22,14 @@ const BettingHistory = () => {
         GUID
     } = useLobbyContext();
     const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'), t('Global.rolling'), t("Global.details")];
-    const detailTableHeaders = [t("Global.order_id"), t("Global.round_info"), t('Global.currency'),t('Global.bet'),
-     t('Global.card_info'),t('Global.win_lose'),t('Global.rolling'),t('Global.lend_chip_tax'),t('Global.add_chip'),t('Global.tips_value'), 
-     t('Global.table_chip'),t("Global.snap_shot_name")];
-    
+    const detailTableHeaders = [t("Global.order_id"), t("Global.round_info"), t('Global.currency'), t('Global.bet'),
+    t('Global.card_info'), t('Global.win_lose'), t('Global.rolling'), t('Global.lend_chip_tax'), t('Global.add_chip'), t('Global.tips_value'),
+    t('Global.table_chip'), t("Global.snap_shot_name")];
 
-     const handleTabClick = (tabName) => {
-         setActiveTab(tabName); 
-     };
+
+    const handleTabClick = (tabName) => {
+        setActiveTab(tabName);
+    };
 
 
     // 點擊區域外則關閉
@@ -100,7 +100,7 @@ const BettingHistory = () => {
     }
 
     //顯示投注紀錄並取得投注資料
-    const reacquireHistoryDetail=(GameCode,QueryDate)=>{
+    const reacquireHistoryDetail = (GameCode, QueryDate) => {
         if (newInstance.length !== 0) {
             newInstance.GetHistoryDetail(CT, GUID, GameCode, QueryDate, (s, o) => {
 
@@ -119,7 +119,7 @@ const BettingHistory = () => {
         }
     }
 
-    const toHistoryDetail=(GameCode,QueryDate)=>{
+    const toHistoryDetail = (GameCode, QueryDate) => {
         if (newInstance.length !== 0) {
             newInstance.GetHistoryDetail(CT, GUID, GameCode, QueryDate, (s, o) => {
 
@@ -140,9 +140,9 @@ const BettingHistory = () => {
     }
 
     // 起始日與終止日變動時再次執行搜尋
-    useEffect(()=>{
+    useEffect(() => {
         bettingHistoryClick()
-    },[beginDate,endDate])
+    }, [beginDate, endDate])
 
 
     useEffect(() => {
@@ -180,7 +180,7 @@ const BettingHistory = () => {
         const formattedSevenDaysAgo = sevenDaysAgo.toISOString().split('T')[0];
         setBeginDate(formattedSevenDaysAgo);
         setEndDate(today.toISOString().split('T')[0]);
-    }, []); 
+    }, []);
 
 
     return (
@@ -195,221 +195,221 @@ const BettingHistory = () => {
                 }}
                 ref={settingsRef}
             >
-                <div> 
-                    
-                <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
-                    <div className='title'>
-                        <div className='type-container'>
-                            <div className={activeTab === 'betHistory' ? 'type-tabs active' : 'type-tabs'} 
-                                onClick={(e) => {
-                                    setBetHistory(1);
-                                    setOrderHistory(0);
-                                    handleTabClick('betHistory');
-                                    bettingHistoryClick();
-                                }}    
-                            >
-                                {t('Global.bet_history')}
-                            </div>
-                            <div className={activeTab === 'orderHistory' ? 'type-tabs active' : 'type-tabs'}
-                                onClick={(e) => {
-                                    setBetHistory(0); 
-                                    setOrderHistory(1);
-                                    handleTabClick('orderHistory');
-                                    bettingHistoryClick();
-                                }}  
-                            >
-                                {t('Global.work_order_history')}
-                            </div>
-                        </div>
-                        <div className='month-container' >
-                            <button onClick={handleSubtractMonth}>
-                                <span>＜</span>
-                                {t("Global.last_month")}
-                            </button>
-                            <button onClick={handleAddMonth}>
-                                {t("Global.next_month")}
-                                <span>＞</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex-box'>
-                        <div>{t('Global.begindate')}
-                            <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
-                        </div>
-                        <div>{t('Global.enddate')}
-                            <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
-                        </div>
-                    </div>
+                <div>
 
-                    <div className={`dis ${orderHistory === 1 ? 'visible' : ''}`}>
-                        {tableData.length > 0 ? (
-                            <table>
-                                <>
-                                <thead>
-                                    <tr>
-                                        {tableHeaders.map((header, index) => (
-                                            <th key={index}>{header}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {tableData.map((data, index) => (
-                                        <tr key={index}>
-                                            <td>{data.SummaryDate}</td>
-                                            <td>{data.CurrencyType}</td>
-                                            <td>{t(`Global.${data.GameCode}`)}</td>
-                                            <td>{data.RewardValue}</td>
-                                            <td>{data.ValidBetValue}</td>
-                                            <td className='detail'  onClick={()=>toHistoryDetail(data.GameCode,data.SummaryDate)}>
-                                                <div>＋</div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                </>
-                            </table>
-                            
-                        ) : (
-                            <div className='noData'>{t("Global.no_data")}</div>
-                        )
-
-                        }
-
-                    </div>
-                    <div className={`dis ${betHistory === 1 ? 'visible' : ''}`}>
-                        {tableData.length > 0 ? (
-                            <table>
-                                <><thead>
-                                    <tr>
-                                        {tableHeaders.map((header, index) => (
-                                            <th key={index}>{header}</th>
-                                        ))}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {tableData.map((data, index) => (
-                                        <tr key={index}>
-                                            <td>{data.SummaryDate}</td>
-                                            <td>{data.CurrencyType}</td>
-                                            <td>{t(`Global.${data.GameCode}`)}</td>
-                                            <td>{data.RewardValue}</td>
-                                            <td>{data.ValidBetValue}</td>
-                                            <td className='detail'  onClick={()=>toHistoryDetail(data.GameCode,data.SummaryDate)}>
-                                                <div>＋</div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                                </>
-                            </table>
-                            
-                        ) : (
-                            <div className='noData'>{t("Global.no_data")}</div>
-                        )
-
-                        }
-
-                    </div>
-                </div>
-                <div className={`hover-box-detail ${hoverdetail === 1 ? 'visible' : ''}`}>
-                    <div className='title'>
-                        <div className='type-container'>
-                            <div className='type-tabs'>
-                                {t('Global.details')}
-                            </div>
-                        </div>
-                        <div className='month-container'>
-                            <button onClick={handleSubtractMonth}>
-                                <span>＜</span>
-                                {t("Global.last_month")}
-                            </button>
-                            <button onClick={handleAddMonth}>
-                                {t("Global.next_month")}
-                                <span>＞</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex-box'>
-                        <div>{t('Global.begindate')}
-                            <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
-                        </div>
-                        <div>{t('Global.enddate')}
-                            <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
-                        </div>
-                    </div>
-
-                    <div className='dis'>
-                        {tableData.length > 0 ||detailList.length > 0 ? (
-                            <table className='table-flex'>
-                                <>
-                                <div>
-                                    <thead>
-                                        <tr>
-                                            <th>{tableHeaders[0]}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <td className='day-choose'>
-                                            {tableData.map((data, index) =>(
-                                                <span onClick={()=>reacquireHistoryDetail(data.GameCode,data.SummaryDate)}>{data.SummaryDate}</span>
-                                            ))}
-                                        </td>
-                                    </tbody>
+                    <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
+                        <div className='title'>
+                            <div className='type-container'>
+                                <div className={activeTab === 'betHistory' ? 'type-tabs active' : 'type-tabs'}
+                                    onClick={(e) => {
+                                        setBetHistory(1);
+                                        setOrderHistory(0);
+                                        handleTabClick('betHistory');
+                                        bettingHistoryClick();
+                                    }}
+                                >
+                                    {t('Global.bet_history')}
                                 </div>
-                                <div>
-                                    <thead>
+                                <div className={activeTab === 'orderHistory' ? 'type-tabs active' : 'type-tabs'}
+                                    onClick={(e) => {
+                                        setBetHistory(0);
+                                        setOrderHistory(1);
+                                        handleTabClick('orderHistory');
+                                        bettingHistoryClick();
+                                    }}
+                                >
+                                    {t('Global.work_order_history')}
+                                </div>
+                            </div>
+                            <div className='month-container' >
+                                <button onClick={handleSubtractMonth}>
+                                    <span>＜</span>
+                                    {t("Global.last_month")}
+                                </button>
+                                <button onClick={handleAddMonth}>
+                                    {t("Global.next_month")}
+                                    <span>＞</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div className='flex-box'>
+                            <div>{t('Global.begindate')}
+                                <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
+                            </div>
+                            <div>{t('Global.enddate')}
+                                <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
+                            </div>
+                        </div>
+
+                        <div className={`dis ${orderHistory === 1 ? 'visible' : ''}`}>
+                            {tableData.length > 0 ? (
+                                <table>
+                                    <>
+                                        <thead>
+                                            <tr>
+                                                {tableHeaders.map((header, index) => (
+                                                    <th key={index}>{header}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {tableData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td>{data.SummaryDate}</td>
+                                                    <td>{data.CurrencyType}</td>
+                                                    <td>{t(`Global.${data.GameCode}`)}</td>
+                                                    <td>{data.RewardValue}</td>
+                                                    <td>{data.ValidBetValue}</td>
+                                                    <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
+                                                        <div>＋</div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </>
+                                </table>
+
+                            ) : (
+                                <div className='noData'>{t("Global.no_data")}</div>
+                            )
+
+                            }
+
+                        </div>
+                        <div className={`dis ${betHistory === 1 ? 'visible' : ''}`}>
+                            {tableData.length > 0 ? (
+                                <table>
+                                    <><thead>
                                         <tr>
-                                            {detailTableHeaders.map((header, index) => (
+                                            {tableHeaders.map((header, index) => (
                                                 <th key={index}>{header}</th>
                                             ))}
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {detailList.map((data, index) => (
-                                            <tr key={index} className='detail'>
-                                                <td className='col-arrange-center'>
-                                                    <span className='order-id'>{data.OrderID}</span>
-                                                    <span>{data.CreateDate.split(" ")[0]}</span>
-                                                    <span>{data.CreateDate.split(" ")[1]}</span>
+                                        <tbody>
+                                            {tableData.map((data, index) => (
+                                                <tr key={index}>
+                                                    <td>{data.SummaryDate}</td>
+                                                    <td>{data.CurrencyType}</td>
+                                                    <td>{t(`Global.${data.GameCode}`)}</td>
+                                                    <td>{data.RewardValue}</td>
+                                                    <td>{data.ValidBetValue}</td>
+                                                    <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
+                                                        <div>＋</div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </>
+                                </table>
+
+                            ) : (
+                                <div className='noData'>{t("Global.no_data")}</div>
+                            )
+
+                            }
+
+                        </div>
+                    </div>
+                    <div className={`hover-box-detail ${hoverdetail === 1 ? 'visible' : ''}`}>
+                        <div className='title'>
+                            <div className='type-container'>
+                                <div className='type-tabs'>
+                                    {t('Global.details')}
+                                </div>
+                            </div>
+                            <div className='month-container'>
+                                <button onClick={handleSubtractMonth}>
+                                    <span>＜</span>
+                                    {t("Global.last_month")}
+                                </button>
+                                <button onClick={handleAddMonth}>
+                                    {t("Global.next_month")}
+                                    <span>＞</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div className='flex-box'>
+                            <div>{t('Global.begindate')}
+                                <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
+                            </div>
+                            <div>{t('Global.enddate')}
+                                <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
+                            </div>
+                        </div>
+
+                        <div className='dis'>
+                            {tableData.length > 0 || detailList.length > 0 ? (
+                                <table className='table-flex'>
+                                    <>
+                                        <div>
+                                            <thead>
+                                                <tr>
+                                                    <th>{tableHeaders[0]}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td className='day-choose'>
+                                                    {tableData.map((data, index) => (
+                                                        <span onClick={() => reacquireHistoryDetail(data.GameCode, data.SummaryDate)}>{data.SummaryDate}</span>
+                                                    ))}
                                                 </td>
-                                                <td>{data.RoundInfo}</td>
-                                                <td>{data.CurrencyType}</td>
-                                                <td className='col-arrange-left'>
-                                                    <span>庒:{data.OrderBanker}</span>
-                                                    <span>閒:{data.OrderPlayer}</span>
-                                                    <span>和:{data.OrderTie }</span>
-                                                    <span>庒對:{data.OrderBankerPair}</span>
-                                                    <span>閒對:{data.OrderPlayerPair}</span>
-                                                </td>
-                                                <td>{data.CardInfo}</td>
-                                                <td>{data.RewardValue}</td>
-                                                <td>{data.BuyChipValue}</td>
-                                                <td>{data.LendChipTax}</td>
-                                                <td>{data.AddChip}</td>
-                                                <td>{data.TipsValue}</td>
-                                                <td>{data.TableChip}</td>
-                                                <td className='snapshot'>
-                                                    {/* {data.SnapshotName?
+                                            </tbody>
+                                        </div>
+                                        <div>
+                                            <thead>
+                                                <tr>
+                                                    {detailTableHeaders.map((header, index) => (
+                                                        <th key={index}>{header}</th>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {detailList.map((data, index) => (
+                                                    <tr key={index} className='detail'>
+                                                        <td className='col-arrange-center'>
+                                                            <span className='order-id'>{data.OrderID}</span>
+                                                            <span>{data.CreateDate.split(" ")[0]}</span>
+                                                            <span>{data.CreateDate.split(" ")[1]}</span>
+                                                        </td>
+                                                        <td>{data.RoundInfo}</td>
+                                                        <td>{data.CurrencyType}</td>
+                                                        <td className='col-arrange-left'>
+                                                            <span>庒:{data.OrderBanker}</span>
+                                                            <span>閒:{data.OrderPlayer}</span>
+                                                            <span>和:{data.OrderTie}</span>
+                                                            <span>庒對:{data.OrderBankerPair}</span>
+                                                            <span>閒對:{data.OrderPlayerPair}</span>
+                                                        </td>
+                                                        <td>{data.CardInfo}</td>
+                                                        <td>{data.RewardValue}</td>
+                                                        <td>{data.BuyChipValue}</td>
+                                                        <td>{data.LendChipTax}</td>
+                                                        <td>{data.AddChip}</td>
+                                                        <td>{data.TipsValue}</td>
+                                                        <td>{data.TableChip}</td>
+                                                        <td className='snapshot'>
+                                                            {/* {data.SnapshotName?
                                                         <img src={data.SnapshotName} alt='snapshot'/>:
                                                         <img src={snapshot} alt='default'/>
                                                     } */}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </div>
-                                
-                                </>
-                            </table>
-                            
-                        ) : (
-                            <div className='noData'>{t("Global.no_data")}</div>
-                        )
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </div>
 
-                        }
+                                    </>
+                                </table>
 
+                            ) : (
+                                <div className='noData'>{t("Global.no_data")}</div>
+                            )
+
+                            }
+
+                        </div>
                     </div>
-                </div>
                 </div>
 
             </div>

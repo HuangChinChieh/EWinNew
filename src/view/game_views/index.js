@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
-// import {
-//     setSeconds,
-//     setFirstSeconds
-// } from 'store/actions';
+import {
+    actIsGameBaccarLoading,
+    actUserBetlimitList
+} from 'store/gameBaccarActions';
 
 import GameHeader from 'games_component/game_header';
 import GameFooterArea from 'games_component/game_footer_area';
@@ -11,19 +11,13 @@ import GameFooterBG from 'games_component/game_footer_bg';
 import CountdownCircle from 'games_component/game_count_down_circle';
 import GameBettingAction from 'games_component/game_betting_action';
 import GameBettingArea from 'games_component/game_betting_area';
-// import GameBettingAreaNew from 'games_component/game_betting_area/newStyle';
-import { useBaccaratContext } from 'provider/GameBaccaratProvider';
+import GameChat from 'games_component/game_chat';
 import Loading from 'component/loading';
 import './index.scss';
 
 
 const GameView = (props) => {
 
-    // const { isLoading } = useLobbyContext();
-    // const isBaccaratLoading = false;
-    const {
-        isBaccaratLoading
-    } = useBaccaratContext();
 
     const [seconds, setSeconds] = useState(777);
     const [firstSeconds, setFirstSeconds] = useState(777);
@@ -50,13 +44,6 @@ const GameView = (props) => {
     // }, []);
 
     // const [newFavo, setNewFavo] = useState('');
-
-
-    // useEffect(() => {
-    //     setNewFavo(props.Favos)
-    // }, [props.Favos])
-
-    const localTableTitle = localStorage.getItem('getLocalTableTitle');
 
 
     useEffect(() => {
@@ -91,7 +78,7 @@ const GameView = (props) => {
 
     return (
         <div className="game-view-wrap">
-            {isBaccaratLoading ? (
+            {props.isGameBaccarLoading ? (
                 <Loading />
             ) : (
                 <div className='game-view-box'>
@@ -100,6 +87,7 @@ const GameView = (props) => {
                     <div className="game-content">
                         <CountdownCircle seconds={seconds} firstSeconds={firstSeconds} />
                     </div>
+                    <GameChat />
                     <GameBettingAction action={bettingAction} />
                     <GameFooterArea />
                     <GameBettingArea seconds={seconds} />
@@ -111,20 +99,20 @@ const GameView = (props) => {
 };
 
 
-// const mapStateToProps = (state) => {
-//     // console.log('檢查state', state);
-//     // console.log('檢查state.favorites', state.root.favorites);
-//     return {
-//         seconds: state.root.seconds,
-//         firstSeconds: state.root.firstSeconds
-//     };
-// };
+const mapStateToProps = (state) => {
+    // console.log('檢查state', state);
+    // console.log('檢查state.favorites', state.root.favorites);
+    return {
+        isGameBaccarLoading: state.gameBaccar.isGameBaccarLoading,
+        userBetlimitList: state.gameBaccar.userBetlimitList
+    };
+};
 
 
-// const mapDispatchToProps = {
-//     setSeconds,
-//     setFirstSeconds
-// };
+const mapDispatchToProps = {
+    actIsGameBaccarLoading,
+    actUserBetlimitList
+};
 
 
 // const mapDispatchToProps = (dispatch) => ({
@@ -132,5 +120,4 @@ const GameView = (props) => {
 //     setFirstSeconds
 // });
 
-// export default connect(mapStateToProps, mapDispatchToProps)(GameView);
-export default GameView;
+export default connect(mapStateToProps, mapDispatchToProps)(GameView);

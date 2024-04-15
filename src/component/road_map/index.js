@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useLobbyContext } from 'provider/GameLobbyProvider';
+
+import { connect } from 'react-redux';
 import './index.scss';
 
-const RoadMap = () => {
-    const { t, shoeResults } = useLobbyContext();
+const RoadMap = (props) => {
+
 
     // 露單樣式，須看實際資料再作調整
     // 生成表格的列和行
@@ -23,7 +23,7 @@ const RoadMap = () => {
                         <tr key={row}>
                             {columns.map((col, colIndex) => {
                                 const index = colIndex * rows.length + (row - 1);
-                                const value = shoeResults.length > index ? shoeResults[index] : null;
+                                const value = props.shoeResults.length > index ? props.shoeResults[index] : null;
                                 return (
                                     <td key={col}>
                                         {value !== null && (
@@ -41,4 +41,14 @@ const RoadMap = () => {
     );
 };
 
-export default RoadMap;
+
+const mapStateToProps = (state) => {
+    // console.log('檢查state', state);
+    // console.log('檢查state.favorites', state.root.favorites);
+    return {
+        shoeResults: state.gameLobby.shoeResults
+    };
+};
+
+
+export default connect(mapStateToProps)(RoadMap);

@@ -1,6 +1,7 @@
 
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import Section from 'component/section';
+import { connect } from 'react-redux';
 import DefaultVedio from 'component/default_vedio';
 import Titlebar from 'component/title_bar';
 import { CustomTabs, CustomTab } from 'component/custom_tabs';
@@ -8,15 +9,15 @@ import Loading from 'component/loading';
 
 import './index.scss';
 
-function Gamelobby() {
+function Gamelobby(props) {
 
-    const { t, isLoading } = useLobbyContext();
+    const { t } = useLobbyContext();
 
 
 
     return (
         <div className='game-lobby-wrap'>
-            {isLoading ? (
+            {props.isGameLobbyLoading ? (
                 <Loading />
             ) : (
 
@@ -30,17 +31,16 @@ function Gamelobby() {
                                         <div className='col'>
                                             <div className='list-box'>
                                                 <CustomTabs
-                                                    defaultActiveKey="yourgames"
+                                                    defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="yourgames" title="屬於您">
+                                                    <CustomTab eventKey="baccarat" title={t("Global.ba")}>
                                                         <Section />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
                                                     </CustomTab>
-                                                    <CustomTab eventKey="baccarat" title="百家樂">
-                                                        {/* hardcode demo用 */}
-                                                        {/* <Section listItems={listItems2} /> */}
-                                                    </CustomTab>
+                                                    {/* <CustomTab eventKey="baccarat" title="百家樂">
+                                                     
+                                                        </CustomTab> */}
                                                 </CustomTabs>
                                             </div>
                                         </div>
@@ -57,20 +57,19 @@ function Gamelobby() {
                                         <div className='col'>
                                             <div className='list-box'>
                                                 <CustomTabs
-                                                    defaultActiveKey="yourgames"
+                                                    defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="yourgames" title="屬於您">
+                                                    <CustomTab eventKey="baccarat" title={t("Global.ba")}>
                                                         <DefaultVedio />
                                                         <Titlebar title="全部遊戲" />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
                                                         <Section />
                                                     </CustomTab>
-                                                    <CustomTab eventKey="baccarat" title="百家樂">
+                                                    {/* <CustomTab eventKey="baccarat" title="百家樂">
                                                         <Titlebar title="百家樂" />
-                                                        {/* hardcode demo用 */}
-                                                        {/* <Section listItems={listItems2} /> */}
-                                                    </CustomTab>
+                                    
+                                                    </CustomTab> */}
                                                 </CustomTabs>
                                             </div>
                                         </div>
@@ -86,4 +85,14 @@ function Gamelobby() {
     )
 }
 
-export default Gamelobby;
+// export default Gamelobby;
+
+const mapStateToProps = (state) => {
+    return {
+        isGameLobbyLoading: state.gameLobby.isGameLobbyLoading,
+    };
+};
+
+
+
+export default connect(mapStateToProps)(Gamelobby);

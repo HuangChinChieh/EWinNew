@@ -4,14 +4,13 @@ import './index.scss';
 
 const GameTotalBet = (props) => {
     const {
-        t,
-        userInfo
+        t
     } = useLobbyContext();
     return (
         <div className='game-total-bet-box'>
             <span className='icon-box'>{t("Global.total_bet")}: </span>
             <span>
-                {userInfo.BetLimitCurrencyType} {props.totalChips1 + props.totalChips2 + props.totalChips3 + props.totalChips4 + props.totalChips5}
+                {props.userInfo.BetLimitCurrencyType} {props.totalChips1 + props.totalChips2 + props.totalChips3 + props.totalChips4 + props.totalChips5}
             </span>
         </div>
     )
@@ -26,6 +25,7 @@ const mapStateToProps = (state) => {
         totalChips3: state.root.totalChips3,
         totalChips4: state.root.totalChips4,
         totalChips5: state.root.totalChips5,
+        userInfo: state.gameLobby.userInfo
     };
 };
 

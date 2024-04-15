@@ -24,13 +24,14 @@
         min-width: 600px;
         z-index: 8;
         visibility: hidden;
-        
-        .month-container{
+
+        .month-container {
             display: flex;
             position: absolute;
             right: 0px;
             top: 10px;
             justify-content: flex-end;
+
             button {
                 background: #8d8d9f4a;
                 display: flex;
@@ -41,14 +42,15 @@
                 padding: 6px 8px;
                 margin-right: 10px;
                 cursor: pointer;
-                span{
+
+                span {
                     margin: 0 2px;
                     font-weight: 800;
                     line-height: normal;
                     font-size: 13px;
                 }
 
-                &:hover{
+                &:hover {
                     background-color: transparent;
                     display: flex;
                     border: 1px solid #f5f5f542;
@@ -69,8 +71,8 @@
             align-items: center;
             margin: 10px;
 
-            
-            input{
+
+            input {
                 margin-left: 5px;
                 max-width: 100px;
                 font-size: 13.5px;
@@ -79,9 +81,10 @@
                 padding: 5px 10px;
                 border-radius: 5px;
                 background-color: rgba(180, 180, 180, 0.199);
-                
+
             }
-            input::-webkit-calendar-picker-indicator{
+
+            input::-webkit-calendar-picker-indicator {
                 filter: invert(1);
 
             }
@@ -125,24 +128,24 @@
             padding: 15px 0 12px 0;
             margin: 0 auto;
             font-size: 16px;
-            font-weight:500;
+            font-weight: 500;
             letter-spacing: 1px;
             position: relative;
-            
 
-            .type-container{
+
+            .type-container {
                 display: flex;
                 justify-content: center;
                 flex-direction: row;
 
 
-                .type-tabs{
+                .type-tabs {
                     margin: 0px 10px;
                     color: rgba(255, 255, 255, 0.7607843137);
                     transition: all 0.3s;
 
-                    
-                    &.active{
+
+                    &.active {
                         color: rgb(255, 255, 255);
                     }
 
@@ -158,7 +161,7 @@
             overflow-y: auto;
             display: none;
 
-            
+
             &.visible {
                 right: 0rem;
                 animation-name: anibettingin;
@@ -170,31 +173,32 @@
                 table {
                     border-spacing: 1px;
                     width: 100%;
-    
+
                     thead {
                         background: rgba(217, 217, 217, 0.05);
-    
+
                         tr {
-                            
+
                             th {
                                 font-size: 14px;
                                 padding: 8px 0px;
                             }
                         }
                     }
-    
+
                     tbody {
-    
+
                         tr {
-    
+
                             td {
                                 padding: 8px 3px;
                                 text-align: center;
                                 font-size: 12px;
-                                
+
                                 &.detail {
                                     font-size: 14px;
                                     cursor: pointer;
+
                                     button {
                                         background: #46465B;
                                         border: none;
@@ -205,14 +209,15 @@
                                     }
                                 }
                             }
-    
+
                             &:nth-child(even) {
                                 background: rgba(217, 217, 217, 0.05);
                             }
                         }
                     }
                 }
-                .noData{
+
+                .noData {
                     font-size: 15px;
                     display: flex;
                     align-items: center;
@@ -226,6 +231,7 @@
         }
 
     }
+
     .hover-box-detail {
         position: fixed;
         right: -80rem;
@@ -243,18 +249,19 @@
         z-index: 8;
         visibility: hidden;
 
-        .type-tabs{
+        .type-tabs {
             margin: 0px 10px;
             color: rgb(255, 255, 255);
 
         }
 
-        .month-container{
+        .month-container {
             display: flex;
             position: absolute;
             right: 0px;
             top: 10px;
             justify-content: flex-end;
+
             button {
                 background: #8d8d9f4a;
                 display: flex;
@@ -265,14 +272,15 @@
                 padding: 6px 8px;
                 margin-right: 10px;
                 cursor: pointer;
-                span{
+
+                span {
                     margin: 0 2px;
                     font-weight: 800;
                     line-height: normal;
                     font-size: 13px;
                 }
 
-                &:hover{
+                &:hover {
                     background-color: transparent;
                     display: flex;
                     border: 1px solid #f5f5f542;
@@ -323,7 +331,8 @@
             justify-content: space-evenly;
             align-items: center;
             margin: 10px;
-            input{
+
+            input {
                 margin-left: 5px;
                 max-width: 100px;
                 font-size: 13.5px;
@@ -332,9 +341,10 @@
                 padding: 5px 10px;
                 border-radius: 5px;
                 background-color: rgba(180, 180, 180, 0.199);
-                
+
             }
-            input::-webkit-calendar-picker-indicator{
+
+            input::-webkit-calendar-picker-indicator {
                 filter: invert(1);
 
             }
@@ -378,12 +388,12 @@
             padding: 15px 0 12px 0;
             margin: 0 auto;
             font-size: 16px;
-            font-weight:500;
+            font-weight: 500;
             letter-spacing: 1px;
             position: relative;
-            
 
-            .type-container{
+
+            .type-container {
                 display: flex;
                 justify-content: center;
                 flex-direction: row;
@@ -408,45 +418,46 @@
                     background: rgba(217, 217, 217, 0.05);
 
                     tr {
-                        
+
                         th {
-                            
+
                             font-size: 14px;
                             padding: 8px 10px;
                         }
                     }
                 }
-                
-                .detail{
 
-                    td{
+                .detail {
+
+                    td {
                         vertical-align: sub;
                     }
                 }
 
-                .col-arrange-left{
+                .col-arrange-left {
                     display: flex;
                     flex-direction: column;
-                    align-items:flex-start;
-                    span{
+                    align-items: flex-start;
+
+                    span {
                         padding-left: 30px;
                     }
                 }
 
-                .col-arrange-center{
+                .col-arrange-center {
                     display: flex;
                     flex-direction: column;
-                    align-items:center;
+                    align-items: center;
                     justify-content: center;
-                    
-                    .order-id{
+
+                    .order-id {
                         background-color: #46465B;
                         padding: 3px 28px;
-                        border-radius:30px;
+                        border-radius: 30px;
                         margin: 3px auto;
                     }
-                    
-                    span{
+
+                    span {
                         margin: 0 auto;
 
                     }
@@ -482,7 +493,8 @@
                     }
                 }
             }
-            .noData{
+
+            .noData {
                 font-size: 15px;
                 display: flex;
                 align-items: center;
@@ -492,28 +504,28 @@
         }
     }
 
-    .table-flex{
+    .table-flex {
         display: flex;
 
-        .snapshot{
+        .snapshot {
             min-width: 120px;
         }
 
-        .day-choose{
+        .day-choose {
             display: flex;
             flex-direction: column;
             background-color: #46465b00;
 
-            span{
+            span {
                 font-size: 12px;
                 padding: 10px 30px;
                 margin: 0px;
                 border: #b8b8b81e 0.5px solid;
-                transition:all 0.2s ;
+                transition: all 0.2s;
                 cursor: pointer;
 
                 &:hover,
-                &:active{
+                &:active {
                     background-color: #46465bda;
                 }
             }
