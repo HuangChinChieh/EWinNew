@@ -70,8 +70,9 @@ const Layout = (props) => {
               //資料處理
               console.log('UserInfo', o);
               // setUserInfo(o);
-              props.actUserInfo(o)
-              localStorage.setItem('CurrencyType', o.BetLimitCurrencyType);
+              props.actUserInfo(o);
+              // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
+              localStorage.setItem('CurrencyType', o.BetLimitCurrencyType ? o.BetLimitCurrencyType : 'PHP');
             } else {
               //系統錯誤處理
               console.log('GetUserInfo: 系統錯誤處理');
