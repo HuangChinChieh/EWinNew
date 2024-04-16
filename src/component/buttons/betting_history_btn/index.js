@@ -343,65 +343,53 @@ const BettingHistory = (props) => {
                         <div className='dis'>
                             {tableData.length > 0 || detailList.length > 0 ? (
                                 <table className='table-flex'>
-                                    <>
-                                        <div>
-                                            <thead>
-                                                <tr>
-                                                    <th>{tableHeaders[0]}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                        <tbody>
+                                            <tr>
+                                                <th>{tableHeaders[0]}</th>
+                                            </tr>
+                                            <tr>
                                                 <td className='day-choose'>
                                                     {tableData.map((data, index) => (
-                                                        <span onClick={() => reacquireHistoryDetail(data.GameCode, data.SummaryDate)}>{data.SummaryDate}</span>
+                                                        <span key={index} onClick={() => reacquireHistoryDetail(data.GameCode, data.SummaryDate)}>{data.SummaryDate}</span>
                                                     ))}
                                                 </td>
-                                            </tbody>
-                                        </div>
-                                        <div>
-                                            <thead>
-                                                <tr>
-                                                    {detailTableHeaders.map((header, index) => (
-                                                        <th key={index}>{header}</th>
-                                                    ))}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {detailList.map((data, index) => (
-                                                    <tr key={index} className='detail'>
-                                                        <td className='col-arrange-center'>
-                                                            <span className='order-id'>{data.OrderID}</span>
-                                                            <span>{data.CreateDate.split(" ")[0]}</span>
-                                                            <span>{data.CreateDate.split(" ")[1]}</span>
-                                                        </td>
-                                                        <td>{data.RoundInfo}</td>
-                                                        <td>{data.CurrencyType}</td>
-                                                        <td className='col-arrange-left'>
-                                                            <span>庒:{data.OrderBanker}</span>
-                                                            <span>閒:{data.OrderPlayer}</span>
-                                                            <span>和:{data.OrderTie}</span>
-                                                            <span>庒對:{data.OrderBankerPair}</span>
-                                                            <span>閒對:{data.OrderPlayerPair}</span>
-                                                        </td>
-                                                        <td>{data.CardInfo}</td>
-                                                        <td>{data.RewardValue}</td>
-                                                        <td>{data.BuyChipValue}</td>
-                                                        <td>{data.LendChipTax}</td>
-                                                        <td>{data.AddChip}</td>
-                                                        <td>{data.TipsValue}</td>
-                                                        <td>{data.TableChip}</td>
-                                                        <td className='snapshot'>
-                                                            {/* {data.SnapshotName?
-                                                        <img src={data.SnapshotName} alt='snapshot'/>:
-                                                        <img src={snapshot} alt='default'/>
-                                                    } */}
-                                                        </td>
-                                                    </tr>
+                                            </tr>
+                                        </tbody>
+                                        <tbody>
+                                            <tr>
+                                                {detailTableHeaders.map((header, index) => (
+                                                    <th key={index}>{header}</th>
                                                 ))}
-                                            </tbody>
-                                        </div>
+                                            </tr>
+                                            {detailList.map((data, index) => (
+                                                <tr key={index} className='detail'>
+                                                    <td className='col-arrange-center'>
+                                                        <span className='order-id'>{data.OrderID}</span>
+                                                        <span>{data.CreateDate.split(" ")[0]}</span>
+                                                        <span>{data.CreateDate.split(" ")[1]}</span>
+                                                    </td>
+                                                    <td>{data.RoundInfo}</td>
+                                                    <td>{data.CurrencyType}</td>
+                                                    <td className='col-arrange-left'>
+                                                        <span>庒:{data.OrderBanker}</span>
+                                                        <span>閒:{data.OrderPlayer}</span>
+                                                        <span>和:{data.OrderTie}</span>
+                                                        <span>庒對:{data.OrderBankerPair}</span>
+                                                        <span>閒對:{data.OrderPlayerPair}</span>
+                                                    </td>
+                                                    <td>{data.CardInfo}</td>
+                                                    <td>{data.RewardValue}</td>
+                                                    <td>{data.BuyChipValue}</td>
+                                                    <td>{data.LendChipTax}</td>
+                                                    <td>{data.AddChip}</td>
+                                                    <td>{data.TipsValue}</td>
+                                                    <td>{data.TableChip}</td>
+                                                    <td className='snapshot'>
 
-                                    </>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
                                 </table>
 
                             ) : (
