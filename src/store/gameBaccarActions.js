@@ -12,3 +12,8 @@ export const actIsFavorited = (isFavorited) => ({
     type: 'IS_FAVORITED',
     payload: { isFavorited }
 })
+
+export const actRoadMapNumber = (roadMapNumber) => ({
+    type: 'ROADMAP_NUMBER',
+    payload: { roadMapNumber }
+})

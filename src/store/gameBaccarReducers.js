@@ -1,7 +1,8 @@
 const initGameBaccarState = {
     isGameBaccarLoading: true,
     userBetlimitList: [],
-    isFavorited: false
+    isFavorited: false,
+    roadMapNumber: ''
 }
 
 
@@ -21,6 +22,11 @@ export const gameBaccarReducer = (state = initGameBaccarState, action) => {
             return {
                 ...state,
                 isFavorited: action.payload.isFavorited
+            }
+        case 'ROADMAP_NUMBER':
+            return {
+                ...state,
+                roadMapNumber: action.payload.roadMapNumber
             }
         default:
             return state;

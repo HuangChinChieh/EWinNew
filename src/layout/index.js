@@ -66,9 +66,9 @@ const Layout = (props) => {
         // 獲取使用者資料
         gameLobbyClient.GetUserInfo(props.ct, props.guid, (s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('UserInfo', o);
+              // console.log('UserInfo', o);
               // setUserInfo(o);
               props.actUserInfo(o);
               // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
@@ -92,9 +92,9 @@ const Layout = (props) => {
 
         gameLobbyClient.GetTableInfoList(props.ct, props.guid, '', 0, (s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('TableList', o);
+              // console.log('TableList', o);
               // setTiList(o);
               props.actTilist(o);
               // setShoeResults(o.TableInfoList.map(info => info.ShoeResult));
@@ -117,9 +117,9 @@ const Layout = (props) => {
 
         gameLobbyClient.GetUserAccountProperty(props.ct, props.guid, 'EWinGame.Favor', (s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('tUserAccountProperty', o);
+              // console.log('tUserAccountProperty', o);
               // setFavos(JSON.parse(o.PropertyValue));
               props.actFavo(JSON.parse(o.PropertyValue));
 
@@ -197,13 +197,13 @@ const Layout = (props) => {
         // 監聽連線狀態
         gameBaccarClient.HeartBeat(props.echo);
         props.actIsGameBaccarLoading(false);
-        console.log('EWinGame.Baccarat 連結成功');
+        console.log('Layout - EWinGame.Baccarat 連結成功');
 
         gameBaccarClient.UserAccountGetBetLimitList(props.ct, props.guid, localStorage.getItem('CurrencyType'), (s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('取得會員個人限紅資料', o);
+              // console.log('取得會員個人限紅資料', o);
               props.actUserBetlimitList(o);
 
             } else {
