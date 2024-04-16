@@ -45,7 +45,7 @@ const GameView = (props) => {
     // }, []);
 
     // const [newFavo, setNewFavo] = useState('');
-    const getRoadMapNumber = props.roadMapNumber ? props.roadMapNumber : localStorage.getItem('getLocalTableTitle')
+    const getRoadMapNumber = props.roadMapNumber ? props.roadMapNumber : localStorage.getItem('getLocalTableTitle');
 
     useEffect(() => {
 
@@ -74,7 +74,7 @@ const GameView = (props) => {
                         }
                     } else {
                         //傳輸等例外問題處理
-                        console.log('取得單一桌台詳細資訊: 傳輸等例外問題處理');
+                        console.log('取得單一桌台詳細資訊: 傳輸等例外問題處理', o);
                     }
                 });
 

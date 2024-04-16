@@ -190,6 +190,8 @@ const Layout = (props) => {
   //百家樂遊戲
   const gameBaccarClient = EWinGameBaccaratClient.getInstance(props.ct, props.ewinurl);
 
+  const getRoadMapNumber = props.roadMapNumber ? props.roadMapNumber : localStorage.getItem('getLocalTableTitle');
+
   useEffect(() => {
 
     if (gameBaccarClient !== null) {
@@ -218,6 +220,26 @@ const Layout = (props) => {
 
           }
         });
+
+
+        gameBaccarClient.GetTableInfo(props.ct, props.guid, getRoadMapNumber, 0, (s, o) => {
+          if (s) {
+            if (o.ResultCode === 0) {
+              //資料處理
+              console.log('取得單一桌台詳細資訊', o);
+
+            } else {
+              //系統錯誤處理
+              console.log('取得單一桌台詳細資訊: 系統錯誤處理');
+
+
+            }
+          } else {
+            //傳輸等例外問題處理
+            console.log('取得單一桌台詳細資訊: 傳輸等例外問題處理', o);
+          }
+        });
+
 
       }
       const handleDisconnect = () => {
