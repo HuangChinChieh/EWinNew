@@ -1,4 +1,6 @@
 ﻿import { hubConnection } from 'signalr-no-jquery';
+import { generateUUIDv4 } from 'utils/guid';
+
 export class EWinGameLobbyClient {
     constructor(CT, eWinUrl) {
         this.EWinHub = null;
@@ -13,6 +15,7 @@ export class EWinGameLobbyClient {
         this.RECONNECTING = 2;
         this.DISCONNECTED = 4;
         this.CT = CT;
+        this.GUID = generateUUIDv4();
         this.conn = hubConnection();
 
         if (eWinUrl) {
@@ -354,11 +357,12 @@ export class EWinGameLobbyClient {
 *       
 * @returns {void}
 */
-    GetUserInfo(CT, GUID, cb) {
+    GetUserInfo(cb) {
         // console.log('Calling GetUserInfo method...');
-        this.EWinHub.invoke("GetUserInfo", CT, GUID).done(function (o) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("GetUserInfo", this.CT, GUID).done(function (o) {
             if (cb)
-            cb(true, o);   
+                cb(true, o);
         }).fail(function (err) {
             if (cb)
                 cb(false, err);
@@ -387,8 +391,9 @@ export class EWinGameLobbyClient {
       *       
       * @returns {void}
       */
-    GetUserAccountProperty(CT, GUID, PropertyName, cb) {
-        this.EWinHub.invoke("GetUserAccountProperty", CT, GUID, PropertyName).done(function (o) {
+    GetUserAccountProperty(PropertyName, cb) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("GetUserAccountProperty", this.CT, GUID, PropertyName).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -417,8 +422,9 @@ export class EWinGameLobbyClient {
  * 
  * @returns {void}
  */
-    SetUserAccountProperty(CT, GUID, PropertyName, PropertyValue, cb) {
-        this.EWinHub.invoke("SetUserAccountProperty", CT, GUID, PropertyName, PropertyValue).done(function (o) {
+    SetUserAccountProperty(PropertyName, PropertyValue, cb) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("SetUserAccountProperty", this.CT, GUID, PropertyName, PropertyValue).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -448,8 +454,9 @@ export class EWinGameLobbyClient {
  * 
  * @returns {void}
  */
-    RemoveUserAccountProperty(CT, GUID, PropertyName, cb) {
-        this.EWinHub.invoke("RemoveUserAccountProperty", CT, GUID, PropertyName).done(function (o) {
+    RemoveUserAccountProperty(PropertyName, cb) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("RemoveUserAccountProperty", this.CT, GUID, PropertyName).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -478,8 +485,9 @@ export class EWinGameLobbyClient {
 * 
 * @returns {void}
 */
-    UpdateProperty(CT, GUID, PS, cb) {
-        this.EWinHub.invoke("UpdateProperty", CT, GUID, PS).done(function (o) {
+    UpdateProperty(PS, cb) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("UpdateProperty", this.CT, GUID, PS).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -517,8 +525,9 @@ export class EWinGameLobbyClient {
 * 
 * @returns {void}
 */
-    UpdateDeviceInfo(CT, GUID, DeviceGUID, PushType, DeviceName, DeviceKey, DeviceType, NotifyToken, GPSPosition, UserAgent, cb) {
-        this.EWinHub.invoke("UpdateDeviceInfo", CT, GUID, DeviceGUID, PushType, DeviceName, DeviceKey, DeviceType, NotifyToken, GPSPosition, UserAgent).done(function (o) {
+    UpdateDeviceInfo(DeviceGUID, PushType, DeviceName, DeviceKey, DeviceType, NotifyToken, GPSPosition, UserAgent, cb) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("UpdateDeviceInfo", this.CT, GUID, DeviceGUID, PushType, DeviceName, DeviceKey, DeviceType, NotifyToken, GPSPosition, UserAgent).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -552,9 +561,10 @@ export class EWinGameLobbyClient {
 *       
 * @returns {void}
 */
-    GetTableInfoList(CT, GUID, AreaCode, GameSetID, cb) {
+    GetTableInfoList(AreaCode, GameSetID, cb) {
         // console.log('Calling GetTableInfoList method...');
-        this.EWinHub.invoke("GetTableInfoList", CT, GUID, AreaCode, GameSetID).done(function (o) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("GetTableInfoList", this.CT, GUID, AreaCode, GameSetID).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -585,9 +595,10 @@ export class EWinGameLobbyClient {
 *       
 * @returns {void}
 */
-    GetHistorySummary(CT, GUID, BeginDate, EndDate, cb) {
+    GetHistorySummary(BeginDate, EndDate, cb) {
         // console.log('Calling GetTableInfoList method...');
-        this.EWinHub.invoke("GetHistorySummary", CT, GUID, BeginDate, EndDate).done(function (o) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("GetHistorySummary", this.CT, GUID, BeginDate, EndDate).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -618,9 +629,10 @@ export class EWinGameLobbyClient {
 *       
 * @returns {void}
 */
-    GetHistoryDetail(CT, GUID, GameCode, QueryDate, cb) {
+    GetHistoryDetail(GameCode, QueryDate, cb) {
         // console.log('Calling GetTableInfoList method...');
-        this.EWinHub.invoke("GetHistoryDetail", CT, GUID, GameCode, QueryDate).done(function (o) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("GetHistoryDetail", this.CT, GUID, GameCode, QueryDate).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
@@ -649,9 +661,10 @@ export class EWinGameLobbyClient {
 *       
 * @returns {void}
 */
-    KeepSID(CT, GUID, cb) {
+    KeepSID(cb) {
         // console.log('Calling GetTableInfoList method...');
-        this.EWinHub.invoke("KeepSID", CT, GUID).done(function (o) {
+        let GUID = generateUUIDv4();
+        this.EWinHub.invoke("KeepSID", this.CT, GUID).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {

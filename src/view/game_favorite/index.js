@@ -43,7 +43,7 @@ function Gamefavorite(props) {
             props.actFavo(newFavo);
             props.showMessage(`移除收藏 ${TableNumber}`);
             if (instance !== null) {
-                instance.SetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", JSON.stringify(newFavo), function (success, o) {
+                instance.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(newFavo), function (success, o) {
                     if (success) {
                         // console.log("SetUserAccountProperty", o);
                     }
