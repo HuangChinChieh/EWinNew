@@ -85,7 +85,7 @@ const BettingHistory = (props) => {
     // 顯示投注紀錄並取得投注資料
     const bettingHistoryClick = (o) => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistorySummary(props.ct, props.guid, beginDate, endDate, (s, o) => {
+            gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
                     console.log(o);
                     if (o.ResultCode === 0) {
@@ -104,7 +104,7 @@ const BettingHistory = (props) => {
     //顯示投注紀錄並取得投注資料
     const reacquireHistoryDetail = (GameCode, QueryDate) => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistoryDetail(props.ct, props.guid, GameCode, QueryDate, (s, o) => {
+            gameLobbyClient.GetHistoryDetail(GameCode, QueryDate, (s, o) => {
 
                 if (s) {
                     console.log(o)
@@ -124,7 +124,7 @@ const BettingHistory = (props) => {
 
     const toHistoryDetail = (GameCode, QueryDate) => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistoryDetail(props.ct, props.guid, GameCode, QueryDate, (s, o) => {
+            gameLobbyClient.GetHistoryDetail(GameCode, QueryDate, (s, o) => {
 
                 if (s) {
                     if (o.ResultCode === 0) {
@@ -150,7 +150,7 @@ const BettingHistory = (props) => {
 
     useEffect(() => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistorySummary(props.ct, props.guid, beginDate, endDate, (s, o) => {
+            gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
                     if (o.ResultCode === 0) {
                         setTableData(o.SummaryList);

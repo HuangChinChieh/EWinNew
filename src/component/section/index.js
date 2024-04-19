@@ -10,6 +10,9 @@ import {
     setSeconds,
     setFirstSeconds
 } from 'store/actions';
+import {
+    actRoadMapNumber
+} from 'store/gameBaccarActions';
 import { actFavo } from 'store/gamelobbyActions';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
@@ -53,7 +56,7 @@ const Section = (props) => {
 
 
         if (instance !== null) {
-            instance.SetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", JSON.stringify(props.favo), function (success, o) {
+            instance.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(props.favo), function (success, o) {
                 if (success) {
                     console.log("SetUserAccountProperty", o);
                 }
@@ -78,7 +81,7 @@ const Section = (props) => {
 
     useEffect(() => {
         if (instance !== null) {
-            instance.GetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", function (s, o) {
+            instance.GetUserAccountProperty("EWinGame.Favor", function (s, o) {
                 if (s) {
                     if (o.ResultCode == 0) {
                         // setstrFavo(o.PropertyValue);
@@ -109,6 +112,7 @@ const Section = (props) => {
     const getGameName = (TableNumber, TableTimeoutSecond) => () => {
         props.getGameTitle(TableNumber);
         localStorage.setItem('getLocalTableTitle', TableNumber);
+        props.actRoadMapNumber(TableNumber);
         // console.log('TableTimeoutSecond', TableTimeoutSecond);
         // props.setSeconds(TableTimeoutSecond);
         // props.setFirstSeconds(TableTimeoutSecond);
@@ -285,7 +289,8 @@ const mapStateToProps = (state) => {
         globalEWinGameLobbyClient: state.gameLobby.globalEWinGameLobbyClient,
         tiList: state.gameLobby.tiList,
         userInfo: state.gameLobby.userInfo,
-        favo: state.gameLobby.favo
+        favo: state.gameLobby.favo,
+        roadMapNumber: state.gameBaccar.roadMapNumber
     };
 };
 
@@ -296,7 +301,8 @@ const mapDispatchToProps = {
     getGameTitle,
     setSeconds,
     setFirstSeconds,
-    actFavo
+    actFavo,
+    actRoadMapNumber
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Section);

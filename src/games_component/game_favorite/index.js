@@ -44,7 +44,7 @@ const GameFavorite = (props) => {
                 props.actFavo(newFavo);
             }
 
-            gameLobbyClient.SetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", JSON.stringify(newFavo), function (s, o) {
+            gameLobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(newFavo), function (s, o) {
                 if (s) {
                     if (o.ResultCode == 0) {
 

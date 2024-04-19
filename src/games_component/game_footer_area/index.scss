@@ -56,18 +56,20 @@
                 position: relative;
 
                 span.cancel,
-                span.double {
+                span.double,
+                span.confirm {
                     display: block;
                     position: absolute;
                     color: #8D8D9F;
                     font-size: 1.4rem;
                     top: 0.9rem;
                     cursor: pointer;
-
                 }
 
                 span.cancel {
-                    left: -6.7rem;
+                    /* left: -6.7rem;*/
+                    left: -4rem;
+                    padding-top: 1.5rem;
 
                     &::after {
                         content: '';
@@ -76,13 +78,34 @@
                         height: 40px;
                         position: absolute;
                         background: url('../../img/games/cancel.png') no-repeat center center/contain;
-                        top: -0.5rem;
-                        right: -3.2rem;
+                        /* top: -0.5rem;
+                       right: -3.2rem;*/
+                        top: -1.5rem;
+                    }
+                }
+
+                span.confirm {
+                    /* left: -6.7rem;*/
+                    left: -7.5rem;
+                    padding-top: 1.5rem;
+
+                    &::after {
+                        content: '';
+                        display: block;
+                        width: 40px;
+                        height: 40px;
+                        position: absolute;
+                        background: url('../../img/games/Check.svg') no-repeat center center/contain;
+                        /* top: -0.5rem;
+                       right: -3.2rem;*/
+                        top: -1.5rem;
                     }
                 }
 
                 span.double {
-                    right: -6.7rem;
+                    /*right: -6.7rem;*/
+                    right: -3.2rem;
+                    padding-top: 1.5rem;
 
                     &::before {
                         content: '';
@@ -91,16 +114,14 @@
                         height: 40px;
                         position: absolute;
                         background: url('../../img/games/double.png') no-repeat center center/contain;
-                        top: -0.5rem;
-                        left: -3.2rem;
+                        /*top: -0.5rem;
+                        left: -3.2rem;*/
+                        top: -1.5rem;
                     }
                 }
             }
         }
-
-
     }
-
 }
 
 @keyframes anigamefooterareain {

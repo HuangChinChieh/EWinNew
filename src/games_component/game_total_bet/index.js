@@ -10,7 +10,9 @@ const GameTotalBet = (props) => {
         <div className='game-total-bet-box'>
             <span className='icon-box'>{t("Global.total_bet")}: </span>
             <span>
-                {props.userInfo.BetLimitCurrencyType} {props.totalChips1 + props.totalChips2 + props.totalChips3 + props.totalChips4 + props.totalChips5}
+                {/* 登入後BetLimitCurrencyType全部變成空字串, 暫時先hardcode */}
+                {/* {props.userInfo.BetLimitCurrencyType} {props.totalChips1 + props.totalChips2 + props.totalChips3 + props.totalChips4 + props.totalChips5} */}
+                {localStorage.getItem('CurrencyType')} {props.totalChips1 + props.totalChips2 + props.totalChips3 + props.totalChips4 + props.totalChips5}
             </span>
         </div>
     )
