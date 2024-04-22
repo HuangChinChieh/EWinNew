@@ -4,7 +4,6 @@
 
 const initialState = {
     favorites: [],
-    showMessage: '',
     message: '',
     mutes: [],
     showMuteMessage: '',
