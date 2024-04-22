@@ -1,18 +1,16 @@
 
 import { useLobbyContext } from 'provider/GameLobbyProvider';
-
 import './index.scss';
 
 function Footer(props) {
-    const { t,userInfo } = useLobbyContext();
-
+    const { t,userInfo,betLimitCurrencyType,wallet } = useLobbyContext();
 
     return (
         <div className='footer-box aniFooterAction'>
             <div className='user-wallet'>{t("Global.balance")}：
-                {userInfo.BetLimitCurrencyType}&nbsp;
-                {userInfo && userInfo.Wallet && userInfo.Wallet.map((i, index) => (
-                    i.CurrencyType === userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                {betLimitCurrencyType}&nbsp;
+                {userInfo && wallet && wallet.map((i, index) => (
+                    i.CurrencyType === betLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                 ))}
             </div>
         </div>

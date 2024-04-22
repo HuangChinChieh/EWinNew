@@ -5,12 +5,38 @@ import './index.scss';
 
 import { useLobbyContext } from "provider/GameLobbyProvider";
 
+
+
+
 const BettingHistory = (props) => {
     const {
         t,CT
     } = useLobbyContext();
     
-    const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'), t('Global.rolling'), t("Global.details")];
+    const tableHeaders = [
+        t("Global.date"),
+        t("Global.currency"),
+        t("Global.type"),
+        t('Global.win_lose'),
+        t('Global.rolling'),
+        t("Global.details")
+    ];
+    
+    const detailTableHeaders = [
+        t("Global.order_id"),
+        t("Global.round_info"),
+        t('Global.currency'),
+        t('Global.bet'),
+        t('Global.card_info'),
+        t('Global.win_lose'),
+        t('Global.rolling'),
+        t('Global.lend_chip_tax'),
+        t('Global.add_chip'),
+        t('Global.tips_value'),
+        t('Global.table_chip'),
+        t("Global.snap_shot_name")
+    ];
+    
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
     const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
     const [hoveredItem, setHoveredItem] = useState(0);
@@ -24,9 +50,7 @@ const BettingHistory = (props) => {
     const [activeTab, setActiveTab] = useState('betHistory');
     const settingsRef = useRef(null);
 
-    const detailTableHeaders = [t("Global.order_id"), t("Global.round_info"), t('Global.currency'), t('Global.bet'),
-    t('Global.card_info'), t('Global.win_lose'), t('Global.rolling'), t('Global.lend_chip_tax'), t('Global.add_chip'), t('Global.tips_value'),
-    t('Global.table_chip'), t("Global.snap_shot_name")];
+
 
 
     const handleTabClick = (tabName) => {

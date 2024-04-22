@@ -14,9 +14,11 @@ const GameLobbyProvider = ({ children }) => {
     const GUID=generateUUIDv4();
     const { t } = useLanguage();
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
-    // const [domain, setDomain] = useState('');
     const [CT, setCT] = useState('');
+    const [wallet,setWallect]=useState([]);
+    const [betLimitCurrencyType,setBetLimitCurrencyType]=useState('');
     const Echo = 'Test_Echo';
+    // const [domain, setDomain] = useState('');
     // const [Favos, setFavos] = useState([]);
     // const [shoeResults, setShoeResults] = useState('');
     // const [isFavorited, setIsFavorited] = useState(false);
@@ -47,7 +49,6 @@ const GameLobbyProvider = ({ children }) => {
     
             setCT(newCT);
             localStorage.setItem('CT', newCT);
-            // setCookie('CT', newCT);
     
           } catch (error) {
             console.error('Error fetching data:', error);
@@ -81,9 +82,10 @@ const GameLobbyProvider = ({ children }) => {
             if (s) {
             if (o.ResultCode === 0) {
                 //資料處理
-                // console.log('UserInfo', o);
-                // setUserInfo(o);
+                console.log('UserInfo', o);
                 setUserInfo(o);
+                setWallect(o.Wallet);
+                setBetLimitCurrencyType(o.BetLimitCurrencyType);
                 // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
                 localStorage.setItem('CurrencyType', o.BetLimitCurrencyType ? o.BetLimitCurrencyType : 'PHP');
             } else {
@@ -98,75 +100,6 @@ const GameLobbyProvider = ({ children }) => {
             setIsLoading(true);
             }
         });
-
-
-
-        // // 獲取LOBBY 頁面的 table list相關資料
-
-        // gameLobbyClient.GetTableInfoList('', 0, (s, o) => {
-        //   if (s) {
-        //     if (o.ResultCode === 0) {
-        //       //資料處理
-        //       // console.log('TableList', o);
-        //       // setTiList(o);
-        //       props.actTilist(o);
-        //       // setShoeResults(o.TableInfoList.map(info => info.ShoeResult));
-        //       props.actShoeResults(o.TableInfoList.map(info => info.ShoeResult));
-        //       props.actIsGameLobbyLoading(false);
-        //     } else {
-        //       //系統錯誤處理
-        //       console.log('GetTableInfoList: 系統錯誤處理');
-        //       props.actIsGameLobbyLoading(true);
-        //       window.location.reload();
-        //     }
-        //   } else {
-        //     //傳輸等例外問題處理
-        //     console.log('GetTableInfoList: 傳輸等例外問題處理');
-        //     props.actIsGameLobbyLoading(true);
-        //     window.location.reload();
-        //   }
-        // });
-
-
-        // gameLobbyClient.GetUserAccountProperty('EWinGame.Favor', (s, o) => {
-        //   if (s) {
-        //     if (o.ResultCode === 0) {
-        //       //資料處理
-        //       // console.log('tUserAccountProperty', o);
-        //       // setFavos(JSON.parse(o.PropertyValue));
-        //       props.actFavo(JSON.parse(o.PropertyValue));
-
-        //     } else {
-        //       //系統錯誤處理
-        //       console.log('GetUserAccountProperty: 系統錯誤處理');
-        //       props.actIsGameLobbyLoading(true);
-        //     }
-        //   } else {
-        //     //傳輸等例外問題處理
-        //     console.log('GetUserAccountProperty: 傳輸等例外問題處理');
-        //     props.actIsGameLobbyLoading(true);
-        //   }
-        // });
-
-        // gameLobbyClient.GetHistorySummary(props.ct, props.guid, '', '', (s, o) => {
-        //   if (s) {
-        //     if (o.ResultCode == 0) {
-        //       //資料處理
-        //       console.log('GetHistorySummary server cb', o);
-
-        //     } else {
-        //       //系統錯誤處理
-        //       console.log('GetHistorySummary 系統錯誤處理');
-
-        //     }
-        //   } else {
-        //     //傳輸等例外問題處理
-        //     console.log('GetHistorySummary 傳輸等例外問題處理');
-        //   }
-        // });
-
-
-
 
 
         };
@@ -204,16 +137,18 @@ const GameLobbyProvider = ({ children }) => {
     return (
         <GameLobbyContext.Provider value={{
             t,
+            CT,
+            wallet,
+            betLimitCurrencyType,
+            // userInfo,
+            // newInstance,
             // EWinUrl,
             // domain,
             // isLoading,
-            CT,
             // GUID,
             // Echo,
-            newInstance,
             // Favos,
             // tiList,
-            userInfo,
             // shoeResults,
             // isFavorited,
             // setIsFavorited,

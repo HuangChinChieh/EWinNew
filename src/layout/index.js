@@ -63,6 +63,8 @@ const Layout = (props) => {
           console.log('處理接收訊息', Msg);
         });
 
+
+
         // 獲取使用者資料
         gameLobbyClient.GetUserInfo((s, o) => {
           if (s) {
@@ -135,26 +137,6 @@ const Layout = (props) => {
           }
         });
 
-        // gameLobbyClient.GetHistorySummary(props.ct, props.guid, '', '', (s, o) => {
-        //   if (s) {
-        //     if (o.ResultCode == 0) {
-        //       //資料處理
-        //       console.log('GetHistorySummary server cb', o);
-
-        //     } else {
-        //       //系統錯誤處理
-        //       console.log('GetHistorySummary 系統錯誤處理');
-
-        //     }
-        //   } else {
-        //     //傳輸等例外問題處理
-        //     console.log('GetHistorySummary 傳輸等例外問題處理');
-        //   }
-        // });
-
-
-
-
 
       };
 
@@ -220,7 +202,6 @@ const Layout = (props) => {
 
           }
         });
-
 
         gameBaccarClient.GetTableInfo(props.ct, props.guid, getRoadMapNumber, 0, (s, o) => {
           if (s) {
