@@ -7,12 +7,12 @@ import { useLobbyContext } from "provider/GameLobbyProvider";
 
 const BettingHistory = (props) => {
     const {
-        t,
+        t,CT
     } = useLobbyContext();
     
     const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'), t('Global.rolling'), t("Global.details")];
-    
-    const gameLobbyClient = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
+    const EWinUrl = 'https://ewin.dev.mts.idv.tw';
+    const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
     const [hoveredItem, setHoveredItem] = useState(0);
     const [hoverdetail, setHoverDetail] = useState(0)
     const [beginDate, setBeginDate] = useState('');
@@ -419,12 +419,6 @@ const BettingHistory = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        ewinurl: state.gameLobby.ewinurl,
-        ct: state.gameLobby.ct,
-        guid: state.gameLobby.guid
-    };
-};
 
-export default connect(mapStateToProps)(BettingHistory);
+
+export default BettingHistory;
