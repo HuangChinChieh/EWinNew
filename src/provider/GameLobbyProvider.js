@@ -1,7 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-// import { useCookies } from 'react-cookie';
 import { useLanguage } from 'hooks';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
+
+// Create two different contexts
+const WalletContext = createContext();
+const RealNameContext = createContext();
+const LanguageContext = createContext();
+const BetLimitCurrencyContext = createContext();
 import {  generateUUIDv4} from "../utils/guid";
 // 建立一個 Context
 const GameLobbyContext = createContext();
@@ -66,129 +71,50 @@ const GameLobbyProvider = ({ children }) => {
     // 遊戲大廳
     const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
 
-    useEffect(() => {
 
-
+// Create a Context Provider to provide shared values
+const GameLobbyProvider  = ({ children }) => {
+  const { t } = useLanguage();
+  const gameLobbyClient = EWinGameLobbyClient.getInstance();
+  const [wallet, setWallet] = useState([]);
+  const [realName, setRealName] = useState('');
+  const [betLimitCurrencyType, setBetLimitCurrencyType] = useState('');
+  
+  // Game Lobby related useEffect
+  useEffect(() => {
     if (gameLobbyClient !== null) {
-
-        const handleConnected = () => {
-
-        // 監聽連線狀態
-        gameLobbyClient.HeartBeat(Echo);
-
-        gameLobbyClient.handleReceiveMsg((Msg) => {
-            console.log('處理接收訊息', Msg);
-        });
-
-        // 獲取使用者資料
+      const handleConnected = () => {
+        // Get user info
         gameLobbyClient.GetUserInfo((s, o) => {
-            if (s) {
+          if (s) {
             if (o.ResultCode === 0) {
-                //資料處理
-                console.log('UserInfo', o);
-                setUserInfo(o);
-                setWallect(o.Wallet);
-                setBetLimitCurrencyType(o.BetLimitCurrencyType);
-                setRealName(o.RealName);
-                // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
-                localStorage.setItem('CurrencyType', o.BetLimitCurrencyType ? o.BetLimitCurrencyType : 'PHP');
+              console.log('UserInfo', o);
+              setWallet(o.Wallet);
+              setRealName(o.RealName);
+              setBetLimitCurrencyType(o.BetLimitCurrencyType);
+              localStorage.setItem('CurrencyType', o.BetLimitCurrencyType ? o.BetLimitCurrencyType : 'PHP');
             } else {
-                //系統錯誤處理
-                console.log('GetUserInfo: 系統錯誤處理');
-                setIsLoading(true);
-
+              console.log('GetUserInfo: 系統錯誤處理');
             }
-            } else {
-            //傳輸等例外問題處理
+          } else {
             console.log('GetUserInfo: 傳輸等例外問題處理');
-            setIsLoading(true);
-            }
+          }
         });
-        
-        gameLobbyClient.GetUserInfo((s, o) => {
-            if (s) {
-            if (o.ResultCode === 0) {
-                //資料處理
-                console.log('UserInfo', o);
-                setUserInfo(o);
-                setWallect(o.Wallet);
-                setBetLimitCurrencyType(o.BetLimitCurrencyType);
-                setRealName(o.RealName);
-                // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
-                localStorage.setItem('CurrencyType', o.BetLimitCurrencyType ? o.BetLimitCurrencyType : 'PHP');
-            } else {
-                //系統錯誤處理
-                console.log('GetUserInfo: 系統錯誤處理');
-                setIsLoading(true);
-
-            }
-            } else {
-            //傳輸等例外問題處理
-            console.log('GetUserInfo: 傳輸等例外問題處理');
-            setIsLoading(true);
-            }
-        });
-
-        };
-
-        const handleDisconnect = () => {
-        console.log('EWinHub 連結失效');
-        setIsLoading(true);
-        window.location.reload();
-        };
-
-        const handleReconnecting = () => {
-        console.log('重新連結 EWinHub');
-        setIsLoading(true);
-        };
-
-        const handleReconnected = () => {
-        console.log('已重新連結 EWinHub');
-        setIsLoading(true);
-        };
-
-        gameLobbyClient.handleConnected(handleConnected);
-        gameLobbyClient.handleDisconnect(handleDisconnect);
-        gameLobbyClient.handleReconnecting(handleReconnecting);
-        gameLobbyClient.handleReconnected(handleReconnected);
-
-        // 初始化連接
-        gameLobbyClient.initializeConnection();
-        // props.actGlobalGameLobbyClient(instance);
-
+      };
     }
-    }, [CT, gameLobbyClient]);
+  }, [gameLobbyClient]);
 
-
-
-    return (
-        <GameLobbyContext.Provider value={{
-            t,
-            CT,
-            wallet,
-            realName,
-            betLimitCurrencyType,
-            showMessage,
-            setShowMessage,
-            // userInfo,
-            // newInstance,
-            // EWinUrl,
-            // domain,
-            // isLoading,
-            // GUID,
-            // Echo,
-            // Favos,
-            // tiList,
-            // shoeResults,
-            // isFavorited,
-            // setIsFavorited,
-            // setShoeResults,
-            // setFavos
-
-        }}>
+  return (
+    <WalletContext.Provider value={{ wallet, setWallet }}>
+      <RealNameContext.Provider value={{ realName, setRealName }}>
+        <LanguageContext.Provider value={t}>
+          <BetLimitCurrencyContext.Provider value={betLimitCurrencyType}>
             {children}
-        </GameLobbyContext.Provider>
-    );
+          </BetLimitCurrencyContext.Provider>
+        </LanguageContext.Provider>
+      </RealNameContext.Provider>
+    </WalletContext.Provider>
+  );
 };
 
-export default GameLobbyProvider;
+export default GameLobbyProvider ;
