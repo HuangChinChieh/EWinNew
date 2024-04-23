@@ -1,8 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-// redux
-import { Provider } from 'react-redux';
 import store from 'store/store';
 import 'local/i18n';
 import { LanguageProvider } from 'hooks';
@@ -18,14 +15,12 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <React.StrictMode>    
       <LanguageProvider>
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
           <Layout />
         </CookiesProvider>
-      </LanguageProvider>
-    </Provider>
+      </LanguageProvider>    
   </React.StrictMode>
 );
 
