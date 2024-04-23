@@ -64,7 +64,7 @@ const Layout = (props) => {
         });
 
         // 獲取使用者資料
-        gameLobbyClient.GetUserInfo(props.ct, props.guid, (s, o) => {
+        gameLobbyClient.GetUserInfo((s, o) => {
           if (s) {
             if (o.ResultCode === 0) {
               //資料處理
@@ -90,7 +90,7 @@ const Layout = (props) => {
 
         // 獲取LOBBY 頁面的 table list相關資料
 
-        gameLobbyClient.GetTableInfoList(props.ct, props.guid, '', 0, (s, o) => {
+        gameLobbyClient.GetTableInfoList('', 0, (s, o) => {
           if (s) {
             if (o.ResultCode === 0) {
               //資料處理
@@ -115,7 +115,7 @@ const Layout = (props) => {
         });
 
 
-        gameLobbyClient.GetUserAccountProperty(props.ct, props.guid, 'EWinGame.Favor', (s, o) => {
+        gameLobbyClient.GetUserAccountProperty('EWinGame.Favor', (s, o) => {
           if (s) {
             if (o.ResultCode === 0) {
               //資料處理

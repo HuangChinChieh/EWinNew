@@ -179,7 +179,7 @@ const Section = (props) => {
 
 useEffect(() => {
         if (instance !== null) {
-            instance.GetUserAccountProperty(props.ct, props.guid, "EWinGame.Favor", function (s, o) {
+            instance.GetUserAccountProperty("EWinGame.Favor", function (s, o) {
                 if (s) {
                     if (o.ResultCode == 0) {
                         // setstrFavo(o.PropertyValue);
