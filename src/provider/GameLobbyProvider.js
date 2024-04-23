@@ -16,6 +16,9 @@ const GameLobbyProvider = ({ children }) => {
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
     const [CT, setCT] = useState('');
     const [wallet,setWallect]=useState([]);
+    const [realName,setRealName]=useState('');
+    const [showMessage,setShowMessage]=useState('');
+    
     const [betLimitCurrencyType,setBetLimitCurrencyType]=useState('');
     const Echo = 'Test_Echo';
     // const [domain, setDomain] = useState('');
@@ -86,6 +89,7 @@ const GameLobbyProvider = ({ children }) => {
                 setUserInfo(o);
                 setWallect(o.Wallet);
                 setBetLimitCurrencyType(o.BetLimitCurrencyType);
+                setRealName(o.RealName);
                 // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
                 localStorage.setItem('CurrencyType', o.BetLimitCurrencyType ? o.BetLimitCurrencyType : 'PHP');
             } else {
@@ -100,7 +104,30 @@ const GameLobbyProvider = ({ children }) => {
             setIsLoading(true);
             }
         });
+        
+        gameLobbyClient.GetUserInfo((s, o) => {
+            if (s) {
+            if (o.ResultCode === 0) {
+                //資料處理
+                console.log('UserInfo', o);
+                setUserInfo(o);
+                setWallect(o.Wallet);
+                setBetLimitCurrencyType(o.BetLimitCurrencyType);
+                setRealName(o.RealName);
+                // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
+                localStorage.setItem('CurrencyType', o.BetLimitCurrencyType ? o.BetLimitCurrencyType : 'PHP');
+            } else {
+                //系統錯誤處理
+                console.log('GetUserInfo: 系統錯誤處理');
+                setIsLoading(true);
 
+            }
+            } else {
+            //傳輸等例外問題處理
+            console.log('GetUserInfo: 傳輸等例外問題處理');
+            setIsLoading(true);
+            }
+        });
 
         };
 
@@ -139,7 +166,10 @@ const GameLobbyProvider = ({ children }) => {
             t,
             CT,
             wallet,
+            realName,
             betLimitCurrencyType,
+            showMessage,
+            setShowMessage,
             // userInfo,
             // newInstance,
             // EWinUrl,

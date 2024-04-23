@@ -1,19 +1,16 @@
 import { useRef, useState, useEffect } from 'react';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import './index.scss';
-import Videos from 'img/videoplayback.mp4';
+// import Videos from 'img/videoplayback.mp4';
 const VideoBox = (props) => {
     const { t } = useLobbyContext();
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [getUrl, setGetUrl] = useState('');
-
-    const { gameTitle } = props
     const [checkLocalTitle, setCheckLocalTitle] = useState('');
-
+    const gameTitle= localStorage.getItem('gameTitle');
 
     const togglePlay = () => {
         setIsPlaying(!isPlaying);
@@ -39,7 +36,7 @@ const VideoBox = (props) => {
     useEffect(() => {
         setGetUrl(props.url.split('/').pop());
         // 透過 getUrl 拿到的遊戲id, 去顯示 websocket對應遊戲的視訊
-        setCheckLocalTitle(localStorage.getItem('gameTitle'));
+        setCheckLocalTitle(gameTitle);
 
     }, [])
 
@@ -103,10 +100,6 @@ const VideoBox = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    gameTitle: state.root.gameTitle
-
-});
 
 
-export default connect(mapStateToProps)(VideoBox);
+export default VideoBox;

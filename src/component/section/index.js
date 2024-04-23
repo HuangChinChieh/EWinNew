@@ -23,7 +23,7 @@ import { use } from 'i18next';
 const Section = (props) => {
     const[favo,setFavo]=useState([]);
     const {
-        t,wallet,betLimitCurrencyType,CT
+        t,wallet,betLimitCurrencyType,CT,setShowMessage
     } = useLobbyContext();
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
     const listItems = props.listItems || [];
@@ -40,10 +40,10 @@ const Section = (props) => {
         if (favo.includes(TableNumber)) {
             var index = favo.indexOf(TableNumber);
             const updatedFavos = favo.filter(num => num !== TableNumber);
-            console.log('1232132132',updatedFavos)
-            props.showMessage(`移除收藏 ${TableNumber}`);
+            // props.showMessage(`移除收藏 ${TableNumber}`);
+            setShowMessage(`移除收藏 ${TableNumber}`);
             setFavo(updatedFavos);
-
+            console.log(showMessage);
 
             if (index > -1) {
                 favo.splice(index, 1);
@@ -51,7 +51,10 @@ const Section = (props) => {
         } else {
             var index = favo.indexOf(TableNumber);
             setFavo([...favo, TableNumber]);
-            props.showMessage(`新增收藏 ${TableNumber}`);
+            // props.showMessage(`新增收藏 ${TableNumber}`);
+            setShowMessage(`新增收藏 ${TableNumber}`);
+            console.log(showMessage);
+
             if (index == -1) {
                 favo.push(TableNumber);
             }
@@ -106,8 +109,8 @@ const Section = (props) => {
     };
 
 
-    const getGameName = (TableNumber, TableTimeoutSecond) => () => {
-        props.getGameTitle(TableNumber);
+    const getGameName = (TableNumber) => () => {
+        localStorage.setItem('gameTitle', TableNumber);
         localStorage.setItem('getLocalTableTitle', TableNumber);
         props.actRoadMapNumber(TableNumber);
         // console.log('TableTimeoutSecond', TableTimeoutSecond);

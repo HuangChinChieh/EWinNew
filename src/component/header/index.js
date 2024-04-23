@@ -16,11 +16,10 @@ import './index.scss';
 
 const Header = (props) => {
 
-  const { t } = useLobbyContext();
+  const { t,wallet,betLimitCurrencyType } = useLobbyContext();
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
-
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleHamburger = () => {
@@ -92,7 +91,7 @@ const Header = (props) => {
             <div className='tool-box-left'>
               {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
               <span><span className='user-icon' /></span>
-              <span className='forpc'><span className='user-wallet' />{props.userInfo.BetLimitCurrencyType} 0</span>
+              <span className='forpc'><span className='user-wallet' />{betLimitCurrencyType} 0</span>
               <span className='forpc'><span>{t("Global.favorites")}({favorites.length}) </span></span>
               <span className='formb'><a className="user-favorite" href='/'></a></span>
 
@@ -102,9 +101,9 @@ const Header = (props) => {
               <span><span className='user-icon' /></span>
               <span className='forpc'>
                 <span className='user-wallet' />
-                {props.userInfo.BetLimitCurrencyType}&nbsp;
-                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
-                  i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                {betLimitCurrencyType}&nbsp;
+                {wallet.map((i, index) => (
+                  i.CurrencyType === betLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                 ))}
               </span>
               <span><a className="user-favorite" href='/Gamefavorite'></a></span>
@@ -171,8 +170,6 @@ const Header = (props) => {
 };
 
 
-const mapStateToProps = (state) => ({
-  userInfo: state.gameLobby.userInfo,
-});
 
-export default connect(mapStateToProps)(Header);
+
+export default Header;
