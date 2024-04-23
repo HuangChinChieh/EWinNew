@@ -11,7 +11,7 @@
     .hover-box {
         position: fixed;
         right: -45rem;
-        background: rgba(29, 29, 38, 0.8);
+        background: rgba(29, 29, 38, 0.9);
         // padding: 20px 35px;
         border-top-left-radius: 12px;
         border-bottom-left-radius: 12px;
@@ -161,6 +161,22 @@
             overflow-y: auto;
             display: none;
 
+            /* 自定義滾動條樣式 */
+            &::-webkit-scrollbar {
+                width: 3px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #292121;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #888;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
 
             &.visible {
                 right: 0rem;
@@ -170,13 +186,19 @@
                 display: block;
                 cursor: auto;
 
+
+
                 table {
                     border-spacing: 1px;
                     width: 100%;
 
                     thead {
-                        background: rgba(217, 217, 217, 0.05);
+                        position: sticky;
+                        top: 0px;
+                        background:rgba(29, 29, 38, 0.8);
+                                    /* 自定義滾動條樣式 */
 
+                            
                         tr {
 
                             th {
@@ -235,7 +257,7 @@
     .hover-box-detail {
         position: fixed;
         right: -80rem;
-        background: rgba(29, 29, 38, 0.8);
+        background: rgba(29, 29, 38, 0.96);
         // padding: 20px 35px;
         border-top-left-radius: 12px;
         border-bottom-left-radius: 12px;
@@ -331,7 +353,7 @@
             justify-content: space-evenly;
             align-items: center;
             margin: 10px;
-
+            
             input {
                 margin-left: 5px;
                 max-width: 100px;
@@ -407,12 +429,13 @@
             font-size: 0.9rem;
             margin-top: 10px;
             margin: 0 auto;
-            max-height: 200px;
-            overflow-y: auto;
+
 
             table {
                 border-spacing: 1px;
                 width: 100%;
+
+
 
                 thead {
                     background: rgba(217, 217, 217, 0.05);
@@ -463,8 +486,34 @@
                     }
                 }
 
-                tbody {
+                
+                .detailContainer{
+                    max-height: 200px;
+                    overflow-y: auto;
+                    position: relative;
+                    
+                    &::-webkit-scrollbar {
+                        width: 3px;
+                    }
 
+                    &::-webkit-scrollbar-track {
+                        background: #292121;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background: #888;
+                    }
+
+                    &::-webkit-scrollbar-thumb:hover {
+                        background: #555;
+                    }
+
+                    .header{
+                        position: sticky;
+                        top: 0;
+                        background:rgba(29, 29, 38, 0.8);
+                        
+                    }
                     tr {
 
                         td {
@@ -492,6 +541,7 @@
                         }
                     }
                 }
+                
             }
 
             .noData {
@@ -507,6 +557,10 @@
     .table-flex {
         display: flex;
 
+        .header{
+            background-color:rgba(29, 29, 38, 0.8) ;
+        }
+        
         .snapshot {
             min-width: 120px;
         }
@@ -515,6 +569,24 @@
             display: flex;
             flex-direction: column;
             background-color: #46465b00;
+            max-height: 220px;
+            overflow-y: auto;
+
+            &::-webkit-scrollbar {
+                width: 3px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #292121;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #888;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
 
             span {
                 font-size: 12px;

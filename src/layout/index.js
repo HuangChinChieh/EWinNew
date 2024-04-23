@@ -63,12 +63,14 @@ const Layout = (props) => {
           console.log('處理接收訊息', Msg);
         });
 
+
+
         // 獲取使用者資料
-        gameLobbyClient.GetUserInfo(props.ct, props.guid, (s, o) => {
+        gameLobbyClient.GetUserInfo((s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('UserInfo', o);
+              // console.log('UserInfo', o);
               // setUserInfo(o);
               props.actUserInfo(o);
               // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
@@ -90,11 +92,11 @@ const Layout = (props) => {
 
         // 獲取LOBBY 頁面的 table list相關資料
 
-        gameLobbyClient.GetTableInfoList(props.ct, props.guid, '', 0, (s, o) => {
+        gameLobbyClient.GetTableInfoList('', 0, (s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('TableList', o);
+              // console.log('TableList', o);
               // setTiList(o);
               props.actTilist(o);
               // setShoeResults(o.TableInfoList.map(info => info.ShoeResult));
@@ -115,11 +117,11 @@ const Layout = (props) => {
         });
 
 
-        gameLobbyClient.GetUserAccountProperty(props.ct, props.guid, 'EWinGame.Favor', (s, o) => {
+        gameLobbyClient.GetUserAccountProperty('EWinGame.Favor', (s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('tUserAccountProperty', o);
+              // console.log('tUserAccountProperty', o);
               // setFavos(JSON.parse(o.PropertyValue));
               props.actFavo(JSON.parse(o.PropertyValue));
 
@@ -134,26 +136,6 @@ const Layout = (props) => {
             props.actIsGameLobbyLoading(true);
           }
         });
-
-        gameLobbyClient.GetHistorySummary(props.ct, props.guid, '', '', (s, o) => {
-          if (s) {
-            if (o.ResultCode == 0) {
-              //資料處理
-              console.log('server cb', o);
-
-            } else {
-              //系統錯誤處理
-              console.log('系統錯誤處理');
-
-            }
-          } else {
-            //傳輸等例外問題處理
-            console.log('傳輸等例外問題處理');
-          }
-        });
-
-
-
 
 
       };
@@ -190,6 +172,8 @@ const Layout = (props) => {
   //百家樂遊戲
   const gameBaccarClient = EWinGameBaccaratClient.getInstance(props.ct, props.ewinurl);
 
+  const getRoadMapNumber = props.roadMapNumber ? props.roadMapNumber : localStorage.getItem('getLocalTableTitle');
+
   useEffect(() => {
 
     if (gameBaccarClient !== null) {
@@ -197,13 +181,13 @@ const Layout = (props) => {
         // 監聽連線狀態
         gameBaccarClient.HeartBeat(props.echo);
         props.actIsGameBaccarLoading(false);
-        console.log('EWinGame.Baccarat 連結成功');
+        console.log('Layout - EWinGame.Baccarat 連結成功');
 
         gameBaccarClient.UserAccountGetBetLimitList(props.ct, props.guid, localStorage.getItem('CurrencyType'), (s, o) => {
           if (s) {
-            if (o.ResultCode == 0) {
+            if (o.ResultCode === 0) {
               //資料處理
-              console.log('取得會員個人限紅資料', o);
+              // console.log('取得會員個人限紅資料', o);
               props.actUserBetlimitList(o);
 
             } else {
@@ -218,6 +202,25 @@ const Layout = (props) => {
 
           }
         });
+
+        gameBaccarClient.GetTableInfo(props.ct, props.guid, getRoadMapNumber, 0, (s, o) => {
+          if (s) {
+            if (o.ResultCode === 0) {
+              //資料處理
+              console.log('取得單一桌台詳細資訊', o);
+
+            } else {
+              //系統錯誤處理
+              console.log('取得單一桌台詳細資訊: 系統錯誤處理');
+
+
+            }
+          } else {
+            //傳輸等例外問題處理
+            console.log('取得單一桌台詳細資訊: 傳輸等例外問題處理', o);
+          }
+        });
+
 
       }
       const handleDisconnect = () => {

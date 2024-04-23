@@ -1,31 +1,56 @@
 import { useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-import { useLobbyContext } from "provider/GameLobbyProvider";
-
 import './index.scss';
 
+import { useLobbyContext } from "provider/GameLobbyProvider";
+
+
+
+
 const BettingHistory = (props) => {
-
-    const gameLobbyClient = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
-
+    const {
+        t,CT
+    } = useLobbyContext();
+    
+    const tableHeaders = [
+        t("Global.date"),
+        t("Global.currency"),
+        t("Global.type"),
+        t('Global.win_lose'),
+        t('Global.rolling'),
+        t("Global.details")
+    ];
+    
+    const detailTableHeaders = [
+        t("Global.order_id"),
+        t("Global.round_info"),
+        t('Global.currency'),
+        t('Global.bet'),
+        t('Global.card_info'),
+        t('Global.win_lose'),
+        t('Global.rolling'),
+        t('Global.lend_chip_tax'),
+        t('Global.add_chip'),
+        t('Global.tips_value'),
+        t('Global.table_chip'),
+        t("Global.snap_shot_name")
+    ];
+    
+    const EWinUrl = 'https://ewin.dev.mts.idv.tw';
+    const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
     const [hoveredItem, setHoveredItem] = useState(0);
+    const [hoverdetail, setHoverDetail] = useState(0)
     const [beginDate, setBeginDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [betHistory, setBetHistory] = useState(1);
     const [orderHistory, setOrderHistory] = useState(0);
     const [tableData, setTableData] = useState([]);
     const [detailList, setDetailList] = useState([]);
-    const [hoverdetail, setHoverDetail] = useState(0)
     const [activeTab, setActiveTab] = useState('betHistory');
     const settingsRef = useRef(null);
-    const {
-        t,
-    } = useLobbyContext();
-    const tableHeaders = [t("Global.date"), t("Global.currency"), t("Global.type"), t('Global.win_lose'), t('Global.rolling'), t("Global.details")];
-    const detailTableHeaders = [t("Global.order_id"), t("Global.round_info"), t('Global.currency'), t('Global.bet'),
-    t('Global.card_info'), t('Global.win_lose'), t('Global.rolling'), t('Global.lend_chip_tax'), t('Global.add_chip'), t('Global.tips_value'),
-    t('Global.table_chip'), t("Global.snap_shot_name")];
+
+
 
 
     const handleTabClick = (tabName) => {
@@ -84,7 +109,7 @@ const BettingHistory = (props) => {
     // 顯示投注紀錄並取得投注資料
     const bettingHistoryClick = (o) => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistorySummary(props.ct, props.guid, beginDate, endDate, (s, o) => {
+            gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
                     console.log(o);
                     if (o.ResultCode === 0) {
@@ -103,9 +128,10 @@ const BettingHistory = (props) => {
     //顯示投注紀錄並取得投注資料
     const reacquireHistoryDetail = (GameCode, QueryDate) => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistoryDetail(props.ct, props.guid, GameCode, QueryDate, (s, o) => {
+            gameLobbyClient.GetHistoryDetail(GameCode, QueryDate, (s, o) => {
 
                 if (s) {
+                    console.log(o)
                     if (o.ResultCode === 0) {
                         setDetailList(o.DetailList);
 
@@ -122,7 +148,7 @@ const BettingHistory = (props) => {
 
     const toHistoryDetail = (GameCode, QueryDate) => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistoryDetail(props.ct, props.guid, GameCode, QueryDate, (s, o) => {
+            gameLobbyClient.GetHistoryDetail(GameCode, QueryDate, (s, o) => {
 
                 if (s) {
                     if (o.ResultCode === 0) {
@@ -148,7 +174,7 @@ const BettingHistory = (props) => {
 
     useEffect(() => {
         if (gameLobbyClient !== null) {
-            gameLobbyClient.GetHistorySummary(props.ct, props.guid, beginDate, endDate, (s, o) => {
+            gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
                     if (o.ResultCode === 0) {
                         setTableData(o.SummaryList);
@@ -194,6 +220,8 @@ const BettingHistory = (props) => {
                         setHoveredItem(1);
                         setHoverDetail(0);
                     }
+                    bettingHistoryClick();
+
                 }}
                 ref={settingsRef}
             >
@@ -254,20 +282,22 @@ const BettingHistory = (props) => {
                                                 ))}
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            {tableData.map((data, index) => (
-                                                <tr key={index}>
-                                                    <td>{data.SummaryDate}</td>
-                                                    <td>{data.CurrencyType}</td>
-                                                    <td>{t(`Global.${data.GameCode}`)}</td>
-                                                    <td>{data.RewardValue}</td>
-                                                    <td>{data.ValidBetValue}</td>
-                                                    <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
+                                        {tableData.length > 0 && (
+                                            <tbody>
+                                                {tableData.filter(data => data.GameCode === 'EWin.BAC.0').map((data, index) => (
+                                                    <tr key={index}>
+                                                        <td>{data.SummaryDate}</td>
+                                                        <td>{data.CurrencyType}</td>
+                                                        <td>{t(`Global.${data.GameCode}`)}</td>
+                                                        <td>{data.RewardValue}</td>
+                                                        <td>{data.ValidBetValue}</td>
+                                                        <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
                                                         <div>＋</div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        )}
                                     </>
                                 </table>
 
@@ -344,7 +374,7 @@ const BettingHistory = (props) => {
                             {tableData.length > 0 || detailList.length > 0 ? (
                                 <table className='table-flex'>
                                         <tbody>
-                                            <tr>
+                                            <tr className='header'>
                                                 <th>{tableHeaders[0]}</th>
                                             </tr>
                                             <tr>
@@ -355,40 +385,46 @@ const BettingHistory = (props) => {
                                                 </td>
                                             </tr>
                                         </tbody>
-                                        <tbody>
-                                            <tr>
+                                        <tbody className='detailContainer'>
+                                            <tr className='header'>
                                                 {detailTableHeaders.map((header, index) => (
                                                     <th key={index}>{header}</th>
                                                 ))}
                                             </tr>
-                                            {detailList.map((data, index) => (
-                                                <tr key={index} className='detail'>
-                                                    <td className='col-arrange-center'>
-                                                        <span className='order-id'>{data.OrderID}</span>
-                                                        <span>{data.CreateDate.split(" ")[0]}</span>
-                                                        <span>{data.CreateDate.split(" ")[1]}</span>
-                                                    </td>
-                                                    <td>{data.RoundInfo}</td>
-                                                    <td>{data.CurrencyType}</td>
-                                                    <td className='col-arrange-left'>
-                                                        <span>庒:{data.OrderBanker}</span>
-                                                        <span>閒:{data.OrderPlayer}</span>
-                                                        <span>和:{data.OrderTie}</span>
-                                                        <span>庒對:{data.OrderBankerPair}</span>
-                                                        <span>閒對:{data.OrderPlayerPair}</span>
-                                                    </td>
-                                                    <td>{data.CardInfo}</td>
-                                                    <td>{data.RewardValue}</td>
-                                                    <td>{data.BuyChipValue}</td>
-                                                    <td>{data.LendChipTax}</td>
-                                                    <td>{data.AddChip}</td>
-                                                    <td>{data.TipsValue}</td>
-                                                    <td>{data.TableChip}</td>
-                                                    <td className='snapshot'>
+                                                {detailList.map((data, index) => (
+                                                    <tr key={index} className='detail'>
+                                                        <td className='col-arrange-center'>
+                                                            <span className='order-id'>{data.OrderID}</span>
+                                                            <span>{data.CreateDate.split(" ")[0]}</span>
+                                                            <span>{data.CreateDate.split(" ")[1]}</span>
+                                                        </td>
+                                                        <td>{data.RoundInfo}</td>
+                                                        <td>{data.CurrencyType}</td>
+                                                        <td className='col-arrange-left'>
+                                                            <span>庒:{data.OrderBanker}</span>
+                                                            <span>閒:{data.OrderPlayer}</span>
+                                                            <span>和:{data.OrderTie}</span>
+                                                            <span>庒對:{data.OrderBankerPair}</span>
+                                                            <span>閒對:{data.OrderPlayerPair}</span>
+                                                        </td>
+                                                        <td>
+                                                            {data.Result === '1' || data.Result === '5' || data.Result === '9' || data.Result === 'D' ? '庒' :
+                                                            data.Result === '2' || data.Result === '6' || data.Result === 'A' || data.Result === 'E' ? '閒' :
+                                                            data.Result === '3' || data.Result === '7' || data.Result === 'B' || data.Result === 'F' ? '和' :
+                                                            ''}
+                                                        </td>
+                                                        <td>{data.RewardValue}</td>
+                                                        <td>{data.BuyChipValue}</td>
+                                                        <td>{data.LendChipTax}</td>
+                                                        <td>{data.AddChip}</td>
+                                                        <td>{data.TipsValue}</td>
+                                                        <td>{data.TableChip}</td>
+                                                        <td className='snapshot'>
+                                                           <img src={data.SnapShot} alt="Snapshot" />
+                                                        </td>
+                                                    </tr>
+                                                ))}
 
-                                                    </td>
-                                                </tr>
-                                            ))}
                                         </tbody>
                                 </table>
 
@@ -407,12 +443,6 @@ const BettingHistory = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        ewinurl: state.gameLobby.ewinurl,
-        ct: state.gameLobby.ct,
-        guid: state.gameLobby.guid
-    };
-};
 
-export default connect(mapStateToProps)(BettingHistory);
+
+export default BettingHistory;

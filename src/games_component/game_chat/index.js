@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { useLobbyContext } from "provider/GameLobbyProvider";
 
 import './index.scss';
@@ -8,7 +7,7 @@ import './index.scss';
 const GameChat = (props) => {
 
     const {
-        t
+        t,realName
     } = useLobbyContext();
 
     // 目前先 hardcode 處理
@@ -54,7 +53,7 @@ const GameChat = (props) => {
             </form>
             <div className='chat-list'>
                 {message.map((message, index) => (
-                    <div key={index}>{props.userInfo.RealName}:
+                    <div key={index}>{realName}:
                         <span>{message}</span>
                     </div>
                 ))}
@@ -63,10 +62,6 @@ const GameChat = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        userInfo: state.gameLobby.userInfo,
-    };
-};
 
-export default connect(mapStateToProps)(GameChat);
+
+export default GameChat;

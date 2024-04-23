@@ -136,10 +136,14 @@ const GameChipsButton = ((props) => {
 
 
     }
+    //投注確認
+    const handleConfirm = () => {
 
+    }
 
     return (
         <div>
+            <span onClick={handleConfirm} className='confirm'>確認</span>
             <span onClick={handleCancel} className='cancel'>撤銷</span>
             <div className="game-chips-box">
                 <div className={props.defaultClick}>
