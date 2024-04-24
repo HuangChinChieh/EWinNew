@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import React, { useContext, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
@@ -55,100 +54,6 @@ const SectionLi = (props) => {
         setHoveredItem(null);
         setMoreScale('');
     }
-    const getGameName = (TableNumber, TableTimeoutSecond) => () => {
-        props.getGameTitle(TableNumber);
-        localStorage.setItem('getLocalTableTitle', TableNumber);
-        props.actRoadMapNumber(TableNumber);
-        // console.log('TableTimeoutSecond', TableTimeoutSecond);
-        // props.setSeconds(TableTimeoutSecond);
-        // props.setFirstSeconds(TableTimeoutSecond);
-    };
-
-    return (<li key={props.tableInfo.TableNumber}
-        onMouseEnter={() => setHoveredItem(props.tableInfo.TableNumber)}
-        onMouseLeave={mouseleave}
-        className='li-box'
-    >
-        <SectionLiFavo1 />
-        <div className={`games ${props.tableInfo.TableNumber}`}>
-            {/* 獲取ImageType為1的ImageUrl */}
-            {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
-                <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
-            )}
-            <RoadMap />
-        </div>
-        <p className='game-title'>
-            {props.tableInfo.TableNumber}
-        </p>
-        <p className='game-wallet'>
-            <span>{props.userInfo.BetLimitCurrencyType}</span>
-            <span>
-                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
-                    props.tableInfo.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(props.tableInfo.Balance)}</span> : ''
-                ))}
-            </span>
-        </p>
-
-        <div className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? 'visible' : ''} ${moreScale}`}>
-            <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
-            <div className={`games ${props.tableInfo.TableNumber}`}>
-                {/* 獲取ImageType為1的ImageUrl */}
-                {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
-                    <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
-                )}
-            </div>
-            <div className='info-box'>
-                <p className='game-title'>
-                    {props.tableInfo.TableNumber}
-                </p>
-                <p className='game-wallet'>
-                    <span>{props.userInfo.BetLimitCurrencyType}</span>
-                    <span>
-                        {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
-                            props.tableInfo.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{props.tableInfo.Balance}</span> : ''
-                        ))}
-                    </span>
-                </p>
-                <div className='game-start' >
-                    {/* <a href='/'> {props.tableInfo.TableTimeoutSecond} </a> */}
-                    <Link to={`/games/${props.tableInfo.TableNumber}`} onClick={getGameName(props.tableInfo.TableNumber, props.tableInfo.TableTimeoutSecond)}>{"Global.start_games"}</Link>
-                </div>
-                <div className='game-table-wrap'>
-                    <RoadMap />
-                </div>
-                <p className='game-dis'>
-                    {props.tableInfo.Status}
-                </p>
-
-                {moreScale === 'more-scale'
-                    ?
-                    <div className='show-similar-games forpc'>
-                        <p>Global.similar_ganes</p>
-                        <SimilarGames />
-                    </div>
-                    : ''
-                }
-
-                <div className='show-similar-games formb'>
-                    <p>Global.similar_ganes</p>
-                    <SimilarGames />
-                </div>
-                <div className='favorites-box'>                                     
-                    <SectionLiFavo2></SectionLiFavo2>
-                </div>
-            </div>
-            <div className='more forpc' onClick={() => { setMoreScale('more-scale') }} />
-        </div>
-    </li>);
-}
-
-
-const Section = (props) => {
-    const {
-        t
-    } = useLobbyContext();    
-
-    const instance = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
 
     return (<li key={props.key}
         onMouseEnter={() => setHoveredItem(props.key)}

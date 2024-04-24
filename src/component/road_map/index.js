@@ -59,28 +59,10 @@ class RoadMap extends Component {
 
   render() {
     return (
-        <div className="table-container">
-            <table>
-                <tbody>
-                    {rows.map((row) => (
-                        <tr key={row}>
-                            {columns.map((col, colIndex) => {
-                                const index = colIndex * rows.length + (row - 1);                            
-                                return (
-                                    <td key={col}>
-                                        
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-
-            </table>
-        </div>
+      <div></div>
     );
 };
-
+}
 
 
 export default (RoadMap);

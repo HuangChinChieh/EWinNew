@@ -93,7 +93,7 @@ const Header = (props) => {
               <span className='forpc'><span className='user-wallet' />
               {/* {betLimitCurrencyType}*/}
               </span>
-              <span className='forpc'><span>{"Global.favorites"}({favorites.length}) </span></span>
+              <span className='forpc'><span>收藏({favorites.length}) </span></span>
               <span className='formb'><a className="user-favorite" href='/'></a></span>
 
             </div>
@@ -150,7 +150,7 @@ const Header = (props) => {
               </label>
               <br />
               {error && <span className="error">{error}</span>}
-              <button type="submit">{"Global.login"}</button>
+              <button type="submit">登入</button>
             </form>
           </div>
         </div>
@@ -159,7 +159,7 @@ const Header = (props) => {
         <div>
           <div className={`lightbox-box ${isOpen ? 'open' : ''}`} onClick={toggleHamburger} />
           <div className='mb-footer-box'>
-            <h4>{"Global.menu"}</h4>
+            <h4>選單</h4>
             <FullscreenButton />
             <SettingButton />
             <span className='close' onClick={() => setIsOpen(false)} />

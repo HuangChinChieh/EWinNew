@@ -30,7 +30,7 @@ const GoodTrendNotice = () => {
             >
 
                 <div className={`hover-box ${hoverItem === 1 ? 'visible' : ''}`}>
-                    <div className='title'>{"Global.good_trend_notice"}</div>
+                    <div className='title'>好路通知</div>
                 </div>
             </div>
         </div>

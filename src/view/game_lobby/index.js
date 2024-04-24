@@ -27,7 +27,7 @@ function Gamelobby(props) {
                                                 <CustomTabs
                                                     defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="baccarat" title={"Global.ba"}>
+                                                    <CustomTab eventKey="baccarat" title="百家樂">
                                                         <Section />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
@@ -53,7 +53,7 @@ function Gamelobby(props) {
                                                 <CustomTabs
                                                     defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="baccarat" title={"Global.ba"}>
+                                                    <CustomTab eventKey="baccarat" title="百家樂">
                                                         <DefaultVedio />
                                                         <Titlebar title="全部遊戲" />
                                                         {/* hardcode demo用 */}
