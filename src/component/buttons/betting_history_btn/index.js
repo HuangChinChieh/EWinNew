@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import './index.scss';
 
-import { useLobbyContext } from "provider/GameLobbyProvider";
 
 const BettingHistory = (props) => {
 
