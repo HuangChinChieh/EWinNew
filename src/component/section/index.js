@@ -12,11 +12,11 @@ import { FavorsContext } from 'provider/GameLobbyProvider';
 const SectionLiFavor2 = (props) => {
     const { favors, updateFavors } = useContext(FavorsContext);
     const tableNumber = props.TableNumber;
-debugger
+console.log("d",favors);
     const handleClick = () => {
         const lobbyClient = EWinGameLobbyClient.getInstance();
         const index = favors.indexOf(tableNumber);
-        console.log("favors",favors);
+      
         //觸發收藏or取消收藏     
         if (index === -1) {
             //沒找到，新增收藏
@@ -45,7 +45,6 @@ debugger
 
 const SectionLiFavor1 = (props) => {
     const { favors } = useContext(FavorsContext);
-  debugger
     return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`}/>);
 }
 
@@ -64,9 +63,8 @@ const SectionLi = (props) => {
     >
         <SectionLiFavor1 tableNumber={props.tableInfo.tableNumber}/>
         <div className={`games ${props.tableInfo.tableNumber}`}>
-            {/* 獲取ImageType為1的ImageUrl */}
-            {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
-                <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
+            {props.tableInfo.Image && (
+                <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
             )}
             <RoadMap />
         </div>
@@ -84,11 +82,11 @@ const SectionLi = (props) => {
 
         <div className={`hover-box ${hoveredItem === props.tableInfo.tableNumber ? 'visible' : ''} ${moreScale}`}>
             <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
-            <div className={`games ${props.tableInfo.tableNumber}`}>
+            <div className={`games`}>
                 {/* 獲取ImageType為1的ImageUrl */}
-                {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
-                    <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
-                )}
+                {props.tableInfo.Image && (
+                <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
+            )}
             </div>
             <div className='info-box'>
                 <p className='game-title'>
@@ -150,7 +148,7 @@ const Section = (props) => {
                             Status:data.Status                            
                         };
                     });
-console.log("tableList",array);
+
                     setTableList(array);
                 }
             }
