@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Routers from 'routers';
+
 import { connect } from 'react-redux';
 import {
   actCT,
@@ -253,7 +253,7 @@ const Layout = (props) => {
   }, [props.ct, gameBaccarClient])
 
   return (
-    <Routers />
+  
   )
 }
 

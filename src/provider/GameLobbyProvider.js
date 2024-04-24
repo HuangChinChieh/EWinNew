@@ -8,12 +8,13 @@ const BetLimitCurrencyContext = createContext();
 const FavorsContext = createContext();
 
 
-export {WalletContext, RealNameContext, BetLimitCurrencyContext, FavorsContext};
-
+export { WalletContext, RealNameContext, BetLimitCurrencyContext, FavorsContext };
+export const useLobbyContext = () => { }
 
 // Create a Context Provider to provide shared values
-const GameLobbyProvider = ({ children }) => {
+const GameLobbyProvider = (props) => {
   const lobbyClient = EWinGameLobbyClient.getInstance();
+  const CurrencyType = props.CurrencyType;
   const [wallet, setWallet] = useState({
     CurrencyType: '',
     CurrencyName: '',
@@ -28,7 +29,7 @@ const GameLobbyProvider = ({ children }) => {
     lobbyClient.GetUserInfo((s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
-          let wallet = o.Wallet.find(x => x.CurrencyType === "CNY");
+          let wallet = o.Wallet.find(x => x.CurrencyType === CurrencyType);
 
           if (wallet) {
             setWallet({
@@ -37,7 +38,7 @@ const GameLobbyProvider = ({ children }) => {
               Balance: wallet.Balance
             });
           }
-
+          debugger;
           setFavors(o.RealName);
           setBetLimitCurrencyType(o.BetLimitCurrencyType)
         }
@@ -83,6 +84,7 @@ const GameLobbyProvider = ({ children }) => {
         CurrencyName: wallet.CurrencyName,
         Balance: wallet.Balance
       };
+      debugger;
       setWallet(setObj);
     });
   };
@@ -99,7 +101,7 @@ const GameLobbyProvider = ({ children }) => {
       <WalletContext.Provider value={{ wallet, updateWallet }}>
         <RealNameContext.Provider value={{ realName, updateRealName }}>
           <BetLimitCurrencyContext.Provider value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}>
-            {children}
+            {props.children}
           </BetLimitCurrencyContext.Provider>
         </RealNameContext.Provider>
       </WalletContext.Provider>

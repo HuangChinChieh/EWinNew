@@ -25,6 +25,7 @@ const Main = () => {
   const EWinUrl = 'https://ewin.dev.mts.idv.tw';
   const intervalIDRef = useRef(0);
   const params = new URLSearchParams(window.location.search);
+  const currencyTypeRef = useRef('CNY');
   const [CT, setCT] = useState('');
   const [isServerConneted, setIsServerConneted] = useState(false);
 
@@ -36,6 +37,12 @@ const Main = () => {
   useEffect(() => {
     const CT = params['CT'];
     const CurrencyType = params['CurrencyType'];
+
+    if(CurrencyType){
+      currencyTypeRef.current = CurrencyType;
+    } else{
+      currencyTypeRef.current = 'CNY';
+    }
 
     if (CT) {
       initLobbyClient(CT);
@@ -63,7 +70,7 @@ const Main = () => {
           , requestOptions
         );
         const jsonReturn = await response.json();
-     
+
         sessionStorage.setItem('CT', jsonReturn.d.CT);
         // setCookie('CT', newCT);
         initLobbyClient(jsonReturn.d.CT);
@@ -98,11 +105,11 @@ const Main = () => {
 
 
     lobbyClient.handleReconnecting(() => {
-  
+
     });
 
     lobbyClient.handleDisconnect(() => {
- 
+
     });
 
     lobbyClient.initializeConnection();
@@ -116,12 +123,13 @@ const Main = () => {
   }, [history.location.pathname]);
 
 
-  return (
-    !isServerConneted ?
-      <div></div> :
+  if (!isServerConneted) {
+    return (<div></div>)
+  } else {
+    return (    
       <div className="wrap-box">
-        <GameLobbyProvider>
-          {!isGameView
+        <GameLobbyProvider CurrencyType={currencyTypeRef.current}>
+        {!isGameView
             ? (
               <>
                 <Header />
@@ -149,14 +157,16 @@ const Main = () => {
         </GameLobbyProvider>
       </div>
   );
+  }
 };
 
 // 加入判斷剔除不顯示的組件
 export default function Routers() {
   return (
-    <Router>      
-          <Main />    
+    <Router>
+      <Main />
     </Router>
   );
 }
+
 
