@@ -5,43 +5,49 @@ import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 const WalletContext = createContext();
 const RealNameContext = createContext();
 const BetLimitCurrencyContext = createContext();
-const FavosContext = createContext();
+const FavorsContext = createContext();
 
-// 建立一個 Context
-const GameLobbyContext = createContext();
 
-// 提供一個 Custom Hook 讓其他元件可以存取 Context 值
-export const useLobbyContext = () => useContext(GameLobbyContext);
+export {WalletContext, RealNameContext, BetLimitCurrencyContext, FavorsContext};
+
 
 // Create a Context Provider to provide shared values
 const GameLobbyProvider = ({ children }) => {
   const lobbyClient = EWinGameLobbyClient.getInstance();
   const [wallet, setWallet] = useState({
-    CurrencyType:'',
-    CurrencyName:'',
-    Balance:0,
+    CurrencyType: '',
+    CurrencyName: '',
+    Balance: 0,
   });
-  const [favos,setFavos]=useState('');
+  const [favors, setFavors] = useState('');
   const [realName, setRealName] = useState('');
   const [betLimitCurrencyType, setBetLimitCurrencyType] = useState('');
-  // const [currencyType,setCurrencyType]=useState('');
-  // const [currencyName,setCurrencyName]=useState('');
-  // const [balance,setBalance]=useState('');
-
-  // const { t } = useLanguage();
-  debugger;
-
-
 
   // Game Lobby related useEffect
   useEffect(() => {
-    updateRealName();
-    updateWallet();
-    updateBetLimitCurrencyType();
-    updateFavos();    
+    lobbyClient.GetUserInfo((s, o) => {
+      if (s) {
+        if (o.ResultCode === 0) {
+          let wallet = o.Wallet.find(x => x.CurrencyType === "CNY");
+
+          if (wallet) {
+            setWallet({
+              CurrencyType: wallet.CurrencyType,
+              CurrencyName: wallet.CurrencyName,
+              Balance: wallet.Balance
+            });
+          }
+
+          setFavors(o.RealName);
+          setBetLimitCurrencyType(o.BetLimitCurrencyType)
+        }
+      }
+    });
+
+    updateFavors();
   }, []);
 
-  const updateInfo = (cb) => {debugger;
+  const updateInfo = (cb) => {
     lobbyClient.GetUserInfo((s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
@@ -51,67 +57,53 @@ const GameLobbyProvider = ({ children }) => {
     });
   };
 
-  const updateUserAccountProperty = (cb) => {
-    lobbyClient.SetUserAccountProperty('EWinGame.Favor',(s, o) => {
+  const updateFavors = () => {
+    lobbyClient.GetUserAccountProperty('EWinGame.Favor', (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
-          cb(o);
+          let setObj = JSON.parse(o.PropertyValue)
+          console.log(setObj)
+          setFavors(setObj);
         }
       }
     });
   };
 
-  const updateFavos = () =>{
-    updateUserAccountProperty((o) =>{
-      let setObj = {
-        Favos: JSON.parse(o.PropertyValue)     
-      };
-      console.log(setObj)
-      setFavos(setObj);
+  const updateRealName = () => {
+    updateInfo((userInfo) => {
+      setRealName(userInfo.RealName);
     });
   };
 
-  const updateRealName = () =>{
-    updateInfo((userInfo) =>{
-      let setObj = {
-        RealName: userInfo.RealName        
-      };
-      setRealName(setObj);
-    });
-  };
-  
-  const updateWallet = () =>{
-    updateInfo((userInfo) =>{
+  const updateWallet = () => {
+    updateInfo((userInfo) => {
       let wallet = userInfo.Wallet.find(x => x.CurrencyType === "CNY");
       let setObj = {
         CurrencyType: wallet.CurrencyType,
         CurrencyName: wallet.CurrencyName,
-        Balance: wallet.Balance        
+        Balance: wallet.Balance
       };
       setWallet(setObj);
     });
   };
-  const updateBetLimitCurrencyType = () =>{
-    updateInfo((userInfo) =>{
-      let setObj = {
-        BetLimitCurrencyType: userInfo.BetLimitCurrencyType      
-      };
-      setBetLimitCurrencyType(setObj);
+  const updateBetLimitCurrencyType = () => {
+    updateInfo((userInfo) => {
+      setBetLimitCurrencyType(userInfo.BetLimitCurrencyType);
     });
   };
 
- 
+
 
   return (
-    <FavosContext.Provider value={ favos}>
-      <WalletContext.Provider value={ wallet}>
-        <RealNameContext.Provider value={realName }>
-            <BetLimitCurrencyContext.Provider value={betLimitCurrencyType}>
-              {children}
-            </BetLimitCurrencyContext.Provider>
+    <FavorsContext.Provider value={{ favors, updateFavors }}>
+      <WalletContext.Provider value={{ wallet, updateWallet }}>
+        <RealNameContext.Provider value={{ realName, updateRealName }}>
+          <BetLimitCurrencyContext.Provider value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}>
+            {children}
+          </BetLimitCurrencyContext.Provider>
         </RealNameContext.Provider>
       </WalletContext.Provider>
-    </FavosContext.Provider >
+    </FavorsContext.Provider >
   );
 };
 
