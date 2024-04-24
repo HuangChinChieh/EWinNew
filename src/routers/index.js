@@ -13,12 +13,11 @@ import Gamefavorite from 'view/game_favorite';
 import GameView from 'view/game_views';
 import Footer from 'component/footer';
 import GameFooter from 'games_component/game_footer';
-import Tips from 'component/tips';
+import TipProvider from 'component/tips';
 import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
 import GameBaccaratProvider from 'provider/GameBaccaratProvider';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-import { TipContext } from 'component/tips'; 
 
 import './index.scss';
 
@@ -75,7 +74,7 @@ useEffect(() => {
       const handleConnected = () => {
 
       // 監聽連線狀態
-      gameLobbyClient.HeartBeat(Echo);
+      //gameLobbyClient.HeartBeat(Echo);
 
       gameLobbyClient.handleReceiveMsg((Msg) => {
           console.log('處理接收訊息', Msg);
@@ -171,9 +170,7 @@ useEffect(() => {
       }
       <Switch>
         <Route path='/Gamefavorite'>
-        <TipContext>
           <Gamefavorite />
-        </TipContext>
         </Route>
         <Route path='/games/:gameId'>
           <GameBaccaratProvider>
@@ -193,7 +190,7 @@ export default function Routers() {
   return (
     <Router>
       <GameLobbyProvider>
-        <Tips />
+              <TipProvider />
         <Main />
       </GameLobbyProvider>
     </Router>

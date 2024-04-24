@@ -1,15 +1,15 @@
 import { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
-import {
-    toggleFavorite,
-    showMessage,
-    toggleMute,
-    getGameTitle
-} from 'store/actions';
-import {
-    actFavo
-} from 'store/gamelobbyActions';
+ import {
+     toggleFavorite,
+     showMessage,
+     toggleMute,
+     getGameTitle
+ } from 'store/actions';
+ import {
+     actFavo
+ } from 'store/gamelobbyActions';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
@@ -142,7 +142,7 @@ function Gamefavorite(props) {
                                                             <SimilarGames />
                                                         </div>
                                                         <div className='favorites-box'>
-                                                            <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} />
+                                                             <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} /> 
                                                             <span onClick={() => handleClick(i.TableNumber)} className={props.favo && props.favo.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
 
                                                         </div>

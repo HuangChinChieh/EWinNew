@@ -39,7 +39,7 @@ import React, { useState, useContext } from 'react';
 // 创建一个 Context
 export const TipContext = React.createContext();
 
-const TipProvider = ({ children }) => {
+const TipProvider = () => {
     const [showTips, setShowTips] = useState(false);
     const [tipText, setTipText] = useState('');
 
@@ -52,23 +52,14 @@ const TipProvider = ({ children }) => {
     };
 
     return (
-        <TipContext.Provider value={{ showTip, showTips, tipText}}>
-            {children}
-        </TipContext.Provider>
-    );
-};
-
-// Tips 组件用于显示 tip
-const Tips = () => {
-    const { showTips, tipText } = useContext(TipContext);
-
-    return (
-        <div className={`tips-box ${showTips ? 'showTips' : 'hiddenTips'}`}>
+        <TipContext.Provider value={{ showTip }}>
+            <div className={`tips-box ${showTips ? 'showTips' : 'hiddenTips'}`}>
             <p>
                 {tipText}
             </p>
         </div>
+        </TipContext.Provider>
     );
 };
 
-export default Tips;
+export default TipProvider;
