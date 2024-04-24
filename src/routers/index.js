@@ -18,6 +18,7 @@ import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
 import GameBaccaratProvider from 'provider/GameBaccaratProvider';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
+import { TipContext } from 'component/tips'; 
 
 import './index.scss';
 
@@ -170,7 +171,9 @@ useEffect(() => {
       }
       <Switch>
         <Route path='/Gamefavorite'>
+        <TipContext>
           <Gamefavorite />
+        </TipContext>
         </Route>
         <Route path='/games/:gameId'>
           <GameBaccaratProvider>
