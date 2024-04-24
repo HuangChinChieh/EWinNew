@@ -1,54 +1,70 @@
+/* eslint-disable eqeqeq */
 
-import { connect } from 'react-redux';
 import './index.scss';
-
-const RoadMap = (props) => {
-
-
-    // 露單樣式，須看實際資料再作調整
-    // 生成表格的列和行
-    const columns = Array.from({ length: 35 }, (_, index) => index + 1);
-    const rows = Array.from({ length: 5 }, (_, index) => index + 1);
-    // 實際看後端返回什麼後再做一次處理
-    // const backendData = [0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1];
-    // const [backendData, setBackendData] = useState([]);
+import React, { Component } from 'react';
+import { RoadMapAPI } from '../../utils/RoadMap.js';
 
 
 
+class RoadMap extends Component {
+  constructor(props) {
+    super(props);
+    this.shoeResultStr = "121F22193521111111129211232312219112123129";
+    this.myRoadMapDiv = React.createRef();
+    //初始化路單處理API;
+
+  }
+
+  componentDidMount() {
+    this.RoadMapAPI = new RoadMapAPI();
+    //config設定檔先寫在內部
+    //debugger;
+    this.RoadMapAPI.init({
+      enableDisplay: false //主路單不做顯示
+    }, {
+      el: this.myRoadMapDiv.current,
+      colMax: 35,
+      
+      rowMax: 5,
+      x: 1,
+      y: 1,
+      width: 10,
+      height: 10
+    }, {
+      enableDisplay: false //主路單不做顯示
+    }, {
+      enableDisplay: false //主路單不做顯示
+    }, {
+      enableDisplay: false //主路單不做顯示
+    });
+
+    this.RoadMapAPI.setRoadMapByString(this.shoeResultStr);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    //檢查是不是因為shoeResult的異動觸發渲染
+    if (nextProps.shoeResultStr == this.shoeResultStr) {
+      //不是，為state的異動觸發
+
+    } else {
+      //是，重新整理state
+      //this.shoeResultStr = nextProps.shoeResultStr;
+      //this.RoadMapAPI.setRoadMapByString(this.shoeResultStr);
+    }
+
+    return false;
+  }
+
+
+
+  render() {
     return (
-        <div className="table-container">
-            <table>
-                <tbody>
-                    {rows.map((row) => (
-                        <tr key={row}>
-                            {columns.map((col, colIndex) => {
-                                const index = colIndex * rows.length + (row - 1);
-                                const value = props.shoeResults.length > index ? props.shoeResults[index] : null;
-                                return (
-                                    <td key={col}>
-                                        {value !== null && (
-                                            <span className={`circle ${value === 0 ? 'blue' : 'red'}`}></span>
-                                        )}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-
-            </table>
+      <div>
+        <div ref={this.myRoadMapDiv} style={{ position: "relative", width: "350px", height: "50px" }}>
         </div>
+      </div>
     );
-};
+  }
+}
 
-
-const mapStateToProps = (state) => {
-    // console.log('檢查state', state);
-    // console.log('檢查state.favorites', state.root.favorites);
-    return {
-        shoeResults: state.gameLobby.shoeResults
-    };
-};
-
-
-export default connect(mapStateToProps)(RoadMap);
+export default RoadMap;
