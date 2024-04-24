@@ -193,7 +193,7 @@ export default function Routers() {
   return (
     <Router>
       <GameLobbyProvider>
-        <Tips />
+        {/* <Tips /> */}
         <Main />
       </GameLobbyProvider>
     </Router>

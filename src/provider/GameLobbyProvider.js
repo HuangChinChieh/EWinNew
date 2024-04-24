@@ -16,11 +16,16 @@ export const useLobbyContext = () => useContext(GameLobbyContext);
 // Create a Context Provider to provide shared values
 const GameLobbyProvider = ({ children }) => {
   const lobbyClient = EWinGameLobbyClient.getInstance();
-  const [wallet, setWallet] = useState(null);
-  const [favos,setFavos]=useState(null);
-  const [realName, setRealName] = useState(null);
-  const [betLimitCurrencyType, setBetLimitCurrencyType] = useState(null);
+  const [wallet, setWallet] = useState([]);
+  const [favos,setFavos]=useState('');
+  const [realName, setRealName] = useState('');
+  const [betLimitCurrencyType, setBetLimitCurrencyType] = useState('');
+  // const [currencyType,setCurrencyType]=useState('');
+  // const [currencyName,setCurrencyName]=useState('');
+  // const [balance,setBalance]=useState('');
+
   // const { t } = useLanguage();
+  debugger;
 
 
 
@@ -30,6 +35,7 @@ const GameLobbyProvider = ({ children }) => {
     updateWallet();
     updateBetLimitCurrencyType();
     updateFavos();
+    debugger;
   }, []);
 
   const updateInfo = (cb) => {
@@ -55,7 +61,7 @@ const GameLobbyProvider = ({ children }) => {
   const updateFavos = () =>{
     updateUserAccountProperty((o) =>{
       let setObj = {
-        RealName: JSON.parse(o.PropertyValue)     
+        Favos: JSON.parse(o.PropertyValue)     
       };
       console.log(setObj)
       setFavos(setObj);
@@ -94,9 +100,9 @@ const GameLobbyProvider = ({ children }) => {
  
 
   return (
-    <FavosContext.Provider value={{ favos}}>
-      <WalletContext.Provider value={{ wallet}}>
-        <RealNameContext.Provider value={{ realName }}>
+    <FavosContext.Provider value={ favos}>
+      <WalletContext.Provider value={ wallet}>
+        <RealNameContext.Provider value={realName }>
             <BetLimitCurrencyContext.Provider value={betLimitCurrencyType}>
               {children}
             </BetLimitCurrencyContext.Provider>
