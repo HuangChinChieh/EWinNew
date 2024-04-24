@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import {
@@ -16,10 +16,12 @@ import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
 import Loading from 'component/loading';
 import './index.scss';
+import { TipContext } from 'component/tips'; 
 
 function Gamefavorite(props) {
     const { t } = useLobbyContext();
     const instance = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
+    const { showTip } = useContext(TipContext);
 
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
@@ -36,20 +38,23 @@ function Gamefavorite(props) {
 
 
     const handleClick = async (TableNumber) => {
-        let newFavo = [...props.favo];
-        const index = newFavo.indexOf(TableNumber);
-        if (index !== -1) {
-            newFavo.splice(index, 1);
-            props.actFavo(newFavo);
-            props.showMessage(`移除收藏 ${TableNumber}`);
-            if (instance !== null) {
-                instance.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(newFavo), function (success, o) {
-                    if (success) {
-                        // console.log("SetUserAccountProperty", o);
-                    }
-                });
-            }
-        }
+        showTip("test");
+
+        //let newFavo = [...props.favo];
+        //const index = newFavo.indexOf(TableNumber);
+        //if (index !== -1) {
+        //    newFavo.splice(index, 1);
+        //    props.actFavo(newFavo);
+        //    props.showMessage(`移除收藏 ${TableNumber}`);
+        //    if (instance !== null) {
+        //        instance.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(newFavo), function (success, o) {
+        //            if (success) {
+        //                // console.log("SetUserAccountProperty", o);
+        //            }
+        //        });
+        //    }
+        //}
+
     };
 
 
