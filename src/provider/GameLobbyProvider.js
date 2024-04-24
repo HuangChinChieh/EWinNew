@@ -68,9 +68,8 @@ const GameLobbyProvider = (props) => {
         if (o.ResultCode === 0) {
           let setObj = [];
 
-          if (Array.isArray(o.PropertyValue)) {
-            setObj = JSON.parse(o.PropertyValue);
-          }
+          setObj = JSON.parse(o.PropertyValue);
+
           console.log(setObj);
           setFavors(setObj);
         }

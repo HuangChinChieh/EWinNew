@@ -11,15 +11,17 @@ import { FavorsContext } from 'provider/GameLobbyProvider';
 
 const SectionLiFavor2 = (props) => {
     const { favors, updateFavors } = useContext(FavorsContext);
-    const tableNumber = props.TableNumber;
+    const tableNumber = props.tableNumber;
+
     const handleClick = () => {
         const lobbyClient = EWinGameLobbyClient.getInstance();
         const index = favors.indexOf(tableNumber);
-        console.log("favors",favors);
+        
         //觸發收藏or取消收藏     
         if (index === -1) {
             //沒找到，新增收藏
-            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors.push(tableNumber)), (success, o) => {
+            favors.push(tableNumber);
+            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors), (success, o) => {
                 if (success) {
                     if (o.ResultCode === 0) {
                         updateFavors();
@@ -28,7 +30,8 @@ const SectionLiFavor2 = (props) => {
             });
         } else {
             //有找到，移除收藏
-            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors.splice(index, 1)), (success, o) => {
+            favors.splice(index, 1);
+            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors), (success, o) => {
                 if (success) {
                     if (o.ResultCode === 0) {
                         updateFavors();
@@ -37,7 +40,7 @@ const SectionLiFavor2 = (props) => {
             });
         }
     };
-
+    
 // 
     return (<span onClick={() => handleClick()} className={`${favors.includes(props.tableNumber) ? 'remove-to-favorites' : 'add-to-favorites'}`} />);
 }
@@ -55,21 +58,18 @@ const SectionLi = (props) => {
         setMoreScale('');
     }
 
-    return (<li key={props.tableInfo.tableNumber}
-        onMouseEnter={() => setHoveredItem(props.tableInfo.tableNumber)}
+    return (<li key={props.tableInfo.TableNumber}
+        onMouseEnter={() => setHoveredItem(props.tableInfo.TableNumber)}
         onMouseLeave={mouseleave}
         className='li-box'
     >
-        <SectionLiFavor1 tableNumber={props.tableInfo.tableNumber}/>
-        <div className={`games ${props.tableInfo.tableNumber}`}>
-            {/* 獲取ImageType為1的ImageUrl */}
-            {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
-                <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
-            )}
-            <RoadMap shoeResult={props.tableInfo.ShoeResult} />
+        <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber}/>
+        <div className={`games`}>
+            {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />)}
+            <RoadMap />
         </div>
         <p className='game-title'>
-            {props.tableInfo.tableNumber}
+            {props.tableInfo.TableNumber}
         </p>
         <p className='game-wallet'>
             <span>{"CNY(暫)"}</span>
@@ -80,17 +80,14 @@ const SectionLi = (props) => {
             </span>
         </p>
 
-        <div className={`hover-box ${hoveredItem === props.tableInfo.tableNumber ? 'visible' : ''} ${moreScale}`}>
+        <div className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? 'visible' : ''} ${moreScale}`}>
             <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
-            <div className={`games ${props.tableInfo.tableNumber}`}>
-                {/* 獲取ImageType為1的ImageUrl */}
-                {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
-                    <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
-                )}
+            <div className={`games`}>
+                {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />)}
             </div>
             <div className='info-box'>
                 <p className='game-title'>
-                    {props.tableInfo.tableNumber}
+                    {props.tableInfo.TableNumber}
                 </p>
                 <p className='game-wallet'>
                     <span>{"CNY(暫)"}</span>
@@ -101,15 +98,16 @@ const SectionLi = (props) => {
                     </span>
                 </p>
                 <div className='game-start' >
-                    <Link to={`/games/${props.tableInfo.tableNumber}`}>{"Global.start_games"}</Link>
+                    <Link to={`/games/${props.tableInfo.TableNumber}`}>{"開始遊戲"}</Link>
                 </div>
                 <div className='game-table-wrap'>
                     <RoadMap shoeResult={props.tableInfo.ShoeResult} />
                 </div>
                 <p className='game-dis'>
-                    {props.tableInfo.Status}
+                    {/* {props.tableInfo.Status} */}
                 </p>
-
+                
+                {/* 相似遊戲相關
                 {moreScale === 'more-scale'
                     ?
                     <div className='show-similar-games forpc'>
@@ -117,17 +115,14 @@ const SectionLi = (props) => {
                         <SimilarGames />
                     </div>
                     : ''
-                }
+                } */}
 
-                <div className='show-similar-games formb'>
-                    <p>Global.similar_ganes</p>
-                    <SimilarGames />
-                </div>
                 <div className='favorites-box'>
-                    <SectionLiFavor2 tableNumber={props.tableInfo.tableNumber}></SectionLiFavor2>
+                    <SectionLiFavor2 tableNumber={props.tableInfo.TableNumber}></SectionLiFavor2>
                 </div>
             </div>
-            <div className='more forpc' onClick={() => { setMoreScale('more-scale') }} />
+            {/* 相似遊戲相關
+            <div className='more forpc' onClick={() => { setMoreScale('more-scale') }} /> */}
         </div>
     </li>);
 }
@@ -149,7 +144,7 @@ const Section = (props) => {
                             ShoeResult:data.ShoeResult                           
                         };
                     });
-console.log("tableList",array);
+
                     setTableList(array);
                 }
             }

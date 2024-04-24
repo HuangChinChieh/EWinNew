@@ -3,7 +3,7 @@
 // 创建一个 Context
 export const TipContext = React.createContext();
 
-const TipProvider = (children) => {
+const TipProvider = ({children}) => {
     const [showTips, setShowTips] = useState(false);
     const [tipText, setTipText] = useState('');
 

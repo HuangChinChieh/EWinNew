@@ -164,7 +164,9 @@ const Main = () => {
 export default function Routers() {
   return (
     <Router>
+    <TipProvider>
       <Main />
+    </TipProvider>
     </Router>
   );
 }
