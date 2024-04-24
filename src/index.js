@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import store from 'store/store';
 import 'local/i18n';
 import { LanguageProvider } from 'hooks';
+import { Provider } from 'react-redux';
 
 import { CookiesProvider } from 'react-cookie';
 
@@ -15,12 +16,14 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>    
-      <LanguageProvider>
-        <CookiesProvider defaultSetOptions={{ path: '/' }}>
-          <Layout />
-        </CookiesProvider>
-      </LanguageProvider>    
+  <React.StrictMode>
+    <Provider store={store}>
+        <LanguageProvider>
+          <CookiesProvider defaultSetOptions={{ path: '/' }}>
+            <Layout />
+          </CookiesProvider>
+        </LanguageProvider>    
+    </Provider>  
   </React.StrictMode>
 );
 

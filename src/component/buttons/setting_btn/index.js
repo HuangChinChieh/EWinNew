@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from 'hooks';
 import './index.scss';
 const SettingButton = () => {
-    const { t } = useLanguage();
     const [hoveredItem, setHoveredItem] = useState(null);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const [isSet, setIsSet] = useState(false);
@@ -41,7 +40,7 @@ const SettingButton = () => {
                 <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                     <div className='flex-box'>
                         <div>
-                            {t("Setting.title")}
+                            {"Setting.title"}
                         </div>
                         <div className={`custom-slider ${isSet ? 'set' : ''}`}>
                             <input type="checkbox" id="sliderCheckbox" />
@@ -49,7 +48,7 @@ const SettingButton = () => {
                         </div>
                     </div>
                     <div className='dis'>
-                        {t("Setting.dis")}
+                        {"Setting.dis"}
                     </div>
                 </div>
             </div>
@@ -60,13 +59,13 @@ const SettingButton = () => {
 
                     >
                         <span className='icons'></span>
-                        <span> {t("Setting.is_true")}</span>
+                        <span> {"Setting.is_true"}</span>
                     </span>
                     <div className={`hover-box ${mbhoveredItem === 1 ? 'visible' : ''}`}>
                         <div className='flex-box'>
                             <div className='backicon' onClick={() => setMbHoveredItem(null)} />
                             <div>
-                                {t("Setting.title")}
+                                {"Setting.title"}
                             </div>
                             <div className={`mbcustom-slider ${isSet ? 'set' : ''}`}>
                                 <input type="checkbox" id="mbsliderCheckbox" />
@@ -74,7 +73,7 @@ const SettingButton = () => {
                             </div>
                         </div>
                         <div className='dis'>
-                            {t("Setting.dis")}
+                            {"Setting.dis"}
                         </div>
                     </div>
                 </div>
