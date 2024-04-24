@@ -105,7 +105,7 @@ const GameLobbyProvider = (props) => {
           </BetLimitCurrencyContext.Provider>
         </RealNameContext.Provider>
       </WalletContext.Provider>
-    </FavorsContext.Provider >
+    </FavorsContext.Provider>
   );
 };
 

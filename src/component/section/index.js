@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { Link, useHistory } from "react-router-dom";
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 
-import { useLobbyContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
 import './index.scss';
+import { WalletContext, FavorsContext } from 'provider/GameLobbyProvider';
 
 
 const SectionLiFavor2 = (props) => {
-    const { favors, updateFavors } = useContext(useLobbyContext);
+    const { favors, updateFavors } = useContext(FavorsContext);
     const tableNumber = props.TableNumber;
 
     const handleClick = () => {
@@ -43,36 +43,25 @@ const SectionLiFavor2 = (props) => {
 }
 
 const SectionLiFavor1 = (props) => {
-    const { favors } = useContext(useLobbyContext);
+    const { favors } = useContext(FavorsContext);
     return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`} />);
 }
 
 const SectionLi = (props) => {
     const [moreScale, setMoreScale] = useState('');
     const [hoveredItem, setHoveredItem] = useState(null);
-    const { userInfo } = useContext(useLobbyContext);
-    const { wallet } = useContext(useLobbyContext);
-    const history = useHistory();
     const mouseleave = () => {
         setHoveredItem(null);
         setMoreScale('');
     }
-    const getGameName = (TableNumber, TableTimeoutSecond) => () => {
-        props.getGameTitle(TableNumber);
-        localStorage.setItem('getLocalTableTitle', TableNumber);
-        props.actRoadMapNumber(TableNumber);
-        // console.log('TableTimeoutSecond', TableTimeoutSecond);
-        // props.setSeconds(TableTimeoutSecond);
-        // props.setFirstSeconds(TableTimeoutSecond);
-    };
 
-    return (<li key={props.tableInfo.TableNumber}
-        onMouseEnter={() => setHoveredItem(props.tableInfo.TableNumber)}
+    return (<li key={props.key}
+        onMouseEnter={() => setHoveredItem(props.key)}
         onMouseLeave={mouseleave}
         className='li-box'
     >
-        <SectionLiFavor1 />
-        <div className={`games ${props.tableInfo.TableNumber}`}>
+        <SectionLiFavor1 tableNumber={props.key}/>
+        <div className={`games ${props.key}`}>
             {/* 獲取ImageType為1的ImageUrl */}
             {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
                 <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
@@ -80,20 +69,20 @@ const SectionLi = (props) => {
             <RoadMap />
         </div>
         <p className='game-title'>
-            {props.tableInfo.TableNumber}
+            {props.key}
         </p>
         <p className='game-wallet'>
-            <span>{props.userInfo.BetLimitCurrencyType}</span>
+            <span>{"CNY(暫)"}</span>
             <span>
-                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                {/* {wallet && wallet.map((i, index) => (
                     props.tableInfo.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(props.tableInfo.Balance)}</span> : ''
-                ))}
+                ))} */}
             </span>
         </p>
 
-        <div className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? 'visible' : ''} ${moreScale}`}>
+        <div className={`hover-box ${hoveredItem === props.key ? 'visible' : ''} ${moreScale}`}>
             <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
-            <div className={`games ${props.tableInfo.TableNumber}`}>
+            <div className={`games ${props.key}`}>
                 {/* 獲取ImageType為1的ImageUrl */}
                 {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
                     <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
@@ -101,19 +90,18 @@ const SectionLi = (props) => {
             </div>
             <div className='info-box'>
                 <p className='game-title'>
-                    {props.tableInfo.TableNumber}
+                    {props.key}
                 </p>
                 <p className='game-wallet'>
-                    <span>{props.userInfo.BetLimitCurrencyType}</span>
+                    <span>{"CNY(暫)"}</span>
                     <span>
-                        {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
+                        {/* {wallet && wallet.map((i, index) => (
                             props.tableInfo.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{props.tableInfo.Balance}</span> : ''
-                        ))}
+                        ))} */}
                     </span>
                 </p>
                 <div className='game-start' >
-                    {/* <a href='/'> {props.tableInfo.TableTimeoutSecond} </a> */}
-                    <Link to={`/games/${props.tableInfo.TableNumber}`} onClick={getGameName(props.tableInfo.TableNumber, props.tableInfo.TableTimeoutSecond)}>{"Global.start_games"}</Link>
+                    <Link to={`/games/${props.key}`}>{"Global.start_games"}</Link>
                 </div>
                 <div className='game-table-wrap'>
                     <RoadMap />
@@ -126,7 +114,7 @@ const SectionLi = (props) => {
                     ?
                     <div className='show-similar-games forpc'>
                         <p>Global.similar_ganes</p>
-                        <SimilarGames tableNumber={props.tableInfo.TableNumber} />
+                        <SimilarGames />
                     </div>
                     : ''
                 }
@@ -136,7 +124,7 @@ const SectionLi = (props) => {
                     <SimilarGames />
                 </div>
                 <div className='favorites-box'>
-                    <SectionLiFavor2 tableNumber={props.tableInfo.TableNumber}></SectionLiFavor2>
+                    <SectionLiFavor2 tableNumber={props.key}></SectionLiFavor2>
                 </div>
             </div>
             <div className='more forpc' onClick={() => { setMoreScale('more-scale') }} />
@@ -171,9 +159,6 @@ const Section = (props) => {
         refreshTableList();
     }, []);
 
-
-
-
     return (
         <div className="section_box">
             <ul>
@@ -184,7 +169,5 @@ const Section = (props) => {
         </div>
     );
 };
-
-
 
 export default (Section);
