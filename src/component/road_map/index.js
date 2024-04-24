@@ -59,12 +59,28 @@ class RoadMap extends Component {
 
   render() {
     return (
-      <div>
-        <div ref={this.myRoadMapDiv} style={{ position: "relative", width: "350px", height: "50px" }}>
-        </div>
-      </div>
-    );
-  }
-}
+        <div className="table-container">
+            <table>
+                <tbody>
+                    {rows.map((row) => (
+                        <tr key={row}>
+                            {columns.map((col, colIndex) => {
+                                const index = colIndex * rows.length + (row - 1);                            
+                                return (
+                                    <td key={col}>
+                                        
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
 
-export default RoadMap;
+            </table>
+        </div>
+    );
+};
+
+
+
+export default (RoadMap);

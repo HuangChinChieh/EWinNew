@@ -78,13 +78,12 @@ const GameLobbyProvider = (props) => {
 
   const updateWallet = () => {
     updateInfo((userInfo) => {
-      let wallet = userInfo.Wallet.find(x => x.CurrencyType === "CNY");
+      let wallet = userInfo.Wallet.find(x => x.CurrencyType === CurrencyType);
       let setObj = {
         CurrencyType: wallet.CurrencyType,
         CurrencyName: wallet.CurrencyName,
         Balance: wallet.Balance
       };
-      debugger;
       setWallet(setObj);
     });
   };
