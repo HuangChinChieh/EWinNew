@@ -25,8 +25,8 @@ import './index.scss';
 const Main = () => {
   const EWinUrl = 'https://ewin.dev.mts.idv.tw';
   // const [domain, setDomain] = useState('');
-  const [CT, setCT] = useState('');
-  const Echo = 'Test_Echo';
+  const [CT, setCT] = useState('');  
+  //應該設計一個loading組件管理
   const [isLoading, setIsLoading] = useState(false);
 
   const location = useLocation();
