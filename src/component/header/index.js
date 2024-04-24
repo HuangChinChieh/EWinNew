@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
 import Logo from 'component/logo';
-import { useLobbyContext } from 'provider/GameLobbyProvider';
+import { WalletContext } from 'provider/GameLobbyProvider';
 import FullscreenButton from 'component/buttons/fs_btn';
 import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
@@ -16,7 +15,8 @@ import './index.scss';
 
 const Header = (props) => {
 
-  const { wallet,betLimitCurrencyType } = useLobbyContext();
+  const { wallet } = useLobbyContext(WalletContext);
+  const walletArray = Object.values(wallet);
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -102,7 +102,7 @@ const Header = (props) => {
               <span className='forpc'>
                 <span className='user-wallet' />
                 {betLimitCurrencyType}&nbsp;
-                {wallet.map((i, index) => (
+                {walletArray.map((i, index) => (
                   i.CurrencyType === betLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
                 ))}
               </span>

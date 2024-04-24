@@ -1,9 +1,9 @@
-
-import { useLobbyContext } from 'provider/GameLobbyProvider';
+import React, { useContext } from 'react';
+import { WalletContext } from 'provider/GameLobbyProvider';
 import './index.scss';
 
 function Footer(props) {
-    const { wallet } = useLobbyContext(Wallet);
+    const { wallet } = useContext(WalletContext);
     const walletArray = Object.values(wallet);
 
 
