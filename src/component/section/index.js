@@ -12,7 +12,6 @@ import { FavorsContext } from 'provider/GameLobbyProvider';
 const SectionLiFavor2 = (props) => {
     const { favors, updateFavors } = useContext(FavorsContext);
     const tableNumber = props.TableNumber;
-debugger
     const handleClick = () => {
         const lobbyClient = EWinGameLobbyClient.getInstance();
         const index = favors.indexOf(tableNumber);
@@ -45,7 +44,6 @@ debugger
 
 const SectionLiFavor1 = (props) => {
     const { favors } = useContext(FavorsContext);
-  debugger
     return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`}/>);
 }
 

@@ -11,6 +11,8 @@ class RoadMap extends Component {
     super(props);
     this.shoeResultStr = props.shoeResult;
     this.myRoadMapDiv = React.createRef();
+    this.myRoadMapDivParent = React.createRef();
+    this.myRoadMapDivParentParent = React.createRef();
     //初始化路單處理API;
 
   }
@@ -18,27 +20,10 @@ class RoadMap extends Component {
   componentDidMount() {
     this.RoadMapAPI = new RoadMapAPI();
     //config設定檔先寫在內部
-    //debugger;
-    this.RoadMapAPI.init({
-      enableDisplay: false //主路單不做顯示
-    }, {
-      el: this.myRoadMapDiv.current,
-      colMax: 35,
-      
-      rowMax: 5,
-      x: 1,
-      y: 1,
-      width: 10,
-      height: 10
-    }, {
-      enableDisplay: false //主路單不做顯示
-    }, {
-      enableDisplay: false //主路單不做顯示
-    }, {
-      enableDisplay: false //主路單不做顯示
-    });
+    //debugger;     
+    this.handleResize();
+    window.addEventListener('resize', this.handleResize.bind(this));
 
-    this.RoadMapAPI.setRoadMapByString(this.shoeResultStr);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -55,12 +40,50 @@ class RoadMap extends Component {
     return false;
   }
 
+  handleResize() {
+    //處理路單偏移，先處理顯示外框的基本寬度，必須要是10的倍數   
 
+    let elementWidth = this.myRoadMapDivParentParent.current.offsetWidth;
+    if (elementWidth != 0) {
+      //顯示之基數
+      let elementWidthBase = (parseInt(elementWidth / 10));
+      elementWidth = elementWidthBase * 10;
+      
+      if (elementWidth <= 350) {          
+        this.myRoadMapDivParent.current.style.width = elementWidth + "px";
+      } else {
+        elementWidthBase = 35;
+        this.myRoadMapDivParent.current.style.width = "350px";
+      }
+
+      this.RoadMapAPI.init({
+        enableDisplay: false //主路單不做顯示
+      }, {
+        el: this.myRoadMapDiv.current,
+        colMax: elementWidthBase,
+        rowMax: 6,
+        x: 1,
+        y: 1,
+        width: 10,
+        height: 10
+      }, {
+        enableDisplay: false //主路單不做顯示
+      }, {
+        enableDisplay: false //主路單不做顯示
+      }, {
+        enableDisplay: false //主路單不做顯示
+      });
+      
+      this.RoadMapAPI.setRoadMapByString(this.shoeResultStr);
+    }
+  }
 
   render() {
     return (
-      <div>
-        <div ref={this.myRoadMapDiv} style={{ position: "relative", width: "350px", height: "50px" }}>
+      <div ref={this.myRoadMapDivParentParent}>
+        <div ref={this.myRoadMapDivParent}>
+          <div className='roadMap-container' ref={this.myRoadMapDiv} style={{ position: "relative", width: "350px", height: "60px" }}>
+          </div>
         </div>
       </div>
     );
