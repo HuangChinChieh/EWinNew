@@ -7,7 +7,7 @@ function Footer(props) {
    
     return (
         <div className='footer-box aniFooterAction'>
-            <div className='user-wallet'>{"Global.balance"}
+            <div className='user-wallet'>餘額
               <span className='without-mr'>{wallet.Balance}</span> 
             </div>
         </div>
