@@ -66,7 +66,7 @@ const SectionLi = (props) => {
             {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
                 <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
             )}
-            <RoadMap />
+            <RoadMap shoeResult={props.tableInfo.ShoeResult} />
         </div>
         <p className='game-title'>
             {props.key}
@@ -82,7 +82,7 @@ const SectionLi = (props) => {
 
         <div className={`hover-box ${hoveredItem === props.key ? 'visible' : ''} ${moreScale}`}>
             <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
-            <div className={`games ${props.key}`}>
+            <div className={`games`}>
                 {/* 獲取ImageType為1的ImageUrl */}
                 {props.tableInfo.ImageList && props.tableInfo.ImageList.find(image => image.ImageType === 1) && (
                     <img src={props.tableInfo.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
@@ -104,7 +104,7 @@ const SectionLi = (props) => {
                     <Link to={`/games/${props.key}`}>{"Global.start_games"}</Link>
                 </div>
                 <div className='game-table-wrap'>
-                    <RoadMap />
+                    <RoadMap shoeResult={props.tableInfo.ShoeResult} />
                 </div>
                 <p className='game-dis'>
                     {props.tableInfo.Status}
@@ -145,7 +145,8 @@ const Section = (props) => {
                             TableNumber:data.TableNumber,
                             Image:data.ImageList.find(image => image.ImageType === 1),
                             CurrencyType:data.CurrencyType,
-                            Status:data.Status                            
+                            Status:data.Status, 
+                            ShoeResult:data.ShoeResult                           
                         };
                     });
 
