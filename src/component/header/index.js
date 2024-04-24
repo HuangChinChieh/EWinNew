@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import Logo from 'component/logo';
 import { WalletContext } from 'provider/GameLobbyProvider';
 import FullscreenButton from 'component/buttons/fs_btn';
@@ -15,7 +15,7 @@ import './index.scss';
 
 const Header = (props) => {
 
-  const { wallet } = useLobbyContext(WalletContext);
+  const { wallet } = useContext(WalletContext);
   const walletArray = Object.values(wallet);
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
@@ -91,7 +91,9 @@ const Header = (props) => {
             <div className='tool-box-left'>
               {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
               <span><span className='user-icon' /></span>
-              <span className='forpc'><span className='user-wallet' />{betLimitCurrencyType} 0</span>
+              <span className='forpc'><span className='user-wallet' />
+              {/* {betLimitCurrencyType}*/}
+              </span>
               <span className='forpc'><span>{"Global.favorites"}({favorites.length}) </span></span>
               <span className='formb'><a className="user-favorite" href='/'></a></span>
 
@@ -101,9 +103,12 @@ const Header = (props) => {
               <span><span className='user-icon' /></span>
               <span className='forpc'>
                 <span className='user-wallet' />
-                {betLimitCurrencyType}&nbsp;
+                {/* {betLimitCurrencyType}&nbsp; */}
                 {walletArray.map((i, index) => (
-                  i.CurrencyType === betLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                  // i.CurrencyType === betLimitCurrencyType ? 
+                  <span className='without-mr' key={index}>{i.Balance}
+                  </span> 
+                  // : ''
                 ))}
               </span>
               <span><a className="user-favorite" href='/Gamefavorite'></a></span>
