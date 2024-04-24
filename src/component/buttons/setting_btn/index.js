@@ -39,7 +39,7 @@ const SettingButton = () => {
                 <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                     <div className='flex-box'>
                         <div>
-                            {"Setting.title"}
+                            遊戲大廳個性化
                         </div>
                         <div className={`custom-slider ${isSet ? 'set' : ''}`}>
                             <input type="checkbox" id="sliderCheckbox" />
@@ -47,7 +47,7 @@ const SettingButton = () => {
                         </div>
                     </div>
                     <div className='dis'>
-                        {"Setting.dis"}
+                            如果您想查看遊戲大廳的個人化遊戲桌列表，請保持該選項處於啟用狀態。 否則，請將其停用，我們將停止為此目的處理個人資料。
                     </div>
                 </div>
             </div>
@@ -55,16 +55,15 @@ const SettingButton = () => {
                 <div className='setting-wrap'>
                     <span className='flex-box'
                         onClick={() => setMbHoveredItem(1)}
-
                     >
                         <span className='icons'></span>
-                        <span> {"Setting.is_true"}</span>
+                        <span> 設置</span>
                     </span>
                     <div className={`hover-box ${mbhoveredItem === 1 ? 'visible' : ''}`}>
                         <div className='flex-box'>
                             <div className='backicon' onClick={() => setMbHoveredItem(null)} />
                             <div>
-                                {"Setting.title"}
+                                遊戲大廳個性化
                             </div>
                             <div className={`mbcustom-slider ${isSet ? 'set' : ''}`}>
                                 <input type="checkbox" id="mbsliderCheckbox" />
@@ -72,7 +71,7 @@ const SettingButton = () => {
                             </div>
                         </div>
                         <div className='dis'>
-                            {"Setting.dis"}
+                            如果您想查看遊戲大廳的個人化遊戲桌列表，請保持該選項處於啟用狀態。 否則，請將其停用，我們將停止為此目的處理個人資料。
                         </div>
                     </div>
                 </div>

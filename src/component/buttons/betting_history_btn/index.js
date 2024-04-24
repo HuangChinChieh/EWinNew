@@ -7,27 +7,27 @@ const BettingHistory = (props) => {
 
     
     const tableHeaders = [
-        "Global.date",
-        "Global.currency",
-        "Global.type",
-        'Global.win_lose',
-        'Global.rolling',
-        "Global.details"
+        "日期",
+        "幣別",
+        "類型",
+        '上下數',
+        '轉碼數',
+        "詳細內容"
     ];
     
     const detailTableHeaders = [
-        "Global.order_id",
-        "Global.round_info",
-        'Global.currency',
-        'Global.bet',
-        'Global.card_info',
-        'Global.win_lose',
-        'Global.rolling',
-        'Global.lend_chip_tax',
-        'Global.add_chip',
-        'Global.tips_value',
-        'Global.table_chip',
-        "Global.snap_shot_name"
+        "序號",
+        "場次",
+        '幣別',
+        '注碼',
+        '結果',
+        '上下數',
+        '轉碼數',
+        '配碼稅金',
+        '加彩',
+        '小費',
+        '檯面',
+        "快照"
     ];
     
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
@@ -225,7 +225,7 @@ const BettingHistory = (props) => {
                                         bettingHistoryClick();
                                     }}
                                 >
-                                    {'Global.bet_history'}
+                                    投注紀錄
                                 </div>
                                 <div className={activeTab === 'orderHistory' ? 'type-tabs active' : 'type-tabs'}
                                     onClick={(e) => {
@@ -235,25 +235,25 @@ const BettingHistory = (props) => {
                                         bettingHistoryClick();
                                     }}
                                 >
-                                    {'Global.work_order_history'}
+                                    工單紀錄
                                 </div>
                             </div>
                             <div className='month-container' >
                                 <button onClick={handleSubtractMonth}>
                                     <span>＜</span>
-                                    {"Global.last_month"}
+                                    上個月
                                 </button>
                                 <button onClick={handleAddMonth}>
-                                    {"Global.next_month"}
+                                    下個月
                                     <span>＞</span>
                                 </button>
                             </div>
                         </div>
                         <div className='flex-box'>
-                            <div>{'Global.begindate'}
+                            <div>起始日
                                 <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
                             </div>
-                            <div>{'Global.enddate'}
+                            <div>終止日
                                 <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
                             </div>
                         </div>
@@ -289,7 +289,7 @@ const BettingHistory = (props) => {
                                 </table>
 
                             ) : (
-                                <div className='noData'>{"Global.no_data"}</div>
+                                <div className='noData'>尚無資料</div>
                             )
 
                             }
@@ -323,7 +323,7 @@ const BettingHistory = (props) => {
                                 </table>
 
                             ) : (
-                                <div className='noData'>{"Global.no_data"}</div>
+                                <div className='noData'>尚無資料</div>
                             )
 
                             }
@@ -334,25 +334,25 @@ const BettingHistory = (props) => {
                         <div className='title'>
                             <div className='type-container'>
                                 <div className='type-tabs'>
-                                    {'Global.details'}
+                                     詳細內容
                                 </div>
                             </div>
                             <div className='month-container'>
                                 <button onClick={handleSubtractMonth}>
                                     <span>＜</span>
-                                    {"Global.last_month"}
+                                    上個月
                                 </button>
                                 <button onClick={handleAddMonth}>
-                                    {"Global.next_month"}
+                                    下個月
                                     <span>＞</span>
                                 </button>
                             </div>
                         </div>
                         <div className='flex-box'>
-                            <div>{'Global.begindate'}
+                            <div>起始日
                                 <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
                             </div>
-                            <div>{'Global.enddate'}
+                            <div>終止日
                                 <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
                             </div>
                         </div>
@@ -416,7 +416,7 @@ const BettingHistory = (props) => {
                                 </table>
 
                             ) : (
-                                <div className='noData'>{"Global.no_data"}</div>
+                                <div className='noData'>尚無資料</div>
                             )
 
                             }

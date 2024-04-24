@@ -42,11 +42,11 @@ const FullscreenButton = () => {
                     {isFullscreen ?
                         <span onClick={toggleFullscreen} className='flex-box'>
                             <span className='exitfullscreen'></span>
-                            <span>{"Global.exit_fs"}</span>
+                            <span>半屏</span>
                         </span>
                         : <span onClick={toggleFullscreen} className='flex-box'>
                             <span className='fullscreen'></span>
-                            <span>{"Global.fs"}</span>
+                            <span>全屏</span>
                         </span>
                     }
                 </div>
