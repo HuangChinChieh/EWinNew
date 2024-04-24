@@ -1,17 +1,7 @@
 import { useContext, useState } from 'react';
-import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
- import {
-     toggleFavorite,
-     showMessage,
-     toggleMute,
-     getGameTitle
- } from 'store/actions';
- import {
-     actFavo
- } from 'store/gamelobbyActions';
-import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-import { useLobbyContext } from 'provider/GameLobbyProvider';
+
+import { FavorsContext,WalletContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import SimilarGames from 'component/similar_games';
 import Loading from 'component/loading';
@@ -19,12 +9,14 @@ import './index.scss';
 import { TipContext } from 'component/tips'; 
 
 function Gamefavorite(props) {
-    const { t } = useLobbyContext();
-    const instance = EWinGameLobbyClient.getInstance(props.ct, props.ewinurl);
     const { showTip } = useContext(TipContext);
-
+    // const [mutes,setMutes]=useContext(false)
     const [hoveredItem, setHoveredItem] = useState(null);
     const [moreScale, setMoreScale] = useState('');
+    const { favors } = useContext(FavorsContext);
+    const { wallet } = useContext(WalletContext);
+    const walletArray = Object.values(wallet);
+
 
     const mouseleave = () => {
         setHoveredItem(null);
@@ -64,21 +56,21 @@ function Gamefavorite(props) {
             <div className="section_box" style={{ width: '100%' }}>
                 {props.isGameLobbyLoading ? (<Loading />) : (
                     <div>
-                        {props.favo && props.favo.length === 0 ? (
+                        {favors.length === 0 ? (
                             <div className='without_favorite'>
-                                <h2>{t("Global.without_favorite")}</h2>
+                                <h2>{"Global.without_favorite"}</h2>
                             </div>
                         ) : (
                             <ul>
                                 {props.tiList && props.tiList.TableInfoList && props.tiList.TableInfoList.map((i, index) => {
-                                    if (props.favo && props.favo.includes(i.TableNumber)) {
+                                    if (favors.includes(i.TableNumber)) {
                                         return (
                                             <li key={index}
                                                 onMouseEnter={() => setHoveredItem(i.TableNumber)}
                                                 onMouseLeave={mouseleave}
                                                 className='li-box'
                                             >
-                                                <span className={`${props.favo && props.favo.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
+                                                <span className={`${favors.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
                                                 <div className={`games ${i.TableNumber}`}>
                                                     {/* 獲取ImageType為1的ImageUrl */}
                                                     {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
@@ -90,10 +82,14 @@ function Gamefavorite(props) {
                                                     {i.TableNumber}
                                                 </p>
                                                 <p className='game-wallet'>
-                                                    <span>{props.userInfo.BetLimitCurrencyType}</span>
                                                     <span>
-                                                        {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
-                                                            i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span> : ''
+                                                        {/* {props.userInfo.BetLimitCurrencyType} */}
+                                                    </span>
+                                                    <span>
+                                                        {walletArray.map((i, index) => (
+                                                            // i.CurrencyType === props.userInfo.BetLimitCurrencyType ? 
+                                                            <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span>
+                                                            //  : ''
                                                         ))}
                                                     </span>
                                                 </p>
@@ -111,15 +107,19 @@ function Gamefavorite(props) {
                                                             {i.TableNumber}
                                                         </p>
                                                         <p className='game-wallet'>
-                                                            <span>{props.userInfo.BetLimitCurrencyType}</span>
                                                             <span>
-                                                                {props.userInfo && props.userInfo.Wallet && props.userInfo.Wallet.map((i, index) => (
-                                                                    i.CurrencyType === props.userInfo.BetLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
+                                                                {/* {props.userInfo.BetLimitCurrencyType} */}
+                                                            </span>
+                                                            <span>
+                                                                {walletArray.map((i, index) => (
+                                                                    // i.CurrencyType === props.userInfo.BetLimitCurrencyType ? 
+                                                                    <span className='without-mr' key={index}>{i.Balance}</span> 
+                                                                    // : ''
                                                                 ))}
                                                             </span>
                                                         </p>
                                                         <div className='game-start' >
-                                                            <Link to={`/games/${i.TableNumber}`} onClick={getGameName(i.TableNumber, i.TableTimeoutSecond)}>{t("Global.start_games")}</Link>
+                                                            <Link to={`/games/${i.TableNumber}`} onClick={getGameName(i.TableNumber, i.TableTimeoutSecond)}>{"Global.start_games"}</Link>
                                                         </div>
                                                         <div className='game-table-wrap'>
                                                             <RoadMap />
@@ -131,19 +131,19 @@ function Gamefavorite(props) {
                                                         {moreScale === 'more-scale'
                                                             ?
                                                             <div className='show-similar-games forpc'>
-                                                                <p>{t("Global.similar_ganes")}</p>
+                                                                <p>{"Global.similar_ganes"}</p>
                                                                 <SimilarGames />
                                                             </div>
                                                             : ''
                                                         }
 
                                                         <div className='show-similar-games formb'>
-                                                            <p>{t("Global.similar_ganes")}</p>
+                                                            <p>{"Global.similar_ganes"}</p>
                                                             <SimilarGames />
                                                         </div>
                                                         <div className='favorites-box'>
-                                                             <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} /> 
-                                                            <span onClick={() => handleClick(i.TableNumber)} className={props.favo && props.favo.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
+                                                             {/* <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} />  */}
+                                                            <span onClick={() => handleClick(i.TableNumber)} className={favors.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
 
                                                         </div>
                                                     </div>
@@ -167,28 +167,7 @@ function Gamefavorite(props) {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        favorites: state.root.favorites || [],
-        mutes: state.root.mutes || [],
-        message: state.root.message,
-        ct: state.gameLobby.ct,
-        guid: state.gameLobby.guid,
-        echo: state.gameLobby.echo,
-        ewinurl: state.gameLobby.ewinurl,
-        isGameLobbyLoading: state.gameLobby.isGameLobbyLoading,
-        tiList: state.gameLobby.tiList,
-        userInfo: state.gameLobby.userInfo,
-        favo: state.gameLobby.favo
-    };
-};
 
-const mapDispatchToProps = {
-    toggleFavorite,
-    showMessage,
-    toggleMute,
-    getGameTitle,
-    actFavo
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Gamefavorite);
+
+export default Gamefavorite;
