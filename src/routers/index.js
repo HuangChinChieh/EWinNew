@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -23,135 +23,99 @@ import './index.scss';
 
 const Main = () => {
   const EWinUrl = 'https://ewin.dev.mts.idv.tw';
-  // const [domain, setDomain] = useState('');
-  const [CT, setCT] = useState('');  
-  //應該設計一個loading組件管理
-  const [isLoading, setIsLoading] = useState(false);
+  const intervalIDRef = useRef(0);
+  const params = new URLSearchParams(window.location.search);
+
+  const [CT, setCT] = useState('');
+  
 
   const location = useLocation();
   const isGameView = location.pathname.includes('/games/');
   const [getUrl, setGetUrl] = useState('');
   const history = useHistory();
 
-  localStorage.setItem('currentUrl', '');
-
-  
   useEffect(() => {
-    // 開發時設定每5分鐘打一次api來獲取有效的 CT
-    const fetchDataBySeconds = async () => {
-      try {
-        const response = await fetch(
-          'https://ewin.dev.mts.idv.tw/API/LoginAPI.asmx/UserLoginByCustomValidate?Token=1_0UE5XQQ_ca95cc8bfb4e442118d60c5b92a7af2e&LoginAccount=ddt1&LoginPassword=1234&CompanyCode=demo&UserIP='
-        );
-        const xmlText = await response.text();
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-        const newCT = xmlDoc.getElementsByTagName('CT')[0].textContent;
+    const CT = params['CT'];
+    const CurrencyType = params['CurrencyType'];
+    
 
-        setCT(newCT);
-        localStorage.setItem('CT', newCT);
+
+    if (CT) {
+      initLobbyClient(CT);
+    } else {
+      // 開發時設定每5分鐘打一次api來獲取有效的 CT
+      const fetchDataBySeconds = async () => {
+        const postData = {
+          Token: '1_0UE5XQQ_ca95cc8bfb4e442118d60c5b92a7af2e',
+          LoginAccount: 'ddt1',
+          LoginPassword: '1234',
+          CompanyCode: 'demo',
+          UserIP: ''
+        };
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(postData)
+        };
+
+
+        const response = await fetch(
+          'https://ewin.dev.mts.idv.tw/API/LoginAPI.asmx/UserLoginByCustomValidate'
+          , requestOptions
+        );
+        const jsonReturn = await response.json();
+
+
+        setCT(jsonReturn.d.CT);
+        sessionStorage.setItem('CT', jsonReturn.d.CT);
         // setCookie('CT', newCT);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchDataBySeconds();
+        initLobbyClient(CT);
+      };
+      fetchDataBySeconds();
+    }
+
+    return clearInterval(intervalIDRef.current);
   }, []);
 
-// 遊戲大廳
-const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
 
+  const initLobbyClient = (CT) => {
+    // 遊戲大廳    
+    const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
 
+    gameLobbyClient.handleReceiveMsg((Msg) => {
+      console.log('處理接收訊息', Msg);
+    });
 
+    gameLobbyClient.handleConnected(() => {    
+      intervalIDRef.current = setInterval(()=>{
+        gameLobbyClient.KeepSID();
+      }, 300000);
 
+      setCT(CT);  
+    });
 
-useEffect(() => {
-
-  if (gameLobbyClient !== null) {
-
-  
-
-      const handleConnected = () => {
-
-      // 監聽連線狀態
-      gameLobbyClient.HeartBeat(Echo);
-
-      gameLobbyClient.handleReceiveMsg((Msg) => {
-          console.log('處理接收訊息', Msg);
-      });
-
-      // 獲取使用者資料
+    gameLobbyClient.handleReconnected((Msg) => {
       
-      const handleDisconnect = () => {
-      console.log('EWinHub 連結失效');
-      setIsLoading(true);
-      window.location.reload();
-      };
-
-      const handleReconnecting = () => {
-      console.log('重新連結 EWinHub');
-      setIsLoading(true);
-      };
-
-      const handleReconnected = () => {
-      console.log('已重新連結 EWinHub');
-      setIsLoading(true);
-      };
+    });
 
 
-      const KeepSIDIntercal=()=>{
-        gameLobbyClient.KeepSID((s, o) => {
-          if (s) {
-            if (o.ResultCode === 0) {
-              //資料處理
-              console.log('sid is fine', o);
-              // 登入後 BetLimitCurrencyType 預設值為 "", 暫時先加這段判斷.
-            } else {
-              //系統錯誤處理
-              console.log('GetUserInfo: 系統錯誤處理');
-  
-            }
-          } else {
-            //傳輸等例外問題處理
-            console.log('GetUserInfo: 傳輸等例外問題處理');
-          }
-          
-        });
-      }
+    gameLobbyClient.handleReconnecting(() => {
 
-      
-      
-      gameLobbyClient.handleConnected(handleConnected);
-      gameLobbyClient.handleDisconnect(handleDisconnect);
-      gameLobbyClient.handleReconnecting(handleReconnecting);
-      gameLobbyClient.handleReconnected(handleReconnected);
-      
-      
-      
-      // 初始化連接
-      gameLobbyClient.initializeConnection();
-      
-      const intervalId = setInterval(KeepSIDIntercal, 30000);
-      KeepSIDIntercal();
-      return () => clearInterval(intervalId);
+    });
 
+    gameLobbyClient.handleDisconnect(() => {
 
+    });
+  };
 
+  useEffect(() => {
+    const currentPath = history.location.pathname;
+    localStorage.setItem('currentUrl', currentPath);
+    setGetUrl(localStorage.getItem('currentUrl'))
 
-
-    }
-  }
-}, [CT, gameLobbyClient]);
-
-
-
-
-useEffect(() => {
-  const currentPath = history.location.pathname;
-  localStorage.setItem('currentUrl', currentPath);
-  setGetUrl(localStorage.getItem('currentUrl'))
-
-}, [history.location.pathname]);
+  }, [history.location.pathname]);
 
 
   return (
