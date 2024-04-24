@@ -3,7 +3,6 @@ import { useLanguage } from 'hooks';
 import './index.scss';
 
 const GoodTrendNotice = () => {
-    const { t } = useLanguage();
     const notifyRef = useRef(null);
     const [hoverItem, setHoverItem] = useState(0);
 
@@ -32,7 +31,7 @@ const GoodTrendNotice = () => {
             >
 
                 <div className={`hover-box ${hoverItem === 1 ? 'visible' : ''}`}>
-                    <div className='title'>{t("Global.good_trend_notice")}</div>
+                    <div className='title'>{"Global.good_trend_notice"}</div>
                 </div>
             </div>
         </div>

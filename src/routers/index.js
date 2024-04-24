@@ -10,7 +10,7 @@ import {
 import Header from 'component/header';
 import Gamelobby from 'view/game_lobby';
 import Gamefavorite from 'view/game_favorite';
-import GameView from 'view/game_views';
+// import GameView from 'view/game_views';
 import Footer from 'component/footer';
 import GameFooter from 'games_component/game_footer';
 import TipProvider from 'component/tips';
@@ -27,7 +27,7 @@ const Main = () => {
   const [CT, setCT] = useState('');  
   //應該設計一個loading組件管理
   const [isLoading, setIsLoading] = useState(false);
-
+  const Echo='Test Echo';
   const location = useLocation();
   const isGameView = location.pathname.includes('/games/');
   const [getUrl, setGetUrl] = useState('');
@@ -172,11 +172,11 @@ useEffect(() => {
         <Route path='/Gamefavorite'>
           <Gamefavorite />
         </Route>
-        <Route path='/games/:gameId'>
+        {/* <Route path='/games/:gameId'>
           <GameBaccaratProvider>
             <GameView url={getUrl} />
           </GameBaccaratProvider>
-        </Route>
+        </Route> */}
         <Route path='/'>
           <Gamelobby />
         </Route>

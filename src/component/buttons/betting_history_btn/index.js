@@ -5,40 +5,35 @@ import './index.scss';
 
 import { useLobbyContext } from "provider/GameLobbyProvider";
 
-
-
-
 const BettingHistory = (props) => {
-    const {
-        t,CT
-    } = useLobbyContext();
+
     
     const tableHeaders = [
-        t("Global.date"),
-        t("Global.currency"),
-        t("Global.type"),
-        t('Global.win_lose'),
-        t('Global.rolling'),
-        t("Global.details")
+        "Global.date",
+        "Global.currency",
+        "Global.type",
+        'Global.win_lose',
+        'Global.rolling',
+        "Global.details"
     ];
     
     const detailTableHeaders = [
-        t("Global.order_id"),
-        t("Global.round_info"),
-        t('Global.currency'),
-        t('Global.bet'),
-        t('Global.card_info'),
-        t('Global.win_lose'),
-        t('Global.rolling'),
-        t('Global.lend_chip_tax'),
-        t('Global.add_chip'),
-        t('Global.tips_value'),
-        t('Global.table_chip'),
-        t("Global.snap_shot_name")
+        "Global.order_id",
+        "Global.round_info",
+        'Global.currency',
+        'Global.bet',
+        'Global.card_info',
+        'Global.win_lose',
+        'Global.rolling',
+        'Global.lend_chip_tax',
+        'Global.add_chip',
+        'Global.tips_value',
+        'Global.table_chip',
+        "Global.snap_shot_name"
     ];
     
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
-    const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
+    const gameLobbyClient = EWinGameLobbyClient.getInstance();
     const [hoveredItem, setHoveredItem] = useState(0);
     const [hoverdetail, setHoverDetail] = useState(0)
     const [beginDate, setBeginDate] = useState('');
@@ -49,9 +44,6 @@ const BettingHistory = (props) => {
     const [detailList, setDetailList] = useState([]);
     const [activeTab, setActiveTab] = useState('betHistory');
     const settingsRef = useRef(null);
-
-
-
 
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
@@ -90,15 +82,13 @@ const BettingHistory = (props) => {
         bettingHistoryClick();
     };
 
-    // 增加一個月
+    // 增減一個月
     const handleAddMonth = () => {
         updateDatesAndSearch((date, setDate) => {
             date.setMonth(date.getMonth() + 1);
             setDate(date.toISOString().split('T')[0]);
         });
     };
-
-    // 減少一個月
     const handleSubtractMonth = () => {
         updateDatesAndSearch((date, setDate) => {
             date.setMonth(date.getMonth() - 1);
@@ -226,7 +216,6 @@ const BettingHistory = (props) => {
                 ref={settingsRef}
             >
                 <div>
-
                     <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                         <div className='title'>
                             <div className='type-container'>
@@ -238,7 +227,7 @@ const BettingHistory = (props) => {
                                         bettingHistoryClick();
                                     }}
                                 >
-                                    {t('Global.bet_history')}
+                                    {'Global.bet_history'}
                                 </div>
                                 <div className={activeTab === 'orderHistory' ? 'type-tabs active' : 'type-tabs'}
                                     onClick={(e) => {
@@ -248,25 +237,25 @@ const BettingHistory = (props) => {
                                         bettingHistoryClick();
                                     }}
                                 >
-                                    {t('Global.work_order_history')}
+                                    {'Global.work_order_history'}
                                 </div>
                             </div>
                             <div className='month-container' >
                                 <button onClick={handleSubtractMonth}>
                                     <span>＜</span>
-                                    {t("Global.last_month")}
+                                    {"Global.last_month"}
                                 </button>
                                 <button onClick={handleAddMonth}>
-                                    {t("Global.next_month")}
+                                    {"Global.next_month"}
                                     <span>＞</span>
                                 </button>
                             </div>
                         </div>
                         <div className='flex-box'>
-                            <div>{t('Global.begindate')}
+                            <div>{'Global.begindate'}
                                 <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
                             </div>
-                            <div>{t('Global.enddate')}
+                            <div>{'Global.enddate'}
                                 <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
                             </div>
                         </div>
@@ -288,7 +277,7 @@ const BettingHistory = (props) => {
                                                     <tr key={index}>
                                                         <td>{data.SummaryDate}</td>
                                                         <td>{data.CurrencyType}</td>
-                                                        <td>{t(`Global.${data.GameCode}`)}</td>
+                                                        <td>{`Global.${data.GameCode}`}</td>
                                                         <td>{data.RewardValue}</td>
                                                         <td>{data.ValidBetValue}</td>
                                                         <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
@@ -302,7 +291,7 @@ const BettingHistory = (props) => {
                                 </table>
 
                             ) : (
-                                <div className='noData'>{t("Global.no_data")}</div>
+                                <div className='noData'>{"Global.no_data"}</div>
                             )
 
                             }
@@ -323,7 +312,7 @@ const BettingHistory = (props) => {
                                                 <tr key={index}>
                                                     <td>{data.SummaryDate}</td>
                                                     <td>{data.CurrencyType}</td>
-                                                    <td>{t(`Global.${data.GameCode}`)}</td>
+                                                    <td>{`Global.${data.GameCode}`}</td>
                                                     <td>{data.RewardValue}</td>
                                                     <td>{data.ValidBetValue}</td>
                                                     <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
@@ -336,7 +325,7 @@ const BettingHistory = (props) => {
                                 </table>
 
                             ) : (
-                                <div className='noData'>{t("Global.no_data")}</div>
+                                <div className='noData'>{"Global.no_data"}</div>
                             )
 
                             }
@@ -347,25 +336,25 @@ const BettingHistory = (props) => {
                         <div className='title'>
                             <div className='type-container'>
                                 <div className='type-tabs'>
-                                    {t('Global.details')}
+                                    {'Global.details'}
                                 </div>
                             </div>
                             <div className='month-container'>
                                 <button onClick={handleSubtractMonth}>
                                     <span>＜</span>
-                                    {t("Global.last_month")}
+                                    {"Global.last_month"}
                                 </button>
                                 <button onClick={handleAddMonth}>
-                                    {t("Global.next_month")}
+                                    {"Global.next_month"}
                                     <span>＞</span>
                                 </button>
                             </div>
                         </div>
                         <div className='flex-box'>
-                            <div>{t('Global.begindate')}
+                            <div>{'Global.begindate'}
                                 <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
                             </div>
-                            <div>{t('Global.enddate')}
+                            <div>{'Global.enddate'}
                                 <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
                             </div>
                         </div>
@@ -429,7 +418,7 @@ const BettingHistory = (props) => {
                                 </table>
 
                             ) : (
-                                <div className='noData'>{t("Global.no_data")}</div>
+                                <div className='noData'>{"Global.no_data"}</div>
                             )
 
                             }

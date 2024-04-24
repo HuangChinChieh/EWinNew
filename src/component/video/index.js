@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import './index.scss';
 // import Videos from 'img/videoplayback.mp4';
 const VideoBox = (props) => {
-    const { t } = useLobbyContext();
     const videoRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
@@ -59,7 +58,7 @@ const VideoBox = (props) => {
                                     }
                                 </h4>
                                 {/* 這邊應該是後端返回的狀態，目前先做假顯示 */}
-                                <span>{t("Global.progress")}</span>
+                                <span>{"Global.progress"}</span>
                             </div>
                             <div className='right-box'>
                                 <div className={`video-control ${isMuted ? 'video-unmute' : 'video-mute'}`} onClick={toggleMute}>
@@ -84,7 +83,7 @@ const VideoBox = (props) => {
                                     }
                                 </h4>
                                 {/* 這邊應該是後端返回的狀態，目前先做假顯示 */}
-                                <span>{t("Global.progress")}</span>
+                                <span>{"Global.progress"}</span>
                             </div>
                             <div className='right-box'>
                                 <div className={`video-control ${isMuted ? 'video-unmute' : 'video-mute'}`} onClick={toggleMute}>
