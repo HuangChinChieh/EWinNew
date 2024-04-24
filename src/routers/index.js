@@ -36,7 +36,7 @@ const Main = () => {
   useEffect(() => {
     const CT = params['CT'];
     const CurrencyType = params['CurrencyType'];
-    
+
     if (CT) {
       initLobbyClient(CT);
     } else {
@@ -63,12 +63,10 @@ const Main = () => {
           , requestOptions
         );
         const jsonReturn = await response.json();
-
-
-        setCT(jsonReturn.d.CT);
+     
         sessionStorage.setItem('CT', jsonReturn.d.CT);
         // setCookie('CT', newCT);
-        initLobbyClient(CT);
+        initLobbyClient(jsonReturn.d.CT);
       };
       fetchDataBySeconds();
     }
@@ -78,53 +76,36 @@ const Main = () => {
 
 
   const initLobbyClient = (CT) => {
-    // 遊戲大廳        
-    const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
+    // 遊戲大廳      
+    const lobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
 
-    gameLobbyClient.handleReceiveMsg((Msg) => {
+    lobbyClient.handleReceiveMsg((Msg) => {
       console.log('處理接收訊息', Msg);
     });
 
-    gameLobbyClient.handleConnected(() => {    
-      intervalIDRef.current = setInterval(()=>{
-        gameLobbyClient.KeepSID();
+    lobbyClient.handleConnected(() => {
+      intervalIDRef.current = setInterval(() => {
+        lobbyClient.KeepSID();
       }, 300000);
 
-      setCT(CT);  
+      setCT(CT);
       setIsServerConneted(true);
     });
 
-<<<<<<< HEAD
-    gameLobbyClient.handleReconnected((Msg) => {
-=======
-useEffect(() => {
+    lobbyClient.handleReconnected((Msg) => {
 
-  if (gameLobbyClient !== null) {
+    });
 
+
+    lobbyClient.handleReconnecting(() => {
   
-
-      const handleConnected = () => {
-
-      // 監聽連線狀態
-      //gameLobbyClient.HeartBeat(Echo);
-
-      gameLobbyClient.handleReceiveMsg((Msg) => {
-          console.log('處理接收訊息', Msg);
-      });
-
-      // 獲取使用者資料
->>>>>>> 5a957b7dddbc4129591c92f01479604c12c6356f
-      
     });
 
-
-    gameLobbyClient.handleReconnecting(() => {
-
+    lobbyClient.handleDisconnect(() => {
+ 
     });
 
-    gameLobbyClient.handleDisconnect(() => {
-
-    });
+    lobbyClient.initializeConnection();
   };
 
   useEffect(() => {
@@ -136,49 +117,45 @@ useEffect(() => {
 
 
   return (
-    isServerConneted ?
-    <div></div> :
-    <div className="wrap-box">
-      {!isGameView
-        ? (
-          <>
-            <Header />
-            <VideoBox url={getUrl} />
-            <Footer />
-          </>
-        )
-        : (
-          <GameFooter />
-        )
-      }
-      <Switch>
-        <Route path='/Gamefavorite'>
-          <Gamefavorite />
-        </Route>
-        <Route path='/games/:gameId'>
-          <GameBaccaratProvider>
-            <GameView url={getUrl} />
-          </GameBaccaratProvider>
-        </Route>
-        <Route path='/'>
-          <Gamelobby />
-        </Route>
-      </Switch>
-    </div>
+    !isServerConneted ?
+      <div></div> :
+      <div className="wrap-box">
+        <GameLobbyProvider>
+          {!isGameView
+            ? (
+              <>
+                <Header />
+                <VideoBox url={getUrl} />
+                <Footer />
+              </>
+            )
+            : (
+              <GameFooter />
+            )
+          }
+          <Switch>
+            <Route path='/Gamefavorite'>
+              <Gamefavorite />
+            </Route>
+            <Route path='/games/:gameId'>
+              <GameBaccaratProvider>
+                <GameView url={getUrl} />
+              </GameBaccaratProvider>
+            </Route>
+            <Route path='/'>
+              <Gamelobby />
+            </Route>
+          </Switch>
+        </GameLobbyProvider>
+      </div>
   );
 };
 
 // 加入判斷剔除不顯示的組件
 export default function Routers() {
   return (
-    <Router>
-      <GameLobbyProvider>
-<<<<<<< HEAD
-=======
-              <TipProvider />
->>>>>>> 5a957b7dddbc4129591c92f01479604c12c6356f
-        <Main />
-      </GameLobbyProvider>
+    <Router>      
+          <Main />    
     </Router>
   );
 }
