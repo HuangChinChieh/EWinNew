@@ -16,7 +16,7 @@ import './index.scss';
 
 const Header = (props) => {
 
-  const { t,wallet,betLimitCurrencyType } = useLobbyContext();
+  const { wallet,betLimitCurrencyType } = useLobbyContext();
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -92,7 +92,7 @@ const Header = (props) => {
               {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
               <span><span className='user-icon' /></span>
               <span className='forpc'><span className='user-wallet' />{betLimitCurrencyType} 0</span>
-              <span className='forpc'><span>{t("Global.favorites")}({favorites.length}) </span></span>
+              <span className='forpc'><span>{"Global.favorites"}({favorites.length}) </span></span>
               <span className='formb'><a className="user-favorite" href='/'></a></span>
 
             </div>
@@ -149,7 +149,7 @@ const Header = (props) => {
               </label>
               <br />
               {error && <span className="error">{error}</span>}
-              <button type="submit">{t("Global.login")}</button>
+              <button type="submit">{"Global.login"}</button>
             </form>
           </div>
         </div>
@@ -158,7 +158,7 @@ const Header = (props) => {
         <div>
           <div className={`lightbox-box ${isOpen ? 'open' : ''}`} onClick={toggleHamburger} />
           <div className='mb-footer-box'>
-            <h4>{t("Global.menu")}</h4>
+            <h4>{"Global.menu"}</h4>
             <FullscreenButton />
             <SettingButton />
             <span className='close' onClick={() => setIsOpen(false)} />

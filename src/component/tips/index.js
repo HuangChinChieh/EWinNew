@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
 import './index.scss';
-import { useLobbyContext } from 'provider/GameLobbyProvider';
 
 const Tips = (props) => {
     const [showTips, setShowTips] = useState('hiddenTips');
-    const {
-        showMessage
-    } = useLobbyContext();
+
 
 
 
     useEffect(() => {
-        if (showMessage) {
+        if (123) {
             setShowTips('showTips');
 
             const timerId = setTimeout(() => {
@@ -20,12 +17,12 @@ const Tips = (props) => {
 
             return () => clearTimeout(timerId);
         }
-    }, [showMessage]);
+    }, [123]);
 
     return (
         <div className={`tips-box ${showTips}`}>
             <p>
-                {showMessage}
+                {123}
             </p>
         </div>
     )

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import './index.scss';
 
 const FullscreenButton = () => {
-    const { t } = useTranslation();
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     const toggleFullscreen = () => {
@@ -44,11 +43,11 @@ const FullscreenButton = () => {
                     {isFullscreen ?
                         <span onClick={toggleFullscreen} className='flex-box'>
                             <span className='exitfullscreen'></span>
-                            <span>{t("Global.exit_fs")}</span>
+                            <span>{"Global.exit_fs"}</span>
                         </span>
                         : <span onClick={toggleFullscreen} className='flex-box'>
                             <span className='fullscreen'></span>
-                            <span>{t("Global.fs")}</span>
+                            <span>{"Global.fs"}</span>
                         </span>
                     }
                 </div>
