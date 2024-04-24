@@ -1,25 +1,19 @@
 
-import { useLobbyContext } from 'provider/GameLobbyProvider';
 import Section from 'component/section';
-import { connect } from 'react-redux';
 import DefaultVedio from 'component/default_vedio';
 import Titlebar from 'component/title_bar';
 import { CustomTabs, CustomTab } from 'component/custom_tabs';
-import Loading from 'component/loading';
 
 import './index.scss';
 
 function Gamelobby(props) {
 
-    const { t } = useLobbyContext();
 
 
 
     return (
         <div className='game-lobby-wrap'>
-            {props.isGameLobbyLoading ? (
-                <Loading />
-            ) : (
+
 
                 <div>
                     <div className='forpc'>
@@ -33,7 +27,7 @@ function Gamelobby(props) {
                                                 <CustomTabs
                                                     defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="baccarat" title={t("Global.ba")}>
+                                                    <CustomTab eventKey="baccarat" title={"Global.ba"}>
                                                         <Section />
                                                         {/* hardcode demo用 */}
                                                         {/* <Section listItems={listItems1} /> */}
@@ -59,7 +53,7 @@ function Gamelobby(props) {
                                                 <CustomTabs
                                                     defaultActiveKey="baccarat"
                                                 >
-                                                    <CustomTab eventKey="baccarat" title={t("Global.ba")}>
+                                                    <CustomTab eventKey="baccarat" title={"Global.ba"}>
                                                         <DefaultVedio />
                                                         <Titlebar title="全部遊戲" />
                                                         {/* hardcode demo用 */}
@@ -80,19 +74,10 @@ function Gamelobby(props) {
                     </div>
                 </div>
 
-            )}
         </div>
     )
 }
 
-// export default Gamelobby;
-
-const mapStateToProps = (state) => {
-    return {
-        isGameLobbyLoading: state.gameLobby.isGameLobbyLoading,
-    };
-};
 
 
-
-export default connect(mapStateToProps)(Gamelobby);
+export default Gamelobby;

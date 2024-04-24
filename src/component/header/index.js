@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect,useContext } from 'react';
 import Logo from 'component/logo';
-import { useLobbyContext } from 'provider/GameLobbyProvider';
+import { WalletContext } from 'provider/GameLobbyProvider';
 import FullscreenButton from 'component/buttons/fs_btn';
 import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
@@ -16,7 +15,7 @@ import './index.scss';
 
 const Header = (props) => {
 
-  const { wallet,betLimitCurrencyType } = useLobbyContext();
+  const { wallet } = useContext(WalletContext);
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -91,7 +90,9 @@ const Header = (props) => {
             <div className='tool-box-left'>
               {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
               <span><span className='user-icon' /></span>
-              <span className='forpc'><span className='user-wallet' />{betLimitCurrencyType} 0</span>
+              <span className='forpc'><span className='user-wallet' />
+              {/* {betLimitCurrencyType}*/}
+              </span>
               <span className='forpc'><span>{"Global.favorites"}({favorites.length}) </span></span>
               <span className='formb'><a className="user-favorite" href='/'></a></span>
 
@@ -101,10 +102,10 @@ const Header = (props) => {
               <span><span className='user-icon' /></span>
               <span className='forpc'>
                 <span className='user-wallet' />
-                {betLimitCurrencyType}&nbsp;
-                {wallet.map((i, index) => (
-                  i.CurrencyType === betLimitCurrencyType ? <span className='without-mr' key={index}>{i.Balance}</span> : ''
-                ))}
+                {/* {betLimitCurrencyType}&nbsp; */}
+                  <span className='without-mr' >{wallet.Balance}
+                  </span> 
+                
               </span>
               <span><a className="user-favorite" href='/Gamefavorite'></a></span>
             </div>
