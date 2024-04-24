@@ -25,9 +25,8 @@ const Main = () => {
   const EWinUrl = 'https://ewin.dev.mts.idv.tw';
   const intervalIDRef = useRef(0);
   const params = new URLSearchParams(window.location.search);
-
   const [CT, setCT] = useState('');
-  
+  const [isServerConneted, setIsServerConneted] = useState(false);
 
   const location = useLocation();
   const isGameView = location.pathname.includes('/games/');
@@ -38,8 +37,6 @@ const Main = () => {
     const CT = params['CT'];
     const CurrencyType = params['CurrencyType'];
     
-
-
     if (CT) {
       initLobbyClient(CT);
     } else {
@@ -81,7 +78,7 @@ const Main = () => {
 
 
   const initLobbyClient = (CT) => {
-    // 遊戲大廳    
+    // 遊戲大廳        
     const gameLobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
 
     gameLobbyClient.handleReceiveMsg((Msg) => {
@@ -94,6 +91,7 @@ const Main = () => {
       }, 300000);
 
       setCT(CT);  
+      setIsServerConneted(true);
     });
 
     gameLobbyClient.handleReconnected((Msg) => {
@@ -119,6 +117,8 @@ const Main = () => {
 
 
   return (
+    isServerConneted ?
+    <div></div> :
     <div className="wrap-box">
       {!isGameView
         ? (
@@ -154,7 +154,6 @@ export default function Routers() {
   return (
     <Router>
       <GameLobbyProvider>
-        <Tips />
         <Main />
       </GameLobbyProvider>
     </Router>
