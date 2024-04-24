@@ -23,10 +23,6 @@ export class EWinGameLobbyClient {
         }
     }
 
-    componentDidMount() {
-        this.initializeConnection();
-    }
-
     handleReceiveMsg(handle) {
         this.onReceive = handle;
     }

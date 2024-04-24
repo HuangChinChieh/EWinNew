@@ -35,11 +35,12 @@
 
 
 import React, { useState, useContext } from 'react';
+import { Children } from 'react';
 
 // 创建一个 Context
 export const TipContext = React.createContext();
 
-const TipProvider = () => {
+const TipProvider = (children) => {
     const [showTips, setShowTips] = useState(false);
     const [tipText, setTipText] = useState('');
 
@@ -58,6 +59,7 @@ const TipProvider = () => {
                 {tipText}
             </p>
         </div>
+        {children}
         </TipContext.Provider>
     );
 };

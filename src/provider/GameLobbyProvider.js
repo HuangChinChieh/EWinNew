@@ -16,7 +16,11 @@ export const useLobbyContext = () => useContext(GameLobbyContext);
 // Create a Context Provider to provide shared values
 const GameLobbyProvider = ({ children }) => {
   const lobbyClient = EWinGameLobbyClient.getInstance();
-  const [wallet, setWallet] = useState([]);
+  const [wallet, setWallet] = useState({
+    CurrencyType:'',
+    CurrencyName:'',
+    Balance:0,
+  });
   const [favos,setFavos]=useState('');
   const [realName, setRealName] = useState('');
   const [betLimitCurrencyType, setBetLimitCurrencyType] = useState('');
@@ -34,11 +38,10 @@ const GameLobbyProvider = ({ children }) => {
     updateRealName();
     updateWallet();
     updateBetLimitCurrencyType();
-    updateFavos();
-    debugger;
+    updateFavos();    
   }, []);
 
-  const updateInfo = (cb) => {
+  const updateInfo = (cb) => {debugger;
     lobbyClient.GetUserInfo((s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
