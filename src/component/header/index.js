@@ -16,7 +16,6 @@ import './index.scss';
 const Header = (props) => {
 
   const { wallet } = useContext(WalletContext);
-  const walletArray = Object.values(wallet);
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -104,12 +103,9 @@ const Header = (props) => {
               <span className='forpc'>
                 <span className='user-wallet' />
                 {/* {betLimitCurrencyType}&nbsp; */}
-                {walletArray.map((i, index) => (
-                  // i.CurrencyType === betLimitCurrencyType ? 
-                  <span className='without-mr' key={index}>{i.Balance}
+                  <span className='without-mr' >{wallet.Balance}
                   </span> 
-                  // : ''
-                ))}
+                
               </span>
               <span><a className="user-favorite" href='/Gamefavorite'></a></span>
             </div>
