@@ -22,13 +22,10 @@ const RoadMap = (props) => {
                     {rows.map((row) => (
                         <tr key={row}>
                             {columns.map((col, colIndex) => {
-                                const index = colIndex * rows.length + (row - 1);
-                                const value = props.shoeResults.length > index ? props.shoeResults[index] : null;
+                                const index = colIndex * rows.length + (row - 1);                            
                                 return (
                                     <td key={col}>
-                                        {value !== null && (
-                                            <span className={`circle ${value === 0 ? 'blue' : 'red'}`}></span>
-                                        )}
+                                        
                                     </td>
                                 );
                             })}
@@ -42,13 +39,5 @@ const RoadMap = (props) => {
 };
 
 
-const mapStateToProps = (state) => {
-    // console.log('檢查state', state);
-    // console.log('檢查state.favorites', state.root.favorites);
-    return {
-        shoeResults: state.gameLobby.shoeResults
-    };
-};
 
-
-export default connect(mapStateToProps)(RoadMap);
+export default (RoadMap);

@@ -38,9 +38,9 @@ const Main = () => {
     const CT = params['CT'];
     const CurrencyType = params['CurrencyType'];
 
-    if(CurrencyType){
+    if (CurrencyType) {
       currencyTypeRef.current = CurrencyType;
-    } else{
+    } else {
       currencyTypeRef.current = 'CNY';
     }
 
@@ -126,10 +126,10 @@ const Main = () => {
   if (!isServerConneted) {
     return (<div></div>)
   } else {
-    return (    
+    return (
       <div className="wrap-box">
         <GameLobbyProvider CurrencyType={currencyTypeRef.current}>
-        {!isGameView
+          {!isGameView
             ? (
               <>
                 <Header />
@@ -156,7 +156,7 @@ const Main = () => {
           </Switch>
         </GameLobbyProvider>
       </div>
-  );
+    );
   }
 };
 
