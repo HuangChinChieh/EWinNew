@@ -10,6 +10,7 @@ class RoadMap extends Component {
   constructor(props) {
     super(props);
     this.shoeResultStr = props.shoeResult;
+    this.roadMapType = props.roaMapType;
     this.myRoadMapDiv = React.createRef();
     this.myRoadMapDivParent = React.createRef();
     this.myRoadMapDivParentParent = React.createRef();
@@ -81,8 +82,8 @@ class RoadMap extends Component {
   render() {
     return (
       <div ref={this.myRoadMapDivParentParent}>
-        <div ref={this.myRoadMapDivParent}>
-          <div className='roadMap-container' ref={this.myRoadMapDiv} style={{ position: "relative", width: "350px", height: "60px" }}>
+        <div className={`roadMap-container-outside type${this.roadMapType}`} ref={this.myRoadMapDivParent}>
+          <div className='roadMap-container'  ref={this.myRoadMapDiv}>
           </div>
         </div>
       </div>

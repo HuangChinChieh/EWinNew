@@ -66,7 +66,7 @@ const SectionLi = (props) => {
         <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber}/>
         <div className={`games`}>
             {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />)}
-            <RoadMap />
+            <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={0} />
         </div>
         <p className='game-title'>
             {props.tableInfo.TableNumber}
@@ -101,7 +101,7 @@ const SectionLi = (props) => {
                     <Link to={`/games/${props.tableInfo.TableNumber}`}>{"開始遊戲"}</Link>
                 </div>
                 <div className='game-table-wrap'>
-                    <RoadMap shoeResult={props.tableInfo.ShoeResult} />
+                    <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={1} />
                 </div>
                 <p className='game-dis'>
                     {/* {props.tableInfo.Status} */}

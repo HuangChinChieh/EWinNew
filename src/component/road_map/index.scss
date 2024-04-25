@@ -1,9 +1,26 @@
 .roadMap-container {
-    width: 300px;  
+    width: 350px;  
     height: 60px;  
     position: relative;
     background-image: url('../../img/roadmap/RoadMap350By4.png');
 }
+
+
+
+.roadMap-container-outside{
+    overflow-x: hidden;
+    
+}
+
+.roadMap-container-outside.type1{
+    border-radius: 5px;
+}
+
+.roadMap-container-outside.type0{
+    border-bottom-left-radius: 5px; /* 左下角圆角半径 */
+    border-bottom-right-radius: 5px; /* 右下角圆角半径 */
+}
+
 @media screen and (max-width: 1082px) {
     
     
