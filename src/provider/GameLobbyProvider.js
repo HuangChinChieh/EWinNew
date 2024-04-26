@@ -4,14 +4,14 @@ import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 // Create two different contexts
 const WalletContext = createContext();
 const RealNameContext = createContext();
-const BetLimitCurrencyContext = createContext();
+const BetLimitContext = createContext();
 const FavorsContext = createContext();
 
 
 export {
   WalletContext,
   RealNameContext,
-  BetLimitCurrencyContext,
+  BetLimitContext,
   FavorsContext,
 };
 
@@ -26,30 +26,66 @@ const GameLobbyProvider = (props) => {
   });
   const [favors, setFavors] = useState([]);
   const [realName, setRealName] = useState("");
-  const [betLimitCurrencyType, setBetLimitCurrencyType] = useState("");
+  const [betLimit, setBetLimit] = useState(null);
 
   // Game Lobby related useEffect
   useEffect(() => {
-    lobbyClient.GetUserInfo((s, o) => {
-      if (s) {
-        if (o.ResultCode === 0) {
-          let wallet = o.Wallet.find((x) => x.CurrencyType === CurrencyType);
-
-          if (wallet) {
-            setWallet({
-              CurrencyType: wallet.CurrencyType,
-              CurrencyName: wallet.CurrencyName,
-              Balance: wallet.Balance,
-            });
+    const PromiseArray = [];
+    
+    //UserInfo
+    PromiseArray.push(new Promise(
+      (resolve) =>{
+        lobbyClient.GetUserInfo((s, o) => {          
+          if (s) {
+            if (o.ResultCode === 0) {
+              resolve(o);
+            }
           }
-
-          setRealName(o.RealName);
-          setBetLimitCurrencyType(o.BetLimitCurrencyType);
-        }
+        });
       }
-    });
+    ));
 
-    updateFavors();
+    //限紅部分不做設定，會隨著進入桌台而影響，這邊只做管理動作，不去做request
+    // PromiseArray.push(new Promise(
+    //   (resolve) =>{
+    //     lobbyClient.GetUserInfo((s, o) => {          
+    //       if (s) {
+    //         if (o.ResultCode === 0) {
+    //           resolve(o);
+    //         }
+    //       }
+    //     });
+    //   }
+    // ));
+
+
+    PromiseArray.push(new Promise(
+      (resolve) =>{
+        lobbyClient.GetUserAccountProperty("EWinGame.Favor", (s, o) => {
+          if (s) {
+            if (o.ResultCode === 0) {
+              resolve(o);
+            }
+          }
+        });
+      }
+    ));
+
+    Promise.all(PromiseArray).then(([userInfo, favorsProp])=> {
+      let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
+      let favorsObj = JSON.parse(favorsProp.PropertyValue)
+      
+      if (wallet) {
+        setWallet({
+          CurrencyType: wallet.CurrencyType,
+          CurrencyName: wallet.CurrencyName,
+          Balance: wallet.Balance,
+        });
+      }
+
+      setRealName(userInfo.RealName);      
+      setFavors(favorsObj);
+    });   
   }, []);
 
   const updateInfo = (cb) => {
@@ -94,21 +130,19 @@ const GameLobbyProvider = (props) => {
       setWallet(setObj);
     });
   };
-  const updateBetLimitCurrencyType = () => {
-    updateInfo((userInfo) => {
-      setBetLimitCurrencyType(userInfo.BetLimitCurrencyType);
-    });
+  const updateBetLimit = (betLimit) => {
+    setBetLimit(betLimit);
   };
 
   return (
     <FavorsContext.Provider value={{ favors, updateFavors }}>
       <WalletContext.Provider value={{ wallet, updateWallet }}>
         <RealNameContext.Provider value={{ realName, updateRealName }}>
-          <BetLimitCurrencyContext.Provider
-            value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}
+          <BetLimitContext.Provider
+            value={{ betLimit, updateBetLimit }}
           >
             {props.children}
-          </BetLimitCurrencyContext.Provider>
+          </BetLimitContext.Provider>
         </RealNameContext.Provider>
       </WalletContext.Provider>
     </FavorsContext.Provider>
