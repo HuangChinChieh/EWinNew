@@ -2,14 +2,14 @@ import { useState } from 'react';
 import snapshot from '../../../../img/bettinghistory/snapshot.png'
 
 const BettingHistoryDetail = ({detailTableHeaders,tableData,reacquireHistoryDetail,detailList,tableHeaders}) => {    
-    const [popupVisible, setPopupVisible] = useState(false);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
 
-    const openPopup = () => {
-      setPopupVisible(true);
+    const openLightbox = () => {
+      setLightboxOpen(true);
     };
   
-    const closePopup = () => {
-      setPopupVisible(false);
+    const closeLightbox = () => {
+      setLightboxOpen(false);
     };
     
     return ( 
@@ -62,7 +62,7 @@ const BettingHistoryDetail = ({detailTableHeaders,tableData,reacquireHistoryDeta
                                     <td>{data.TipsValue}</td>
                                     <td>{data.TableChip}</td>
                                     <td className='snapshot' 
-                                    // onClick={openPopup}
+                                    onClick={openLightbox}
                                     >
                                         {/* <img src={data.SnapShot} alt="Snapshot" /> */}
                                         <img src={snapshot} alt="Description ohe image" />
@@ -74,14 +74,12 @@ const BettingHistoryDetail = ({detailTableHeaders,tableData,reacquireHistoryDeta
                     </tbody>
             </table>
             <div>
-                {popupVisible && (
-                    <div className="popup">
-                    <div className="popup-content">
-                     <img src={snapshot} alt="Description ohe image" />
-                        <button onClick={closePopup}>X</button>
+                <div className={`lightbox ${lightboxOpen ? 'open' : ''}`} onClick={closeLightbox}>
+                    <div className="lightbox-content">
+                    <img src={snapshot} alt="" />
+                    <button className="close-button" onClick={closeLightbox}>X</button>
                     </div>
-                    </div>
-                )}
+                </div>
             </div>    
         </>
 
