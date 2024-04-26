@@ -7,13 +7,13 @@ const RealNameContext = createContext();
 const BetLimitCurrencyContext = createContext();
 const FavorsContext = createContext();
 
+
 export {
   WalletContext,
   RealNameContext,
   BetLimitCurrencyContext,
   FavorsContext,
 };
-export const useLobbyContext = () => {};
 
 // Create a Context Provider to provide shared values
 const GameLobbyProvider = (props) => {
