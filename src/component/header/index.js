@@ -1,17 +1,13 @@
 import React, { useState, useEffect,useContext } from 'react';
 import Logo from 'component/logo';
-import { WalletContext } from 'provider/GameLobbyProvider';
+import { FavorsContext,WalletContext } from 'provider/GameLobbyProvider';
 import FullscreenButton from 'component/buttons/fs_btn';
 import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
 
-
 import './index.scss';
-
-
-
 
 const Header = (props) => {
 
@@ -20,6 +16,7 @@ const Header = (props) => {
   const [aniHeader, setAniHeader] = useState('aniHeader');
   const [lastScrollTop, setLastScrollTop] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const { favors } = useContext(FavorsContext);
 
   const toggleHamburger = () => {
     setIsOpen(!isOpen);
@@ -93,7 +90,7 @@ const Header = (props) => {
               <span className='forpc'><span className='user-wallet' />
               {/* {betLimitCurrencyType}*/}
               </span>
-              <span className='forpc'><span>收藏({favorites.length}) </span></span>
+              <span className='forpc'><span>收藏({favors.length}) </span></span>
               <span className='formb'><a className="user-favorite" href='/'></a></span>
 
             </div>

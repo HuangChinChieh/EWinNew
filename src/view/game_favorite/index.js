@@ -1,173 +1,214 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import { FavorsContext,WalletContext } from 'provider/GameLobbyProvider';
-import RoadMap from 'component/road_map';
-import SimilarGames from 'component/similar_games';
-import Loading from 'component/loading';
-import './index.scss';
-import { TipContext } from 'component/tips'; 
+import "./index.scss";
+import RoadMap from "component/road_map";
+import { TipContext } from "component/tips";
+import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
+import { FavorsContext } from "provider/GameLobbyProvider";
 
-function Gamefavorite(props) {
-    const { showTip } = useContext(TipContext);
-    // const [mutes,setMutes]=useContext(false)
-    const [hoveredItem, setHoveredItem] = useState(null);
-    const [moreScale, setMoreScale] = useState('');
-    const { favors } = useContext(FavorsContext);
-    const { wallet } = useContext(WalletContext);
-    const walletArray = Object.values(wallet);
+const GamefavoriteLi = (props) => {
+  const { showTip } = useContext(TipContext);
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const [moreScale, setMoreScale] = useState("");
+  const lobbyClient = EWinGameLobbyClient.getInstance();
 
 
-    const mouseleave = () => {
-        setHoveredItem(null);
-        setMoreScale('');
+  const mouseleave = () => {
+    setHoveredItem(null);
+    setMoreScale("");
+  };
+  const handleClick = (TableNumber) => {
+    const newFavors = [...props.favors];
+    const index = newFavors.indexOf(TableNumber);
+    if (index !== -1) {
+      newFavors.splice(index, 1);
+      showTip(`移除收藏 ${TableNumber}`);
+      if (lobbyClient !== null) {
+        lobbyClient.SetUserAccountProperty(
+          "EWinGame.Favor",
+          JSON.stringify(newFavors),
+          function (success, o) {
+            if (success) {
+              // console.log("SetUserAccountProperty", o);
+
+              props.setFavors();
+            }
+          }
+        );
+      }
     }
+  };
 
-    const getGameName = (TableNumber, TableTimeoutSecond) => () => {
-        props.getGameTitle(TableNumber);
-        localStorage.setItem('getLocalTableTitle', TableNumber);
-    };
-
-
-    const handleClick = async (TableNumber) => {
-        showTip("test");
-
-        //let newFavo = [...props.favo];
-        //const index = newFavo.indexOf(TableNumber);
-        //if (index !== -1) {
-        //    newFavo.splice(index, 1);
-        //    props.actFavo(newFavo);
-        //    props.showMessage(`移除收藏 ${TableNumber}`);
-        //    if (instance !== null) {
-        //        instance.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(newFavo), function (success, o) {
-        //            if (success) {
-        //                // console.log("SetUserAccountProperty", o);
-        //            }
-        //        });
-        //    }
-        //}
-
-    };
-
-
-
-    return (
-        <div className='favorite_box'>
-            <div className="section_box" style={{ width: '100%' }}>
-                {props.isGameLobbyLoading ? (<Loading />) : (
-                    <div>
-                        {favors.length === 0 ? (
-                            <div className='without_favorite'>
-                                <h2>{"Global.without_favorite"}</h2>
-                            </div>
-                        ) : (
-                            <ul>
-                                {props.tiList && props.tiList.TableInfoList && props.tiList.TableInfoList.map((i, index) => {
-                                    if (favors.includes(i.TableNumber)) {
-                                        return (
-                                            <li key={index}
-                                                onMouseEnter={() => setHoveredItem(i.TableNumber)}
-                                                onMouseLeave={mouseleave}
-                                                className='li-box'
-                                            >
-                                                <span className={`${favors.includes(i.TableNumber) ? 'has-favorites' : ''}`} />
-                                                <div className={`games ${i.TableNumber}`}>
-                                                    {/* 獲取ImageType為1的ImageUrl */}
-                                                    {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
-                                                        <img src={i.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
-                                                    )}
-                                                    <RoadMap />
-                                                </div>
-                                                <p className='game-title'>
-                                                    {i.TableNumber}
-                                                </p>
-                                                <p className='game-wallet'>
-                                                    <span>
-                                                        {/* {props.userInfo.BetLimitCurrencyType} */}
-                                                    </span>
-                                                    <span>
-                                                        {walletArray.map((i, index) => (
-                                                            // i.CurrencyType === props.userInfo.BetLimitCurrencyType ? 
-                                                            <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span>
-                                                            //  : ''
-                                                        ))}
-                                                    </span>
-                                                </p>
-
-                                                <div className={`hover-box ${hoveredItem === i.TableNumber ? 'visible' : ''} ${moreScale}`}>
-                                                    <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
-                                                    <div className={`games ${i.TableNumber}`}>
-                                                        {/* 獲取ImageType為1的ImageUrl */}
-                                                        {i.ImageList && i.ImageList.find(image => image.ImageType === 1) && (
-                                                            <img src={i.ImageList.find(image => image.ImageType === 1).ImageUrl} alt="Table Image" />
-                                                        )}
-                                                    </div>
-                                                    <div className='info-box'>
-                                                        <p className='game-title'>
-                                                            {i.TableNumber}
-                                                        </p>
-                                                        <p className='game-wallet'>
-                                                            <span>
-                                                                {/* {props.userInfo.BetLimitCurrencyType} */}
-                                                            </span>
-                                                            <span>
-                                                                {walletArray.map((i, index) => (
-                                                                    // i.CurrencyType === props.userInfo.BetLimitCurrencyType ? 
-                                                                    <span className='without-mr' key={index}>{i.Balance}</span> 
-                                                                    // : ''
-                                                                ))}
-                                                            </span>
-                                                        </p>
-                                                        <div className='game-start' >
-                                                            <Link to={`/games/${i.TableNumber}`} onClick={getGameName(i.TableNumber, i.TableTimeoutSecond)}>{"Global.start_games"}</Link>
-                                                        </div>
-                                                        <div className='game-table-wrap'>
-                                                            <RoadMap />
-                                                        </div>
-                                                        <p className='game-dis'>
-                                                            {i.Status}
-                                                        </p>
-
-                                                        {moreScale === 'more-scale'
-                                                            ?
-                                                            <div className='show-similar-games forpc'>
-                                                                <p>{"Global.similar_ganes"}</p>
-                                                                <SimilarGames />
-                                                            </div>
-                                                            : ''
-                                                        }
-
-                                                        <div className='show-similar-games formb'>
-                                                            <p>{"Global.similar_ganes"}</p>
-                                                            <SimilarGames />
-                                                        </div>
-                                                        <div className='favorites-box'>
-                                                             {/* <span onClick={() => toggleMute(i.TableNumber)} className={`video-control ${props.mutes.includes(i.TableNumber) ? 'video-unmute' : 'video-mute'}`} />  */}
-                                                            <span onClick={() => handleClick(i.TableNumber)} className={favors.includes(i.TableNumber) ? 'remove-to-favorites' : 'add-to-favorites'} />
-
-                                                        </div>
-                                                    </div>
-                                                    <div className='more forpc' onClick={() => { setMoreScale('more-scale') }} />
-                                                </div>
-                                            </li>
-                                        );
-                                    } else {
-                                        return null;
-                                    }
-                                })}
-
-                            </ul>
-                        )}
-                    </div>
+  return (
+    <div className="favorite_box">
+      <div>
+        {props.favors.length === 0 ? (
+          <div className="without_favorite">
+            <h2>{"Global.without_favorite"}</h2>
+          </div>
+        ) : (
+          <ul>
+            <li
+              key={props.tableInfo.TableNumber}
+              onMouseEnter={() => setHoveredItem(props.tableInfo.TableNumber)}
+              onMouseLeave={mouseleave}
+              className="li-box"
+              style={{ width: "100%" }}
+            >
+              <span className="has-favorites" />
+              <div className={`games`}>
+                {props.tableInfo.Image && (
+                  <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
                 )}
+                <RoadMap
+                  shoeResult={props.tableInfo.ShoeResult}
+                  roaMapType={0}
+                />
+              </div>
+              <p className="game-title">{props.tableInfo.TableNumber}</p>
+              <p className="game-wallet">
+                <span>{/* {props.userInfo.BetLimitCurrencyType} */}</span>
+                <span>
+                  {/* {walletArray.map((i, index) => (
+                                // i.CurrencyType === props.userInfo.BetLimitCurrencyType ? 
+                                <span className='without-mr' key={index}>{Math.floor(i.Balance)}</span>
+                                //  : ''
+                            ))} */}
+                </span>
+              </p>
 
-            </div>
-        </div>
+              <div
+                className={`hover-box ${
+                  hoveredItem === props.tableInfo.TableNumber ? "visible" : ""
+                } ${moreScale}`}
+              >
+                <span
+                  className="close-hover-box"
+                  onClick={() => {
+                    setHoveredItem(null);
+                  }}
+                ></span>
+                <div className={`games ${props.tableInfo.TableNumber}`}>
+                  {props.tableInfo.Image && (
+                    <img
+                      src={props.tableInfo.Image.ImageUrl}
+                      alt="Table Image"
+                    />
+                  )}
+                </div>
+                <div className="info-box">
+                  <p className="game-title">{props.tableInfo.TableNumber}</p>
+                  <p className="game-wallet">
+                    <span>{/* {props.userInfo.BetLimitCurrencyType} */}</span>
+                    <span>
+                      {/* {walletArray.map((i, index) => (
+                                        // i.CurrencyType === props.userInfo.BetLimitCurrencyType ? 
+                                        <span className='without-mr' key={index}>{i.Balance}</span> 
+                                        // : ''
+                                    ))} */}
+                    </span>
+                  </p>
+                  <div className="game-start">
+                    <Link to={`/games/${props.tableInfo.TableNumber}`}>
+                      {"開始遊戲"}
+                    </Link>
+                  </div>
+                  <div className="game-table-wrap">
+                    <RoadMap
+                      shoeResult={props.tableInfo.ShoeResult}
+                      roaMapType={1}
+                    />
+                  </div>
+                  <p className="game-dis">{/* {i.Status} */}</p>
 
-    )
-}
+                  {/* {moreScale === 'more-scale'
+                                ?
+                                <div className='show-similar-games forpc'>
+                                    <p>{"Global.similar_ganes"}</p>
+                                    <SimilarGames />
+                                </div>
+                                : ''
+                            } */}
 
+                  {/* <div className='show-similar-games formb'>
+                                <p>{"Global.similar_ganes"}</p>
+                                <SimilarGames />
+                            </div> */}
+                  <div className="favorites-box">
+                    {/* <span onClick={() => toggleMute(props.tableInfo.TableNumber)} className={`video-control ${props.mutes.includes(props.tableInfo.TableNumber) ? 'video-unmute' : 'video-mute'}`} />  */}
+                    <span
+                      onClick={() => handleClick(props.tableInfo.TableNumber)}
+                      className="remove-to-favorites"
+                    />
+                  </div>
+                </div>
+                {/* <div className='more forpc' onClick={() => { setMoreScale('more-scale') }} /> */}
+              </div>
+            </li>
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+};
 
+const Gamefavorite = (props) => {
+  const lobbyClient = EWinGameLobbyClient.getInstance();
+  const [tableList, setTableList] = useState([]);
+  const { favors, updateFavors } = useContext(FavorsContext);
 
+  const refreshTableList = () => {
+    if (favors.length > 0) {
+      lobbyClient.GetTableInfoList("", 0, (success, o) => {
+        if (success) {
+          if (o.ResultCode === 0) {
+            let array = [];
+
+            for (let i = 0; i < favors.length; i++) {
+              for (let j = 0; j < o.TableInfoList.length; j++) {
+                let data = o.TableInfoList[j];
+
+                if (data.TableNumber == favors[i]) {
+                  array.push({
+                    TableNumber: data.TableNumber,
+                    Image: data.ImageList.find(
+                      (image) => image.ImageType === 1
+                    ),
+                    CurrencyType: data.CurrencyType,
+                    Status: data.Status,
+                    ShoeResult: data.ShoeResult,
+                  });
+                  break;
+                }
+              }
+            }
+
+            setTableList(array);
+          }
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    refreshTableList();
+  }, [favors]);
+
+  return (
+    <div className="section_box">
+      <ul>
+        {tableList.map((data) => (
+          <GamefavoriteLi
+            key={data.TableNumber}
+            tableInfo={data}
+            favors={favors}
+            setFavors={updateFavors}
+          />
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default Gamefavorite;

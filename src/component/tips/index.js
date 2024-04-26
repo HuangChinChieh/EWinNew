@@ -1,4 +1,5 @@
 ﻿import React, { useState, useContext } from 'react';
+import './index.scss';
 
 // 创建一个 Context
 export const TipContext = React.createContext();
