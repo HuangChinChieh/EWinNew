@@ -6,12 +6,14 @@ const WalletContext = createContext();
 const RealNameContext = createContext();
 const BetLimitCurrencyContext = createContext();
 const FavorsContext = createContext();
+const MusicIsPlayingContext = createContext();
 
 export {
   WalletContext,
   RealNameContext,
   BetLimitCurrencyContext,
   FavorsContext,
+  MusicIsPlayingContext,
 };
 export const useLobbyContext = () => {};
 
@@ -27,6 +29,12 @@ const GameLobbyProvider = (props) => {
   const [favors, setFavors] = useState([]);
   const [realName, setRealName] = useState("");
   const [betLimitCurrencyType, setBetLimitCurrencyType] = useState("");
+  const [musicIsPlaying,setMusicIsPlaying]=useState(false);
+
+
+  const muteChange=()=>{
+    setMusicIsPlaying(!musicIsPlaying)
+  }
 
   // Game Lobby related useEffect
   useEffect(() => {
@@ -101,17 +109,20 @@ const GameLobbyProvider = (props) => {
   };
 
   return (
-    <FavorsContext.Provider value={{ favors, updateFavors }}>
-      <WalletContext.Provider value={{ wallet, updateWallet }}>
-        <RealNameContext.Provider value={{ realName, updateRealName }}>
-          <BetLimitCurrencyContext.Provider
-            value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}
-          >
-            {props.children}
-          </BetLimitCurrencyContext.Provider>
-        </RealNameContext.Provider>
-      </WalletContext.Provider>
-    </FavorsContext.Provider>
+    <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
+      <FavorsContext.Provider value={{ favors, updateFavors }}>
+        <WalletContext.Provider value={{ wallet, updateWallet }}>
+          <RealNameContext.Provider value={{ realName, updateRealName }}>
+            <BetLimitCurrencyContext.Provider
+              value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}
+            >
+              {props.children}
+            </BetLimitCurrencyContext.Provider>
+          </RealNameContext.Provider>
+        </WalletContext.Provider>
+      </FavorsContext.Provider>
+    </MusicIsPlayingContext.Provider>
+
   );
 };
 

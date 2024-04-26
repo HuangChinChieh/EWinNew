@@ -3,6 +3,7 @@ import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import './index.scss';
 import SummaryTable from './summary_table'; 
 import BettingTable from './betting_table';
+import MonthSwtich from './month_switch';
 import BettingHistoryDetail from './betting_history_detail';
 import snapshot from 'img/bettinghistory/snapshot.png'
 
@@ -76,17 +77,8 @@ const BettingHistory = (props) => {
         setEndDate(event.target.value);
     }
 
-    const [popupVisible, setPopupVisible] = useState(false);
 
-    const openPopup = () => {
-      setPopupVisible(true);
-    };
-  
-    const closePopup = () => {
-      setPopupVisible(false);
-      setHoverDetail(1);
 
-    };
 
     // 更新日期並執行搜索
     const updateDatesAndSearch = (updateFunction) => {
@@ -102,26 +94,11 @@ const BettingHistory = (props) => {
         bettingHistoryClick();
     };
 
-    // 增減一個月
-    const handleAddMonth = () => {
-        updateDatesAndSearch((date, setDate) => {
-            date.setMonth(date.getMonth() + 1);
-            setDate(date.toISOString().split('T')[0]);
-        });
-    };
-    const handleSubtractMonth = () => {
-        updateDatesAndSearch((date, setDate) => {
-            date.setMonth(date.getMonth() - 1);
-            setDate(date.toISOString().split('T')[0]);
-        });
-    };
-
     // 顯示投注紀錄並取得投注資料
     const bettingHistoryClick = (o) => {
         if (gameLobbyClient !== null) {
             gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
-                    console.log(o);
                     if (o.ResultCode === 0) {
                         setTableData(o.SummaryList);
                     } else {
@@ -141,7 +118,6 @@ const BettingHistory = (props) => {
             gameLobbyClient.GetHistoryDetail(GameCode, QueryDate, (s, o) => {
 
                 if (s) {
-                    console.log(o)
                     if (o.ResultCode === 0) {
                         setDetailList(o.DetailList);
 
@@ -157,8 +133,7 @@ const BettingHistory = (props) => {
     }
 
     const toHistoryDetail = (GameCode, QueryDate) => {
-        console.log('GameCode',GameCode)
-        console.log('QueryDate',QueryDate)
+
 
         if (gameLobbyClient !== null) {
             gameLobbyClient.GetHistoryDetail(GameCode, QueryDate, (s, o) => {
@@ -226,17 +201,7 @@ const BettingHistory = (props) => {
 
 
     return (
-        <>
-                        <div>
-                {popupVisible && (
-                    <div className="popup">
-                    <div className="popup-content">
-                         <img src={snapshot} alt="Description ohe image" />
-                        <button onClick={closePopup}>X</button>
-                    </div>
-                    </div>
-                )}
-            </div>  
+
             <div className='betting-history-box forpc'>
                 <div
                     className={`betting-history ${isButtonClicked ? 'active' : ''}`}
@@ -275,16 +240,9 @@ const BettingHistory = (props) => {
                                         工單紀錄
                                     </div>
                                 </div>
-                                <div className='month-container' >
-                                    <button onClick={handleSubtractMonth}>
-                                        <span>＜</span>
-                                        上個月
-                                    </button>
-                                    <button onClick={handleAddMonth}>
-                                        下個月
-                                        <span>＞</span>
-                                    </button>
-                                </div>
+                                <MonthSwtich
+                                    updateDatesAndSearch={updateDatesAndSearch}
+                                />
                             </div>
                             <div className='flex-box'>
                                 <div>起始日
@@ -333,16 +291,9 @@ const BettingHistory = (props) => {
                                         詳細內容
                                     </div>
                                 </div>
-                                <div className='month-container'>
-                                    <button onClick={handleSubtractMonth}>
-                                        <span>＜</span>
-                                        上個月
-                                    </button>
-                                    <button onClick={handleAddMonth}>
-                                        下個月
-                                        <span>＞</span>
-                                    </button>
-                                </div>
+                                <MonthSwtich
+                                    updateDatesAndSearch={updateDatesAndSearch}
+                                />
                             </div>
                             <div className='flex-box'>
                                 <div>起始日
@@ -376,7 +327,6 @@ const BettingHistory = (props) => {
 
                 </div>
             </div>
-        </>
     )
 }
 
