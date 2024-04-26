@@ -5,8 +5,16 @@
         height: 33px;
         cursor: pointer;
 
+        transition: filter 0.3s; /* 添加過渡效果 */
+
+        &:hover {
+            filter: brightness(1.5); /* 使圖片亮一點 */
+        }
+
         &.mute {
             background: url('../../../img/header/mute.png') no-repeat center center/contain;
+                    
+
         }
 
         &.unmute {

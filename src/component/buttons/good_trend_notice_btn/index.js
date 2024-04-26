@@ -4,12 +4,22 @@ import './index.scss';
 const GoodTrendNotice = () => {
     const notifyRef = useRef(null);
     const [hoverItem, setHoverItem] = useState(0);
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+
 
     const handleDocumentClick = (e) => {
         if (notifyRef.current && !notifyRef.current.contains(e.target)) {
             setHoverItem(0);
+            setIsButtonClicked(false);
         }
     }
+
+    const handleButtonClick = () => {
+        setIsButtonClicked(true);
+        setHoverItem(1);
+    };
+
 
     useEffect(() => {
         // 在 component mount 時加入 click 事件監聽器
@@ -24,8 +34,8 @@ const GoodTrendNotice = () => {
     return (
         <div className='notify-box forpc'>
             <div
-                className='notify'
-                onClick={() => setHoverItem(1)}
+                className={`notify ${isButtonClicked ? 'active' : ''}`}
+                onClick={handleButtonClick}
                 ref={notifyRef}
             >
 

@@ -7,6 +7,12 @@
         margin-left: 15px;
         background: url('../../../img/header/settings.png') no-repeat center center/contain;
 
+        &.active {
+            background: url('../../../img/header/settings-bright.png') no-repeat center center/contain;
+        }
+
+
+
         .hover-box {
             position: fixed;
             right: -30rem;
@@ -130,6 +136,11 @@
 
 
 @media screen and (max-width: 1082px) {
+
+    .settings {
+        display: none;
+    }
+
     .formb {
         .setting-wrap {
             margin: 10px 0 10px 25px;

@@ -87,6 +87,12 @@
                 width: 33px;
                 height: 33px;
                 cursor: pointer;
+
+                transition: filter 0.3s; /* 添加過渡效果 */
+
+                &:hover { /* 滑鼠懸停時的樣式 */
+                    filter: brightness(1.5); /* 使按鈕亮一點 */
+                }
             }
 
             .fullscreen {

@@ -5,7 +5,10 @@
         height: 33px;
         background: url('../../../img/header/notify.png') no-repeat center center/contain;
         cursor: pointer;
-
+        
+        &.active {
+            background: url('../../../img/header/notify-bright.png') no-repeat center center/contain;
+        }
         .hover-box {
             position: fixed;
             right: -30rem;
@@ -45,14 +48,14 @@
                 }
 
                 100% {
-                    right: -30rem;
+                    right: -10rem;
                 }
             }
 
 
             @keyframes anisettingin {
                 0% {
-                    right: -30rem;
+                    right: -0rem;
                 }
 
                 100% {

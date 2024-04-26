@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import './index.scss';
+import SummaryTable from './summary_table'; 
+import BettingTable from './betting_table';
+import BettingHistoryDetail from './betting_history_detail';
+import snapshot from 'img/bettinghistory/snapshot.png'
 
 
 const BettingHistory = (props) => {
@@ -30,7 +34,6 @@ const BettingHistory = (props) => {
         "快照"
     ];
     
-    const EWinUrl = 'https://ewin.dev.mts.idv.tw';
     const gameLobbyClient = EWinGameLobbyClient.getInstance();
     const [hoveredItem, setHoveredItem] = useState(0);
     const [hoverdetail, setHoverDetail] = useState(0)
@@ -42,11 +45,17 @@ const BettingHistory = (props) => {
     const [detailList, setDetailList] = useState([]);
     const [activeTab, setActiveTab] = useState('betHistory');
     const settingsRef = useRef(null);
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
+
 
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
     };
 
+    const handleButtonClick = () => {
+        setIsButtonClicked(true);
+        bettingHistoryClick();
+    };
 
     // 點擊區域外則關閉
     const handleDocumentClick = (e) => {
@@ -54,6 +63,8 @@ const BettingHistory = (props) => {
             // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
             setHoveredItem(0);
             setHoverDetail(0);
+            setIsButtonClicked(false);
+
         }
     };
 
@@ -65,6 +76,17 @@ const BettingHistory = (props) => {
         setEndDate(event.target.value);
     }
 
+    const [popupVisible, setPopupVisible] = useState(false);
+
+    const openPopup = () => {
+      setPopupVisible(true);
+    };
+  
+    const closePopup = () => {
+      setPopupVisible(false);
+      setHoverDetail(1);
+
+    };
 
     // 更新日期並執行搜索
     const updateDatesAndSearch = (updateFunction) => {
@@ -135,10 +157,15 @@ const BettingHistory = (props) => {
     }
 
     const toHistoryDetail = (GameCode, QueryDate) => {
+        console.log('GameCode',GameCode)
+        console.log('QueryDate',QueryDate)
+
         if (gameLobbyClient !== null) {
             gameLobbyClient.GetHistoryDetail(GameCode, QueryDate, (s, o) => {
 
+
                 if (s) {
+                    console.log(o.ResultCode)
                     if (o.ResultCode === 0) {
                         setDetailList(o.DetailList);
                         setHoverDetail(1);
@@ -198,235 +225,158 @@ const BettingHistory = (props) => {
     }, []);
 
 
-
     return (
-        <div className='betting-history-box forpc'>
-            <div
-                className='betting-history'
-                onClick={(e) => {
-                    if (e.currentTarget === e.target) {
-                        setHoveredItem(1);
-                        setHoverDetail(0);
-                    }
-                    bettingHistoryClick();
+        <>
+                        <div>
+                {popupVisible && (
+                    <div className="popup">
+                    <div className="popup-content">
+                         <img src={snapshot} alt="Description ohe image" />
+                        <button onClick={closePopup}>X</button>
+                    </div>
+                    </div>
+                )}
+            </div>  
+            <div className='betting-history-box forpc'>
+                <div
+                    className={`betting-history ${isButtonClicked ? 'active' : ''}`}
+                    onClick={(e) => {
+                        if (e.currentTarget === e.target) {
+                            setHoveredItem(1);
+                            setHoverDetail(0);
+                        }
+                        handleButtonClick();
 
-                }}
-                ref={settingsRef}
-            >
-                <div>
-                    <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
-                        <div className='title'>
-                            <div className='type-container'>
-                                <div className={activeTab === 'betHistory' ? 'type-tabs active' : 'type-tabs'}
-                                    onClick={(e) => {
-                                        setBetHistory(1);
-                                        setOrderHistory(0);
-                                        handleTabClick('betHistory');
-                                        bettingHistoryClick();
-                                    }}
-                                >
-                                    投注紀錄
+                    }}
+                    ref={settingsRef}
+                >
+                    <div>
+                        <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
+                            <div className='title'>
+                                <div className='type-container'>
+                                    <div className={activeTab === 'betHistory' ? 'type-tabs active' : 'type-tabs'}
+                                        onClick={(e) => {
+                                            setBetHistory(1);
+                                            setOrderHistory(0);
+                                            handleTabClick('betHistory');
+                                            bettingHistoryClick();
+                                        }}
+                                    >
+                                        投注紀錄
+                                    </div>
+                                    <div className={activeTab === 'orderHistory' ? 'type-tabs active' : 'type-tabs'}
+                                        onClick={(e) => {
+                                            setBetHistory(0);
+                                            setOrderHistory(1);
+                                            handleTabClick('orderHistory');
+                                            bettingHistoryClick();
+                                        }}
+                                    >
+                                        工單紀錄
+                                    </div>
                                 </div>
-                                <div className={activeTab === 'orderHistory' ? 'type-tabs active' : 'type-tabs'}
-                                    onClick={(e) => {
-                                        setBetHistory(0);
-                                        setOrderHistory(1);
-                                        handleTabClick('orderHistory');
-                                        bettingHistoryClick();
-                                    }}
-                                >
-                                    工單紀錄
+                                <div className='month-container' >
+                                    <button onClick={handleSubtractMonth}>
+                                        <span>＜</span>
+                                        上個月
+                                    </button>
+                                    <button onClick={handleAddMonth}>
+                                        下個月
+                                        <span>＞</span>
+                                    </button>
                                 </div>
                             </div>
-                            <div className='month-container' >
-                                <button onClick={handleSubtractMonth}>
-                                    <span>＜</span>
-                                    上個月
-                                </button>
-                                <button onClick={handleAddMonth}>
-                                    下個月
-                                    <span>＞</span>
-                                </button>
+                            <div className='flex-box'>
+                                <div>起始日
+                                    <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
+                                </div>
+                                <div>終止日
+                                    <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
+                                </div>
+                            </div>
+
+                            <div className={`dis ${orderHistory === 1 ? 'visible' : ''}`}>
+                                {tableData.length > 0 ? (
+                                    <BettingTable
+                                        tableData={tableData}
+                                        tableHeaders={tableHeaders}
+                                        toHistoryDetail={toHistoryDetail}
+                                    />
+
+                                ) : (
+                                    <div className='noData'>尚無資料</div>
+                                )
+
+                                }
+
+                            </div>
+                            <div className={`dis ${betHistory === 1 ? 'visible' : ''}`}>
+                                {tableData.length > 0 ? (
+                                    <SummaryTable
+                                        tableData={tableData}
+                                        tableHeaders={tableHeaders}
+                                        toHistoryDetail={toHistoryDetail}
+                                    />
+
+                                ) : (
+                                    <div className='noData'>尚無資料</div>
+                                )
+
+                                }
+
                             </div>
                         </div>
-                        <div className='flex-box'>
-                            <div>起始日
-                                <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
+                        <div className={`hover-box-detail ${hoverdetail === 1 ? 'visible' : ''}`}>
+                            <div className='title'>
+                                <div className='type-container'>
+                                    <div className='type-tabs'>
+                                        詳細內容
+                                    </div>
+                                </div>
+                                <div className='month-container'>
+                                    <button onClick={handleSubtractMonth}>
+                                        <span>＜</span>
+                                        上個月
+                                    </button>
+                                    <button onClick={handleAddMonth}>
+                                        下個月
+                                        <span>＞</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div>終止日
-                                <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
+                            <div className='flex-box'>
+                                <div>起始日
+                                    <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
+                                </div>
+                                <div>終止日
+                                    <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div className={`dis ${orderHistory === 1 ? 'visible' : ''}`}>
-                            {tableData.length > 0 ? (
-                                <table>
-                                    <>
-                                        <thead>
-                                            <tr>
-                                                {tableHeaders.map((header, index) => (
-                                                    <th key={index}>{header}</th>
-                                                ))}
-                                            </tr>
-                                        </thead>
-                                        {tableData.length > 0 && (
-                                            <tbody>
-                                                {tableData.filter(data => data.GameCode === 'EWin.BAC.0').map((data, index) => (
-                                                    <tr key={index}>
-                                                        <td>{data.SummaryDate}</td>
-                                                        <td>{data.CurrencyType}</td>
-                                                        <td>{`Global.${data.GameCode}`}</td>
-                                                        <td>{data.RewardValue}</td>
-                                                        <td>{data.ValidBetValue}</td>
-                                                        <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
-                                                        <div>＋</div>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        )}
-                                    </>
-                                </table>
+                            <div className='dis'>
+                                {tableData.length > 0 || detailList.length > 0 ? (
+                                    <BettingHistoryDetail
+                                        setHoverDetail={setHoverDetail}
+                                        tableHeaders={tableHeaders}
+                                        detailTableHeaders={detailTableHeaders}
+                                        tableData={tableData}
+                                        reacquireHistoryDetail={reacquireHistoryDetail}
+                                        detailList={detailList}
+                                    />
 
-                            ) : (
-                                <div className='noData'>尚無資料</div>
-                            )
+                                ) : (
+                                    <div className='noData'>尚無資料</div>
+                                )
 
-                            }
+                                }
 
-                        </div>
-                        <div className={`dis ${betHistory === 1 ? 'visible' : ''}`}>
-                            {tableData.length > 0 ? (
-                                <table>
-                                    <><thead>
-                                        <tr>
-                                            {tableHeaders.map((header, index) => (
-                                                <th key={index}>{header}</th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-                                        <tbody>
-                                            {tableData.map((data, index) => (
-                                                <tr key={index}>
-                                                    <td>{data.SummaryDate}</td>
-                                                    <td>{data.CurrencyType}</td>
-                                                    <td>{`Global.${data.GameCode}`}</td>
-                                                    <td>{data.RewardValue}</td>
-                                                    <td>{data.ValidBetValue}</td>
-                                                    <td className='detail' onClick={() => toHistoryDetail(data.GameCode, data.SummaryDate)}>
-                                                        <div>＋</div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </>
-                                </table>
-
-                            ) : (
-                                <div className='noData'>尚無資料</div>
-                            )
-
-                            }
-
+                            </div>
                         </div>
                     </div>
-                    <div className={`hover-box-detail ${hoverdetail === 1 ? 'visible' : ''}`}>
-                        <div className='title'>
-                            <div className='type-container'>
-                                <div className='type-tabs'>
-                                     詳細內容
-                                </div>
-                            </div>
-                            <div className='month-container'>
-                                <button onClick={handleSubtractMonth}>
-                                    <span>＜</span>
-                                    上個月
-                                </button>
-                                <button onClick={handleAddMonth}>
-                                    下個月
-                                    <span>＞</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div className='flex-box'>
-                            <div>起始日
-                                <input type="date" id="begindate" value={beginDate} onChange={handleBeginDateChange} name="begindate" />
-                            </div>
-                            <div>終止日
-                                <input type="date" id="enddate" value={endDate} onChange={handleEndDateChange} name="enddate" />
-                            </div>
-                        </div>
 
-                        <div className='dis'>
-                            {tableData.length > 0 || detailList.length > 0 ? (
-                                <table className='table-flex'>
-                                        <tbody>
-                                            <tr className='header'>
-                                                <th>{tableHeaders[0]}</th>
-                                            </tr>
-                                            <tr>
-                                                <td className='day-choose'>
-                                                    {tableData.map((data, index) => (
-                                                        <span key={index} onClick={() => reacquireHistoryDetail(data.GameCode, data.SummaryDate)}>{data.SummaryDate}</span>
-                                                    ))}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tbody className='detailContainer'>
-                                            <tr className='header'>
-                                                {detailTableHeaders.map((header, index) => (
-                                                    <th key={index}>{header}</th>
-                                                ))}
-                                            </tr>
-                                                {detailList.map((data, index) => (
-                                                    <tr key={index} className='detail'>
-                                                        <td className='col-arrange-center'>
-                                                            <span className='order-id'>{data.OrderID}</span>
-                                                            <span>{data.CreateDate.split(" ")[0]}</span>
-                                                            <span>{data.CreateDate.split(" ")[1]}</span>
-                                                        </td>
-                                                        <td>{data.RoundInfo}</td>
-                                                        <td>{data.CurrencyType}</td>
-                                                        <td className='col-arrange-left'>
-                                                            <span>庒:{data.OrderBanker}</span>
-                                                            <span>閒:{data.OrderPlayer}</span>
-                                                            <span>和:{data.OrderTie}</span>
-                                                            <span>庒對:{data.OrderBankerPair}</span>
-                                                            <span>閒對:{data.OrderPlayerPair}</span>
-                                                        </td>
-                                                        <td>
-                                                            {data.Result === '1' || data.Result === '5' || data.Result === '9' || data.Result === 'D' ? '庒' :
-                                                            data.Result === '2' || data.Result === '6' || data.Result === 'A' || data.Result === 'E' ? '閒' :
-                                                            data.Result === '3' || data.Result === '7' || data.Result === 'B' || data.Result === 'F' ? '和' :
-                                                            ''}
-                                                        </td>
-                                                        <td>{data.RewardValue}</td>
-                                                        <td>{data.BuyChipValue}</td>
-                                                        <td>{data.LendChipTax}</td>
-                                                        <td>{data.AddChip}</td>
-                                                        <td>{data.TipsValue}</td>
-                                                        <td>{data.TableChip}</td>
-                                                        <td className='snapshot'>
-                                                           <img src={data.SnapShot} alt="Snapshot" />
-                                                        </td>
-                                                    </tr>
-                                                ))}
-
-                                        </tbody>
-                                </table>
-
-                            ) : (
-                                <div className='noData'>尚無資料</div>
-                            )
-
-                            }
-
-                        </div>
-                    </div>
                 </div>
-
             </div>
-        </div>
+        </>
     )
 }
 

@@ -5,7 +5,12 @@ const SettingButton = () => {
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const [isSet, setIsSet] = useState(false);
     const settingsRef = useRef(null);
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
 
+    const handleButtonClick = () => {
+        setIsButtonClicked(true);
+        setHoveredItem(1)
+    };
     const handleSliderClick = () => {
         setIsSet(!isSet);
     };
@@ -14,6 +19,8 @@ const SettingButton = () => {
         if (settingsRef.current && !settingsRef.current.contains(e.target)) {
             // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
             setHoveredItem(null);
+            setIsButtonClicked(false);
+
         }
     };
 
@@ -31,8 +38,8 @@ const SettingButton = () => {
     return (
         <div className='settings-box'>
             <div
-                className='settings forpc'
-                onClick={() => setHoveredItem(1)}
+                className={`settings ${isButtonClicked ? 'active' : ''}`}
+                onClick={handleButtonClick}
                 ref={settingsRef}
             >
 
