@@ -91,9 +91,15 @@ const Main = () => {
     });
 
     lobbyClient.handleConnected(() => {
+      
       intervalIDRef.current = setInterval(() => {
-        lobbyClient.KeepSID();
-      }, 300000);
+        const currentTime = new Date().toLocaleString();
+        lobbyClient.KeepSID((s, o) => {
+          console.log("KeepSIDs:" + s);
+          console.log("KeepSID:" + JSON.stringify(o));
+          console.log("Current Time:", currentTime);
+        });
+      }, 30000);
 
       setCT(CT);
       setIsServerConneted(true);

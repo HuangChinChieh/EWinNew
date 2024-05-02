@@ -22,9 +22,6 @@
         border-bottom-left-radius: 12px;
         top: 6rem;
         box-shadow: 0 0 7px rgba(0, 0, 0, 0.7);
-        animation-name: anibettingout;
-        animation-duration: 1.5s;
-        animation-timing-function: ease;
         transition: all 1s ease;
         min-width: 600px;
         z-index: 8;
@@ -106,26 +103,7 @@
 
         }
 
-        @keyframes anisettingout {
-            0% {
-                right: 0rem;
-            }
 
-            100% {
-                right: -30rem;
-            }
-        }
-
-
-        @keyframes anisettingin {
-            0% {
-                right: -30rem;
-            }
-
-            100% {
-                right: 0rem;
-            }
-        }
 
         .title {
             width: 90%;
@@ -333,26 +311,6 @@
 
         }
 
-        @keyframes anisettingout {
-            0% {
-                right: 0rem;
-            }
-
-            100% {
-                right: -30rem;
-            }
-        }
-
-
-        @keyframes anisettingin {
-            0% {
-                right: -30rem;
-            }
-
-            100% {
-                right: 0rem;
-            }
-        }
 
         .flex-box {
             display: flex;
@@ -388,26 +346,7 @@
 
         }
 
-        @keyframes anisettingout {
-            0% {
-                right: 0rem;
-            }
 
-            100% {
-                right: -30rem;
-            }
-        }
-
-
-        @keyframes anisettingin {
-            0% {
-                right: -30rem;
-            }
-
-            100% {
-                right: 0rem;
-            }
-        }
 
         .title {
             width: 90%;
@@ -610,6 +549,10 @@
                 background: #555;
             }
 
+            .active {
+                background-color: #46465bda;
+            }
+
             span {
                 font-size: 12px;
                 padding: 10px 30px;
@@ -618,8 +561,8 @@
                 transition: all 0.2s;
                 cursor: pointer;
 
-                &:hover,
-                &:active {
+                &:hover
+                 {
                     background-color: #46465bda;
                 }
             }

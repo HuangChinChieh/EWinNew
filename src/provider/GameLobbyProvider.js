@@ -31,9 +31,8 @@ const GameLobbyProvider = (props) => {
   const [betLimitCurrencyType, setBetLimitCurrencyType] = useState("");
   const [musicIsPlaying,setMusicIsPlaying]=useState(false);
 
-
-  const muteChange=()=>{
-    setMusicIsPlaying(!musicIsPlaying)
+  const muteSwitch=(v)=>{
+    setMusicIsPlaying(v)
   }
 
   // Game Lobby related useEffect
@@ -109,7 +108,7 @@ const GameLobbyProvider = (props) => {
   };
 
   return (
-    <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
+    <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteSwitch }}>
       <FavorsContext.Provider value={{ favors, updateFavors }}>
         <WalletContext.Provider value={{ wallet, updateWallet }}>
           <RealNameContext.Provider value={{ realName, updateRealName }}>
