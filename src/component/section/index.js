@@ -152,17 +152,21 @@ const Section = (props) => {
                         };
                     });
 
-                    // 根據是否已被收藏來排序
+                    // 根據是否開啟個人化來排序
                     if(lobbyPersonal){
                             array.sort((a, b) => {
+                                 //判斷是否為收藏
                                 const isAFavorited = favors.includes(a.TableNumber);
                                 const isBFavorited = favors.includes(b.TableNumber);
         
                                 if (isAFavorited && !isBFavorited) {
+                                    //返回 -1：表示 a 應該排在 b 之前
                                     return -1;
                                 } else if (!isAFavorited && isBFavorited) {
+                                    //返回 1：表示 b 應該排在 a 之前。
                                     return 1;
                                 } else {
+                                    //返回 0：表示保持原始順序，即 a 和 b 的相對位置不變。
                                     return 0;
                                 }
                             });
