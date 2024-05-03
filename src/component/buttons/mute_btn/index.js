@@ -8,24 +8,15 @@ import musicAAC from 'music/lobby_music/Lobby.aac';
 
 const MuteButton = () => {
     const { musicIsPlaying, muteSwitch } = useContext(MusicIsPlayingContext);
-    const [isMuted, setIsMuted] = useState(false); // 初始狀態為未靜音
     const audioRef = useRef(null);
     const lastTimeRef = useRef(0); 
 
-    // 從 Context 中獲取靜音狀態
-    useEffect(() => {
-        setIsMuted(musicIsPlaying);
-        
-    }, [musicIsPlaying]);
-
     // 切換圖示跟變更全域音樂的播放狀態
     const toggleMute = () => {
-        const newMuteState = !isMuted;
-        setIsMuted(newMuteState);
-        muteSwitch(newMuteState); // 將靜音狀態保存到 Context 中
+        muteSwitch(!musicIsPlaying); // 將靜音狀態保存到 Context 中
     }
 
-    // 判斷音樂在別的地方是暫停還是播放的狀態再決定是否播放
+    // 判斷是否繼續播放
     useEffect(() => {
         if (musicIsPlaying) {
             handlePlay();
@@ -53,10 +44,10 @@ const MuteButton = () => {
 
     return (
         <div className='mute-box forpc'>
-            {isMuted ?
-                <div onClick={toggleMute} className='mute' />
-                :
+            {musicIsPlaying ?
                 <div onClick={toggleMute} className='unmute' />
+                :
+                <div onClick={toggleMute} className='mute' />
             }
             <audio ref={audioRef} autoPlay loop >
                 <source src={musicMP3} type="audio/mpeg" />
