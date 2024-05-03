@@ -261,6 +261,17 @@
 
         }
 
+        .goback-summary{
+            position: absolute;
+            left: 0;
+            top: 15px;;
+
+            img{
+                width:22px;
+            }
+        }
+
+
         .month-container {
             display: flex;
             position: absolute;
@@ -373,8 +384,8 @@
         .dis {
             font-size: 0.9rem;
             margin-top: 10px;
-            margin: 0 auto;
-
+            margin: 5px 0px auto;
+            
 
             table {
                 border-spacing: 1px;
@@ -455,9 +466,14 @@
 
                     .header{
                         position: sticky;
+                        font-size: 14px;
                         top: 0;
                         background:rgba(29, 29, 38, 0.8);
                         
+                        th{
+                            padding: 0px 8px;
+
+                        }
                     }
 
 
@@ -555,7 +571,7 @@
 
             span {
                 font-size: 12px;
-                padding: 10px 30px;
+                padding: 15px 28px;
                 margin: 0px !important;
                 border: #b8b8b81e 0.5px solid;
                 transition: all 0.2s;

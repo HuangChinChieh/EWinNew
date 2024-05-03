@@ -18,7 +18,7 @@ const BettingHistory = () => {
 
 
 
-    const passParameter=(e, gamecode, querydate)=>{
+    const passGamecodeAndQuerydate=(e, gamecode, querydate)=>{
         e.stopPropagation()
         setDisplayArea(0);
         setParameterData({gamecode,querydate});
@@ -85,7 +85,7 @@ const BettingHistory = () => {
                                     beginDate={beginDate} 
                                     endDate={endDate} 
                                     updateDate={updateDate}
-                                    passParameter={passParameter}
+                                    passGamecodeAndQuerydate={passGamecodeAndQuerydate}
                                 />
 
                         </div>
@@ -94,9 +94,9 @@ const BettingHistory = () => {
                                 <BettingHistoryDetail
                                     beginDate={beginDate} 
                                     endDate={endDate} 
-                                    updateDate={updateDate}
+                                    setDisplayArea={setDisplayArea}
                                     parameterData={parameterData}
-                                    passParameter={passParameter}
+                                    passGamecodeAndQuerydate={passGamecodeAndQuerydate}
                                 />
 
                         </div>

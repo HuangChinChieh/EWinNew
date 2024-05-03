@@ -1,17 +1,20 @@
 import { useState,  useEffect, useRef } from 'react';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
-
+import gobacksummary from 'img/header/backArrow.png'
 import snapshot from 'img/bettinghistory/snapshot.png'
 
 const BettingHistoryDetail = ({
     beginDate,
     endDate,
-    updateDate,
     parameterData,
-    passParameter,
+    setDisplayArea,
+    passGamecodeAndQuerydate,
 }) => {    
     const [detailList, setDetailList] = useState([]);
-    const [selectedDate, setSelectedDate] = useState('');
+    const [selectedDateAndGamecode, setSelectedDateAndGamecode] = useState({
+        GameCode: '', 
+        QueryDate: ''
+    });
 
     const gameLobbyClient = EWinGameLobbyClient.getInstance();
     const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -31,33 +34,8 @@ const BettingHistoryDetail = ({
         "快照"
     ];
 
-    const handleSubtractMonth = () => {
-        const newBeginDate = new Date(beginDate);
-        const newEndDate = new Date(endDate);
-        newBeginDate.setMonth(newBeginDate.getMonth() - 1);
-        newEndDate.setMonth(newEndDate.getMonth() - 1);
-        updateDate(newBeginDate.toISOString().split('T')[0],newEndDate.toISOString().split('T')[0]);
-    
-    };
-    
-    const handleAddMonth = () => {
-        const newBeginDate = new Date(beginDate);
-        const newEndDate = new Date(endDate);
-        newBeginDate.setMonth(newBeginDate.getMonth() + 1);
-        newEndDate.setMonth(newEndDate.getMonth() + 1);
-        updateDate(newBeginDate.toISOString().split('T')[0],newEndDate.toISOString().split('T')[0]);
-    };
-
-    const BeginDateRefrsh = (event) => {
-        updateDate(event.target.value, endDate);
-    };
-
-    const EndDateChangeRefrsh = (event) => {
-        updateDate(beginDate, event.target.value);
-    };
 
     useEffect(() => {
-        console.log(parameterData);
         bettingHistoryClick();
     }, [beginDate, endDate])
 
@@ -71,11 +49,25 @@ const BettingHistoryDetail = ({
         if (gameLobbyClient !== null) {
             gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
-                    console.log('resultcode',o.ResultCode);
-                    console.log('beginDate',beginDate);
-                    console.log('endDate',endDate);
+
                     if (o.ResultCode === 0) {
-                        setHistoryDays(o.SummaryList);
+                        const filteredData = o.SummaryList.reduce((acc, curr) => {
+                            const {SummaryDate,GameCode}=curr;
+                            const existingItemIndex = acc.findIndex(item =>
+                                item.SummaryDate === SummaryDate && item.GameCode === GameCode
+                            );
+
+                            if (existingItemIndex !== -1) {
+                                // 如果存在相同的 SummaryDate 和 GameCode，不做任何操作
+                            } else {
+                                // 否則將當前物件添加到累加器中
+                                acc.push({ SummaryDate, GameCode });
+                            }
+                            return acc;
+                        }, []);
+                        setHistoryDays(filteredData);
+                        console.log('historyDays',historyDays);
+
                     } else {
                         console.log('GetHistorySummary: 系統錯誤處理',o.Message);
                     }
@@ -97,7 +89,7 @@ const BettingHistoryDetail = ({
                 if (s) {
                     if (o.ResultCode === 0) {
                         setDetailList(o.DetailList);
-                        setSelectedDate(QueryDate);
+                        setSelectedDateAndGamecode({GameCode,QueryDate});
 
 
                     } else {
@@ -124,7 +116,9 @@ const BettingHistoryDetail = ({
         setLightboxOpen(false);
     };
 
-
+    const goBackSummary = () => {
+        setDisplayArea(1);
+    };
 
     return ( 
         <>
@@ -133,24 +127,9 @@ const BettingHistoryDetail = ({
                     <div className='type-tabs'>
                         詳細內容
                     </div>
-                </div>
-                <div className='month-container' >
-                    <button onClick={handleSubtractMonth}>
-                        <span>＜</span>
-                        上個月
-                    </button>
-                    <button onClick={handleAddMonth}>
-                        下個月
-                        <span>＞</span>
-                    </button>
-                </div>
-            </div>
-            <div className='flex-box'>
-                <div>起始日
-                    <input type="date" id="begindate" value={beginDate} onChange={BeginDateRefrsh} name="begindate" />
-                </div>
-                <div>終止日
-                    <input type="date" id="enddate" value={endDate} onChange={EndDateChangeRefrsh} name="enddate" />
+                    <div className='goback-summary'>
+                        <img src={gobacksummary} onClick={goBackSummary}></img>
+                    </div>
                 </div>
             </div>
             <div className='dis'>
@@ -166,8 +145,9 @@ const BettingHistoryDetail = ({
                                             {historyDays.map((data, index) => (
                                                 <span 
                                                     key={index} 
-                                                    onClick={(e) => passParameter(e, data.GameCode, data.SummaryDate)}
-                                                        className={selectedDate === data.SummaryDate ? 'active' : ''}
+                                                    onClick={(e) => passGamecodeAndQuerydate(e, data.GameCode, data.SummaryDate)}
+                                                        className={selectedDateAndGamecode.GameCode ===data.GameCode &&
+                                                            selectedDateAndGamecode.QueryDate ===data.SummaryDate ? 'active' : ''}
 
                                                 >
                                                     {data.SummaryDate}</span>

@@ -6,7 +6,7 @@ const SummaryTable = ({
     beginDate, 
     endDate ,
     updateDate,
-    passParameter,
+    passGamecodeAndQuerydate,
     }) => {
     const activeTabSwitch = (tabName) => {
         setActiveTab(tabName);
@@ -34,9 +34,7 @@ const SummaryTable = ({
         if (gameLobbyClient !== null) {
             gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
-                    console.log('resultcode',o.ResultCode);
-                    console.log('beginDate',beginDate);
-                    console.log('endDate',endDate);
+
                     if (o.ResultCode === 0) {
                         setTableData(o.SummaryList);
                     } else {
@@ -135,7 +133,7 @@ const SummaryTable = ({
                                         </td>
                                         <td>{data.RewardValue}</td>
                                         <td>{data.ValidBetValue}</td>
-                                        <td className='detail' onClick={(e) => {passParameter(e, data.GameCode, data.SummaryDate)}}>
+                                        <td className='detail' onClick={(e) => {passGamecodeAndQuerydate(e, data.GameCode, data.SummaryDate)}}>
                                             <div>＋</div>
                                         </td>
                                     </tr>
@@ -175,7 +173,7 @@ const SummaryTable = ({
                                         </td>
                                         <td>{data.RewardValue}</td>
                                         <td>{data.ValidBetValue}</td>
-                                        <td className='detail' onClick={(e) => passParameter(e, data.GameCode, data.SummaryDate)}>
+                                        <td className='detail' onClick={(e) => passGamecodeAndQuerydate(e, data.GameCode, data.SummaryDate)}>
                                             <div>＋</div>
                                         </td>
                                     </tr>
