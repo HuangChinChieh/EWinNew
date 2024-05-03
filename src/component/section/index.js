@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 
 import RoadMap from 'component/road_map';
-import SimilarGames from 'component/similar_games';
 import './index.scss';
-import { FavorsContext } from 'provider/GameLobbyProvider';
+import { FavorsContext,LobbyPersonalContext } from 'provider/GameLobbyProvider';
 
 
 const SectionLiFavor2 = (props) => {
     const { favors, updateFavors } = useContext(FavorsContext);
+
     const tableNumber = props.tableNumber;
 
     const handleClick = () => {
@@ -131,6 +130,14 @@ const SectionLi = (props) => {
 const Section = (props) => {
     const lobbyClient = EWinGameLobbyClient.getInstance();
     const [tableList, setTableList] = useState([]);
+    const { favors } = useContext(FavorsContext);
+    const { lobbyPersonal } = useContext(LobbyPersonalContext);
+
+
+    useEffect(()=>{
+        refreshTableList()
+    },[lobbyPersonal])
+
     const refreshTableList = () => {
         lobbyClient.GetTableInfoList("", 0, (success, o) => {
             if (success) {
@@ -144,6 +151,22 @@ const Section = (props) => {
                             ShoeResult:data.ShoeResult                           
                         };
                     });
+
+                    // 根據是否已被收藏來排序
+                    if(lobbyPersonal){
+                            array.sort((a, b) => {
+                                const isAFavorited = favors.includes(a.TableNumber);
+                                const isBFavorited = favors.includes(b.TableNumber);
+        
+                                if (isAFavorited && !isBFavorited) {
+                                    return -1;
+                                } else if (!isAFavorited && isBFavorited) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            });
+                    }
 
                     setTableList(array);
                 }

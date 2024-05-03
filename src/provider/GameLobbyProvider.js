@@ -7,6 +7,7 @@ const RealNameContext = createContext();
 const BetLimitCurrencyContext = createContext();
 const FavorsContext = createContext();
 const MusicIsPlayingContext = createContext();
+const LobbyPersonalContext=createContext();
 
 export {
   WalletContext,
@@ -14,6 +15,7 @@ export {
   BetLimitCurrencyContext,
   FavorsContext,
   MusicIsPlayingContext,
+  LobbyPersonalContext
 };
 export const useLobbyContext = () => {};
 
@@ -30,12 +32,18 @@ const GameLobbyProvider = (props) => {
   const [realName, setRealName] = useState("");
   const [betLimitCurrencyType, setBetLimitCurrencyType] = useState("");
   const [musicIsPlaying,setMusicIsPlaying]=useState(false);
-
+  const [lobbyPersonal,setLobbyPersonal]=useState(false);
 
 
   const muteSwitch=(v)=>{
     setMusicIsPlaying(v)
   }
+
+
+  useEffect(()=>{
+    console.log('lobbyPersonal',lobbyPersonal)
+  },[lobbyPersonal])
+
 
   // Game Lobby related useEffect
   useEffect(() => {
@@ -110,18 +118,20 @@ const GameLobbyProvider = (props) => {
   };
 
   return (
-    <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteSwitch }}>
-      <FavorsContext.Provider value={{ favors, updateFavors }}>
-        <WalletContext.Provider value={{ wallet, updateWallet }}>
-          <RealNameContext.Provider value={{ realName, updateRealName }}>
-            <BetLimitCurrencyContext.Provider
-              value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}
-            >
-              {props.children}
-            </BetLimitCurrencyContext.Provider>
-          </RealNameContext.Provider>
-        </WalletContext.Provider>
-      </FavorsContext.Provider>
+    <MusicIsPlayingContext.Provider value={{  musicIsPlaying, muteSwitch}}>
+      <LobbyPersonalContext.Provider value={{ lobbyPersonal,setLobbyPersonal }}>
+        <FavorsContext.Provider value={{ favors, updateFavors }}>
+          <WalletContext.Provider value={{ wallet, updateWallet }}>
+            <RealNameContext.Provider value={{ realName, updateRealName }}>
+              <BetLimitCurrencyContext.Provider
+                value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}
+              >
+                {props.children}
+              </BetLimitCurrencyContext.Provider>
+            </RealNameContext.Provider>
+          </WalletContext.Provider>
+        </FavorsContext.Provider>
+      </LobbyPersonalContext.Provider> 
     </MusicIsPlayingContext.Provider>
 
   );
