@@ -64,7 +64,10 @@ const SectionLi = (props) => {
     >
         <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber}/>
         <div className={`games`}>
-            {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />)}
+            {props.tableInfo.Image 
+                ? <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
+                : <img src="http://bm.dev.mts.idv.tw/images/JINBEI1.png" alt="Default Table Image" />
+            }
             <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={0} />
         </div>
         <p className='game-title'>
