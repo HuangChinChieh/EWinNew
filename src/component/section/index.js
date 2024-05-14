@@ -44,6 +44,7 @@ const SectionLiFavor2 = (props) => {
     return (<span onClick={() => handleClick()} className={`${favors.includes(props.tableNumber) ? 'remove-to-favorites' : 'add-to-favorites'}`} />);
 }
 
+
 const SectionLiFavor1 = (props) => {
     const { favors } = useContext(FavorsContext);
     return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`}/>);
