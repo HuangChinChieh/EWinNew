@@ -81,7 +81,6 @@ const Main = () => {
         return clearInterval(intervalIDRef.current);
     }, []);
 
-
     const initLobbyClient = (CT) => {
         // 遊戲大廳      
         const lobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
@@ -128,7 +127,6 @@ const Main = () => {
         
     }, [history.location.pathname]);
 
-
     if (!isServerConneted) {
         return (<div></div>)
     } else {
@@ -139,7 +137,7 @@ const Main = () => {
                         ? (
                             <>
                                 <Header />
-                                <VideoBox url={getUrl} />
+                                 {/*<VideoBox url={getUrl} />*/}
                                 <Footer />
                             </>
                         )
@@ -147,34 +145,17 @@ const Main = () => {
                             <GameFooter />
                         )
                     }
-                    {/*<Switch>*/}
-                    {/*    <Route path='?p=Gamefavorite'>*/}
-                    {/*         <Gamefavorite /> */}
-                    {/*    </Route>*/}
-                    {/*    <Route path='/games/:gameId'>*/}
-                    {/*        <GameBaccaratProvider>*/}
-                    {/*            <GameView url={getUrl} />*/}
-                    {/*        </GameBaccaratProvider>*/}
-                    {/*    </Route>*/}
-                    {/*    <Route path='/'>*/}
-                    {/*        <Gamelobby />*/}
-                    {/*    </Route>*/}
-                    {/*</Switch>*/}
-
-                    {(() => {
-                        if (window.location.search.includes('p=Gamefavorite')) {
-                            return <Gamefavorite />;
-                        } else if (window.location.pathname.startsWith('/games/')) {
-                            return (
-                                <GameBaccaratProvider>
-                                    <GameView url={getUrl} />
-                                </GameBaccaratProvider>
-                            );
-                        } else {
-                            return <Gamelobby />;
-                        }
-                    })()}
-
+                    <Switch>
+                        <Route path='/Gamefavorite'>
+                          <Gamefavorite></Gamefavorite>
+                        </Route>
+                        <Route path='/games/:gameId'>
+                            <GameBaccaratProvider>
+                                <GameView url={getUrl} />
+                            </GameBaccaratProvider>
+                        </Route>
+                        <Route path='/' component={Gamelobby}></Route>
+                    </Switch>
                 </GameLobbyProvider>
             </div>
         );
