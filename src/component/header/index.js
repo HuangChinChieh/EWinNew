@@ -104,7 +104,7 @@ const Header = (props) => {
                   </span> 
                 
               </span>
-              <span><a className="user-favorite" href='/Gamefavorite'></a></span>
+              <span><a className="user-favorite" href='?p=Gamefavorite'></a></span>
             </div>
           )}
         </div>
