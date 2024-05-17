@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-  useHistory
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    useLocation,
+    useHistory
 } from "react-router-dom";
 
 import Header from 'component/header';
@@ -18,6 +18,7 @@ import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
 import GameBaccaratProvider from 'provider/GameBaccaratProvider';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
+import AlertButton from 'component/alert';
 
 import './index.scss';
 
@@ -124,7 +125,7 @@ const Main = () => {
         const currentPath = history.location.pathname;
         localStorage.setItem('currentUrl', currentPath);
         setGetUrl(localStorage.getItem('currentUrl'))
-        
+
     }, [history.location.pathname]);
 
     if (!isServerConneted) {
@@ -137,7 +138,7 @@ const Main = () => {
                         ? (
                             <>
                                 <Header />
-                                 {/*<VideoBox url={getUrl} />*/}
+                                {/*<VideoBox url={getUrl} />*/}
                                 <Footer />
                             </>
                         )
@@ -147,7 +148,7 @@ const Main = () => {
                     }
                     <Switch>
                         <Route path='/Gamefavorite'>
-                          <Gamefavorite></Gamefavorite>
+                            <Gamefavorite></Gamefavorite>
                         </Route>
                         <Route path='/games/:gameId'>
                             <GameBaccaratProvider>
@@ -164,13 +165,15 @@ const Main = () => {
 
 // 加入判斷剔除不顯示的組件
 export default function Routers() {
-  return (
-    <Router>
-    <TipProvider>
-      <Main />
-    </TipProvider>
-    </Router>
-  );
+    return (
+        <Router>
+            <AlertButton>
+                <TipProvider>
+                    <Main />
+                </TipProvider>
+            </AlertButton>
+        </Router>
+    );
 }
 
 
