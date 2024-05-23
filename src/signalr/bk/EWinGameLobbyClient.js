@@ -15,7 +15,7 @@ export class EWinGameLobbyClient {
         this.RECONNECTING = 2;
         this.DISCONNECTED = 4;
         this.CT = CT;
-        this.GUID = generateUUIDv4();
+        
         this.conn = hubConnection();
 
         if (eWinUrl) {

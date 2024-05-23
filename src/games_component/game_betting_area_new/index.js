@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import ButtonBox from 'games_component/game_buttons/game_btn_box';
 import GameChipsButton from 'games_component/game_buttons/game_chips_btn';
@@ -16,7 +16,11 @@ const GameBettingArea = (props) => {
     const pathRef3 = useRef(null);
     const pathRef4 = useRef(null);
     const pathRef5 = useRef(null);
-
+    const orderPlayer = useState(null);
+    const orderPlayerPair = useState(null);
+    const orderTie = useState(null);
+    const orderBanker = useState(null);
+    const orderBankerPair = useState(null);
     // const [isAct1, setIsAct1] = useState('');
     // const [isAct2, setIsAct2] = useState('');
     // const [isAct3, setIsAct3] = useState('');
@@ -41,10 +45,10 @@ const GameBettingArea = (props) => {
     const numberOfClick4 = props.numberOfClick4;
     const numberOfClick5 = props.numberOfClick5;
 
+    const selChipRef = useRef(null);
+
     const chipsDenominations = [25, 50, 100, 500, 1000, 1250, 5000, 10000];
-
-
-
+    
     const updateButtonClickCount = (button) => {
         setButtonClickCounts((prevCounts) => ({
             ...prevCounts,
@@ -52,6 +56,21 @@ const GameBettingArea = (props) => {
         }));
     };
 
+
+    const addOrderValue = (type) => {
+        //整體流程為，在body以絕對位置建立籌碼，移動籌碼動畫，更新數值
+        const 
+        let endPoint;
+
+    };
+
+
+    const selChip = useCallback((rect, value)=>{
+        selChipRef.current = {
+            rect:rect,
+            value:value
+        };
+    }, []);
 
     useEffect(() => {
         setChips([25, 50, 100, 500, 1000, 1250, 5000, 10000][props.defaultChipsId]);
@@ -497,6 +516,8 @@ const GameBettingArea = (props) => {
 
                 </div>
                 <div
+                    
+
                     className={`middle-box ${props.seconds === 0 ? 'disable' : 'enable'}`}>
                     <canvas ref={canvasRef} />
                     <ButtonBox label={t('Global.p_pair')} bglabel="" totalChips={props.totalChips1} isAct={props.isAct1} animations={animations1} getChipsId={getChipsId} isAnimationActive={props.isAnimationActive1} btn="btn1" />

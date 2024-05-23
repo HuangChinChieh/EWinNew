@@ -16,7 +16,7 @@ import GameFooter from 'games_component/game_footer';
 import TipProvider from 'component/tips';
 import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
-import GameBaccaratProvider from 'provider/GameBaccaratProvider';
+import GameBaccaratProvider from 'provider/GameTableProvider';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 
 import './index.scss';
@@ -83,9 +83,9 @@ const Main = () => {
 
 
   const initLobbyClient = (CT) => {
-    // 遊戲大廳      
+    // 遊戲大廳     
     const lobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
-
+   
     lobbyClient.handleReceiveMsg((Msg) => {
       console.log('處理接收訊息', Msg);
     });
@@ -111,8 +111,10 @@ const Main = () => {
     lobbyClient.handleDisconnect(() => {
 
     });
-
-    lobbyClient.initializeConnection();
+    
+    if(lobbyClient.state() !== 1){
+      lobbyClient.initializeConnection();
+    }   
   };
 
   useEffect(() => {
@@ -128,7 +130,7 @@ const Main = () => {
   } else {
     return (
       <div className="wrap-box">
-        <GameLobbyProvider CurrencyType={currencyTypeRef.current}>
+        <GameLobbyProvider CT={CT} CurrencyType={currencyTypeRef.current}>
           {!isGameView
             ? (
               <>

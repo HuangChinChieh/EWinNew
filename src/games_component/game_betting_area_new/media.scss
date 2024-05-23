@@ -1,0 +1,337 @@
+@media screen and (max-width: 768px) {
+    .game-betting-area {
+        .game-betting-area-box {
+            .middle-box {
+
+                .btn1.btn-box,
+                .btn3.btn-box {
+                    &.isAct {
+                        .chips-animation-box {
+
+                            .animation-1,
+                            .animation-2,
+                            .animation-3 {
+                                left: 0.3rem;
+                            }
+
+                        }
+                    }
+                }
+
+                .btn1.btn-box {
+                    &.isAct {
+                        span {
+                            bottom: 2.5rem;
+                            left: -1rem;
+                        }
+
+                        .chips-animation-box {
+
+                            &.chipsId-0,
+                            &.chipsId-1,
+                            &.chipsId-2,
+                            &.chipsId-3,
+                            &.chipsId-4,
+                            &.chipsId-5,
+                            &.chipsId-6,
+                            &.chipsId-7 {
+
+                                &.active {
+                                    &::before {
+                                        animation-name: anibtn1chipId1;
+                                        bottom: -17.7rem;
+                                        left: 7.7rem;
+                                        z-index: -1;
+                                        visibility: visible;
+                                        opacity: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @keyframes anibtn1chipId1 {
+                        0% {
+                            width: 55px;
+                            height: 55px;
+                            left: 7.7rem;
+                            bottom: -17.7rem;
+                            opacity: 0;
+                            visibility: visible;
+                        }
+
+                        50% {
+                            width: 35px;
+                            height: 35px;
+                            left: 0rem;
+                            bottom: -3rem;
+                            opacity: 1;
+                            visibility: visible;
+                        }
+
+                        100% {
+                            width: 25px;
+                            height: 25px;
+                            left: 0rem;
+                            bottom: 0rem;
+                            opacity: 0;
+                            visibility: visible;
+                        }
+                    }
+                }
+
+                .btn2.btn-box {
+                    &.isAct {
+                        span {
+                            left: -1.4rem;
+                            bottom: 2.5rem;
+                        }
+
+                        .chips-animation-box {
+                            left: -0.2rem;
+
+                            &.chipsId-0,
+                            &.chipsId-1,
+                            &.chipsId-2,
+                            &.chipsId-3,
+                            &.chipsId-4,
+                            &.chipsId-5,
+                            &.chipsId-6,
+                            &.chipsId-7 {
+
+                                &.active {
+                                    &::before {
+                                        animation-name: anibtn1chipId2;
+                                        bottom: -17.7rem;
+                                        left: -1.3rem;
+                                        z-index: -1;
+                                        visibility: hidden;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @keyframes anibtn1chipId2 {
+                        0% {
+                            width: 55px;
+                            height: 55px;
+                            left: -1.3rem;
+                            bottom: -17.7rem;
+                            opacity: 0;
+                            visibility: hidden;
+                        }
+
+                        50% {
+                            width: 35px;
+                            height: 35px;
+                            left: 0rem;
+                            bottom: -3rem;
+                            opacity: 1;
+                            visibility: visible;
+                        }
+
+                        100% {
+                            width: 25px;
+                            height: 25px;
+                            left: 0rem;
+                            bottom: 0rem;
+                            opacity: 0;
+                            visibility: visible;
+                        }
+                    }
+                }
+
+                .btn3.btn-box {
+                    &.isAct {
+                        span {
+                            left: -1.1rem;
+                            bottom: 2.5rem;
+                        }
+
+                        .chips-animation-box {
+
+                            &.chipsId-0,
+                            &.chipsId-1,
+                            &.chipsId-2,
+                            &.chipsId-3,
+                            &.chipsId-4,
+                            &.chipsId-5,
+                            &.chipsId-6,
+                            &.chipsId-7 {
+
+                                &.active {
+                                    &::before {
+                                        animation-name: anibtn1chipId3;
+                                        bottom: -17.7rem;
+                                        left: -9.5rem;
+                                        z-index: -1;
+                                        visibility: hidden;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @keyframes anibtn1chipId3 {
+                        0% {
+                            width: 55px;
+                            height: 55px;
+                            left: -9.5rem;
+                            bottom: -17.7rem;
+                            opacity: 0;
+                            visibility: hidden;
+                        }
+
+                        50% {
+                            width: 35px;
+                            height: 35px;
+                            left: 0rem;
+                            bottom: -3rem;
+                            opacity: 1;
+                            visibility: visible;
+                        }
+
+                        100% {
+                            width: 25px;
+                            height: 25px;
+                            left: 0rem;
+                            bottom: 0rem;
+                            opacity: 0;
+                            visibility: visible;
+                        }
+                    }
+                }
+
+                .btn4.btn-box {
+                    &.isAct {
+                        span {
+                            left: -1.4rem;
+                            bottom: 2.5rem;
+                        }
+
+                        .chips-animation-box {
+
+                            left: -3.2rem;
+                            bottom: -0.3rem;
+
+                            &.chipsId-0,
+                            &.chipsId-1,
+                            &.chipsId-2,
+                            &.chipsId-3,
+                            &.chipsId-4,
+                            &.chipsId-5,
+                            &.chipsId-6,
+                            &.chipsId-7 {
+
+                                &.active {
+                                    &::before {
+                                        animation-name: anibtn1chipId4;
+                                        bottom: -24.7rem;
+                                        left: -4.3rem;
+                                        z-index: -1;
+                                        visibility: hidden;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @keyframes anibtn1chipId4 {
+                        0% {
+                            width: 55px;
+                            height: 55px;
+                            left: -4.3rem;
+                            bottom: -24.7rem;
+                            opacity: 0;
+                            visibility: hidden;
+                        }
+
+                        50% {
+                            width: 35px;
+                            height: 35px;
+                            left: 0rem;
+                            bottom: -3rem;
+                            opacity: 1;
+                            visibility: visible;
+                        }
+
+                        100% {
+                            width: 25px;
+                            height: 25px;
+                            left: 0rem;
+                            bottom: 0rem;
+                            opacity: 0;
+                            visibility: visible;
+                        }
+                    }
+                }
+
+                .btn5.btn-box {
+                    &.isAct {
+                        span {
+                            left: -1.4rem;
+                            bottom: 2.5rem;
+                        }
+
+                        .chips-animation-box {
+
+                            left: 3rem;
+                            bottom: -0.3rem;
+
+                            &.chipsId-0,
+                            &.chipsId-1,
+                            &.chipsId-2,
+                            &.chipsId-3,
+                            &.chipsId-4,
+                            &.chipsId-5,
+                            &.chipsId-6,
+                            &.chipsId-7 {
+
+                                &.active {
+                                    &::before {
+                                        animation-name: anibtn1chipId5;
+                                        bottom: -24.7rem;
+                                        left: 1.7rem;
+                                        z-index: -1;
+                                        visibility: hidden;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @keyframes anibtn1chipId5 {
+                        0% {
+                            width: 55px;
+                            height: 55px;
+                            left: 1.7rem;
+                            bottom: -24.7rem;
+                            opacity: 0;
+                            visibility: hidden;
+                        }
+
+                        50% {
+                            width: 35px;
+                            height: 35px;
+                            left: 0rem;
+                            bottom: -3rem;
+                            opacity: 1;
+                            visibility: visible;
+                        }
+
+                        100% {
+                            width: 25px;
+                            height: 25px;
+                            left: 0rem;
+                            bottom: 0rem;
+                            opacity: 0;
+                            visibility: visible;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}

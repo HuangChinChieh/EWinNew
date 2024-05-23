@@ -65,7 +65,7 @@ const SectionLi = (props) => {
     >
         <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber}/>
         <div className={`games`}>
-            {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />)}
+            {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table" />)}
             <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={0} />
         </div>
         <p className='game-title'>
@@ -83,7 +83,7 @@ const SectionLi = (props) => {
         <div className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? 'visible' : ''} ${moreScale}`}>
             <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
             <div className={`games`}>
-                {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />)}
+                {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table" />)}
             </div>
             <div className='info-box'>
                 <p className='game-title'>

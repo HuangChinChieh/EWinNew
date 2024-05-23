@@ -32,7 +32,7 @@
             box-sizing: border-box;
             inset: -10px;
             border-radius: 50%;
-            animation: prixClipFix var(--countdown-duration) infinite linear;
+            clip-path: var(--PathContent);
             z-index: 2;
         }
 
@@ -88,7 +88,6 @@
                 transition: all 1s ease;
                 transform: scale(2) rotate(44deg);
                 opacity: 0;
-
             }
 
             &:before {

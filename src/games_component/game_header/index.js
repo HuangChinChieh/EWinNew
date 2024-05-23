@@ -22,7 +22,6 @@ import GameReloadButton from 'games_component/game_buttons/game_reload_btn';
 
 import { useEffect, useState } from 'react';
 const GameHeader = (props) => {
-    const [checkLocalTitle, setCheckLocalTitle] = useState('');
 
     useEffect(() => {
         setCheckLocalTitle(localStorage.getItem('gameTitle'));
@@ -34,11 +33,7 @@ const GameHeader = (props) => {
             <div className='game-left-box'>
                 <div className='game-flex-box'>
                     <GameBack />
-                    {/* 避免在遊戲內時重整畫面, 拿不到redux內儲存的id時,顯示 '' 產生的相關錯誤 */}
-                    {props.gameTitle === ''
-                        ? <span>{checkLocalTitle}</span>
-                        : <span>{props.gameTitle}</span>}
-
+                    <span>{props.tableNumber}</span>
                 </div>
                 {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
                 <span className='user-icon' />
@@ -63,10 +58,4 @@ const GameHeader = (props) => {
     )
 }
 
-
-const mapStateToProps = (state) => ({
-    gameTitle: state.root.gameTitle
-
-});
-
-export default connect(mapStateToProps)(GameHeader);
+export default GameHeader;

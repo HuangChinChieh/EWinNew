@@ -1,16 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { useLobbyContext } from 'provider/GameLobbyProvider';
 import './index.scss';
 
 const GameHDSDButton = (props) => {
-    const {
-        t
-    } = useLobbyContext();
-    const [hoveredItem, setHoveredItem] = useState(null);
-    const settingsRef = useRef(null);
-    const localTitle = localStorage.getItem('gameTitle');
-    const [selectedLimit, setSelectedLimit] = useState(null);
+    const [hoveredItem, setHoveredItem] = useState(false);
+    const settingsRef = useRef(null);    
+    const [streamTypes, setStreamTypes] = useState([]);
 
     const handleDocumentClick = (e) => {
         if (settingsRef.current && !settingsRef.current.contains(e.target)) {
@@ -19,20 +14,14 @@ const GameHDSDButton = (props) => {
         }
     };
 
+    const handleHoveredItemClick = ()=>{
+        const tableInfo = props.getTableInfo();
+    };
+
     const handleOptionClick = (id) => {
         setSelectedLimit(id);
         setHoveredItem(null);
     };
-
-    useEffect(() => {
-        if (props.tiList && props.tiList.TableInfoList) {
-            const tableInfo = props.tiList.TableInfoList.find(table => table.TableNumber === localTitle);
-            if (tableInfo && tableInfo.Stream && tableInfo.Stream.length > 0) {
-                setSelectedLimit(tableInfo.Stream[0].StreamName);
-            }
-        }
-    }, [props.tiList, localTitle]);
-
 
     useEffect(() => {
         // 在 component mount 時加入 click 事件監聽器
