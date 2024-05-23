@@ -1,9 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect,useContext } from 'react';
+import { LobbyPersonalContext } from 'provider/GameLobbyProvider';
+
 import './index.scss';
 const SettingButton = () => {
+    const { lobbyPersonal,setLobbyPersonal } = useContext(LobbyPersonalContext);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
-    const [isSet, setIsSet] = useState(false);
     const settingsRef = useRef(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
 
@@ -12,7 +14,7 @@ const SettingButton = () => {
         setHoveredItem(1)
     };
     const handleSliderClick = () => {
-        setIsSet(!isSet);
+        setLobbyPersonal(!lobbyPersonal)
     };
 
     const handleDocumentClick = (e) => {
@@ -48,7 +50,7 @@ const SettingButton = () => {
                         <div>
                             遊戲大廳個性化
                         </div>
-                        <div className={`custom-slider ${isSet ? 'set' : ''}`}>
+                        <div className={`custom-slider ${lobbyPersonal ? 'set' : ''}`}>
                             <input type="checkbox" id="sliderCheckbox" />
                             <label htmlFor="sliderCheckbox" onClick={handleSliderClick}></label>
                         </div>
@@ -72,7 +74,7 @@ const SettingButton = () => {
                             <div>
                                 遊戲大廳個性化
                             </div>
-                            <div className={`mbcustom-slider ${isSet ? 'set' : ''}`}>
+                            <div className={`mbcustom-slider ${lobbyPersonal ? 'set' : ''}`}>
                                 <input type="checkbox" id="mbsliderCheckbox" />
                                 <label htmlFor="mbsliderCheckbox" onClick={handleSliderClick}></label>
                             </div>

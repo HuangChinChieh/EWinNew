@@ -6,11 +6,11 @@ import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
+import { useHistory } from 'react-router-dom';
 
 import './index.scss';
 
 const Header = (props) => {
-
   const { wallet } = useContext(WalletContext);
   const { favorites } = props;
   const [aniHeader, setAniHeader] = useState('aniHeader');
@@ -21,7 +21,6 @@ const Header = (props) => {
   const toggleHamburger = () => {
     setIsOpen(!isOpen);
   };
-
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,20 +39,17 @@ const Header = (props) => {
     };
     window.addEventListener('scroll', handleScroll);
 
-
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollTop]);
 
-
   const [isLightboxOpen, setLightboxOpen] = useState(false);
-
   const [isLogged, setIsLogged] = useState(false);
   const [userName, setUserName] = useState('Jisdom');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const history = useHistory();
 
   const handleLogin = () => {
     setLightboxOpen(true);
@@ -76,6 +72,9 @@ const Header = (props) => {
     }
   };
 
+  const handleGoGamefavorite = () => {
+    history.replace('/Gamefavorite')
+  };
 
   return (
     <div className={aniHeader}>
@@ -104,7 +103,7 @@ const Header = (props) => {
                   </span> 
                 
               </span>
-              <span><a className="user-favorite" href='/Gamefavorite'></a></span>
+              <span><li className="user-favorite" onClick={() => handleGoGamefavorite()} ></li></span>
             </div>
           )}
         </div>

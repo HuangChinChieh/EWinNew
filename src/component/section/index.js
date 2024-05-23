@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 
 import RoadMap from 'component/road_map';
-import SimilarGames from 'component/similar_games';
 import './index.scss';
-import { FavorsContext } from 'provider/GameLobbyProvider';
+import { FavorsContext,LobbyPersonalContext } from 'provider/GameLobbyProvider';
 
 
 const SectionLiFavor2 = (props) => {
     const { favors, updateFavors } = useContext(FavorsContext);
+
     const tableNumber = props.tableNumber;
 
     const handleClick = () => {
@@ -45,6 +44,7 @@ const SectionLiFavor2 = (props) => {
     return (<span onClick={() => handleClick()} className={`${favors.includes(props.tableNumber) ? 'remove-to-favorites' : 'add-to-favorites'}`} />);
 }
 
+
 const SectionLiFavor1 = (props) => {
     const { favors } = useContext(FavorsContext);
     return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`}/>);
@@ -65,7 +65,10 @@ const SectionLi = (props) => {
     >
         <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber}/>
         <div className={`games`}>
-            {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table" />)}
+            {props.tableInfo.Image 
+                ? <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
+                : <img src="http://bm.dev.mts.idv.tw/images/JINBEI1.png" alt="Default Table Image" />
+            }
             <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={0} />
         </div>
         <p className='game-title'>
@@ -131,6 +134,14 @@ const SectionLi = (props) => {
 const Section = (props) => {
     const lobbyClient = EWinGameLobbyClient.getInstance();
     const [tableList, setTableList] = useState([]);
+    const { favors } = useContext(FavorsContext);
+    const { lobbyPersonal } = useContext(LobbyPersonalContext);
+
+
+    useEffect(()=>{
+        refreshTableList()
+    },[lobbyPersonal])
+
     const refreshTableList = () => {
         lobbyClient.GetTableInfoList("", 0, (success, o) => {
             if (success) {
@@ -144,6 +155,26 @@ const Section = (props) => {
                             ShoeResult:data.ShoeResult                           
                         };
                     });
+
+                    // 根據是否開啟個人化來排序
+                    if(lobbyPersonal){
+                            array.sort((a, b) => {
+                                 //判斷是否為收藏
+                                const isAFavorited = favors.includes(a.TableNumber);
+                                const isBFavorited = favors.includes(b.TableNumber);
+        
+                                if (isAFavorited && !isBFavorited) {
+                                    //返回 -1：表示 a 應該排在 b 之前
+                                    return -1;
+                                } else if (!isAFavorited && isBFavorited) {
+                                    //返回 1：表示 b 應該排在 a 之前。
+                                    return 1;
+                                } else {
+                                    //返回 0：表示保持原始順序，即 a 和 b 的相對位置不變。
+                                    return 0;
+                                }
+                            });
+                    }
 
                     setTableList(array);
                 }

@@ -9,7 +9,7 @@ const RealNameContext = createContext();
 const BetLimitContext = createContext();
 const FavorsContext = createContext();
 const MusicIsPlayingContext = createContext();
-
+const LobbyPersonalContext=createContext();
 
 export {
   WalletContext,
@@ -17,6 +17,7 @@ export {
   BetLimitContext,
   FavorsContext,
   MusicIsPlayingContext,
+  LobbyPersonalContext
 };
 
 // Create a Context Provider to provide shared values
@@ -31,8 +32,11 @@ const GameLobbyProvider = (props) => {
   });
   const [favors, setFavors] = useState([]);
   const [realName, setRealName] = useState("");
-  const [betLimit, setBetLimit] = useState(null);
-  const [musicIsPlaying, setMusicIsPlaying] = useState(false);
+  const [betLimitCurrencyType, setBetLimitCurrencyType] = useState("");
+  const [musicIsPlaying,setMusicIsPlaying]=useState(false);
+  const [lobbyPersonal,setLobbyPersonal]=useState(false);
+
+  
 
   // Game Lobby related useEffect
   useEffect(() => {
@@ -145,17 +149,19 @@ const GameLobbyProvider = (props) => {
   
   return (
     <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
+      <LobbyPersonalContext.Provider value={{ lobbyPersonal,setLobbyPersonal }}></LobbyPersonalContext.Provider>
       <FavorsContext.Provider value={{ favors, updateFavors }}>
         <WalletContext.Provider value={{ wallet, updateWallet }}>
           <RealNameContext.Provider value={{ realName, updateRealName }}>
-            <BetLimitContext.Provider
-              value={{ betLimit, updateBetLimit }}
+            <BetLimitCurrencyContext.Provider
+              value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}
             >
               {props.children}
-            </BetLimitContext.Provider>
+            </BetLimitCurrencyContext.Provider>
           </RealNameContext.Provider>
         </WalletContext.Provider>
       </FavorsContext.Provider>
+      </LobbyPersonalContext.Provider> 
     </MusicIsPlayingContext.Provider>
 
   );

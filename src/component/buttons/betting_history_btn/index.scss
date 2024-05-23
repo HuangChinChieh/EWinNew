@@ -22,9 +22,6 @@
         border-bottom-left-radius: 12px;
         top: 6rem;
         box-shadow: 0 0 7px rgba(0, 0, 0, 0.7);
-        animation-name: anibettingout;
-        animation-duration: 1.5s;
-        animation-timing-function: ease;
         transition: all 1s ease;
         min-width: 600px;
         z-index: 8;
@@ -106,26 +103,7 @@
 
         }
 
-        @keyframes anisettingout {
-            0% {
-                right: 0rem;
-            }
 
-            100% {
-                right: -30rem;
-            }
-        }
-
-
-        @keyframes anisettingin {
-            0% {
-                right: -30rem;
-            }
-
-            100% {
-                right: 0rem;
-            }
-        }
 
         .title {
             width: 90%;
@@ -283,6 +261,17 @@
 
         }
 
+        .goback-summary{
+            position: absolute;
+            left: 0;
+            top: 15px;;
+
+            img{
+                width:22px;
+            }
+        }
+
+
         .month-container {
             display: flex;
             position: absolute;
@@ -333,26 +322,6 @@
 
         }
 
-        @keyframes anisettingout {
-            0% {
-                right: 0rem;
-            }
-
-            100% {
-                right: -30rem;
-            }
-        }
-
-
-        @keyframes anisettingin {
-            0% {
-                right: -30rem;
-            }
-
-            100% {
-                right: 0rem;
-            }
-        }
 
         .flex-box {
             display: flex;
@@ -388,26 +357,7 @@
 
         }
 
-        @keyframes anisettingout {
-            0% {
-                right: 0rem;
-            }
 
-            100% {
-                right: -30rem;
-            }
-        }
-
-
-        @keyframes anisettingin {
-            0% {
-                right: -30rem;
-            }
-
-            100% {
-                right: 0rem;
-            }
-        }
 
         .title {
             width: 90%;
@@ -434,8 +384,8 @@
         .dis {
             font-size: 0.9rem;
             margin-top: 10px;
-            margin: 0 auto;
-
+            margin: 5px 0px auto;
+            
 
             table {
                 border-spacing: 1px;
@@ -516,9 +466,14 @@
 
                     .header{
                         position: sticky;
+                        font-size: 14px;
                         top: 0;
                         background:rgba(29, 29, 38, 0.8);
                         
+                        th{
+                            padding: 0px 8px;
+
+                        }
                     }
 
 
@@ -610,16 +565,20 @@
                 background: #555;
             }
 
+            .active {
+                background-color: #46465bda;
+            }
+
             span {
                 font-size: 12px;
-                padding: 10px 30px;
+                padding: 15px 28px;
                 margin: 0px !important;
                 border: #b8b8b81e 0.5px solid;
                 transition: all 0.2s;
                 cursor: pointer;
 
-                &:hover,
-                &:active {
+                &:hover
+                 {
                     background-color: #46465bda;
                 }
             }
