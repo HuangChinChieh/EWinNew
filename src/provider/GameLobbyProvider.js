@@ -32,7 +32,7 @@ const GameLobbyProvider = (props) => {
   });
   const [favors, setFavors] = useState([]);
   const [realName, setRealName] = useState("");
-  const [betLimitCurrencyType, setBetLimitCurrencyType] = useState("");
+  const [betLimit, setBetLimit] = useState("");
   const [musicIsPlaying,setMusicIsPlaying]=useState(false);
   const [lobbyPersonal,setLobbyPersonal]=useState(false);
 
@@ -149,15 +149,15 @@ const GameLobbyProvider = (props) => {
   
   return (
     <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
-      <LobbyPersonalContext.Provider value={{ lobbyPersonal,setLobbyPersonal }}></LobbyPersonalContext.Provider>
+      <LobbyPersonalContext.Provider value={{ lobbyPersonal,setLobbyPersonal }}>
       <FavorsContext.Provider value={{ favors, updateFavors }}>
         <WalletContext.Provider value={{ wallet, updateWallet }}>
           <RealNameContext.Provider value={{ realName, updateRealName }}>
-            <BetLimitCurrencyContext.Provider
-              value={{ betLimitCurrencyType, updateBetLimitCurrencyType }}
+            <BetLimitContext.Provider
+              value={{ betLimit, updateBetLimit }}
             >
               {props.children}
-            </BetLimitCurrencyContext.Provider>
+            </BetLimitContext.Provider>
           </RealNameContext.Provider>
         </WalletContext.Provider>
       </FavorsContext.Provider>
