@@ -1,4 +1,4 @@
-﻿import React, { createContext, useState, useEffect } from 'react';
+﻿import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import './index.scss';
 
 const AlertContext = createContext();
@@ -10,7 +10,7 @@ const AlertButton = ({ children }) => {
     const [showAlert, setShowAlert] = useState(false);
     const [title, setTitle] = useState('');
     const [message, setMessage] = useState('');
-    const [cb, setCB] = useState(null);
+    const cbRef = useRef(null); 
 
     useEffect(() => {
         if (message) {
@@ -24,12 +24,12 @@ const AlertButton = ({ children }) => {
 
     const handleOK = () => {
         setShowAlert(false);
-        if (cb) {
-            cb();
-        }
+        if (cbRef.current) {
+          cbRef.current();
+      }
     };
 
-    const alertMsg = (title, message, cb) => {
+    const alertMsg = useCallback((title, message, cb) => {
         if (title) {
             setTitle(title);
         }
@@ -37,9 +37,9 @@ const AlertButton = ({ children }) => {
             setMessage(message);
         }
         if (cb) {
-            setCB(() => cb);
+          cbRef.current = cb;
         }
-    }
+    },[handleClose,handleOK]);
 
     return (
         <AlertContext.Provider value={{ alertMsg }}>
