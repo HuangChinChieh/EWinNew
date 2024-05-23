@@ -1,11 +1,14 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { createContext, useCallback, useState, useEffect } from "react";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
+
 
 // Create two different contexts
 const WalletContext = createContext();
 const RealNameContext = createContext();
 const BetLimitContext = createContext();
 const FavorsContext = createContext();
+const MusicIsPlayingContext = createContext();
 
 
 export {
@@ -13,12 +16,14 @@ export {
   RealNameContext,
   BetLimitContext,
   FavorsContext,
+  MusicIsPlayingContext,
 };
 
 // Create a Context Provider to provide shared values
 const GameLobbyProvider = (props) => {
   const lobbyClient = EWinGameLobbyClient.getInstance();
   const CurrencyType = props.CurrencyType;
+  const CT = props.CT;
   const [wallet, setWallet] = useState({
     CurrencyType: "",
     CurrencyName: "",
@@ -27,6 +32,7 @@ const GameLobbyProvider = (props) => {
   const [favors, setFavors] = useState([]);
   const [realName, setRealName] = useState("");
   const [betLimit, setBetLimit] = useState(null);
+  const [musicIsPlaying, setMusicIsPlaying] = useState(false);
 
   // Game Lobby related useEffect
   useEffect(() => {
@@ -88,7 +94,7 @@ const GameLobbyProvider = (props) => {
     });   
   }, []);
 
-  const updateInfo = (cb) => {
+  const updateInfo = useCallback((cb) => {
     lobbyClient.GetUserInfo((s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
@@ -96,30 +102,28 @@ const GameLobbyProvider = (props) => {
         }
       }
     });
-  };
+  }, [lobbyClient]);
 
-  const updateFavors = () => {
+  const updateFavors = useCallback(() => {
     lobbyClient.GetUserAccountProperty("EWinGame.Favor", (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
           let setObj = [];
 
           setObj = JSON.parse(o.PropertyValue);
-
-          console.log(setObj);
           setFavors(setObj);
         }
       }
     });
-  };
+  }, [lobbyClient]);
 
-  const updateRealName = () => {
+  const updateRealName = useCallback(() => {
     updateInfo((userInfo) => {
       setRealName(userInfo.RealName);
     });
-  };
+  }, [updateInfo]);
 
-  const updateWallet = () => {
+  const updateWallet = useCallback(() => {
     updateInfo((userInfo) => {
       let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
       let setObj = {
@@ -129,23 +133,31 @@ const GameLobbyProvider = (props) => {
       };
       setWallet(setObj);
     });
-  };
-  const updateBetLimit = (betLimit) => {
-    setBetLimit(betLimit);
-  };
+  }, [CT, CurrencyType, updateInfo]);
 
+  const updateBetLimit = useCallback((betLimit) => {
+    setBetLimit(betLimit);
+  }, [CT]);
+
+  const muteChange = useCallback(() => {
+    setMusicIsPlaying(!musicIsPlaying)
+  }, [CT, musicIsPlaying]);
+  
   return (
-    <FavorsContext.Provider value={{ favors, updateFavors }}>
-      <WalletContext.Provider value={{ wallet, updateWallet }}>
-        <RealNameContext.Provider value={{ realName, updateRealName }}>
-          <BetLimitContext.Provider
-            value={{ betLimit, updateBetLimit }}
-          >
-            {props.children}
-          </BetLimitContext.Provider>
-        </RealNameContext.Provider>
-      </WalletContext.Provider>
-    </FavorsContext.Provider>
+    <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
+      <FavorsContext.Provider value={{ favors, updateFavors }}>
+        <WalletContext.Provider value={{ wallet, updateWallet }}>
+          <RealNameContext.Provider value={{ realName, updateRealName }}>
+            <BetLimitContext.Provider
+              value={{ betLimit, updateBetLimit }}
+            >
+              {props.children}
+            </BetLimitContext.Provider>
+          </RealNameContext.Provider>
+        </WalletContext.Provider>
+      </FavorsContext.Provider>
+    </MusicIsPlayingContext.Provider>
+
   );
 };
 
