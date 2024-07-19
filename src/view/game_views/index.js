@@ -30,16 +30,41 @@ const GameView = (props) => {
     const [shoeResult, setShoeResult] = useState('');
     const countdownInfo = useRef({ lastQueryDate: null, tableTimeoutSecond: 60, remainingSecond: 0 });
     const [isCanBet, setIsCanBet] = useState(false);
-    const [orderData, dispatchOrderData] = useReducer(orderReducer, initialOrderData);
+    const [winAreas, setWinAreas] = useState(["Banker", "Tie"]);
+    const [orderData, setOrderData] = useState({
+        Tie: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        },
+        Banker: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: [{ styleIndex: 5, chipsValue: 1000, orderUnix: "1721252751" }]
+        },
+        Player: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        },
+        PlayerPair: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        },
+        BankerPair: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        }
+    });
 
 
-
-    // 閒 Player,和 Tie, 庄 Bank
-    const [bettingAction, setBettingAction] = useState('');
-
-
-
-    const [orderValue, setOrderValue] = useState([]);
 
     const { wallet, updateWallet } = useContext(WalletContext)
     const { AddSubscribe, RemoveSubscribe } = useContext(SubscribeContext)
@@ -354,7 +379,7 @@ const GameView = (props) => {
 
     const memoCountdownCircle = useMemo(() => (
         <div className="game-content">
-            <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
+
         </div>
     ), [isCanBet, getCountdownInfo]);
 
@@ -362,9 +387,8 @@ const GameView = (props) => {
         <div className="game-view-wrap">
             <div className='game-view-box'>
                 <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
-                {memoCountdownCircle}
+                <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
                 <GameChat />
-                <GameBettingAction action={bettingAction} />
                 <GameFooterArea />
                 <GameBettingArea isCanBet={isCanBet} />
                 <GameFooterBG />
