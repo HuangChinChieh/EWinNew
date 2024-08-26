@@ -1,11 +1,6 @@
-<<<<<<<< HEAD:src/utils/RoadMap.js
-/* eslint-disable eqeqeq */
 export class RoadMapAPI {
-========
-export class roadMapAPI {
     //不採取table方案，與舊版相比在整體路珠超過路單時，不重新渲染，透過transform移動x軸
     //因此在塞入前多塞入一層Div
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
     lang = 'C';
     rawRoadCfg = null;
     bigRoadCfg = null;
@@ -21,11 +16,6 @@ export class roadMapAPI {
     Road2 = [];  // 大眼仔資料
     Road3 = [];  // 小路資料
     Road4 = [];  // 曱甴路資料
-<<<<<<<< HEAD:src/utils/RoadMap.js
-    resultString = '';
-    lastResultData = null;
-========
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
     constructor(_lang) {
         //C=CH, E=EN   
@@ -64,25 +54,14 @@ export class roadMapAPI {
         this.queryRoadType = type;
         this.initResultData();
     }
-<<<<<<<< HEAD:src/utils/RoadMap.js
-
-    setRoadMapByString(resultString) {
-        let ret = this.lastResultData;
-
-========
 
     setRoadMapByString(resultString) {
         //1=莊(0001)/2=閒(0010)/3=和(0011)/5=莊+莊對(0101)/9=莊+閒對(1001)/D=莊+莊對+閒對(1101)/6=閒+莊對(0110)/A=閒+閒對(1010)/E=閒+莊對+閒對(1110)/7=和+莊對(0111)/B=和+閒對(1011)/F=和+莊對+閒對(1111)
         //設定當靴結果資料
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
         if (resultString != null) {
+            for (var i = 0; i < resultString.length; i++) {
+                var result = resultString.substr(i, 1);
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            for (let i = 0; i < resultString.length; i++) {
-                let result = resultString.substr(i, 1);
-
-========
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 if (this.rawResultData[i]) {
                     this.rawResultData[i].LastResult = result;
                 } else {
@@ -94,21 +73,6 @@ export class roadMapAPI {
                 }
             }
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            if (resultString.length < this.rawResultData.length) {
-                this.rawResultData.splice(resultString.length, this.rawResultData.length - resultString.length);
-            }
-
-            ret = this.initResultData();
-
-        }
-
-        return ret;
-    }
-
-    updateQRoadMap(qType, qResult, imgR, imgB) {
-        let qImgCfg = this.getDefaultQImg();
-========
             if (resultString.length < this.rawResultData.length)
                 this.rawResultData.splice(resultString.length, this.rawResultData.length - resultString.length);
         }
@@ -118,7 +82,6 @@ export class roadMapAPI {
 
     updateQRoadMap(qType, qResult, imgR, imgB) {
         var qImgCfg = this.getDefaultQImg();
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         switch (qType) {
             case 1:
@@ -139,11 +102,7 @@ export class roadMapAPI {
     }
 
     getResult(roundResult) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let retValue = {
-========
         var retValue = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             winner: "",
             winnerValue: 0,
             isBankerPair: false,
@@ -256,11 +215,7 @@ export class roadMapAPI {
 
     copyConfigValue(srcCfg, dstCfg) {
         if (srcCfg != null && dstCfg != null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            for (let key in dstCfg) {
-========
             for (var key in dstCfg) {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 if (srcCfg.hasOwnProperty(key) === true) {
                     dstCfg[key] = srcCfg[key];
                 }
@@ -291,19 +246,11 @@ export class roadMapAPI {
     }
 
     defaultRawConfig(_lang) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let cfg = {
-========
         var cfg = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             el: null,
             contentEl:null,
             colMax: 20,
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            rowMax: 6,
-========
             rowMax: 6,            
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             x: 0,
             y: 0,
             width: 48,
@@ -323,19 +270,11 @@ export class roadMapAPI {
     }
 
     defaultBigConfig() {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let cfg = {
-========
         var cfg = { 
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             el: null,
             contentEl:null,
             colMax: 20,
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            rowMax: 6,
-========
             rowMax: 6,            
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             x: 0,
             y: 0,
             width: 24,
@@ -354,15 +293,10 @@ export class roadMapAPI {
     }
 
     defaultSmallConfig(count) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let cfg = {
-========
         var cfg = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             el: null,
             contentEl:null,
             colMax: 20,
-            rowMax: 6,
             x: 0,
             y: 0,
             width: 12,
@@ -394,11 +328,7 @@ export class roadMapAPI {
     }
 
     getDefaultQImg() {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let qImg = {
-========
         var qImg = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             q1r: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAvCAYAAABzJ5OsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpjNmU1ZDQ4Yy05YzY4LWE0NDktOGUxMi0xZjFmMjY5NjBhY2IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjlCMzZENDRGMjk3MTFFNkFFMEM5N0EyOUYyQTk5NTYiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjlCMzZENDNGMjk3MTFFNkFFMEM5N0EyOUYyQTk5NTYiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphZDhlZTkyYS05YjQ5LWI5NDEtYWJlMy0wNTkxYTlmMjdiYTQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YzZlNWQ0OGMtOWM2OC1hNDQ5LThlMTItMWYxZjI2OTYwYWNiIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+o+NvgQAAA0pJREFUeNrUmr1v00AYh+1EMAAtEkikKg2IhYSJfHSBhaRS0zKT0P4DSNCWf6ZMCDqWRmmyQAdAtDABQoLC1JSVDylQkEqBBQXzO/sshTd3iWP70kukR5HP8d1zzuvT+b0zLSPwJwJSIMe/E2AMHAZHwS74BT6CbfAOPAVvwV/DCmBg+ScDFkEDWD5o8OszFo784Ec6DzZ8CsvYsOtVKH8a3A9ZmvLAbsejvOkx4krgLhiWnH8PHoLXPK5ZfP/k8c7i/gh/DtjzkAXT4Kykrh/gGuwqQWM+yuNSdqfugJLPZ6bEr5fVvWi37zNsDoJVScUroGAFe+BdWD33JO2s2h49yrM7XpZUeDMkaQdXxjAWJO1VZP+ArFJRqLzgw6OhRN7pQJq30x5CHuWvCi5+AmKhi1N5pwMx3h51mOkmPwZ2BXd8VIm4SN7pwIjgH2Be8U7yVUGP08rEZfJOB1ICl6pMPif48YJS8U7yTgfmBU45kTyNs5py8W7yTgdqbc8fkR8X9HBKE/kpgVu2VZ4OjUt9Efci73RgSTR0shMR8IWcvKKZfJH4Md+IOy9vPVHvm7hXeacDdeKZYW9BeTJXe2To+aFeeSafIYWvNJV/SY7HmXySFG5pKr9NjhNM/iQp/KypfIMcx5j8MVL4TVP5PXI8ZPKhvvVj9lWpl9SH+f9bK7vzf8hPDmh5302Tvj/vMfnvpPC4pmEzJJL/RApHNZWP0Qc4IhiCkprKJ+jQyeQ3SWFaU3nqtcmGmgtkzrA1IHObi26a4+sAziqjLGyaoEz+ksuahcw0OS6jC81BeJMqdHuTYqy3vanrIU8zGuteswfz+5w9mBM45WV5m5rgx6l9ytucF7jUOiWd4pKM2UifM2YnwHNBxuxUt1zljKa5ytmgWeKU4ixxSpIlvtVrfr4iyZfPKcrP35C0V+01P99tZWQZTIbUgUleX2grI72sSRV9SheDrkl5XQ2cBbc7rAayjMNj8AbUwQfwu2U18BCI8+k2S7UUwLkOq4HXYbcS5gr4GbCmeB12zW5H4Qr4hKIV8Il+LN+7ZO0hzDB2fArv8OuzfvcemFbw6WqU7/a4xL+TLbs+hnkMu7s+6nzXxzO+66MZZNfHPwEGAOxkqfRtuBOwAAAAAElFTkSuQmCC",
             q1b: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAvCAYAAABzJ5OsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpjNmU1ZDQ4Yy05YzY4LWE0NDktOGUxMi0xZjFmMjY5NjBhY2IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MkE4MUEwRTRGMjk4MTFFNkE0OTU5RUQzOUJDRURBQUEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MkE4MUEwRTNGMjk4MTFFNkE0OTU5RUQzOUJDRURBQUEiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphZDhlZTkyYS05YjQ5LWI5NDEtYWJlMy0wNTkxYTlmMjdiYTQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YzZlNWQ0OGMtOWM2OC1hNDQ5LThlMTItMWYxZjI2OTYwYWNiIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+W7fu0gAAA0hJREFUeNrUmjtvE0EQx8+xSAEkSCDhKGBQGmwq/EgDDXakPKixSb4AEiThy0CFICXEMnYDFIAIUAFC4lXFoeUhOQSkEKBB5vgPHgtn2D2f7+GsT/rL2r273d/cza73ZjZiWbbl8xiAUlCOfxPQYWgPtA/ahH5AH6A16C30GHoD/bb9dW97VQa6DNUh24PqfH/GRtGLvEDnoUcegXWi9vJhwh+FbgcMLXWH+nELH3Hp80XoOjSsOf8Ouge9ZL8m//7O/k5+v5fHAY2HLDQDHdO09Q06D7ayX5+Psl/qntQ1qOhxzBT5fl3b1G/Uq9sMQrc0DS9DUz4Ge7uonZuafqj/wW7h6YmXNA1eCgj6r/6B2Iua/sq6N6BrVOUqz3h6tMKAZwPS3M9/LuQW/pzi5odQLGhwCc8GxLg/yTDbCR4zgr2peOKjYYCr4NmAEcUbIK64E3xFYXE6LHAdPBuQUrBUdPA5xcWLYYI7wbMBCwqmnApe+lk1bPBO8GxAVY4/CT+usHDaEPhpBVu2HV5OjUu9AHcDzwYsqaZOOoH1uL0uTp41DL4g+Nab3M0/nvYTtV6Bu4VnA2qCM0P0ebFSu2+ZeUiuPMFnROULQ+Gfi/I4wSdF5aqh8GuinCD4Q6Lyk6HwdVGOEfx+UfnFUPgtUR6KNEfutiPSS6JuQh+RyPZvVnryv8Q1u0x87ACX389bBP9VVB4w1G2GVPAfReWoofAxOYAHFFNQ0lD4hJw6Cf61qEwbCi+5iNs+KdYMq32ytjnVCnN87sNVZZTcpgGVxCs5Y5jLzIhyCSY0+uFLaqrTlxRpRX6pGwIvIxorbqMHCzscPZhXMOV1cZuq4uLUDsVtTihYqk5Bp7gmYjbS44jZQeipImJ2pFOsctbQWOWc3yhxKuQocUoTJb7SbXy+rImXz4cUn7+o6a/SbXy+U2bkBjQZkAGT3F5gmZFuclIFj9AFvzkpt9nAOeiqQzaQIg4PoFcQFlDWe+hnWzZwNxTn5TaFWvCvaR13yAZeANtykBnwMehuyHlYan8szAz4REgZ8IlepO9bytIUBm14BN7g+7Ne9x649XmnI8q7PU7zb7Jt18cw+3Br10eNd3084V0fDT+7Pv4IMADJDan0sYhzvgAAAABJRU5ErkJggg==",
             q2r: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC8AAAAvCAYAAABzJ5OsAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTMyIDc5LjE1OTI4NCwgMjAxNi8wNC8xOS0xMzoxMzo0MCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpjNmU1ZDQ4Yy05YzY4LWE0NDktOGUxMi0xZjFmMjY5NjBhY2IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RUVBNkU3QjRGMjk3MTFFNjlEMDZBNzY1MUFBRjcyODkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RUVBNkU3QjNGMjk3MTFFNjlEMDZBNzY1MUFBRjcyODkiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUuNSAoV2luZG93cykiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDphZDhlZTkyYS05YjQ5LWI5NDEtYWJlMy0wNTkxYTlmMjdiYTQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6YzZlNWQ0OGMtOWM2OC1hNDQ5LThlMTItMWYxZjI2OTYwYWNiIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+596NUQAAAfRJREFUeNrUmjFPwkAUgEuJLia6SNQIGicYCWWX8h8EXPQnafAXsBGQRRkBHdjRTXZNbCQmSFw0tb6n75KmoSJHW+5d8tEu5X09LsfdexdztIWbDmSBAl3TQBJYAzaAMfAOPAJD4B64Ae6Ar4UiO/LkgCpgAY4EFj2fk3WQecgEepLCfvToe0OT3weuApb2ck1xApU/AsYhiwswTikI+TiNS2cJVCm+lPwq0FySuKBJHnPJ4xvXlywuaPj9An7yVUXE3UPoX/IlxcQF5VnyyQhnFZlZKOX21T1/uOfAuqZmQ68zv+VBQdEe91KYNmw6TOQ7Xvk8E3GB4R7zJxqvdoofMef3BZ6BBCP5F2BbbCQSzHoefbMob2o8m4nyOabyeZTPMJVPo/wuU/ktnG0+4GaFofwE5R2mPf8zx38ydZ+g/Ctn+Sem8pZOKTiObYjyA6byA5TvM5Xv41QZp1XlJrNV5Q72vA3UmfU6+tpiM1JjJl/zbsC7TLaA3WkbcC7ZA9Mv6dRSXLz1V8YspXjGbG9WrrKsqHyFa5b4Yt78fEMR8ct58/OsKyPsa1JuKhFXA4+DrsMeAO2QxdsUJ7QKeDGkCngxivK9wKApbCQpPKLnDVmHWAB5jzglaw/pmnGd+sBSzJvr1McDnfq4pVMf9iKBvwUYAEF0QQ8vAWsYAAAAAElFTkSuQmCC",
@@ -416,13 +346,8 @@ export class roadMapAPI {
 
 
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-    getNextRawRoad(xPos, yPos, data, yMax) {
-        let road;
-========
     getNextRawRoad(xPos, yPos, data) {
         var road;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         // data:
         // 1: 庄
@@ -437,12 +362,11 @@ export class roadMapAPI {
             isQueryRoad: true,
             dataImg: null,
             ppImg: null,
-            bpImg: null,
-            valueChange: true
+            bpImg: null
         };
 
         yPos++;
-        if (yPos >= yMax) {
+        if (yPos >= 6) {
             xPos++;
             yPos = 0;
         }
@@ -450,13 +374,8 @@ export class roadMapAPI {
         return road;
     }
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-    getNextRoad1(xPos, yPos, rTopCount, rEndCount, pointCount, lastDragon, lastData, data, yMax) {
-        let road;
-========
     getNextRoad1(xPos, yPos, rTopCount, rEndCount, pointCount, lastDragon, lastData, data) {
         var road;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         // data:
         // 1: 庄
@@ -481,8 +400,7 @@ export class roadMapAPI {
             ppImg: null,
             tieImg: null,
             dragonDiv: null,
-            divText: null,
-            valueChange: true
+            divText: null
         };
 
         road.data = data;
@@ -496,10 +414,10 @@ export class roadMapAPI {
 
                 rTopCount = 0;
                 if (rEndCount) {
-                    for (let k = 0; k < rEndCount.length; k++) {
+                    for (var k = 0; k < rEndCount.length; k++) {
                         if (rEndCount[k]) {
                             if (rEndCount[k] >= xPos) {
-                                rTopCount = yMax - k;
+                                rTopCount = 6 - k;
                                 break;
                             }
                         }
@@ -522,7 +440,7 @@ export class roadMapAPI {
                 road.colPosition = xPos;
                 road.Number = (pointCount - 1);
 
-                if ((yPos + 1) < (yMax - rTopCount)) {
+                if ((yPos + 1) < (6 - rTopCount)) {
                     // 仍維持原位置
                     yPos++;
 
@@ -532,7 +450,7 @@ export class roadMapAPI {
                     var rPosition = 0;
                     // 拉龍
                     if (yPos > 0) {
-                        rPosition = xPos + (pointCount - (yMax - rTopCount));
+                        rPosition = xPos + (pointCount - (6 - rTopCount));
                     } else {
                         rPosition = xPos;
                     }
@@ -565,19 +483,11 @@ export class roadMapAPI {
         return road;
     }
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-    getNextRoad2(matchCol, lastNoMatch, xPos, yPos, rTopCount, pointCount, rEndCount, lastColor, lastRoad1, data, yMax) {
-        let road; // 小路使用
-        let nextColor = -1; // -1=none, 0=red, 1=blue
-        let r1;
-        let r2;
-========
     getNextRoad2(matchCol, lastNoMatch, xPos, yPos, rTopCount, pointCount, rEndCount, lastColor, lastRoad1, data) {
         var road; // 小路使用
         var nextColor = -1; // -1=none, 0=red, 1=blue
         var r1;
         var r2;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         // data:
         // 1: 庄
@@ -612,7 +522,7 @@ export class roadMapAPI {
                     nextColor = 0;
                 } else {
                     // 同色, 比對是否隔壁排有路 (無路藍色, 有路紅色)
-                    let r;
+                    var r;
 
                     r = this.findRoad1(lastRoad1.colPosition - matchCol, (lastRoad1.Number + 1));
                     if (r) {
@@ -632,8 +542,7 @@ export class roadMapAPI {
                 y: 0,
                 color: nextColor,
                 isQueryRoad: true,
-                dataImg: null,
-                valueChange: true
+                dataImg: null
             };
 
             if (lastColor != -1) {
@@ -641,16 +550,16 @@ export class roadMapAPI {
                     // 原排
                     pointCount++;
 
-                    if ((yPos + 1) < (yMax - rTopCount)) {
+                    if ((yPos + 1) < (6 - rTopCount)) {
                         // 仍維持原位置
                         yPos++;
 
                         road.x = xPos;
                         road.y = yPos;
                     } else {
-                        let rPosition = 0;
+                        var rPosition = 0;
                         // 拉龍
-                        rPosition = xPos + (pointCount - (yMax - rTopCount));
+                        rPosition = xPos + (pointCount - (6 - rTopCount));
 
                         if (!rEndCount[yPos]) {
                             rEndCount[yPos] = 0;
@@ -669,10 +578,10 @@ export class roadMapAPI {
 
                     rTopCount = 0;
                     if (rEndCount) {
-                        for (let k = 0; k < rEndCount.length; k++) {
+                        for (var k = 0; k < rEndCount.length; k++) {
                             if (rEndCount[k]) {
                                 if (rEndCount[k] >= xPos) {
-                                    rTopCount = yMax - k;
+                                    rTopCount = 6 - k;
                                     break;
                                 }
                             }
@@ -698,11 +607,7 @@ export class roadMapAPI {
     }
 
     initResultData() {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let qRoadResult = {
-========
         var qRoadResult = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             counting: null,
             road1: null,
             road2: null,
@@ -710,21 +615,12 @@ export class roadMapAPI {
         };
 
         if (this.rawResultData != null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            let bc1;
-            let pc1;
-            let bc2;
-            let pc2;
-            let bc3;
-            let pc3;
-========
             var bc1;
             var pc1;
             var bc2;
             var pc2;
             var bc3;
             var pc3;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
             this.initRawRoad();  // 處理珠盤路
             this.initRoad1();  // 處理大路
@@ -857,24 +753,6 @@ export class roadMapAPI {
 
     // 大眼路(1)/小路(2)/曱甴路(3)
     initRoad2(roadType, roadArray) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let oRoadMap = null;
-        let road;
-        let startPosition = -1;
-        let roadPosLeft = 0;
-        let roadPosTop = 0;
-        let imgWidth = 0;
-        let imgHeight = 0;
-        let imgRed = "";
-        let imgBlue = "";
-        let enableDisplay = false;
-        let extraLine = false;
-        let matchCol = 0;
-        let arrayMax = -1;
-        let xMax = 0;
-        let yMax = 6;
-        let queryRoad = {
-========
         var oRoadMap = null;
         var road;
         var startPosition = -1;
@@ -890,7 +768,6 @@ export class roadMapAPI {
         var arrayMax = -1;
         var xMax = 0;
         var queryRoad = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             IfPlayer: null,
             IfBanker: null
         };
@@ -909,10 +786,6 @@ export class roadMapAPI {
                 imgBlue = this.road1Cfg.bImg;
                 matchCol = 1;
                 xMax = this.road1Cfg.colMax;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                yMax = this.road1Cfg.rowMax;
-========
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 imgWidth = this.road1Cfg.width;
                 imgHeight = this.road1Cfg.height;
                 extraLine = this.road1Cfg.extraLine;
@@ -930,10 +803,6 @@ export class roadMapAPI {
                 imgBlue = this.road2Cfg.bImg;
                 matchCol = 2;
                 xMax = this.road2Cfg.colMax;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                yMax = this.road2Cfg.rowMax;
-========
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 imgWidth = this.road2Cfg.width;
                 imgHeight = this.road2Cfg.height;
                 extraLine = this.road2Cfg.extraLine;
@@ -951,10 +820,6 @@ export class roadMapAPI {
                 imgBlue = this.road3Cfg.bImg;
                 matchCol = 3;
                 xMax = this.road3Cfg.colMax;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                yMax = this.road3Cfg.rowMax;
-========
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 imgWidth = this.road3Cfg.width;
                 imgHeight = this.road3Cfg.height;
                 extraLine = this.road3Cfg.extraLine;
@@ -966,34 +831,23 @@ export class roadMapAPI {
 
         startPosition = this.isRoad2Avail(matchCol);
         if (startPosition >= 0) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            let lastNoMatch = false;
-            let lastRoad1 = this.Road1[startPosition];
-            let xDisplay = 0;
-            let xPosMax = 0;
-========
             var lastNoMatch = false;
             var lastRoad1 = this.Road1[startPosition];
             var qR1, qR2, qColor; // 問路使用
             var xDisplay = 0;
             var xPosMax = 0;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             // 可以產生下三路結果
-            let lastColor = -1;
-            let j = -1;
-            let xPos = 0;
-            let yPos = 0;
-            let pointCount = 0; // 相同顏色計算數量
-            let rEndCount = []; // 拉龍拉到第幾個位置
-            let rTopCount = 0; // 目前位置有幾條龍
-            let nextColor = 0;  // 0=red, 1=blue
+            var lastColor = -1;
+            var j = -1;
+            var xPos = 0;
+            var yPos = 0;
+            var pointCount = 0; // 相同顏色計算數量
+            var rEndCount = []; // 拉龍拉到第幾個位置
+            var rTopCount = 0; // 目前位置有幾條龍
+            var nextColor = 0;  // 0=red, 1=blue
 
             if (this.Road1.length > (startPosition + 1)) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                for (let i = (startPosition + 1); i < this.Road1.length; i++) {
-========
                 for (var i = (startPosition + 1); i < this.Road1.length; i++) {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                     lastRoad1 = this.Road1[i];
 
                     if (lastRoad1.isQueryRoad == false) {
@@ -1054,16 +908,16 @@ export class roadMapAPI {
                                 // 原排
                                 pointCount++;
 
-                                if ((yPos + 1) < (yMax - rTopCount)) {
+                                if ((yPos + 1) < (6 - rTopCount)) {
                                     // 仍維持原位置
                                     yPos++;
 
                                     road.x = xPos;
                                     road.y = yPos;
                                 } else {
-                                    let rPosition = 0;
+                                    var rPosition = 0;
                                     // 拉龍
-                                    rPosition = xPos + (pointCount - (yMax - rTopCount));
+                                    rPosition = xPos + (pointCount - (6 - rTopCount));
 
                                     if (!rEndCount[yPos]) {
                                         rEndCount[yPos] = 0;
@@ -1081,10 +935,10 @@ export class roadMapAPI {
                                 xPos++;
 
                                 rTopCount = 0;
-                                for (let k = 0; k < rEndCount.length; k++) {
+                                for (var k = 0; k < rEndCount.length; k++) {
                                     if (rEndCount[k]) {
                                         if (rEndCount[k] >= xPos) {
-                                            rTopCount = yMax - k;
+                                            rTopCount = 6 - k;
                                             break;
                                         }
                                     }
@@ -1127,13 +981,8 @@ export class roadMapAPI {
                     lastRoad1 = null;
 
             if (lastRoad1 != null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                queryRoad.IfBanker = this.getNextRoad2(matchCol, lastNoMatch, xPos, yPos, rTopCount, pointCount, rEndCount, lastColor, lastRoad1, 1, yMax);
-                queryRoad.IfPlayer = this.getNextRoad2(matchCol, lastNoMatch, xPos, yPos, rTopCount, pointCount, rEndCount, lastColor, lastRoad1, 2, yMax);
-========
                 queryRoad.IfBanker = this.getNextRoad2(matchCol, lastNoMatch, xPos, yPos, rTopCount, pointCount, rEndCount, lastColor, lastRoad1, 1);
                 queryRoad.IfPlayer = this.getNextRoad2(matchCol, lastNoMatch, xPos, yPos, rTopCount, pointCount, rEndCount, lastColor, lastRoad1, 2);
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             }
 
             // 0=無問路/1=庄問路/2=閒問路
@@ -1204,9 +1053,9 @@ export class roadMapAPI {
             // 下三路呈現最多數量 x: 57
             // 處理下三路貼圖
             if ((enableDisplay == true) && (oRoadMap != null)) {
-                for (let i = 0; i < roadArray.length; i++) {
-                    let baseX;
-                    let baseY;
+                for (var i = 0; i < roadArray.length; i++) {
+                    var baseX;
+                    var baseY;
 
                     road = roadArray[i];
 
@@ -1221,24 +1070,26 @@ export class roadMapAPI {
 
                         // 處理主要資料
                         if (road.dataImg == null) {
-                            road.dataImg = this.generateVirtualDom("img");
-                            road.dataImg.virtualStyle.display = "none";
-                            road.dataImg.virtualStyle.position = "absolute";
-                            road.dataImg.virtualStyle.width = (imgWidth - 1) + "px";
-                            road.dataImg.virtualStyle.height = (imgHeight - 1) + "px";
+                            road.dataImg = document.createElement("img");
+                            road.dataImg.style.display = "none";
+                            road.dataImg.style.position = "absolute";
+                            road.dataImg.style.width = (imgWidth - 1) + "px";
+                            road.dataImg.style.height = (imgHeight - 1) + "px";
+
+                            oRoadMap.appendChild(road.dataImg);
                         }
 
                         switch (road.color) {
                             case 0:
                                 road.dataImg.src = imgRed;
-                                road.dataImg.virtualStyle.display = "inline";
+                                road.dataImg.style.display = "inline";
                                 break;
                             case 1:
                                 road.dataImg.src = imgBlue;
-                                road.dataImg.virtualStyle.display = "inline";
+                                road.dataImg.style.display = "inline";
                                 break;
                             default:
-                                road.dataImg.virtualStyle.display = "none";
+                                road.dataImg.style.display = "none";
                         }
 
                         if (road.isQueryRoad == true) {
@@ -1259,28 +1110,19 @@ export class roadMapAPI {
 
                         // 重新設定 position
                         if (road.dataImg != null) {
-                            road.dataImg.virtualStyle.left = baseX + "px";
-                            road.dataImg.virtualStyle.top = baseY + "px";
-
-                            road.dataImg.setCssText();
-                            if (!road.dataImg.isAppended) {
-                                oRoadMap.appendChild(road.dataImg);
-                            }
+                            road.dataImg.style.left = baseX + "px";
+                            road.dataImg.style.top = baseY + "px";
                         }
-
-
                     } else {
                         if (road.dataImg != null) {
-                            road.dataImg.virtualStyle.display = "none";
-                            road.dataImg.setCssText();
+                            road.dataImg.style.display = "none";
                         }
-
                     }
                 }
             }
         } else {
             if (roadArray) {
-                for (let i = 0; i < roadArray.length; i++) {
+                for (var i = 0; i < roadArray.length; i++) {
                     road = roadArray[i];
 
                     if (road) {
@@ -1311,19 +1153,11 @@ export class roadMapAPI {
     // 檢查大路是否足夠產生指定小路(少一顆, 用來產生預先問路, 呼叫端需檢查)
     // 傳回值: 指定小路起始位置
     isRoad2Avail(matchCol) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let startPosition = -1;
-
-        // 必須從大路, 第N列 (matchCol), 第二口, 開始計算  // 改回傳回第一口
-        // 尋找該列第一顆
-        for (let i = 0; i < this.Road1.length; i++) {
-========
         var startPosition = -1;
 
         // 必須從大路, 第N列 (matchCol), 第二口, 開始計算  // 改回傳回第一口
         // 尋找該列第一顆
         for (var i = 0; i < this.Road1.length; i++) {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             if (this.Road1[i].colPosition == matchCol && this.Road1[i].Number == 0) {
                 startPosition = i;
                 break;
@@ -1336,13 +1170,9 @@ export class roadMapAPI {
     // 尋找指定位置的大路
     findRoad1(colPosition, Number) {
         // 傳回值: Road1 object
-        let road = null;
+        var road = null;
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        for (let _i = 0; _i < this.Road1.length; _i++) {
-========
         for (var _i = 0; _i < this.Road1.length; _i++) {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             if (this.Road1[_i].colPosition > colPosition) {
                 break;
             } else if ((this.Road1[_i].colPosition == colPosition) && (this.Road1[_i].Number == Number)) {
@@ -1356,27 +1186,6 @@ export class roadMapAPI {
 
     // 大路
     initRoad1() {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let xPos = 0;
-        let yPos = 0;
-        let pointCount = 0; // 相同顏色計算數量
-        let rEndCount = []; // 拉龍拉到第幾個位置
-        let rTopCount = 0; // 目前位置有幾條龍
-        let oRoadMap;;
-        let j = -1;
-        let arrayMax = -1;
-        let lastData = -1;
-        let lastDragon = false;
-        let roadPosLeft = this.bigRoadCfg.x;
-        let roadPosTop = this.bigRoadCfg.y;
-        let tieCount = 0;
-        let allowNext = false;
-        let road;
-        let colFirstRoad;
-        let xPosMax = 0;
-        let xDisplay = 0;
-        let queryRoad = {
-========
         var xPos = 0;
         var yPos = 0;
         var pointCount = 0; // 相同顏色計算數量
@@ -1397,7 +1206,6 @@ export class roadMapAPI {
         var xPosMax = 0;
         var xDisplay = 0;
         var queryRoad = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             IfPlayer: null,
             IfBanker: null
         };
@@ -1493,7 +1301,7 @@ export class roadMapAPI {
                                 for (var k = 0; k < rEndCount.length; k++) {
                                     if (rEndCount[k]) {
                                         if (rEndCount[k] >= xPos) {
-                                            rTopCount = this.bigRoadCfg.rowMax - k;
+                                            rTopCount = 6 - k;
                                             break;
                                         }
                                     }
@@ -1519,7 +1327,7 @@ export class roadMapAPI {
 
                                 colFirstRoad.colCount = pointCount;
 
-                                if ((yPos + 1) < (this.bigRoadCfg.rowMax - rTopCount)) {
+                                if ((yPos + 1) < (6 - rTopCount)) {
                                     // 仍維持原位置
                                     yPos++;
 
@@ -1529,7 +1337,7 @@ export class roadMapAPI {
                                     var rPosition = 0;
                                     // 拉龍
                                     if (yPos > 0) {
-                                        rPosition = xPos + (pointCount - (this.bigRoadCfg.rowMax - rTopCount));
+                                        rPosition = xPos + (pointCount - (6 - rTopCount));
                                     } else {
                                         rPosition = xPos;
                                     }
@@ -1567,7 +1375,8 @@ export class roadMapAPI {
 
                         lastData = road.data;
 
-                        // 設定遇到第一顆閒, 避免一開始開和                     
+                        // 設定遇到第一顆閒, 避免一開始開和
+                        started = true;
                     } else {
                         // 尚未進入下一顆
                         if (road) {
@@ -1621,13 +1430,8 @@ export class roadMapAPI {
         // 產生問路
 
         // 庄
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        queryRoad.IfBanker = this.getNextRoad1(xPos, yPos, rTopCount, rEndCount, pointCount, lastDragon, lastData, 1, this.bigRoadCfg.rowMax)
-        queryRoad.IfPlayer = this.getNextRoad1(xPos, yPos, rTopCount, rEndCount, pointCount, lastDragon, lastData, 2, this.bigRoadCfg.rowMax)
-========
         queryRoad.IfBanker = this.getNextRoad1(xPos, yPos, rTopCount, rEndCount, pointCount, lastDragon, lastData, 1)
         queryRoad.IfPlayer = this.getNextRoad1(xPos, yPos, rTopCount, rEndCount, pointCount, lastDragon, lastData, 2)
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         // 0=無問路/1=庄問路/2=閒問路
         if (this.queryRoadType == 1) {
@@ -1754,19 +1558,11 @@ export class roadMapAPI {
 
                     // 處理主要資料
                     if (road.dataImg == null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                        road.dataImg = this.generateVirtualDom("img");
-                        road.dataImg.virtualStyle.display = "none";
-                        road.dataImg.virtualStyle.position = "absolute";
-                        road.dataImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.dataImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
-========
                         road.dataImg = document.createElement("img");
                         road.dataImg.style.display = "none";
                         road.dataImg.style.position = "absolute";
                         road.dataImg.style.width = (this.bigRoadCfg.width - 1) + "px";
                         road.dataImg.style.height = (this.bigRoadCfg.height - 1) + "px";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                         road.dataImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1777,20 +1573,11 @@ export class roadMapAPI {
                                 road.dataImg.onmouseout = function () { raiseEvent(this, "mouseout"); };
                             }
                         }
+
+                        oRoadMap.appendChild(road.dataImg);
                     }
 
                     if (road.divText == null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                        road.divText = this.generateVirtualDom("div");
-                        road.divText.virtualStyle.display = "none";
-                        road.divText.virtualStyle.position = "absolute";
-                        road.divText.virtualStyle.color = "#008000";
-                        road.divText.virtualStyle.fontSize = "9px";
-                        road.divText.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.divText.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
-                        road.divText.virtualStyle.textAlign = "center";
-                        road.divText.virtualStyle.lineHeight = (this.bigRoadCfg.height - 1) + "px";
-========
                         road.divText = document.createElement("div");
                         road.divText.style.display = "none";
                         road.divText.style.position = "absolute";
@@ -1800,7 +1587,6 @@ export class roadMapAPI {
                         road.divText.style.height = (this.bigRoadCfg.height - 1) + "px";
                         road.divText.style.textAlign = "center";
                         road.divText.style.lineHeight = (this.bigRoadCfg.height - 1) + "px";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                         road.divText.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1811,22 +1597,16 @@ export class roadMapAPI {
                                 road.divText.onmouseout = function () { raiseEvent(this, "mouseout"); };
                             }
                         }
+
+                        oRoadMap.appendChild(road.divText);
                     }
 
                     if (road.tieImg == null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                        road.tieImg = this.generateVirtualDom("img");
-                        road.tieImg.virtualStyle.display = "none";
-                        road.tieImg.virtualStyle.position = "absolute";
-                        road.tieImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.tieImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
-========
                         road.tieImg = document.createElement("img");
                         road.tieImg.style.display = "none";
                         road.tieImg.style.position = "absolute";
                         road.tieImg.style.width = (this.bigRoadCfg.width - 1) + "px";
                         road.tieImg.style.height = (this.bigRoadCfg.height - 1) + "px";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                         road.tieImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1837,14 +1617,16 @@ export class roadMapAPI {
                                 road.tieImg.onmouseout = function () { raiseEvent(this, "mouseout"); };
                             }
                         }
+
+                        oRoadMap.appendChild(road.tieImg);
                     }
 
                     if (road.isDragon) {
                         // 拉龍
                         if (road.dragonDiv == null) {
-                            road.dragonDiv = this.generateVirtualDom("div");
-                            road.dragonDiv.virtualStyle.display = "none";
-                            road.dragonDiv.virtualStyle.position = "absolute";
+                            road.dragonDiv = document.createElement("div");
+                            road.dragonDiv.style.display = "none";
+                            road.dragonDiv.style.position = "absolute";
                             road.dragonDiv.setAttribute("RoundNumber", road.RoundNumber);
 
                             if (road.isQueryRoad == false) {
@@ -1855,32 +1637,27 @@ export class roadMapAPI {
                                     road.dragonDiv.onmouseout = function () { raiseEvent(this, "mouseout"); };
                                 }
                             }
+
+
+                            oRoadMap.appendChild(road.dragonDiv);
                         }
                     } else {
                         if (road.dragonDiv != null) {
-                            road.dragonDiv.virtualStyle.display = "none";
+                            road.dragonDiv.style.display = "none";
                         }
                     }
 
                     switch (road.data) {
                         case 1:
                             road.dataImg.src = this.bigRoadCfg.bImg;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                            road.dataImg.virtualStyle.display = "inline";
-                            break;
-                        case 2:
-                            road.dataImg.src = this.bigRoadCfg.pImg;
-                            road.dataImg.virtualStyle.display = "inline";
-========
                             road.dataImg.style.display = "inline";
                             break;
                         case 2:
                             road.dataImg.src = this.bigRoadCfg.pImg;
                             road.dataImg.style.display = "inline";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                             break;
                         default:
-                            road.dataImg.virtualStyle.display = "none";
+                            road.dataImg.style.display = "none";
                     }
 
                     // 處理 "和" 數量
@@ -1888,43 +1665,31 @@ export class roadMapAPI {
                         if (this.bigRoadCfg.showTieCount == true) {
                             if (road.tieCount > 1) {
                                 road.divText.innerHTML = road.tieCount;
-                                road.divText.virtualStyle.display = "inline";
+                                road.divText.style.display = "inline";
                             } else {
                                 road.divText.innerHTML = "";
-                                road.divText.virtualStyle.display = "none";
+                                road.divText.style.display = "none";
                             }
                         } else {
                             road.divText.innerHTML = "";
-                            road.divText.virtualStyle.display = "none";
+                            road.divText.style.display = "none";
                         }
 
                         road.tieImg.src = this.bigRoadCfg.tImg;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                        road.tieImg.virtualStyle.display = "inline";
-========
                         road.tieImg.style.display = "inline";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                     } else {
                         road.divText.innerHTML = "";
-                        road.divText.virtualStyle.display = "none";
-                        road.tieImg.virtualStyle.display = "none";
+                        road.divText.style.display = "none";
+                        road.tieImg.style.display = "none";
                     }
 
                     // 處理對子
                     if (road.ppImg == null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                        road.ppImg = this.generateVirtualDom("img");
-                        road.ppImg.virtualStyle.display = "none";
-                        road.ppImg.virtualStyle.position = "absolute";
-                        road.ppImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.ppImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
-========
                         road.ppImg = document.createElement("img");
                         road.ppImg.style.display = "none";
                         road.ppImg.style.position = "absolute";
                         road.ppImg.style.width = (this.bigRoadCfg.width - 1) + "px";
                         road.ppImg.style.height = (this.bigRoadCfg.height - 1) + "px";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                         road.ppImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1935,22 +1700,16 @@ export class roadMapAPI {
                                 road.ppImg.onmouseout = function () { raiseEvent(this, "mouseout"); };
                             }
                         }
+
+                        oRoadMap.appendChild(road.ppImg);
                     }
 
                     if (road.bpImg == null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                        road.bpImg = this.generateVirtualDom("img");
-                        road.bpImg.virtualStyle.display = "none";
-                        road.bpImg.virtualStyle.position = "absolute";
-                        road.bpImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.bpImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
-========
                         road.bpImg = document.createElement("img");
                         road.bpImg.style.display = "none";
                         road.bpImg.style.position = "absolute";
                         road.bpImg.style.width = (this.bigRoadCfg.width - 1) + "px";
                         road.bpImg.style.height = (this.bigRoadCfg.height - 1) + "px";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                         road.bpImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1961,47 +1720,33 @@ export class roadMapAPI {
                                 road.bpImg.onmouseout = function () { raiseEvent(this, "mouseout"); };
                             }
                         }
+
+                        oRoadMap.appendChild(road.bpImg);
                     }
 
                     switch (road.pair) {
                         case 1:
                             // 庄對
                             road.bpImg.src = this.bigRoadCfg.bpImg;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                            road.bpImg.virtualStyle.display = "inline";
-                            road.ppImg.virtualStyle.display = "none";
-========
                             road.bpImg.style.display = "inline";
                             road.ppImg.style.display = "none";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                             break;
                         case 2:
                             // 閒對
                             road.ppImg.src = this.bigRoadCfg.ppImg;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                            road.ppImg.virtualStyle.display = "inline";
-                            road.bpImg.virtualStyle.display = "none";
-========
                             road.ppImg.style.display = "inline";
                             road.bpImg.style.display = "none";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                             break;
                         case 3:
                             // 庄閒對
                             road.bpImg.src = this.bigRoadCfg.bpImg;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                            road.bpImg.virtualStyle.display = "inline";
-                            road.ppImg.src = this.bigRoadCfg.ppImg;
-                            road.ppImg.virtualStyle.display = "inline";
-========
                             road.bpImg.style.display = "inline";
                             road.ppImg.src = this.bigRoadCfg.ppImg;
                             road.ppImg.style.display = "inline";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                             break;
                         default:
-                            road.bpImg.virtualStyle.display = "none";
-                            road.ppImg.virtualStyle.display = "none";
+                            road.bpImg.style.display = "none";
+                            road.ppImg.style.display = "none";
                     }
 
                     if (road.isQueryRoad == true || road.RoundNumber == this.blinkRoundNumber) {
@@ -2023,30 +1768,18 @@ export class roadMapAPI {
 
                     // 重新設定 position
                     if (road.divText != null) {
-                        road.divText.virtualStyle.left = baseX + "px";
-                        road.divText.virtualStyle.top = baseY + "px";
-                        road.divText.setCssText();
-                        if (!road.divText.isAppended) {
-                            oRoadMap.appendChild(road.divText);
-                        }
+                        road.divText.style.left = baseX + "px";
+                        road.divText.style.top = baseY + "px";
                     }
 
                     if (road.dataImg != null) {
-                        road.dataImg.virtualStyle.left = baseX + "px";
-                        road.dataImg.virtualStyle.top = baseY + "px";
-                        road.dataImg.setCssText();
-                        if (!road.dataImg.isAppended) {
-                            oRoadMap.appendChild(road.dataImg);
-                        }
+                        road.dataImg.style.left = baseX + "px";
+                        road.dataImg.style.top = baseY + "px";
                     }
 
                     if (road.tieImg != null) {
-                        road.tieImg.virtualStyle.left = baseX + "px";
-                        road.tieImg.virtualStyle.top = baseY + "px";
-                        road.tieImg.setCssText();
-                        if (!road.tieImg.isAppended) {
-                            oRoadMap.appendChild(road.tieImg);
-                        }
+                        road.tieImg.style.left = baseX + "px";
+                        road.tieImg.style.top = baseY + "px";
                     }
 
                     if (road.dragonDiv != null) {
@@ -2070,18 +1803,6 @@ export class roadMapAPI {
                                 }
 
                                 if (road.isDragonStart == true) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                                    var extenWidth = parseInt(this.bigRoadCfg.width / 2);
-
-                                    if (road.Number == (colFirstRoad.colCount - 1)) {
-                                        // dragon start = dragon end
-                                        road.dragonDiv.style.left = parseInt(baseX - extenWidth) + "px";
-                                        road.dragonDiv.style.width = this.bigRoadCfg.width + "px";
-                                    } else {
-                                        // dragon start
-                                        road.dragonDiv.style.left = parseInt(baseX - extenWidth) + "px";
-                                        road.dragonDiv.style.width = (this.bigRoadCfg.width + extenWidth) + "px";
-========
                                     var extendWidth = parseInt(this.bigRoadCfg.width / 2);
 
                                     if (road.Number == (colFirstRoad.colCount - 1)) {
@@ -2092,7 +1813,6 @@ export class roadMapAPI {
                                         // dragon start
                                         road.dragonDiv.style.left = parseInt(baseX - extendWidth) + "px";
                                         road.dragonDiv.style.width = (this.bigRoadCfg.width + extendWidth) + "px";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                                     }
                                 } else if (road.Number == (colFirstRoad.colCount - 1)) {
                                     // dragon end
@@ -2134,60 +1854,40 @@ export class roadMapAPI {
                                 }
                             }
                         }
-
-                        road.dragonDiv.setCssText();
-                        if (!road.dragonDiv.isAppended) {
-                            oRoadMap.appendChild(road.dragonDiv);
-                        }
                     }
 
                     if (road.ppImg != null) {
-                        road.ppImg.virtualStyle.left = baseX + "px";
-                        road.ppImg.virtualStyle.top = baseY + "px";
-                        road.ppImg.setCssText();
-                        if (!road.ppImg.isAppended) {
-                            oRoadMap.appendChild(road.ppImg);
-                        }
+                        road.ppImg.style.left = baseX + "px";
+                        road.ppImg.style.top = baseY + "px";
                     }
 
                     if (road.bpImg != null) {
-                        road.bpImg.virtualStyle.left = baseX + "px";
-                        road.bpImg.virtualStyle.top = baseY + "px";
-                        road.bpImg.setCssText();
-                        if (!road.bpImg.isAppended) {
-                            oRoadMap.appendChild(road.bpImg);
-                        }
+                        road.bpImg.style.left = baseX + "px";
+                        road.bpImg.style.top = baseY + "px";
                     }
                 } else {
                     if (road.divText != null) {
-                        road.divText.virtualStyle.display = "none";
-                        road.dataImg.setCssText();
+                        road.divText.style.display = "none";
                     }
 
                     if (road.dataImg != null) {
-                        road.dataImg.virtualStyle.display = "none";
-                        road.dataImg.setCssText();
+                        road.dataImg.style.display = "none";
                     }
 
                     if (road.dragonDiv != null) {
-                        road.dragonDiv.virtualStyle.display = "none";
-                        road.dragonDiv.setCssText();
+                        road.dragonDiv.style.display = "none";
                     }
 
                     if (road.ppImg != null) {
-                        road.ppImg.virtualStyle.display = "none";
-                        road.ppImg.virtualStyle.display = "none";
-                        road.tieImg.setCssText();
+                        road.ppImg.style.display = "none";
                     }
 
                     if (road.bpImg != null) {
-                        road.bpImg.virtualStyle.display = "none";
-                        road.bpImg.setCssText();
+                        road.bpImg.style.display = "none";
                     }
 
                     if (road.tieImg != null) {
-                        road.tieImg.virtualStyle.display = "none";
-                        road.tieImg.setCssText();
+                        road.tieImg.style.display = "none";
                     }
                 }
             }
@@ -2196,17 +1896,6 @@ export class roadMapAPI {
 
     // 珠盤路
     initRawRoad() {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let xPos = 0;
-        let yPos = 0;
-        let oRoadMap = null;
-        let roadPosLeft = this.rawRoadCfg.x;
-        let roadPosTop = this.rawRoadCfg.y;
-        let xPosMax = 0;
-        let xDisplay = 0;
-        let arrayMax = -1;
-        let queryRoad = {
-========
         var xPos = 0;
         var yPos = 0;
         var oRoadMap = null;
@@ -2216,7 +1905,6 @@ export class roadMapAPI {
         var xDisplay = 0;
         var arrayMax = -1;
         var queryRoad = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             IfPlayer: null,
             IfBanker: null
         };
@@ -2233,29 +1921,17 @@ export class roadMapAPI {
         }
 
         if (this.rawRoadCfg.el != null) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            oRoadMap = this.rawRoadCfg.el;
-========
             //做調整，加入可以父層DiV
             if (this.rawRoadCfg.contentEl){
 this.generateScrollDiv(this.rawRoadCfg);
             }
             oRoadMap = this.rawRoadCfg.contentEl;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
         } //else {
         //  oRoadMap = document.body;
         //}
 
         // rawResultData[x].LastResult:
         // 1=莊(0001)/2=閒(0010)/3=和(0011)/5=莊+莊對(0101)/9=莊+閒對(1001)/D=莊+莊對+閒對(1101)/6=閒+莊對(0110)/A=閒+閒對(1010)/E=閒+莊對+閒對(1110)/7=和+莊對(0111)/B=和+閒對(1011)/F=和+莊對+閒對(1111)
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        for (let i = 0; i < this.rawResultData.length; i++) {
-            let rData = 0;  //1=庄/2=閒/3=和
-            let rPair = 0;  //0=無對/1=庄對/2=閒對/3=庄閒對          
-
-            if (this.rawResultData[i].Result != this.rawResultData[i].LastResult) {
-                this.rawResultData[i].Result = this.rawResultData[i].LastResult
-========
         for (var i = 0; i < this.rawResultData.length; i++) {
             var rData = 0;  //1=庄/2=閒/3=和
             var rPair = 0;  //0=無對/1=庄對/2=閒對/3=庄閒對
@@ -2264,7 +1940,6 @@ this.generateScrollDiv(this.rawRoadCfg);
             if (this.rawResultData[i].Result != this.rawResultData[i].LastResult) {
                 this.rawResultData[i].Result = this.rawResultData[i].LastResult
                 valueChange = true;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             }
 
             switch (this.rawResultData[i].LastResult) {
@@ -2334,20 +2009,11 @@ this.generateScrollDiv(this.rawRoadCfg);
 
             if (this.rawRoad[i]) {
                 // 指定珠盤路位置存在
-<<<<<<<< HEAD:src/utils/RoadMap.js
-
-                //該路珠是否需要做畫面調整            
-========
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 this.rawRoad[i].x = xPos;
                 this.rawRoad[i].y = yPos;
                 this.rawRoad[i].data = rData;
                 this.rawRoad[i].pair = rPair;
                 this.rawRoad[i].isQueryRoad = false;
-<<<<<<<< HEAD:src/utils/RoadMap.js
-
-========
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             } else {
                 this.rawRoad[i] = {
                     x: xPos,
@@ -2358,8 +2024,10 @@ this.generateScrollDiv(this.rawRoadCfg);
                     isQueryRoad: false,
                     dataImg: null,
                     ppImg: null,
-                    bpImg: null,
+                    bpImg: null
                 };
+
+                valueChange = true;
             }
 
             if (xPos > xPosMax) {
@@ -2368,7 +2036,7 @@ this.generateScrollDiv(this.rawRoadCfg);
 
             //調整y與x的位置
             yPos++;
-            if (yPos >= this.rawRoadCfg.rowMax) {
+            if (yPos >= 6) {
                 xPos++;
                 yPos = 0;
             }
@@ -2377,13 +2045,8 @@ this.generateScrollDiv(this.rawRoadCfg);
         arrayMax = this.rawResultData.length - 1;
 
         // 產生問路資料
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        queryRoad.IfBanker = this.getNextRawRoad(xPos, yPos, 1, this.rawRoadCfg.rowMax)
-        queryRoad.IfPlayer = this.getNextRawRoad(xPos, yPos, 2, this.rawRoadCfg.rowMax)
-========
         queryRoad.IfBanker = this.getNextRawRoad(xPos, yPos, 1)
         queryRoad.IfPlayer = this.getNextRawRoad(xPos, yPos, 2)
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         // 0=無問路/1=庄問路/2=閒問路
         if (this.queryRoadType == 1) {
@@ -2418,19 +2081,11 @@ this.generateScrollDiv(this.rawRoadCfg);
 
         // 問路結束
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        // 移除過多的 road (可能經過修改)
-        if ((this.rawRoad.length - 1) > arrayMax) {
-            // 移除綁在畫面上的物件
-            for (let i = arrayMax + 1; i < this.rawRoad.length; i++) {
-                let road = this.rawRoad[i];
-========
         // 移除過多的 road (可能經過修改) => 開牌結果總局數變少
         if ((this.rawRoad.length - 1) > arrayMax) {
             // 移除綁在畫面上的物件
             for (var i = arrayMax + 1; i < this.rawRoad.length; i++) {
                 this.road = this.rawRoad[i];
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
                 if (this.road.dataImg != null) {
                     if (this.road.dataImg.hasAttribute("BlinkId") == true) {
@@ -2467,197 +2122,19 @@ this.generateScrollDiv(this.rawRoadCfg);
 
         if ((xPosMax - (this.rawRoadCfg.colMax - 1)) >= 0) {
             xDisplay = (xPosMax - (this.rawRoadCfg.colMax - 1));
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        } else {
-            xDisplay = 0;
-        }
-========
             this.setScrollDiv(this.rawRoadCfg, xDisplay);
         } 
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         // 珠盤路最大 x:12
         // 處理珠盤路貼圖
         if ((this.rawRoadCfg.enableDisplay == true) && (oRoadMap != null)) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-            for (let i = 0; i < this.rawRoad.length; i++) {
-========
             for (var i = 0; i < this.rawRoad.length; i++) {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 let baseX;
                 let baseY;
 
                 let road = this.rawRoad[i];
 
                 if (road.x >= xDisplay) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-                    baseX = roadPosLeft + ((road.x - xDisplay) * this.rawRoadCfg.width);
-                    baseY = roadPosTop + (road.y * this.rawRoadCfg.height);
-
-                    // 處理主要資料
-                    if (road.dataImg == null) {
-                        road.dataImg = this.generateVirtualDom("img");
-                        road.dataImg.virtualStyle.display = "none";
-                        road.dataImg.virtualStyle.position = "absolute";
-                        road.dataImg.virtualStyle.width = (this.rawRoadCfg.width - 1) + "px";
-                        road.dataImg.virtualStyle.height = (this.rawRoadCfg.height - 1) + "px";
-                        road.dataImg.setAttribute("RoundNumber", road.RoundNumber);
-
-                        if (road.isQueryRoad == false) {
-                            // 珠盤路圖像點下去處理函式
-                            if (this.rawRoadCfg.eventHandler != null) {
-                                road.dataImg.onclick = function () { raiseEvent(this, "click"); }
-                                road.dataImg.onmouseover = function () { raiseEvent(this, "mouseover"); }
-                                road.dataImg.onmouseout = function () { raiseEvent(this, "mouseout"); }
-                            }
-                        }
-
-
-                    }
-
-                    switch (this.rawRoad[i].data) {
-                        case 1:
-                            road.dataImg.src = this.rawRoadCfg.bImg;
-                            road.dataImg.virtualStyle.display = "inline";
-                            break;
-                        case 2:
-                            road.dataImg.src = this.rawRoadCfg.pImg;
-                            road.dataImg.virtualStyle.display = "inline";
-                            break;
-                        case 3:
-                            road.dataImg.src = this.rawRoadCfg.tImg;
-                            road.dataImg.virtualStyle.display = "inline";
-                            break;
-                        default:
-                            road.dataImg.virtualStyle.display = "none";
-                    }
-
-                    // 處理對子
-                    if (road.ppImg == null) {
-                        road.ppImg = this.generateVirtualDom("img");
-                        road.ppImg.virtualStyle.display = "none";
-                        road.ppImg.virtualStyle.position = "absolute";
-                        road.ppImg.virtualStyle.width = (this.rawRoadCfg.width - 1) + "px";
-                        road.ppImg.virtualStyle.height = (this.rawRoadCfg.height - 1) + "px";
-                        road.ppImg.setAttribute("RoundNumber", road.RoundNumber);
-
-                        if (road.isQueryRoad == false) {
-                            // 珠盤路圖像點下去處理函式
-                            if (this.rawRoadCfg.eventHandler != null) {
-                                road.ppImg.onclick = function () { raiseEvent(this, "click"); }
-                                road.ppImg.onmouseover = function () { raiseEvent(this, "mouseover"); }
-                                road.ppImg.onmouseout = function () { raiseEvent(this, "mouseout"); }
-                            }
-                        }
-
-
-                    }
-
-                    if (road.bpImg == null) {
-                        road.bpImg = this.generateVirtualDom("img");
-
-                        road.bpImg.virtualStyle.display = "none";
-                        road.bpImg.virtualStyle.position = "absolute";
-                        road.bpImg.virtualStyle.width = (this.rawRoadCfg.width - 1) + "px";
-                        road.bpImg.virtualStyle.height = (this.rawRoadCfg.height - 1) + "px";
-                        road.bpImg.setAttribute("RoundNumber", road.RoundNumber);
-
-                        if (road.isQueryRoad == false) {
-                            // 珠盤路圖像點下去處理函式
-                            if (this.rawRoadCfg.eventHandler != null) {
-                                road.bpImg.onclick = function () { raiseEvent(this, "click"); }
-                                road.bpImg.onmouseover = function () { raiseEvent(this, "mouseover"); }
-                                road.bpImg.onmouseout = function () { raiseEvent(this, "mouseout"); }
-                            }
-                        }
-
-
-                    }
-
-
-                    switch (road.pair) {
-                        case 1:
-                            // 庄對
-                            road.bpImg.src = this.rawRoadCfg.bpImg;
-                            road.bpImg.virtualStyle.display = "inline";
-                            road.ppImg.virtualStyle.display = "none";
-                            break;
-                        case 2:
-                            // 閒對
-                            road.ppImg.src = this.rawRoadCfg.ppImg;
-                            road.ppImg.virtualStyle.display = "inline";
-                            road.bpImg.virtualStyle.display = "none";
-                            break;
-                        case 3:
-                            // 庄閒對
-                            road.bpImg.src = this.rawRoadCfg.bpImg;
-                            road.bpImg.virtualStyle.display = "inline";
-                            road.ppImg.src = this.rawRoadCfg.ppImg;
-                            road.ppImg.virtualStyle.display = "inline";
-                            break;
-                        default:
-                            road.bpImg.virtualStyle.display = "none";
-                            road.ppImg.virtualStyle.display = "none";
-                    }
-
-                    if (road.isQueryRoad == true || road.RoundNumber == this.blinkRoundNumber) {
-                        if (road.dataImg.hasAttribute("BlinkId") == false) {
-                            let blinkId;
-
-                            blinkId = this.setBlink(road.dataImg);
-                            road.dataImg.setAttribute("BlinkId", blinkId);
-                        }
-                    } else {
-                        if (road.dataImg.hasAttribute("BlinkId") == true) {
-                            clearInterval(parseInt(road.dataImg.getAttribute("BlinkId")));
-                            road.dataImg.removeAttribute("BlinkId");
-
-                            this.clearBlink(road.dataImg);
-                        }
-                    }
-
-                    if (road.dataImg != null) {
-                        road.dataImg.virtualStyle.left = baseX + "px";
-                        road.dataImg.virtualStyle.top = baseY + "px";
-                        road.dataImg.setCssText();
-                        if (!road.dataImg.isAppended) {
-                            oRoadMap.appendChild(road.dataImg);
-                        }
-                    }
-
-                    if (road.ppImg != null) {
-                        road.ppImg.virtualStyle.left = baseX + "px";
-                        road.ppImg.virtualStyle.top = baseY + "px";
-                        road.ppImg.setCssText();
-                        if (!road.ppImg.isAppended) {
-                            oRoadMap.appendChild(road.ppImg);
-                        }
-                    }
-
-                    if (road.bpImg != null) {
-                        road.bpImg.virtualStyle.left = baseX + "px";
-                        road.bpImg.virtualStyle.top = baseY + "px";
-                        road.bpImg.setCssText();
-                        if (!road.bpImg.isAppended) {
-                            oRoadMap.appendChild(road.bpImg);
-                        }
-                    }
-                } else {
-                    if (road.dataImg != null && road.dataImg.style.display == "inline") {
-                        road.dataImg.style.display = "none";
-                        road.dataImg.setCssText();
-                    }
-
-                    if (road.bpImg != null && road.bpImg.style.display == "inline") {
-                        road.bpImg.style.display = "none";
-                        road.bpImg.setCssText();
-                    }
-
-                    if (road.ppImg != null && road.ppImg.style.display == "inline") {
-                        road.ppImg.style.display = "none";
-                        road.ppImg.setCssText();
-                    }
-========
                     
                 } else {
                     if (this.road.dataImg != null && this.road.dataImg.style.display == "inline")
@@ -2668,18 +2145,13 @@ this.generateScrollDiv(this.rawRoadCfg);
 
                     if (this.road.ppImg != null && this.road.ppImg.style.display == "inline")
                         this.road.ppImg.style.display = "none";
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
                 }
             }
         }
     }
 
     updateCounting() {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let countingResult = {
-========
         var countingResult = {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             banker: 0,
             player: 0,
             tie: 0,
@@ -2687,11 +2159,7 @@ this.generateScrollDiv(this.rawRoadCfg);
             playerPair: 0
         }
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        for (let i = 0; i < this.rawResultData.length; i++) {
-========
         for (var i = 0; i < this.rawResultData.length; i++) {
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
             switch (this.rawResultData[i].LastResult) {
                 case "1":
                     // 1=莊(0001)
@@ -2769,13 +2237,8 @@ this.generateScrollDiv(this.rawRoadCfg);
     }
 
     setBlink(o) {
-<<<<<<<< HEAD:src/utils/RoadMap.js
-        let op = 100;
-        let opMode = 0;
-========
         var op = 100;
         var opMode = 0;
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
 
         return setInterval(function () {
             o.style.filter = "alpha(opacity=" + op + ")";//"filter: alpha(opacity=70); -moz-opacity: 0.7; opacity: 0.7; display: inline;";
@@ -2797,40 +2260,6 @@ this.generateScrollDiv(this.rawRoadCfg);
         }, 50);
     }
 
-<<<<<<<< HEAD:src/utils/RoadMap.js
-    generateVirtualDom(elementTag) {
-        let img = document.createElement(elementTag);
-        let listener = {
-            set: (function (target, property, value) {
-                if (target[property] != value) {
-                    this.valueChange = true
-                    target[property] = value;
-                }
-
-                // 在这里可以统一处理属性的设置部分，例如记录日志、验证等
-
-                return true; // 返回 true 表示设置成功
-            }).bind(img)
-        };
-
-        img.virtualStyle = new Proxy({}, listener);
-        img.valueChange = true;
-        img.setCssText = (function () {
-            if (img.valueChange) {
-                let cssText = "";
-
-                for (var key in this.virtualStyle) {
-                    cssText += key + ":" + this.virtualStyle[key] + ";";
-                }
-
-                img.style.cssText = cssText;
-                img.valueChange = false;
-            }
-        }).bind(img);
-
-        img.isAppended = false;
-        return img;
-========
     generateScrollDiv(cfg){
         let contentDiv = document.createElement("div");
         contentDiv.style.position = 'absolute';
@@ -2844,6 +2273,5 @@ this.generateScrollDiv(this.rawRoadCfg);
     setScrollDiv(cfg, xDisplay){
         //設定偏移
         cfg.contentDiv.style.transform = 'translateX(' + cfg.width * xDisplay + 'px)' ;        
->>>>>>>> 2de8de72e41c89e09c37a0a3b73211c55d4e6015:src/utils/RoadMapNew.js
     }
 }

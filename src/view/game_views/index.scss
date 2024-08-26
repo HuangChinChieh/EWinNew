@@ -8,19 +8,18 @@
     position: relative;
     overflow-x: hidden;
 
-    .game-view-box {
-        width: 100%;
-        height: 100%;
+    user-select: none;
+    /* 禁止用户选择文本 */
+    -webkit-user-select: none;
+    /* 针对 Safari */
+    -moz-user-select: none;
+    /* 针对 Firefox */
+    -ms-user-select: none;
 
-        .game-content {
-            // 這邊先顯示假的影像
-            width: 100%;
-            height: 100vh;
-            background: url('../../img/games/bg.png') no-repeat center center/cover;
-            position: absolute;
-            z-index: 1;
-            top: 0;
-        }
+    .game-view-box {
+        width: 120rem;
+        height: 67.5rem;
+        position: relative;
     }
 
 }

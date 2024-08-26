@@ -1,5 +1,5 @@
 .game-header-wrap {
-    height: 70px;
+    height: 4.375rem;
     width: 100%;
     background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35));
     position: fixed;
@@ -26,16 +26,16 @@
             span {
                 color: #fff;
                 font-size: 1.3rem;
-                margin-left: 14px;
-                margin-top: -4px;
+                margin-left: 0.875rem;
+                margin-top: -0.25rem;
             }
         }
 
         .user-icon {
             display: inline-block;
-            margin-right: 4px !important;
-            width: 22px;
-            height: 22px;
+            margin-right: 0.25rem !important;
+            width: 1.375rem;
+            height: 1.375rem;
             cursor: pointer;
             margin-left: 2rem;
             background: url("../../img/header/user.png") no-repeat center center/contain;
@@ -56,28 +56,11 @@
 
 @keyframes anigameheaderin {
     0% {
-        top: -200px;
+        top: -12.5rem;
     }
 
     100% {
         top: 0;
     }
 }
-
-@media screen and (max-width: 1200px) {
-    .game-header-wrap {
-        grid-template-columns: 40% 20% 40%;
-
-        .game-left-box {
-            .user-icon {
-                margin-left: 1rem;
-            }
-        }
-    }
-}
-
-@media screen and (max-width: 933px) {
-    .game-header-wrap {
-        display: none;
-    }
-}
+ 

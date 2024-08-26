@@ -1,0 +1,117 @@
+
+.roadMap-baccarat{
+    width: 100%;
+    position: absolute;
+    height: 12.5rem;
+    bottom: 7.25rem;
+    left: 0px;
+    z-index: 10;
+    pointer-events: none;
+    .roadMap-left{
+        position:absolute;
+        width: 37.5rem;
+        height: 11.25rem;
+        left: 0px;
+        top: 0px;
+        overflow: hidden;
+
+        .backImg{
+            background-image: url('../../img/roadmap/roadMap_30_6_30.png');
+            background-repeat: no-repeat;
+            width: 56.3125rem;
+            height: 11.25rem;
+            background-size: contain;
+        }
+    }
+
+    .roadMap-right{
+        position:absolute;
+        width: 33.75rem;
+        height: 11.25rem;
+        right: 0.625rem;
+        top: 0px;
+        overflow: hidden;
+
+        .backImg{
+            background-image: url('../../img/roadmap/roadMap_20_6_35.png');
+            background-repeat: repeat;
+            width: 43.8125rem;
+            height: 11.25rem;
+            background-size: contain;
+        }
+    }
+
+    .roadMap-road1{
+        position:absolute;
+        width:100%;
+        height: 100%;
+        left: 0px;
+        top: 0px;       
+    }
+
+    .roadMap-road2{
+        position:absolute;
+        width:100%;
+        height: 66.6666%;
+        left: 0px;
+        top: 0px;   
+        border-bottom: 0.125rem solid rgb(133 133 133);    
+        border-left: 0.03125rem solid transparent;             
+        box-sizing: border-box;
+    }
+
+    .roadMap-road3{
+        position:absolute;
+        width: 33.33333%;
+        height: 33.3333%;
+        left: 0px;
+        top: 66.6666%;    
+        border-right: 0.125rem solid rgb(133 133 133);            
+    }
+
+    .roadMap-road4{
+        position:absolute;
+        width: 33.33333%;
+        height: 33.3333%;
+        left: 33.3333%;
+        top: 66.6666%;     
+        border-right: 0.125rem solid rgb(133 133 133);      
+    }
+
+
+    .roadMap-road5{
+        position:absolute;
+        width: 33.33333%;
+        height: 33.3333%;
+        left: 66.6666%;
+        top: 66.6666%;        
+    }
+}
+
+.roadMap-container {
+    width: 21.875rem;  
+    height: 3.75rem;  
+    position: relative;
+    background-image: url('../../img/roadmap/RoadMap350By4.png');
+}
+
+
+
+.roadMap-container-outside{
+    overflow-x: hidden;
+    
+}
+
+.roadMap-container-outside.type1{
+    border-radius: 0.3125rem;
+}
+
+.roadMap-container-outside.type0{
+    border-bottom-left-radius: 0.3125rem; /* 左下角圆角半径 */
+    border-bottom-right-radius: 0.3125rem; /* 右下角圆角半径 */
+}
+
+@media screen and (max-width: 1082px) {
+    
+    
+}

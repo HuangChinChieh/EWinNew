@@ -1,6 +1,6 @@
     .marquee-box {
-        height: 40px;
-        line-height: 40px;
+        height: 2.5rem;
+        line-height: 2.5rem;
         overflow: hidden;
         position: relative;
 
@@ -18,17 +18,17 @@
         &:before {
             content: '';
             display: block;
-            width: 77px;
+            width: 4.8125rem;
             height: 100%;
             position: absolute;
             top: 0;
             left: 0;
             z-index: 9;
             background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.01));
-            -webkit-backdrop-filter: blur(1px);
-            -moz-backdrop-filter: blur(1px);
-            -ms-backdrop-filter: blur(1px);
-            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(0.0625rem);
+            -moz-backdrop-filter: blur(0.0625rem);
+            -ms-backdrop-filter: blur(0.0625rem);
+            backdrop-filter: blur(0.0625rem);
         }
 
     }

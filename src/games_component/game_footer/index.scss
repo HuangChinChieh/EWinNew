@@ -1,7 +1,7 @@
 .game-footer-box {
     display: none;
     background-color: #1A1A20;
-    box-shadow: -1px 0 13px rgba(0, 0, 0, 0.5);
+    box-shadow: -0.0625rem 0 0.8125rem rgba(0, 0, 0, 0.5);
 
     &.aniFooter,
     &.aniFooterAction {
@@ -10,11 +10,11 @@
         width: 100%;
         z-index: 9999;
         transition: all 1s ease;
-        padding: 8px 13px;
+        padding: 0.5rem 0.8125rem;
     }
 
     &.aniFooter {
-        bottom: -300px;
+        bottom: -18.75rem;
         animation-name: anifooterout;
         animation-duration: 1s;
         animation-timing-function: ease;
@@ -28,51 +28,3 @@
     }
 }
 
-
-@media screen and (max-width: 1082px) {
-    .game-footer-box {
-        display: block;
-
-        .total-betting {
-            color: #DBC165;
-            position: relative;
-            font-weight: 600;
-            margin-bottom: 3px;
-
-            span.title {
-                color: #fff;
-            }
-        }
-
-        .user-wallet {
-            color: #DBC165;
-            position: relative;
-            font-weight: 600;
-
-            span.title {
-                color: #fff;
-            }
-        }
-    }
-
-    @keyframes anifooterin {
-        0% {
-            bottom: -300px;
-        }
-
-        100% {
-            bottom: 0;
-        }
-    }
-
-
-    @keyframes anifooterout {
-        0% {
-            bottom: 0;
-        }
-
-        100% {
-            bottom: -300px;
-        }
-    }
-}

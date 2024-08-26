@@ -27,6 +27,7 @@ export class EWinGameBaccaratClient {
     // conn;
 
     constructor(CT, eWinUrl) {
+
         this.EWinHub = null;
         this.currentState = 4;  //0=connecting, 1=connected, 2=reconnecting, 4=disconnected
         this.onReceive = null;
@@ -34,12 +35,9 @@ export class EWinGameBaccaratClient {
         this.onReconnecting = null;
         this.onConnected = null;
         this.onDisconnect = null;
-        this.CONNECTING = 0;
-        this.CONNECTED = 1;
-        this.RECONNECTING = 2;
-        this.DISCONNECTED = 4;
+        this.isDestroy = false;
         this.CT = CT;
-        
+
         this.conn = hubConnection();
 
         if (eWinUrl) {
@@ -65,6 +63,15 @@ export class EWinGameBaccaratClient {
 
     handleDisconnect(handle) {
         this.onDisconnect = handle;
+    }
+
+    clearHandleEvent() {
+        this.isDestroy = true;
+        this.onReceive = null;
+        this.onReconnected = null;
+        this.onReconnecting = null;
+        this.onConnected = null;
+        this.onDisconnect = null;
     }
 
     //#region 通用API
@@ -1219,16 +1226,16 @@ export class EWinGameBaccaratClient {
         const connectServer = (c, events) => {
 
             c.start({ withCredentials: false })
-                .done((function () {
+                .done((function () {                    
                     //這邊的this有問題，由於使用箭頭函式，無法使用call or bind，採用傳入解決
                     if (this.onConnected != null)
                         this.onConnected();
-                }).bind(events))
-                .fail((function (error) {
+                }).bind(this))
+                .fail((function (error) {                    
                     if (this.onDisconnect != null) {
                         this.onDisconnect();
                     }
-                }).bind(events));
+                }).bind(this));
 
         };
 
@@ -1244,28 +1251,30 @@ export class EWinGameBaccaratClient {
 
 
 
-        this.conn.disconnected(function () {
-            setTimeout(function () {
-                connectServer(this.conn);
-            }, 1000);
-        });
+        this.conn.disconnected((function () {            
+            if(!this.isDestroy){
+                setTimeout((function () {
+                    connectServer.call(this, this.conn, { onConnected: this.onConnected, onDisconnect: this.onDisconnect });
+                }).bind(this), 1000);
+            }            
+        }).bind(this));
 
-        this.conn.stateChanged(function (state) {
-            //state.oldState
+        this.conn.stateChanged((function (state) {
+            //state.oldState            
             this.currentState = state.newState;
-        });
+        }).bind(this));
 
-        this.conn.reconnected(function () {
+        this.conn.reconnected((function () {            
             if (this.onReconnected != null)
                 this.onReconnected();
-        });
+        }).bind(this));
 
-        this.conn.reconnecting(function () {
+        this.conn.reconnecting((function () {            
             if (this.onReconnecting != null)
-                this.oinReconnecting();
-        });
+                this.onReconnecting();
+        }).bind(this));
 
-        connectServer(this.conn, { onConnected: this.onConnected, onDisconnect: this.onDisconnect });
+        connectServer.call(this, this.conn, { onConnected: this.onConnected, onDisconnect: this.onDisconnect });
     }
 
     getJSON(text) {
@@ -1389,7 +1398,6 @@ export class EWinGameBaccaratClient {
 
     static getInstance(CT, eWinUrl) {
         let Ret;
-
         if (EWinGameBaccaratClient.instance) {
             Ret = EWinGameBaccaratClient.instance;
         } else {
@@ -1405,9 +1413,13 @@ export class EWinGameBaccaratClient {
         return Ret;
     }
 
-    static destroyInstance() {
+    static destroyInstance() {        
         // 执行一些清理操作
-        EWinGameBaccaratClient.instance  = null;
+        if(EWinGameBaccaratClient.instance){
+            EWinGameBaccaratClient.instance.clearHandleEvent();
+            EWinGameBaccaratClient.instance.conn.stop();         
+            EWinGameBaccaratClient.instance = null;
+        }
     }
 }
 

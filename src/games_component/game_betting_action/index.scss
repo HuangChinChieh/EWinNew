@@ -1,11 +1,11 @@
 .game-betting-action {
     background: url('../../img/bettingaction/stop.png') no-repeat center center/contain;
-    height: 78px;
+    height: 4.875rem;
     left: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
     transition: all 1s ease-out;
-    width: 250px;
+    width: 15.625rem;
     z-index: 3;
 
     &.betting {
@@ -19,23 +19,3 @@
     }
 }
 
-@media screen and (max-width:1082px) {
-    .game-betting-action {
-        width: 120px;
-        height: 36px;
-        transition: all 1s ease-in;
-
-        &.betting {
-            visibility: hidden;
-            top: 14rem;
-            opacity: 0;
-        }
-
-        &.stop-betting {
-            visibility: visible;
-            top: 14rem;
-            opacity: 1;
-        }
-
-    }
-}

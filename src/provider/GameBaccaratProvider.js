@@ -1,9 +1,13 @@
 import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from 'react';
-import EWinGameBaccaratClient from '../signalr/bk/EWinGameBaccaratClient';
+import { EWinGameBaccaratClient } from 'signalr/bk/EWinGameBaccaratClient';
 
-export const NotifyContext = createContext();
-export const SubscribeContext = createContext();
+const NotifyContext = createContext();
+const SubscribeContext = createContext();
 
+export {
+  NotifyContext,
+  SubscribeContext
+};
 
 class Notify extends EventTarget {
   on(eventName, callback) {
@@ -28,32 +32,32 @@ const GameBaccaratProvider =  (props) => {
   const notify = useRef(new Notify());  
   const [isConnected, setIsConnected] = useState(false);
 
-  const initGameClient = useCallback(() => {
+  const initGameClient = useCallback(() => {   
     // 遊戲大廳  
-    let client;
+    let client;  
     gameClient.current = EWinGameBaccaratClient.getInstance(props.CT, props.EWinUrl);
     client = gameClient.current;
 
     client.handleReceiveMsg((Msg) => {
       console.log(Msg);
-      notify.notify(Msg.Type, Msg.Args);
+      notify.current.notify(Msg.Type, Msg.Args);
     });
 
-    client.handleConnected(() => {
-      setIsConnected(true);
+    client.handleConnected(() => {      
+      setIsConnected(true);      
     });
 
     client.handleReconnected((Msg) => {
-
+      
     });
 
 
     client.handleReconnecting(() => {
-
+      
     });
 
     client.handleDisconnect(() => {
-
+      
     });
 
     if (client.state() !== 1) {
@@ -73,18 +77,21 @@ const GameBaccaratProvider =  (props) => {
     }
   }, []);
 
-  const AddSubscribe = useCallback((RoadMapNumber, cb) => {
+  const AddSubscribe = useCallback((RoadMapNumber, cb) => {    
     tableNumberArray.current.push(RoadMapNumber);
 
     //訂閱桌台
-    gameClient.current.AddSubscribe(tableNumberArray.current, (s, o) => {
+    gameClient.current.AddSubscribe(tableNumberArray.current.join(""), (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
-          cb();
+          if(cb)
+            cb(true);
         } else {
+          if(cb)
           cb(false);
         }
       } else {
+        if(cb)
         cb(false);
       }
     })
@@ -94,14 +101,17 @@ const GameBaccaratProvider =  (props) => {
     tableNumberArray.current = tableNumberArray.current.filter(item => item !== RoadMapNumber);
 
     //訂閱桌台
-    gameClient.current.AddSubscribe(tableNumberArray.current, (s, o) => {
+    gameClient.current.AddSubscribe(tableNumberArray.current.join(""), (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
+          if(cb)
           cb(true);
         } else{
+          if(cb)
           cb(false);
         }
       }else{
+        if(cb)
         cb(false);
       }
     })
@@ -124,25 +134,36 @@ const GameBaccaratProvider =  (props) => {
 
   useEffect(() => {
     //尚未初始化，執行初始化
-    if (gameClient.current) {
+    if (!gameClient.current) {
       initGameClient();
     }
 
     return () => {
       //每次離開時destroy client
-      if (gameClient.current.currentState === 1) {
+      if (gameClient.current.currentState === 1) {        
         ClearSubscribe((s) => {
+          gameClient.current = null;
           EWinGameBaccaratClient.destroyInstance();
         });
-      } else {
+      } else {        
+        gameClient.current = null;
         EWinGameBaccaratClient.destroyInstance();
       }
     };
   }, [initGameClient, props.CT]);
 
+  useEffect(() => {
+    //尚未初始化，執行初始化
+   console.log("test entry");
 
 
-  if (isConnected) {
+    return (() => {
+      //每次離開時destroy client
+      console.log("test leave");
+    });
+  }, []);
+
+  if (isConnected) {    
     return (
       <SubscribeContext.Provider value={{
         AddSubscribe, RemoveSubscribe
@@ -159,6 +180,8 @@ const GameBaccaratProvider =  (props) => {
   }
 }
 
-export default React.memo(GameBaccaratProvider,(props)=>{
-  return 
-});
+// export default React.memo(GameBaccaratProvider,(props)=>{
+//   return false;
+// });
+
+export default GameBaccaratProvider;

@@ -7,10 +7,6 @@ import { CustomTabs, CustomTab } from 'component/custom_tabs';
 import './index.scss';
 
 function Gamelobby(props) {
-
-
-
-
     return (
         <div className='game-lobby-wrap'>
             <div>

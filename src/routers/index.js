@@ -12,17 +12,17 @@ import Gamelobby from 'view/game_lobby';
 import Gamefavorite from 'view/game_favorite';
 import GameView from 'view/game_views';
 import Footer from 'component/footer';
-import GameFooter from 'games_component/game_footer';
 import TipProvider from 'component/tips';
 import VideoBox from 'component/video';
 import GameLobbyProvider from 'provider/GameLobbyProvider';
-import GameBaccaratProvider from 'provider/GameTableProvider';
+import GameBaccaratProvider from 'provider/GameBaccaratProvider';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import AlertButton from 'component/alert';
 
+
 import './index.scss';
 
-const Main = () => {
+const Main = () => {    
     const EWinUrl = 'https://ewin.dev.mts.idv.tw';
     const intervalIDRef = useRef(0);
     const params = new URLSearchParams(window.location.search);
@@ -73,23 +73,24 @@ const Main = () => {
                 const jsonReturn = await response.json();
 
                 sessionStorage.setItem('CT', jsonReturn.d.CT);
+                sessionStorage.setItem('SID', jsonReturn.d.SID);
                 // setCookie('CT', newCT);
                 initLobbyClient(jsonReturn.d.CT);
             };
             fetchDataBySeconds();
         }
 
-    return clearInterval(intervalIDRef.current);
-  }, []);
+        return clearInterval(intervalIDRef.current);
+    }, []);
 
 
-  const initLobbyClient = (CT) => {
-    // 遊戲大廳     
-    const lobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
-   
-    lobbyClient.handleReceiveMsg((Msg) => {
-      console.log('處理接收訊息', Msg);
-    });
+    const initLobbyClient = (CT) => {
+        // 遊戲大廳     
+        const lobbyClient = EWinGameLobbyClient.getInstance(CT, EWinUrl);
+
+        lobbyClient.handleReceiveMsg((Msg) => {
+            console.log('處理接收訊息', Msg);
+        });
 
         lobbyClient.handleConnected(() => {
 
@@ -117,19 +118,20 @@ const Main = () => {
 
         lobbyClient.handleDisconnect(() => {
 
-    });
-    
-    if(lobbyClient.state() !== 1){
-      lobbyClient.initializeConnection();
-    }   
-  };
+        });
 
-    useEffect(() => {
-        const currentPath = history.location.pathname;
-        localStorage.setItem('currentUrl', currentPath);
-        setGetUrl(localStorage.getItem('currentUrl'))
+        if (lobbyClient.state() !== 1) {
+            lobbyClient.initializeConnection();
+        }
+    };
 
-    }, [history.location.pathname]);
+    // useEffect(() => {
+    //     const currentPath = history.location.pathname;
+    //     localStorage.setItem('currentUrl', currentPath);
+    //     setGetUrl(localStorage.getItem('currentUrl'))
+
+    // }, [history.location.pathname]);
+
 
     if (!isServerConneted) {
         return (<div></div>)
@@ -137,25 +139,22 @@ const Main = () => {
         return (
             <div className="wrap-box">
                 <GameLobbyProvider CT={CT} CurrencyType={currencyTypeRef.current}>
-                    {!isGameView
-                        ? (
+                    {!isGameView &&
+                         (
                             <>
                                 <Header />
                                 {/*<VideoBox url={getUrl} />*/}
                                 <Footer />
                             </>
-                        )
-                        : (
-                            <GameFooter />
-                        )
+                        )                        
                     }
                     <Switch>
                         <Route path='/Gamefavorite'>
                             <Gamefavorite></Gamefavorite>
                         </Route>
                         <Route path='/games/:gameId'>
-                            <GameBaccaratProvider>
-                                <GameView url={getUrl} />
+                            <GameBaccaratProvider EWinUrl={EWinUrl} CT={CT}>
+                                <GameView CT={CT} GameSetID={0} TableNumber={'SOL_3513'} />
                             </GameBaccaratProvider>
                         </Route>
                         <Route path='/' component={Gamelobby}></Route>
@@ -172,7 +171,7 @@ export default function Routers() {
         <Router>
             <AlertButton>
                 <TipProvider>
-                    <Main />
+                    <Main></Main>
                 </TipProvider>
             </AlertButton>
         </Router>

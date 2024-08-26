@@ -1,35 +1,40 @@
 import './index.scss';
-import GameChipsButton from 'games_component/game_buttons/game_chips_btn';
-import GameBalance from 'games_component/game_balance';
-import GameTotalBet from 'games_component/game_total_bet';
-import GameTips from 'games_component/game_tips';
-import GameAddTable from 'games_component/game_add_table';
+// import GameChipsButton from 'games_component/game_buttons/game_chips_btn';
+import { useCallback, useState } from 'react';
+import GameBalance from 'games_component/game_footer_btn/game_balance';
+import GameTotalBet from 'games_component/game_footer_btn/game_total_bet';
+import GameTips from 'games_component/game_footer_btn/game_tips';
+import GameAddTable from 'games_component/game_footer_btn/game_add_table';
+import GameOpenGameSetAction from 'games_component/game_footer_btn/game_open_gameSet_action';
 
-const GameFooterArea = () => {
+const GameFooterArea = (props) => {
+    const [middleBtnType, setMiddleBtnType] = useState("Chip")
+    const updateMiddleBtnType = useCallback((v) => {
+        setMiddleBtnType(v);
+    });
 
     return (
         <div className='game-footer-area'>
-            <div className='game-footer-area-box'>
-                <div className='left-box'>
-                    <div className='box-area'>
-                        <GameBalance />
-                    </div>
-                    <div className='box-area'>
-                        <GameTotalBet />
-                    </div>
+            <div className='left-box'>
+                <div className='box-area'>
+                    <GameBalance />
                 </div>
-                <div className='middle-box'>
-                    <div className='game-box-straight'>
-                        <GameChipsButton />
-                    </div>
+                <div className='box-area'>
+                    <GameTotalBet totalBetValue={props.totalBetValue} />
                 </div>
-                <div className='right-box'>
-                    <div className='box-area'>
-                        <GameTips />
+            </div>
+            <div className='middle-box'>
+                    {middleBtnType === "Chip" ? props.children : (<div></div>)}            
+            </div>
+            <div className='right-box'>
+                <div className='box-area'>
+                    <GameOpenGameSetAction />
                     </div>
-                    <div className='box-area'>
-                        <GameAddTable />
-                    </div>
+                <div className='box-area'>
+                    <GameTips />
+                </div>
+                <div className='box-area'>
+                    <GameAddTable />
                 </div>
             </div>
         </div>

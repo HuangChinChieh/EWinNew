@@ -1,0 +1,42 @@
+.game-add-table-box {
+    border: 0.0625rem solid #46465B;
+    border-radius: 3.3125rem;
+    display: flex;
+    width: 7.5rem;
+    height: 3.3125rem;
+    max-width: 13.75rem;
+    padding: 0.375rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    opacity: 0.75;
+    margin-bottom: 1.5625rem;
+    span {
+        color: #FFF;
+
+        font-family: "Noto Sans TC";
+        font-size: 1.125rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 150%; /* 27px */
+        letter-spacing: 0.045rem;
+
+        &.icon-box {
+            position: relative;
+            padding-left: 1.8125rem;
+            display: inline-block;
+
+            &::before {
+                content: '';
+                position: absolute;
+                display: block;
+                width: 1.4375rem;
+                height: 1.4375rem;
+                background: url('/img/global/add.png') no-repeat center center/contain;
+                left: 0px;
+            }
+        }
+    }
+}

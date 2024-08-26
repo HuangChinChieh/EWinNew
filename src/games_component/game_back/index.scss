@@ -1,17 +1,17 @@
 .game-back-box {
-    width: 46px;
-    height: 46px;
+    width: 2.875rem;
+    height: 2.875rem;
     background: rgba(70, 70, 91, 1);
-    border-radius: 50px;
+    border-radius: 3.125rem;
     display: flex;
     justify-content: center;
     align-items: center;
 
     a {
         display: block;
-        width: 12px;
-        height: 20px;
-        margin-left: -3px;
+        width: 0.75rem;
+        height: 1.25rem;
+        margin-left: -0.1875rem;
         background: url('../../img/games/back.png') no-repeat center center/contain;
     }
 }

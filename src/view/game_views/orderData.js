@@ -1,36 +1,85 @@
+const initialOrderData = {
+  Tie: {
+    totalValue: 0,
+    confirmValue: 0,
+    unConfirmValue: 0,
+    chips: []
+  },
+  Banker: {
+    totalValue: 0,
+    confirmValue: 0,
+    unConfirmValue: 0,
+    chips: []
+  },
+  Player: {
+    totalValue: 0,
+    confirmValue: 0,
+    unConfirmValue: 0,
+    chips: []
+  },
+  PlayerPair: {
+    totalValue: 0,
+    confirmValue: 0,
+    unConfirmValue: 0,
+    chips: []
+  },
+  BankerPair: {
+    totalValue: 0,
+    confirmValue: 0,
+    unConfirmValue: 0,
+    chips: []
+  }
+};
 
-function initialOrderData(){
-    return  {
-        orderBanker:0,
-        orderPlayer:0,
-        orderTie:0,
-        orderBankerPair:0,
-        orderPlayerPair:0
-    }; 
-}
+function orderReducer(state, action) {
+  const newOrderData = { ...state };
 
-function orderReducer(state, action) {    
   switch (action.type) {
-    case 'addBanker':
-      return { ...state, orderBanker: state.orderBanker + action.payload };
-    case 'addPlayer':
-        return { ...state, orderPlayer: state.orderPlayer + action.payload };
-    case 'addTie':
-        return { ...state, orderTie: state.orderTie + action.payload };        
-    case 'addBankerPair':
-        return { ...state, orderBankerPair: state.orderBankerPair + action.payload };
-        
-    case 'addPlayerPair':
-        return { ...state, orderPlayerPair: state.orderPlayerPair + action.payload };
-    case 'clear':
-      if(Object.values(state).every(value => value === 0)){
-        return state;
-      }else{
-        return initialOrderData(); // 使用 payload 傳遞新值
-      }      
+    case 'addBet':
+      //待補上動畫                             
+      newOrderData[action.payload.areaType].totalValue += action.payload.selChipData.chipValue;
+      newOrderData[action.payload.areaType].unConfirmValue += action.payload.selChipData.chipValue;
+      newOrderData[action.payload.areaType].chips.push({
+        index: action.payload.selChipData.index,
+        styleIndex: action.payload.selChipData.styleIndex,
+        chipValue: action.payload.selChipData.chipValue,
+        orderUnix: Date.now().toString()
+      });
+
+      return newOrderData
+    case 'doubleBet':
+      //待補上動畫                             
+      for (let areaType in newOrderData) {
+        if (newOrderData[areaType].totalValue !== 0) {
+          newOrderData[areaType].unConfirmValue += newOrderData[areaType].totalValue;
+          newOrderData[areaType].totalValue += newOrderData[areaType].totalValue;
+          newOrderData[areaType].chips.push(
+            ...[...newOrderData[areaType].chips]
+          );
+        }
+      }
+
+      return newOrderData;
+    case 'cancelBet':
+      //待補上動畫                             
+      for (let areaType in newOrderData) {
+        newOrderData[areaType].unConfirmValue = 0;
+        newOrderData[areaType].totalValue = 0;
+        newOrderData[areaType].confirmValue = 0;
+        newOrderData[areaType].chips.length = 0;
+      }
+
+      return newOrderData;
+    case 'confirmBet':
+      for (let areaType in newOrderData) {
+        newOrderData[areaType].unConfirmValue = 0;
+        newOrderData[areaType].confirmValue += newOrderData[areaType].unConfirmValue;
+      }
+
+      return newOrderData;
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
 }
 
-export {orderReducer, initialOrderData};
+export { orderReducer, initialOrderData };

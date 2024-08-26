@@ -1,69 +1,45 @@
-import { useState } from 'react';
 import './index.scss';
+import '../../animation/betAnimation/orderAnimation.scss';
+import { moveChipAnimation } from '../../animation/betAnimation/baccaratBasicAnimation'
 
-const GameChipsButton = ((props) => {
-    const chipsItem = [
-        { index: 1, chipsValue: 25 },
-        { index: 2, chipsValue: 50 },
-        { index: 3, chipsValue: 100 },
-        { index: 4, chipsValue: 500 },
-        { index: 5, chipsValue: 1000 },
-        { index: 6, chipsValue: 1250 },
-        { index: 7, chipsValue: 5000 },
-        { index: 8, chipsValue: 10000 }
-    ];
+const GameChipsButton = ((props) => {   
+    const handleDoubleBet = ()=>{
+        const promiseArray = [];
+        debugger;
+        for(let areaType in props.orderData){
+            if(props.orderData[areaType].totalValue > 0){
+                promiseArray.push(new Promise((resolve, reject)=>{
+                    moveChipAnimation(areaType, ()=>{resolve()});
+                }));
+            }       
+        }
 
-    const type = ""
-
-    const [selChipIndex, setSelChipIndex] = useState(0); 
-
-    const handleSelChip = (event, chipValue) => {
-        props.updateSelChipValue(event, chipValue)
-        setSelChipIndex(chipValue);
+        if(promiseArray.length > 0) {
+            Promise.all(promiseArray).then(()=>{            
+                props.dispatchOrderData({ type:"doubleBet"});
+            });
+        }       
     };
-
-    const handleCancel = (event) => {
-        props.cancelBet(event);
-    };
-
-    const handleDouble = (event) => {
-        props.doubleBet(event);
-    };
-
-    //投注確認
-    const handleAdd = (event) => {
-        props.addGameSetActionChip(event);
-    };
-
-
-    const handleConfirm = (event) => {
-        props.addGameSetActionChip(event);
-    };
-
-
-
 
     return (
-        <div>
+        <div className={'game-chips-area ' +  (props.isCanBet && 'can-bet')}>
             {/* {(!props.onGameSetAction && props.isCanBet) && <span onClick={handleConfirm} className='confirm'>確認</span>} */}
-            {props.isCanBet && <span onClick={handleCancel} className='cancel'>撤銷</span>}
+            <span onClick={() => props.dispatchOrderData({ type:"confirmBet"})} className='confirm'>確認</span>
+            <span onClick={() => props.dispatchOrderData({ type:"cancelBet"})} className='cancel'>撤銷</span>
             <div className="game-chips-box">
            
                     {
-                        chipsItem.map((item) => (
-                            <div key={item.index}
-                                className={`chips-${item.index} ${props.selChipIndex === item.index ? 'act' : ''}`}
-                                onClick={(event) => (handleSelChip(event, item.chipsValue))}>
-                                <span
-
-                                />
+                        props.chipsItems.map((item, index) => (
+                            <div key={item.styleIndex}
+                                className={`chips-${item.styleIndex} ${props.selChipData.index === index ? 'act' : ''}`}
+                                onClick={() => (props.setSelChipData({...item, index:index}))}>
+                                <div>{item.chipValue}</div>
                             </div>
                         ))
                     }
             
             </div>
-            {(!props.onGameSetAction && props.isCanBet) && <span onClick={handleDouble} className='double'>加倍</span>}
-            {(props.onGameSetAction && props.isCanBet) && <span onClick={handleAdd} className='confirm'>加值</span>}
+            <span onClick={() => handleDoubleBet()} className='double'>加倍</span> 
         </div>
     )
 })

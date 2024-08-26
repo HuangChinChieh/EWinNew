@@ -1,0 +1,59 @@
+    .move-chip {
+        width: 3.416875rem;
+        height: 3.416875rem;
+        border-radius: 1.7084375rem;
+        position: absolute;
+        display: inline-block;
+        background-size: cover;
+        background-position: center;
+        transition: transform 0.3s linear;
+        z-index: 20;
+        transform-origin: 0 0;
+
+        &.chips-1 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #FB8F02 0%, #BE7000 100%);
+        }
+
+        &.chips-2 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #F950A2 0%, #EA275D 100%);
+        }
+
+        &.chips-3 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #17AAFF 0%, #625FFF 100%);
+        }
+
+        &.chips-4 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #26FF7A 0%, #0B7453 100%);
+        }
+
+        &.chips-5 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #7128EA 0%, #702449 100%);
+        }
+
+        &.chips-6 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #44C8C0 0%, #339F6A 100%);
+        }
+
+        &.chips-7 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #72FB0C 0%, #87BA2F 100%);
+        }
+
+        &.chips-8 {
+            background-image: url('/img/games/chips/chip-basic.png'), linear-gradient(180deg, #FF5B53 0%, #EA311D 100%);
+        }
+
+        >div {
+            position: absolute;
+            top: 0.88875rem;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 1.09375rem;
+            font-weight: 500;
+            line-height: 1.28125rem;
+            text-align: center;
+            color: #FFFFFF;
+            height: auto;
+            cursor: pointer;
+        }
+    }

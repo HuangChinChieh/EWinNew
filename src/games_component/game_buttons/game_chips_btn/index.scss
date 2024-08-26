@@ -1,1244 +1,192 @@
-.game-chips-box {
-    /* Auto layout */
+.game-chips-area {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0px;
-    gap: 0.75rem;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
 
-    position: absolute;
-    width: 32.5875rem;
-    height: 3.416875rem;
-    left: 47.5625rem;
-    top: 62.1875rem;
-
-
-    div {
-        /* icon/chip */
-
-        width: 3.416875rem;
+    .game-chips-box {
+        /* Auto layout */
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 0px;
+        gap: 0.75rem;      
+        width: 32.5875rem;
         height: 3.416875rem;
-        /* Inside auto layout */
-        flex: none;
-        order: 0;
-        flex-grow: 0;
-        position: relative;
-        background-size: cover;
-        background-position: center;
-        border-radius: 1.7084375rem;
-
-        &.chips-1 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FB8F02 0%, #BE7000 100%);
-        }
-
-        &.chips-2 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #F950A2 0%, #EA275D 100%);
-        }
-
-        &.chips-3 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #17AAFF 0%, #625FFF 100%);
-        }
-
-        &.chips-4 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #26FF7A 0%, #0B7453 100%);
-        }
-
-        &.chips-5 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #7128EA 0%, #702449 100%);
-        }
-
-        &.chips-6 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #44C8C0 0%, #339F6A 100%);
-        }
-
-        &.chips-7 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #72FB0C 0%, #87BA2F 100%);
-        }
-
-        &.chips-8 {
-            background-image:url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FF5B53 0%, #EA311D 100%);
-        }
-
-        &.act {
-
-            &::before {
-                content: '';
-                background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
-                display: block;
-                width: 4.125rem;
-                height: 4.125rem;
-                border-radius: 4.125rem;
-                position: absolute;
-                left: 0;
-                top: 0;
-                transform: translate(-9%, -9%);
-            }
-        }
+        flex: 1 0 auto;
+        margin-bottom: 1.875rem;
 
         div {
-            position: absolute;
-            top: 0.88875rem;
+            /* icon/chip */
+
+            width: 3.416875rem;
+            height: 3.416875rem;
+            /* Inside auto layout */
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 1.7084375rem;
+            cursor: pointer;
+
+            &.chips-1 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FB8F02 0%, #BE7000 100%);
+            }
+
+            &.chips-2 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #F950A2 0%, #EA275D 100%);
+            }
+
+            &.chips-3 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #17AAFF 0%, #625FFF 100%);
+            }
+
+            &.chips-4 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #26FF7A 0%, #0B7453 100%);
+            }
+
+            &.chips-5 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #7128EA 0%, #702449 100%);
+            }
+
+            &.chips-6 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #44C8C0 0%, #339F6A 100%);
+            }
+
+            &.chips-7 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #72FB0C 0%, #87BA2F 100%);
+            }
+
+            &.chips-8 {
+                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FF5B53 0%, #EA311D 100%);
+            }
+
+            &.act {
+
+                &::before {
+                    content: '';
+                    background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
+                    display: block;
+                    width: 4.125rem;
+                    height: 4.125rem;
+                    border-radius: 4.125rem;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    transform: translate(-9%, -9%);
+                }
+            }
+
+            div {
+                position: absolute;
+                top: 0.88875rem;
+                left: 50%;
+                transform: translateX(-50%);
+                /* 字体大小，可以根据需要调整 */
+                text-align: center;
+                /* 文字居中，可选 */
+                font-size: 1.09375rem;
+                font-weight: 500;
+                line-height: 1.28125rem;
+                text-align: center;
+                color: #FFFFFF;
+                height: auto;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .cancel,
+    .double,
+    .confirm {
+        color: #8D8D9F;
+        font-size: 1.4rem;
+        cursor: pointer;
+        display: inline-flex;
+        padding: 0.28125rem 0px;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 1.0625rem;
+        position: relative;
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+
+
+        &::after {
+            content: '';
+            display: block;
+            width: 2.5rem;
+            height: 2.5rem;
+            position: absolute;            
+            /* top: -0.5rem;
+           right: -3.2rem;*/
+            top: -2.5rem;
             left: 50%;
             transform: translateX(-50%);
-            /* 字体大小，可以根据需要调整 */
-            text-align: center;
-            /* 文字居中，可选 */            
-            font-size: 1.09375rem;
-            font-weight: 500;
-            line-height: 1.28125rem;
-            text-align: center;
-            color: #FFFFFF;
-            height: auto;
+            background-color: rgba(41, 41, 51, 0.5);
+            border: 0.03125rem solid rgba(255, 255, 255, 0.5);
+            border-radius: 1.375rem;
+            background-size: 1.625rem;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        &:hover::after{
+            background-color: rgba(141, 141, 159, 0.5);         
+        }
+
+        &:hover{
+            color:rgba(255, 255, 255, 1);
         }
     }
-}
 
-//下方手機版
-@media screen and (max-width:1082px) and (min-width: 323px) {
-    .game-chips-box {
-        position: relative;
-        width: 68px;
-        height: 58px;
-
-        // margin-bottom: 9rem;
-        // div {
-
-        //     position: fixed;
-        // }
-
-        div.none {
-            // bottom: 6rem;
-
-            .default-click {
-
-                width: 55px;
-                height: 55px;
-                border-radius: 55px;
-                margin: 0 5px;
-                position: relative;
-                display: block;
-
-                &.chips-0 {
-                    background: url('../../../img/games/chips/chips-25.png') no-repeat center center / cover;
-                }
-
-                &.chips-1 {
-                    background: url('../../../img/games/chips/chips-50.png') no-repeat center center / cover;
-                }
-
-                &.chips-2 {
-                    background: url('../../../img/games/chips/chips-100.png') no-repeat center center / cover;
-                }
-
-                &.chips-3 {
-                    background: url('../../../img/games/chips/chips-500.png') no-repeat center center / cover;
-                }
-
-                &.chips-4 {
-                    background: url('../../../img/games/chips/chips-1000.png') no-repeat center center / cover;
-                }
-
-                &.chips-5 {
-                    background: url('../../../img/games/chips/chips-1250.png') no-repeat center center / cover;
-                }
-
-                &.chips-6 {
-                    background: url('../../../img/games/chips/chips-5000.png') no-repeat center center / cover;
-                }
-
-                &.chips-7 {
-                    background: url('../../../img/games/chips/chips-10000.png') no-repeat center center / cover;
-                }
-
-                &::before {
-                    content: '';
-                    background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
-                    display: block;
-                    width: 66px;
-                    height: 66px;
-                    border-radius: 66px;
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    transform: translate(-9%, -9%);
-
-                }
-            }
-
-            span {
-                position: absolute;
-                z-index: 9;
-                width: 45px;
-                height: 45px;
-                // transition: all 1s ease;
-
-                //手機尺寸代幣展開時的動畫
-                &.chips-0 {
-                    animation-name: animbchips0;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -9.5rem;
-                    bottom: 0rem;
-                }
-
-                @keyframes animbchips0 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -9.5rem;
-                        bottom: 0rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-1 {
-                    animation-name: animbchips1;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -8.2rem;
-                    bottom: 3.3rem;
-                }
-
-                @keyframes animbchips1 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -8.2rem;
-                        bottom: 3.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-2 {
-                    animation-name: animbchips2;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -5.2rem;
-                    bottom: 5.9rem;
-                }
-
-                @keyframes animbchips2 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -5.2rem;
-                        bottom: 5.9rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-3 {
-                    animation-name: animbchips3;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -1.55rem;
-                    bottom: 6.8rem;
-                }
-
-                @keyframes animbchips3 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -1.55rem;
-                        bottom: 6.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-4 {
-                    animation-name: animbchips4;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -1.55rem;
-                    bottom: 6.8rem;
-                }
-
-                @keyframes animbchips4 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -1.55rem;
-                        bottom: 6.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-5 {
-                    animation-name: animbchips5;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -5.2rem;
-                    bottom: 5.9rem;
-                }
-
-                @keyframes animbchips5 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -5.2rem;
-                        bottom: 5.9rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-6 {
-                    animation-name: animbchips6;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -8.2rem;
-                    bottom: 3.3rem;
-                }
-
-                @keyframes animbchips6 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -8.2rem;
-                        bottom: 3.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-7 {
-                    animation-name: animbchips7;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -9.5rem;
-                    bottom: 0rem;
-                }
-
-                @keyframes animbchips7 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -9.5rem;
-                        bottom: 0rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-
-                &.act {
-
-                    &::before {
-                        display: none;
-                    }
-                }
-            }
-
+    .cancel {
+        margin-left: 1.375rem;
+        &::after {
+            background-image: url('/img/games/cancel.png');
         }
-
-        div.show {
-
-            span {
-                // display: none;
-
-                // &.act {
-                //     display: block;
-                //     bottom: 8.8rem;
-                //     left: 0.2rem;
-                // }
-                position: absolute;
-                width: 45px;
-                height: 45px;
-
-                &.chips-0 {
-                    animation-name: animbeasechips0;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips0 {
-                    0% {
-                        left: -9.5rem;
-                        bottom: 5.5rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0.5rem;
-                        bottom: 0;
-                        opacity: 1;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-1 {
-                    animation-name: animbeasechips1;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips1 {
-                    0% {
-                        left: -8.2rem;
-                        bottom: 8.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0.5rem;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-2 {
-                    animation-name: animbeasechips2;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips2 {
-                    0% {
-                        left: -5.2rem;
-                        bottom: 10.9rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0.5rem;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-3 {
-                    animation-name: animbeasechips3;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips3 {
-                    0% {
-                        left: -1.55rem;
-                        bottom: 11.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0rem;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-4 {
-                    animation-name: animbeasechips4;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips4 {
-                    0% {
-                        right: -1.55rem;
-                        bottom: 11.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0.5rem;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-5 {
-                    animation-name: animbeasechips5;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips5 {
-                    0% {
-                        right: -5.2rem;
-                        bottom: 10.9rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0.5rem;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-6 {
-                    animation-name: animbeasechips6;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips6 {
-                    0% {
-                        right: -8.2rem;
-                        bottom: 8.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0.5rem;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-7 {
-                    animation-name: animbeasechips7;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 0;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips7 {
-                    0% {
-                        right: -9.5rem;
-                        bottom: 5.5rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0.5rem;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.act {
-
-                    &::before {
-                        display: none;
-                    }
-                }
-
-            }
-
-            .default-click {
-                width: 60px;
-                height: 60px;
-                border-radius: 60px;
-                margin: 0 5px;
-                position: relative;
-                display: inline-block;
-                background: url('../../../img/games/chips/chips-25.png') no-repeat center center / contain;
-
-                &::before {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    z-index: -1;
-                    bottom: -8px;
-                    left: -5px;
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 60px;
-                    margin: 0 5px;
-                    position: relative;
-                    display: inline-block;
-                    background: url('../../../img/games/chips/chips-50.png') no-repeat center center / contain;
-
-                }
-
-                &::after {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    z-index: -2;
-                    bottom: 48px;
-                    left: -5px;
-                    width: 60px;
-                    height: 60px;
-                    border-radius: 60px;
-                    margin: 0 5px;
-                    position: relative;
-                    display: inline-block;
-                    background: url('../../../img/games/chips/chips-100.png') no-repeat center center / contain;
-
-                }
-
-                &.chips-0 {
-                    background: url('../../../img/games/chips/chips-25.png') no-repeat center center / cover;
-                }
-
-                &.chips-1 {
-                    background: url('../../../img/games/chips/chips-50.png') no-repeat center center / cover;
-                }
-
-                &.chips-2 {
-                    background: url('../../../img/games/chips/chips-100.png') no-repeat center center / cover;
-                }
-
-                &.chips-3 {
-                    background: url('../../../img/games/chips/chips-500.png') no-repeat center center / cover;
-                }
-
-                &.chips-4 {
-                    background: url('../../../img/games/chips/chips-1000.png') no-repeat center center / cover;
-                }
-
-                &.chips-5 {
-                    background: url('../../../img/games/chips/chips-1250.png') no-repeat center center / cover;
-                }
-
-                &.chips-6 {
-                    background: url('../../../img/games/chips/chips-5000.png') no-repeat center center / cover;
-                }
-
-                &.chips-7 {
-                    background: url('../../../img/games/chips/chips-10000.png') no-repeat center center / cover;
-                }
-
-            }
+        &:hover::after {
+            background-image: url('/img/games/cancel_light.png');
         }
     }
-}
-
-@media screen and (max-width: 322px) {
-    .game-chips-box {
-        position: relative;
-        width: 68px;
-        height: 58px;
-
-        // margin-bottom: 9rem;
-        div {
-
-            position: fixed;
+    
+    .confirm {
+    
+        &::after {
+    
+            background-image: url('/img/games/confirm.png');
         }
-
-        div.none {
-            bottom: 6rem;
-
-            .default-click {
-
-                width: 50px;
-                height: 50px;
-                border-radius: 50px;
-                margin: 0 5px 0 8px;
-                position: relative;
-                display: block;
-
-                &.chips-0 {
-                    background: url('../../../img/games/chips/chips-25.png') no-repeat center center / cover;
-                }
-
-                &.chips-1 {
-                    background: url('../../../img/games/chips/chips-50.png') no-repeat center center / cover;
-                }
-
-                &.chips-2 {
-                    background: url('../../../img/games/chips/chips-100.png') no-repeat center center / cover;
-                }
-
-                &.chips-3 {
-                    background: url('../../../img/games/chips/chips-500.png') no-repeat center center / cover;
-                }
-
-                &.chips-4 {
-                    background: url('../../../img/games/chips/chips-1000.png') no-repeat center center / cover;
-                }
-
-                &.chips-5 {
-                    background: url('../../../img/games/chips/chips-1250.png') no-repeat center center / cover;
-                }
-
-                &.chips-6 {
-                    background: url('../../../img/games/chips/chips-5000.png') no-repeat center center / cover;
-                }
-
-                &.chips-7 {
-                    background: url('../../../img/games/chips/chips-10000.png') no-repeat center center / cover;
-                }
-
-                &::before {
-                    content: '';
-                    background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
-                    display: block;
-                    width: 61px;
-                    height: 61px;
-                    border-radius: 61px;
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    transform: translate(-9%, -9%);
-
-                }
-            }
-
-            span {
-                position: absolute;
-                z-index: 9;
-                width: 40px;
-                height: 40px;
-                transition: all 1s ease;
-
-
-                &.chips-0 {
-                    animation-name: animbchips0;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -8.5rem;
-                    bottom: 0rem;
-                }
-
-                @keyframes animbchips0 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -8.5rem;
-                        bottom: 0rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-1 {
-                    animation-name: animbchips1;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -7.2rem;
-                    bottom: 3.3rem;
-                }
-
-                @keyframes animbchips1 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -7.2rem;
-                        bottom: 3.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-2 {
-                    animation-name: animbchips2;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -4.8rem;
-                    bottom: 5.9rem;
-                }
-
-                @keyframes animbchips2 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -4.8rem;
-                        bottom: 5.9rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-3 {
-                    animation-name: animbchips3;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: -1.3rem;
-                    bottom: 6.8rem;
-                }
-
-                @keyframes animbchips3 {
-                    0% {
-                        left: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        left: -1.3rem;
-                        bottom: 6.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-4 {
-                    animation-name: animbchips4;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -1.3rem;
-                    bottom: 6.8rem;
-                }
-
-                @keyframes animbchips4 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -1.3rem;
-                        bottom: 6.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-5 {
-                    animation-name: animbchips5;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -4.8rem;
-                    bottom: 5.9rem;
-                }
-
-                @keyframes animbchips5 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -4.8rem;
-                        bottom: 5.9rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-6 {
-                    animation-name: animbchips6;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -7.2rem;
-                    bottom: 3.3rem;
-                }
-
-                @keyframes animbchips6 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -7.2rem;
-                        bottom: 3.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-                &.chips-7 {
-                    animation-name: animbchips7;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: -8.5rem;
-                    bottom: 0rem;
-                }
-
-                @keyframes animbchips7 {
-                    0% {
-                        right: 0;
-                        bottom: 0;
-                        opacity: 0;
-                        transform: rotate(-180deg);
-                    }
-
-                    100% {
-                        right: -8.5rem;
-                        bottom: 0rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-                }
-
-
-                &.act {
-
-                    &::before {
-                        display: none;
-                    }
-                }
-            }
-
+        &:hover::after {
+            background-image: url('/img/games/confirm_light.png');
         }
+    }
+    
+    .double {
+    
+        margin-left: auto;
+        &::after {
+            content: 'X2';    
+            font-size: 1.5rem;       
+            text-align: center;
+            line-height: 2.5rem;
+            font-weight: 600;
+            color: rgba(141, 141, 159, 0.70);
+            
+        }
+        &:hover::after {
+            color:rgba(255, 255, 255, 1);
+        }
+    }
 
-        div.show {
-            bottom: 1.8rem;
-
-            span {
-                position: absolute;
-                width: 40px;
-                height: 40px;
-                transition: all 1s ease;
-
-
-                &.chips-0 {
-                    animation-name: animbeasechips0;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 4.5rem;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips0 {
-                    0% {
-                        left: -8.5rem;
-                        bottom: 6rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0.5rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-1 {
-                    animation-name: animbeasechips1;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 4.5rem;
-                    transform: rotate(180deg);
-                    z-index: -1;
-                }
-
-                @keyframes animbeasechips1 {
-                    0% {
-                        left: -7.2rem;
-                        bottom: 7.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0.5rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-2 {
-                    animation-name: animbeasechips2;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 4.5rem;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips2 {
-                    0% {
-                        left: -4.8rem;
-                        bottom: 10.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0.5rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-3 {
-                    animation-name: animbeasechips3;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    left: 0.5rem;
-                    bottom: 4.5rem;
-                    transform: rotate(180deg);
-                    z-index: -1;
-                }
-
-                @keyframes animbeasechips3 {
-                    0% {
-                        left: -1.3rem;
-                        bottom: 11.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        left: 0.5rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-4 {
-                    animation-name: animbeasechips4;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 4.5rem;
-                    z-index: -1;
-                    transform: rotate(180deg);
-                }
-
-                @keyframes animbeasechips4 {
-                    0% {
-                        right: -1.3rem;
-                        bottom: 11.3rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0.5rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-5 {
-                    animation-name: animbeasechips5;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 4.5rem;
-                    transform: rotate(180deg);
-                    z-index: -1;
-                }
-
-                @keyframes animbeasechips5 {
-                    0% {
-                        right: -4.8rem;
-                        bottom: 10.4rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-6 {
-                    animation-name: animbeasechips6;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 4.5rem;
-                    transform: rotate(180deg);
-                    z-index: -1;
-                }
-
-                @keyframes animbeasechips6 {
-                    0% {
-                        right: -7.2rem;
-                        bottom: 7.8rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0.5rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.chips-7 {
-                    animation-name: animbeasechips7;
-                    animation-duration: 1s;
-                    animation-timing-function: ease;
-                    right: 0.5rem;
-                    bottom: 4.5rem;
-                    transform: rotate(180deg);
-                    z-index: -1;
-                }
-
-                @keyframes animbeasechips7 {
-                    0% {
-                        right: -8.5rem;
-                        bottom: 4.5rem;
-                        opacity: 1;
-                        transform: rotate(0deg);
-                    }
-
-                    100% {
-                        right: 0.5rem;
-                        bottom: 4.5rem;
-                        opacity: 0;
-                        transform: rotate(180deg);
-                    }
-                }
-
-                &.act {
-
-                    &::before {
-                        display: none;
-                    }
-                }
-            }
-
-            .default-click {
-                width: 50px;
-                height: 50px;
-                border-radius: 50px;
-                margin: 0 5px 0 8px;
-                position: relative;
-                display: inline-block;
-                background: url('../../../img/games/chips/chips-25.png') no-repeat center center / contain;
-
-                &::before {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    z-index: -1;
-                    bottom: -5px;
-                    left: -5px;
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50px;
-                    margin: 0 5px;
-                    position: relative;
-                    display: inline-block;
-                    background: url('../../../img/games/chips/chips-50.png') no-repeat center center / contain;
-
-                }
-
-                &::after {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    z-index: -2;
-                    bottom: 44px;
-                    left: -5px;
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50px;
-                    margin: 0 5px;
-                    position: relative;
-                    display: inline-block;
-                    background: url('../../../img/games/chips/chips-100.png') no-repeat center center / contain;
-
-                }
-            }
+    &.can-bet{
+        .cancel,
+        .double,
+        .confirm {
+           opacity: 1.0;
         }
     }
 }

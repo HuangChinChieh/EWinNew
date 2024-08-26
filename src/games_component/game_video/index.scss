@@ -1,0 +1,21 @@
+#divVideoArea{
+    position: absolute;
+    //left: 50%;
+    left: 0;
+    top: 0;
+    //transform: translateX(-50%);
+}
+
+
+.magnifierDiv{
+    width: 120.2rem;
+    height: 67.625rem;
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+
+    .magnifier{
+        width: 100%;
+        height: 100%;
+    }
+}

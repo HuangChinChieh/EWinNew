@@ -1,29 +1,503 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import ButtonBox from 'games_component/game_buttons/game_btn_box';
-import GameChipsButton from 'games_component/game_buttons/game_chips_btn';
-import Snap from "utils/snap.svg"
-
+import { moveChipAnimation } from '../animation/betAnimation/baccaratBasicAnimation'
+import '../animation/betAnimation/orderAnimation.scss';
 import './index.scss';
-import './animations.scss';
-import './media.scss';
 
 // 之後會優化代碼
 
-const GameBettingArea = (props) => {    
- 
+const GameBettingArea = (props) => {
+  const betAreaPath = useRef(null);
+  const chipMaxCount = 5;
 
-    const addOrderValue = (type) => {
-        //整體流程為，在body以絕對位置建立籌碼，移動籌碼動畫，更新數值
+  const handleAddBetValue = (event, areaType) => {
+
+    moveChipAnimation(areaType,()=>{
+      props.dispatchOrderData({
+        type: "addBet",
+        payload: {
+          areaType: areaType,
+          selChipData: props.selChipData
+        }
+      });
+    });   
+  };
 
 
-    };
 
-
-
+  const generateChipDom = (chipData) => {
     return (
+      <div className="chip-stack">
+        <div className={"game-chip chips-" + chipData.styleIndex}>
+          <div className='game-chipValue'>{chipData.chipValue}</div>
+        </div>
+      </div>
+    );
+  };
 
-    )
-}
+  const generateTotalValueDom = (areaData) => {
+    return (<div class="chip-stack">
+      <div className={"game-chipTotal " + ((areaData.unConfirmValue === 0) ? "confirm-bet " : " ") + ((areaData.totalValue > 0) ? "show " : " ")}>
+        <div class="game-chipTotal-content">
+          <div class="game-chipTotal-icon">
+
+          </div>
+          <div class="game-chipTotal-checkIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
+              <path d="M18.3828 4.11719C18.8711 4.60547 18.8711 5.39844 18.3828 5.88672L8.38281 15.8867C7.89453 16.375 7.10156 16.375 6.61328 15.8867L1.61328 10.8867C1.125 10.3984 1.125 9.60547 1.61328 9.11719C2.10156 8.62891 2.89453 8.62891 3.38281 9.11719L7.5 13.2305L16.6172 4.11719C17.1055 3.62891 17.8984 3.62891 18.3867 4.11719H18.3828Z" fill="white" />
+            </svg>
+          </div>
+          <div class="game-chipTotal-value">{areaData.totalValue}</div>
+          <div class="game-chipTotal-leftLine"></div>
+          <div class="game-chipTotal-rightLine"></div>
+          <div class="game-chipTotal-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" class="nocheck" viewBox="0 0 19 12" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.93836 10.5638C8.1075 12.4821 10.8926 12.4821 12.0618 10.5638L18.5001 0H0.5L6.93836 10.5638Z" fill="black" fill-opacity="0.6" />
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3425 9.98552C10.5309 11.3382 8.4691 11.3382 7.6575 9.98552L1.6662 1.70469e-05H17.3338L11.3425 9.98552ZM0.5 0L0.50001 1.70469e-05L6.80001 10.5C8.00001 12.5 11 12.5 12.2 10.5L18.5 1.70469e-05L18.5 0H0.5Z" fill="#CBCBCB" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="check" viewBox="0 0 19 12" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.72352 10.5611C7.89265 12.4794 10.6778 12.4794 11.8469 10.5611L18.2853 -0.00268555H0.285156L6.72352 10.5611Z" fill="#B8870A" fill-opacity="0.6" />
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1277 9.98284C10.3161 11.3355 8.25426 11.3355 7.44266 9.98284L1.45136 -0.0026685H17.119L11.1277 9.98284ZM0.285156 -0.00268555L0.285166 -0.0026685L6.58517 10.4973C7.78517 12.4973 10.7852 12.4973 11.9852 10.4973L18.2852 -0.0026685L18.2852 -0.00268555H0.285156Z" fill="#FFB423" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>)
+  };
+
+  //初始化設定檔
+  useEffect(() => {
+    betAreaPath.current = {
+      banker: {
+        snap: window.Snap(".svg-banker"),
+        close:
+          "M0,0 H274.27 C274.27,0 275,4 275,4 C296,137 295,142 196,142 H0 V0 Z",
+        open:
+          "M0.5,0.5H285.932C289.535 10.324 291.5 20.9328 291.5 32C291.5 82.5339 250.534 123.5 200 123.5H0.5V0.5Z"
+      },
+      player: {
+        snap: window.Snap(".svg-player"),
+        close:
+          "M15.65,0H291.92V142H89.92C-5.08,142,-6.08,137,14.92,4C14.92,4,15.65,0,15.65,0Z",
+        open:
+          "M6.06847, 0.5H291.5V123.5H92C41.4661 123.5 0.5 82.5339 0.5 32C0.5 20.9328 2.46535 10.324 6.06847 0.5Z"
+      },
+      bankerPair: {
+        snap: window.Snap(".svg-banker-pair"),
+        close:
+          "M154.5,0 H239.23 V180 C239.23,202.09,221.32,220,199.23,220 H75.9 L-0.77,142 H76.23 C175.23,142,176.23,137,155.23,4 L154.5,0 Z",
+        open:
+          "M163.996 0.5  H239.5V122C239.5 165.904 203.904 201.5 160 201.5H78.2086L1.96871 124.5H77C128.086 124.5 169.5 83.0861 169.5 32C169.5 20.9427 167.559 10.336 163.996 0.5Z"
+      },
+      playerPair: {
+        snap: window.Snap(".svg-player-pair"),
+        close:
+          "M1,0 H83.73 L83,4 C62,137,63,142,162,142H240L162.77,220H41C18.91,220,1,202.09,1,180V0Z",
+        open:
+          "M0.5 0.5 H74.0041 C70.441 10.336 68.5 20.9427 68.5 32 C68.5 83.0861 109.914 124.5 161 124.5 H238.031 L161.791 201.5 H80 C36.0961 201.5 0.5 165.904 0.5 122 V0.5Z"
+      },
+      tie: {
+        snap: window.Snap(".svg-tie"),
+        close: "M0 80L80 0 H320 L400 80H0Z",
+        open: "M1.19869 77.5L77.4386 0.5H322.561L398.801 77.5H1.19869Z"
+      }
+    };
+  }, []);
+
+  //處理收合投注區
+  useEffect(() => {
+    if (props.isCanBet) {
+      for (let key in betAreaPath.current) {
+        let path = betAreaPath.current[key].snap.select(".svg-eve");
+
+        path.animate({ d: betAreaPath.current[key].open }, 500, window.mina.linear);
+      }
+    } else {
+      for (let key in betAreaPath.current) {
+        let path = betAreaPath.current[key].snap.select(".svg-eve");
+
+        path.animate({ d: betAreaPath.current[key].close }, 500, window.mina.linear);
+      }
+    }
+  }, [props.isCanBet]);
+
+  //處理開獎區塊
+  useEffect(() => {
+    for (let winArea of props.winAreas) {
+      let winAreaClass = "";
+      switch (winArea) {
+        case "Player":
+          winAreaClass = "svg-player";
+          break;
+        case "Banker":
+          winAreaClass = "svg-banker";
+          break;
+        case "PlayerPair":
+          winAreaClass = "svg-player-pair";
+          break;
+        case "BankerPair":
+          winAreaClass = "svg-banker-pair";
+          break;
+        case "Tie":
+          winAreaClass = "svg-tie";
+          break;
+        default:
+          break;
+      }
+
+      if (winAreaClass) {
+        document.querySelector("." + winAreaClass).classList.add("win");
+
+        setTimeout(() => {
+          document.querySelector("." + winAreaClass).classList.remove("win");
+        }, 6000);
+      }
+    }
+  }, [props.winAreas]);
+
+  return (
+    <div className={"betArea " + (props.isCanBet ? "" : "close")}>
+      <svg class="betWinEffect">
+        <filter id="blurFilter">
+          <feGaussianBlur stdDeviation="1" />
+        </filter>
+        <filter
+          id="filter0_ii_1724_13078"
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+          filterUnits="userSpaceOnUse"
+          color-interpolation-filters="sRGB"
+        >
+          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feBlend
+            mode="normal"
+            in="SourceGraphic"
+            in2="BackgroundImageFix"
+            result="shape"
+          />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dx="-1" dy="-1" />
+          <feGaussianBlur stdDeviation="7">
+            <animate
+              attributeName="stdDeviation"
+              values="2;7;2"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+          </feGaussianBlur>
+          <feComposite in2="hardAlpha" operator="out" k2="-1" k3="1" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="shape"
+            result="effect1_innerShadow_1724_13078"
+          />
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+            result="hardAlpha"
+          />
+          <feOffset dx="1" dy="1" />
+          <feGaussianBlur stdDeviation="7" />
+          <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+          <feColorMatrix
+            type="matrix"
+            values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"
+          />
+          <feBlend
+            mode="normal"
+            in2="effect1_innerShadow_1724_13078"
+            result="effect2_innerShadow_1724_13078"
+          />
+        </filter>
+      </svg>
+      <svg
+        class="svg-player-pair"
+        viewBox="0 0 240 221"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        pointer-events="none"
+      >
+        <path
+          class="svg-eve"
+          d="M0.5 0.5 H74.0041 C70.441 10.336 68.5 20.9427 68.5 32 C68.5 83.0861 109.914 124.5 161 124.5 H238.031 L161.791 201.5 H80 C36.0961 201.5 0.5 165.904 0.5 122 V0.5Z"
+          fill="url(#paint0_linear_1640_16820)"
+          stroke="url(#paint1_linear_1640_16820)"
+          pointer-events="visibleFill"
+          shape-rendering="geometricPrecision"
+          onClick={(event) => (handleAddBetValue(event, 'PlayerPair'))}
+        />
+        <defs>
+          <linearGradient
+            class="svg-eve-fill"
+            id="paint0_linear_1640_16820"
+            x1="119.615"
+            y1="0"
+            x2="119.615"
+            y2="202"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#0F52B7" stop-opacity="0.9" />
+            <stop offset="1" stop-color="#003380" />
+          </linearGradient>
+          <linearGradient
+            class="svg-eve-border"
+            id="paint1_linear_1640_16820"
+            x1="119.615"
+            y1="0"
+            x2="119.615"
+            y2="202"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#17AAFF" />
+            <stop offset="1" stop-color="#625FFF" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <svg
+        class="svg-banker-pair"
+        viewBox="0 0 240 221"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        pointer-events="none"
+      >
+        <path
+          class="svg-eve"
+          d="M163.996 0.5  H239.5V122C239.5 165.904 203.904 201.5 160 201.5H78.2086L1.96871 124.5H77C128.086 124.5 169.5 83.0861 169.5 32C169.5 20.9427 167.559 10.336 163.996 0.5Z"
+          fill="url(#paint0_linear_1640_16822)"
+          stroke="url(#paint1_linear_1640_16822)"
+          pointer-events="visibleFill"
+          shape-rendering="geometricPrecision"
+          onClick={(event) => (handleAddBetValue(event, 'BankerPair'))}
+        />
+        <defs>
+          <linearGradient
+            class="svg-eve-fill"
+            id="paint0_linear_1640_16822"
+            x1="120.385"
+            y1="0"
+            x2="120.385"
+            y2="202"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#B70F0F" stop-opacity="0.9" />
+            <stop offset="1" stop-color="#720000" />
+          </linearGradient>
+          <linearGradient
+            class="svg-eve-border"
+            id="paint1_linear_1640_16822"
+            x1="120.385"
+            y1="0"
+            x2="120.385"
+            y2="202"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#FF5B53" />
+            <stop offset="1" stop-color="#EA311D" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <svg
+        class="svg-banker"
+        viewBox="0 0 292 142"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        pointer-events="none"
+      >
+        <path
+          class="svg-eve"
+          d="M0.5,0.5H285.932C289.535 10.324 291.5 20.9328 291.5 32C291.5 82.5339 250.534 123.5 200 123.5H0.5V0.5Z"
+          fill="url(#paint0_linear_1640_16818)"
+          stroke="url(#paint1_linear_1640_16818)"
+          pointer-events="visibleFill"
+          shape-rendering="geometricPrecision"
+          onClick={(event) => (handleAddBetValue(event, 'Banker'))}
+        />
+        <defs>
+          <linearGradient
+            class="svg-eve-fill"
+            id="paint0_linear_1640_16818"
+            x1="146"
+            y1="0"
+            x2="146"
+            y2="124"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#B70F0F" stop-opacity="0.9" />
+            <stop offset="1" stop-color="#720000" />
+          </linearGradient>
+          <linearGradient
+            class="svg-eve-border"
+            id="paint1_linear_1640_16818"
+            x1="146"
+            y1="0"
+            x2="146"
+            y2="124"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#FF5B53" />
+            <stop offset="1" stop-color="#EA311D" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <svg
+        class="svg-player"
+        viewBox="0 0 292 142"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class="svg-eve"
+          d="M6.06847, 0.5H291.5V123.5H92C41.4661 123.5 0.5 82.5339 0.5 32C0.5 20.9328 2.46535 10.324 6.06847 0.5Z"
+          fill="url(#paint0_linear_1640_16816)"
+          stroke="url(#paint1_linear_1640_16816)"
+          shape-rendering="geometricPrecision"
+          onClick={(event) => (handleAddBetValue(event, 'Player'))}
+        />
+        <defs>
+          <linearGradient
+            class="svg-eve-fill"
+            id="paint0_linear_1640_16816"
+            x1="146"
+            y1="0"
+            x2="146"
+            y2="124"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#0F52B7" stop-opacity="0.9" />
+            <stop offset="1" stop-color="#003380" />
+          </linearGradient>
+          <linearGradient
+            class="svg-eve-border"
+            id="paint1_linear_1640_16816"
+            x1="146"
+            y1="0"
+            x2="146"
+            y2="124"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#17AAFF" />
+            <stop offset="1" stop-color="#625FFF" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <svg
+        class="svg-tie"
+        viewBox="0 0 400 78"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        pointer-events="none"
+      >
+        <path
+          class="svg-eve"
+          d="M1.19869 77.5L77.4386 0.5H322.561L398.801 77.5H1.19869Z"
+          fill="url(#paint0_linear_1640_16824)"
+          stroke="url(#paint1_linear_1640_16824)"
+          pointer-events="visibleFill"
+          shape-rendering="crispEdges"
+          onClick={(event) => (handleAddBetValue(event, 'Tie'))}
+        />
+        <defs>
+          <linearGradient
+            class="svg-eve-fill"
+            id="paint0_linear_1640_16824"
+            x1="200"
+            y1="0"
+            x2="200"
+            y2="78"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#0FB766" stop-opacity="0.9" />
+            <stop offset="1" stop-color="#064F2C" />
+          </linearGradient>
+          <linearGradient
+            class="svg-eve-border"
+            id="paint1_linear_1640_16824"
+            x1="200"
+            y1="0"
+            x2="200"
+            y2="78"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#26FF7A" />
+            <stop offset="1" stop-color="#0B7453" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="betTextArea">
+        <div class="bet-text bet-text-banker">
+          <div class="bet-text-title">庄</div>
+          <div class="bet-text-num">1:0:9</div>
+        </div>
+        <div class="bet-text bet-text-player">
+          <div class="bet-text-title">閒</div>
+          <div class="bet-text-num">1:0:9</div>
+        </div>
+        <div class="bet-text bet-text-banker-pair">
+          <div class="bet-text-title">庄對</div>
+          <div class="bet-text-num">1:0:9</div>
+        </div>
+        <div class="bet-text bet-text-player-pair">
+          <div class="bet-text-title">閒對</div>
+          <div class="bet-text-num">1:0:9</div>
+        </div>
+        <div class="bet-text bet-text-tie">
+          <div class="bet-text-title">和</div>
+          <div class="bet-text-num">1:0:9</div>
+        </div>
+        <div class="betArea-bakText-banker">庄</div>
+        <div class="betArea-bakText-player">閒</div>
+      </div>
+      <div class="betChipArea">
+        <div class="bet-chip-banker">
+          {props.orderData.Banker.chips.map(
+            (chipData, index, array) =>
+              array.length - index <= chipMaxCount && generateChipDom(chipData)
+          )}
+          {generateTotalValueDom(props.orderData.Banker)}
+        </div>
+        <div class="bet-chip-player">
+          {props.orderData.Player.chips.map(
+            (chipData, index, array) =>
+              array.length - index <= chipMaxCount && generateChipDom(chipData)
+          )}
+          {generateTotalValueDom(props.orderData.Player)}
+        </div>
+        <div class="bet-chip-bankerpair">
+          {props.orderData.BankerPair.chips.map(
+            (chipData, index, array) =>
+              array.length - index <= chipMaxCount && generateChipDom(chipData)
+          )}
+          {generateTotalValueDom(props.orderData.BankerPair)}
+        </div>
+        <div class="bet-chip-playerpair">
+          {props.orderData.PlayerPair.chips.map(
+            (chipData, index, array) =>
+              array.length - index <= chipMaxCount && generateChipDom(chipData)
+          )}
+          {generateTotalValueDom(props.orderData.PlayerPair)}
+        </div>
+        <div class="bet-chip-tie">
+          {props.orderData.Tie.chips.map(
+            (chipData, index, array) =>
+              array.length - index <= chipMaxCount && generateChipDom(chipData)
+          )}
+          {generateTotalValueDom(props.orderData.Tie)}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 
 

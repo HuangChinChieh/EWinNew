@@ -1,8 +1,8 @@
 .game-mute-box {
     div {
-        margin-left: 25px;
-        width: 33px;
-        height: 33px;
+        margin-left: 1.5625rem;
+        width: 2.0625rem;
+        height: 2.0625rem;
         cursor: pointer;
 
         &.mute {
@@ -15,11 +15,3 @@
     }
 }
 
-
-@media screen and (max-width: 1200px) {
-    .game-mute-box {
-        div {
-            margin-left: 7px;
-        }
-    }
-}

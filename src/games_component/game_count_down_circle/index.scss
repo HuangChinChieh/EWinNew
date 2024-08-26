@@ -1,13 +1,13 @@
 .countdown-circle-box {
 
-    width: 80px;
-    height: 80px;
+    width: 5rem;
+    height: 5rem;
     margin: 12rem auto 0;
 
 
     .countdown-circle {
-        width: 77px;
-        height: 77px;
+        width: 4.8125rem;
+        height: 4.8125rem;
         // border: 10px solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
         position: relative;
@@ -21,7 +21,7 @@
         .countdown-text {
             z-index: 1;
             font-size: 2.4rem;
-            text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+            text-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.6);
             font-weight: bold;
             transform: scale(1) rotate(-44deg);
         }
@@ -30,21 +30,21 @@
             content: "";
             position: absolute;
             box-sizing: border-box;
-            inset: -10px;
+            inset: -0.625rem;
             border-radius: 50%;
             clip-path: var(--PathContent);
             z-index: 2;
         }
 
         &.green {
-            box-shadow: 0 0 20px rgba(76, 175, 80, 1);
+            box-shadow: 0 0 1.25rem rgba(76, 175, 80, 1);
 
             .countdown-text {
                 color: #4caf50;
             }
 
             &:before {
-                border: 10px solid rgba(76, 175, 80, 1);
+                border: 0.625rem solid rgba(76, 175, 80, 1);
                 // box-shadow: inset 0px -10px 5px rgba(76, 175, 80, 0.4);
                 z-index: 2;
             }
@@ -52,20 +52,20 @@
         }
 
         &.yellow {
-            box-shadow: 0 0 20px rgba(255, 232, 148, 1);
+            box-shadow: 0 0 1.25rem rgba(255, 232, 148, 1);
 
             .countdown-text {
                 color: rgba(255, 232, 148, 1);
             }
 
             &:before {
-                border: 10px solid rgba(255, 232, 148, 1);
+                border: 0.625rem solid rgba(255, 232, 148, 1);
             }
         }
 
 
         &.red {
-            box-shadow: 0 0 20px rgba(255, 68, 68, 1);
+            box-shadow: 0 0 1.25rem rgba(255, 68, 68, 1);
 
             .countdown-text {
                 color: rgba(255, 68, 68, 1);
@@ -94,9 +94,9 @@
                 content: "";
                 position: absolute;
                 box-sizing: border-box;
-                inset: -10px;
+                inset: -0.625rem;
                 border-radius: 50%;
-                border: 10px solid rgba(255, 68, 68, 1);
+                border: 0.625rem solid rgba(255, 68, 68, 1);
                 // animation: prixClipFix 30s infinite linear;
             }
 
@@ -156,80 +156,3 @@
 
 }
 
-
-@media screen and (max-width: 1082px) {
-    .countdown-circle-box {
-        width: 63px;
-        height: 63px;
-        margin: auto;
-        position: absolute;
-        right: 2.5rem;
-        top: 2.5rem;
-
-        .countdown-circle {
-            width: 60px;
-            height: 60px;
-
-            .countdown-text {
-                z-index: 1;
-                font-size: 1.4rem;
-                text-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-                font-weight: bold;
-                transform: scale(1) rotate(-44deg);
-            }
-
-            &:before {
-                inset: -4px;
-            }
-
-            &.green {
-                &:before {
-                    border: 5px solid rgba(76, 175, 80, 1);
-                }
-
-            }
-
-            &.yellow {
-
-                &:before {
-                    border: 5px solid rgba(255, 232, 148, 1);
-                }
-            }
-
-
-            &.red {
-                box-shadow: 0 0 20px rgba(255, 68, 68, 1);
-
-                .countdown-text {
-                    color: rgba(255, 68, 68, 1);
-                    animation: aniText 1s ease-out infinite;
-                }
-
-                @keyframes aniText {
-                    0% {
-                        transform: scale(1) rotate(-44deg);
-                        opacity: 1;
-                    }
-
-                    100% {
-                        transform: scale(1.7) rotate(-44deg);
-                        opacity: 0.6;
-                    }
-                }
-
-                &.done {
-                    transition: all 1s ease;
-                    transform: scale(2) rotate(44deg);
-                    opacity: 0;
-
-                }
-
-                &:before {
-                    border: 5px solid rgba(255, 68, 68, 1);
-                    inset: -4px;
-                }
-
-            }
-        }
-    }
-}

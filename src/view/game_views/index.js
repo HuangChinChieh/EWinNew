@@ -1,25 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useRef, useCallback, useMemo } from 'react';
-import { EWinGameBaccaratClient } from '../signalr/bk/EWinGameBaccaratClient';
-import GameHeader from 'games_component/game_header';
-import GameFooterArea from 'games_component/game_footer_area';
-import GameFooterBG from 'games_component/game_footer_bg';
+import React, { useState, useEffect, useContext, useRef, useCallback, useMemo, useReducer } from 'react';
+
 import CountdownCircle from 'games_component/game_count_down_circle';
-import GameBettingAction from 'games_component/game_betting_action';
-import GameBettingArea from 'games_component/game_betting_area';
-import GameChat from 'games_component/game_chat';
 import { WalletContext } from '../../provider/GameLobbyProvider';
 import { SubscribeContext } from '../../provider/GameBaccaratProvider'
 import './index.scss';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+//import { animationMoveChip } from './orderAnimation';
+import GameFooterArea from 'games_component/game_footer_area';
+import GameChipsButton from 'games_component/game_buttons/game_chips_btn';
+import GameBettingArea from 'games_component/game_betting_area_new';
+import GameRoadMap from 'games_component/game_road_map';
+import GameVideo from 'games_component/game_video';
+import { EWinGameBaccaratClient } from 'signalr/bk/EWinGameBaccaratClient';
 import { orderReducer, initialOrderData } from './orderData';
-import './orderAnimation.scss';
-import { animationMoveChip } from './orderAnimation';
-
+import { forEach } from 'lodash';
 
 
 const GameView = (props) => {
     const GameType = "BA";
+    //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
     const gameSetID = props.GameSetID;
     const gameClient = EWinGameBaccaratClient.getInstance();
@@ -31,44 +31,30 @@ const GameView = (props) => {
     const countdownInfo = useRef({ lastQueryDate: null, tableTimeoutSecond: 60, remainingSecond: 0 });
     const [isCanBet, setIsCanBet] = useState(false);
     const [winAreas, setWinAreas] = useState(["Banker", "Tie"]);
-    const [orderData, setOrderData] = useState({
-        Tie: {
-            totalValue: 0,
-            confirmValue: 0,
-            unConfirmValue: 0,
-            chips: []
-        },
-        Banker: {
-            totalValue: 0,
-            confirmValue: 0,
-            unConfirmValue: 0,
-            chips: [{ styleIndex: 5, chipsValue: 1000, orderUnix: "1721252751" }]
-        },
-        Player: {
-            totalValue: 0,
-            confirmValue: 0,
-            unConfirmValue: 0,
-            chips: []
-        },
-        PlayerPair: {
-            totalValue: 0,
-            confirmValue: 0,
-            unConfirmValue: 0,
-            chips: []
-        },
-        BankerPair: {
-            totalValue: 0,
-            confirmValue: 0,
-            unConfirmValue: 0,
-            chips: []
-        }
-    });
+    const [orderData, dispatchOrderData] = useReducer(orderReducer, initialOrderData);
 
-
-
+    const [totalBetValue, setTotalBetValue] = useState(0);
     const { wallet, updateWallet } = useContext(WalletContext)
     const { AddSubscribe, RemoveSubscribe } = useContext(SubscribeContext)
     const history = useHistory();
+    const [selChipData, setSelChipData] = useState(null);
+
+    const [videoResolutionType, setVideoResolutionType] = useState(0);
+    const [streamName, setStreamName] = useState("");
+    const [videoSourceList, setVideoSourceList] = useState([])
+    const [vpDomain, setVpDomain] = useState("")
+    //0=std/1=HD
+
+    const chipsItems = [
+        { styleIndex: 1, chipValue: 25 },
+        { styleIndex: 2, chipValue: 50 },
+        { styleIndex: 3, chipValue: 100 },
+        { styleIndex: 4, chipValue: 500 },
+        { styleIndex: 5, chipValue: 1000 },
+        { styleIndex: 6, chipValue: 1250 },
+        { styleIndex: 7, chipValue: 5000 },
+        { styleIndex: 8, chipValue: 10000 }
+    ];
 
 
     useEffect(() => {
@@ -82,7 +68,7 @@ const GameView = (props) => {
             gameClient.GetTableInfo(tableNumber, gameSetID, (success, o) => {
                 if (success) {
                     if (o.ResultCode === 0) {
-                        resolve(o);
+                        resolve({ name: "GetTableInfo", value: o });
                     } else {
                         reject("GetTableInfoError");
                     }
@@ -102,7 +88,7 @@ const GameView = (props) => {
                 gameClient.UserAccountGetBetLimitListByRoadMap(tableNumber, gameSetID, (success, o) => {
                     if (success) {
                         if (o.ResultCode === 0) {
-                            resolve(o)
+                            resolve({ name: "SetBetLimit", value: o });
                         } else {
                             reject("GetBetLimitError");
                         }
@@ -178,13 +164,15 @@ const GameView = (props) => {
         //PromiseArray.push();
 
         new Promise((resolve, reject) => {
+
             //訂閱桌台
-            AddSubscribe((addSubscribeSuccess) => {
+            AddSubscribe(tableNumber, (addSubscribeSuccess) => {
                 if (addSubscribeSuccess) {
                     //刷新並取得桌台資訊
                     gameClient.RefreshSubscribe(gameSetID, tableNumber, refreshStreamType, (s, o) => {
                         if (s) {
                             if (o.ResultCode === 0) {
+                                debugger;
                                 resolve(o);
                             } else {
                                 reject("RefreshSubscribeError");
@@ -214,23 +202,56 @@ const GameView = (props) => {
 
         //#endregion
 
+        //promise4 取得視頻列表清單
+
+        //#region 取得視頻列表清單
+        PromiseArray.push(
+            new Promise((resolve, reject) => {
+                getVideoSourceList((success, o) => {
+                    if (success) {
+                        resolve({ name: "GetVideoSourceList", value: o });
+                    } else {
+                        reject(o);
+                    }
+                });
+            })
+        );
+        //#endregion
+
         Promise.all(PromiseArray).then((results) => {
+            for (let result of results) {
+                switch (result.name) {
+                    case "GetTableInfo":
+                        //Set Table Info
+                        handleTableInfo(result.value);
+                        break;
+                    case "SetBetLimit":
+                        //#region result2 限紅相關
+                        //限紅設定完成，設定限紅狀態
+                        if (gameSetID === 0) {
+                            //傳統桌台，使用桌台限紅
+                            //資訊會從GetTableInfo取得
+                        } else {
+                            setUseBetLimit(result.value);
+                        }
+                        //#endregion
+                        break;
+                    case "GetVideoSourceList":
+                        //#region 視頻清單資料                
+                        setVideoSourceList(result.value.Source);
 
-            //#region result1 桌台資料相關
-            //Set Table Info
-            handleTableInfo(results[0]);
+                        if (vpDomain === "") {
+                            if (result.value.Source.length > 0) {
+                                setVpDomain(result.value.Source[0].Server);
+                            }
+                        }
 
-            //#endregion
-
-            //#region result2 限紅相關
-            //限紅設定完成，設定限紅狀態
-            if (gameSetID === 0) {
-                //傳統桌台，使用桌台限紅
-                //資訊會從GetTableInfo取得
-            } else {
-                setUseBetLimit(results[1]);
+                        //#endregion
+                        break;
+                    default:
+                        break;
+                }
             }
-            //#endregion
         }).then(() => {
             intervalIDByTableInfo = setInterval(() => {
                 refreshTableInfo();
@@ -238,6 +259,12 @@ const GameView = (props) => {
         });
 
 
+        setSelChipData({ ...chipsItems[0], index: 0 });
+
+
+        resize();
+        window.addEventListener('resize', resize);
+        
 
         return () => {
             clearInterval(intervalIDByRefreshSubscribe);
@@ -251,6 +278,7 @@ const GameView = (props) => {
     //#region 限紅相關事件
 
     const setBetLimit = (tableNumber, gameSetID, selBetLimit, cb) => {
+
         if (selBetLimit && selBetLimit.BetLimitID !== 0) {
             gameClient.UserAccountSetBetLimit(tableNumber, wallet.CurrencyType, gameSetID, selBetLimit, (s, o) => {
                 if (s) {
@@ -267,9 +295,10 @@ const GameView = (props) => {
         } else {
             cb(false);
         }
-    }
+    };
 
     const clearBetLimit = (cb) => {
+
         gameClient.UserAccountClearBetLimit((s, o) => {
             if (s) {
                 if (o.ResultCode === 0) {
@@ -286,28 +315,59 @@ const GameView = (props) => {
 
     //#endregion
 
-    //#region 投注相關事件
-    //動畫也在這邊做處理，因為有
+    //#region 視頻相關
+    const handleStreamArray = (streamArray) => {
+        let ret;
+        //streamArray最多為兩個
 
-    const bet = (type, value) => {
+        if (streamArray.length === 0) {
+            ret = "";
+        } else if (streamArray.length === 1) {
+            ret = streamArray[0].StreamName.toUpperCase();
+        } else {
+            if (videoResolutionType != null) {
+                if (videoResolutionType === 0) {
+                    // std
+                    ret = streamArray[1].StreamName.toUpperCase();
+                } else {
+                    // HD
+                    ret = streamArray[0].StreamName.toUpperCase();
+                }
+            } else {
+                ret = streamArray[0].StreamName.toUpperCase();
+            }
+        }
 
+
+        return ret;
     };
 
-    const doubleBet = (e) => {
 
-    }
-
-    const cancelBet = (e) => {
-
+    const getVideoSourceList = (cb) => {
+        fetch('https://ewin.dev.mts.idv.tw/GetVideoSource.aspx?CT=' + window.encodeURIComponent(props.CT), {
+            method: 'GET' // 请求方法// 将 JavaScript 对象转换为 JSON 字符串
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // 解析响应中的 JSON 数据
+        }).then((o) => {
+            cb(true, o);
+        }).catch(() => {
+            cb(false, null);
+        });
     };
 
 
+    const selectVideoSource = (s, r) => {
+        window.localStorage.setItem("VideoSourceDomain", s);
+        window.localStorage.setItem("VideoResolutionType", r);
+
+        setVpDomain(s);
+        setVideoResolutionType(r);
+    };
 
     //#endregion
-
-    const rasieOrderValue = () => {
-
-    };
 
     const refreshTableInfo = () => {
         gameClient.GetTableInfo(tableNumber, gameSetID, (success, o) => {
@@ -328,6 +388,9 @@ const GameView = (props) => {
         countdownInfo.current.lastQueryDate = new Date();
         countdownInfo.current.remainingSecond = tableInfo.RemainingSecond;
         countdownInfo.current.tableTimeoutSecond = tableInfo.TableTimeoutSecond;
+
+        //設定視頻串流
+        setStreamName(handleStreamArray(tableInfo.Stream));
 
         switch (tableInfo.Status) {
             case GameType + ".Close":
@@ -366,6 +429,8 @@ const GameView = (props) => {
         }
     };
 
+
+
     const getCountdownInfo = useCallback(() => {
         return countdownInfo.current;
     }, []);
@@ -374,7 +439,30 @@ const GameView = (props) => {
         return tableInfo.current;
     }, []);
 
-    const setStreamType = 1;
+    const resize = () => {
+        // 设计稿的宽度和高度
+        const designWidth = 1920;
+        const designHeight = 1080;
+
+        // 获取当前窗口的宽度和高度
+        const currentWidth = window.innerWidth;
+        const currentHeight = window.innerHeight;
+
+        // 根据窗口的宽度或高度计算比例
+        const widthRatio = currentWidth / designWidth;
+        const heightRatio = currentHeight / designHeight;
+
+        // 使用最小比例来保证适应屏幕而不超出
+        const scaleRatio = Math.min(widthRatio, heightRatio);
+
+        // 计算新的 font-size，基于 16px 的设计基础大小
+        const newFontSize = 16 * scaleRatio;
+
+        // 设置根元素的 font-size
+        document.documentElement.style.fontSize = `${newFontSize}px`;
+    };
+
+
 
 
     const memoCountdownCircle = useMemo(() => (
@@ -385,14 +473,36 @@ const GameView = (props) => {
 
     return (
         <div className="game-view-wrap">
-            <div className='game-view-box'>
-                <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
+
+            {/* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
                 <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
                 <GameChat />
                 <GameFooterArea />
-                <GameBettingArea isCanBet={isCanBet} />
-                <GameFooterBG />
-            </div>
+                <GameBettingArea isCanBet={isCanBet} /> 
+                */
+                roundInfo === "" ? (<div></div>) : (
+                    <div className='game-view-box' >
+                        <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName}></GameVideo>
+                        <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
+                        <GameBettingArea isCanBet={true}
+                            winAreas={winAreas}
+                            selChipData={selChipData}
+                            orderData={orderData}
+                            dispatchOrderData={dispatchOrderData}
+                        ></GameBettingArea>
+                        <GameFooterArea totalBetValue={totalBetValue} chipItems={chipsItems}>
+                            <GameChipsButton chipsItems={chipsItems}
+                                isCanBet={true}
+                                selChipData={selChipData}
+                                setSelChipData={setSelChipData}
+                                orderData={orderData}
+                                dispatchOrderData={dispatchOrderData}></GameChipsButton>
+                        </GameFooterArea>
+                    </div>
+
+                )
+            }
+
         </div>
     );
 };

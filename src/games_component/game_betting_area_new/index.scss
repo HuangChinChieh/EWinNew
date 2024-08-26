@@ -1,75 +1,123 @@
 @import url("https://fonts.googleapis.com/css2?family=Yuji+Boku&display=swap");
 
+$image-url: url('/img/games/chips/chip-basic.png');
+
 @keyframes collapsingKeyframes {
   0% {
-    transform: translateZ(0) scale(1.0);
+    transform: translateZ(0) scale(1);
   }
-  100% {    
+  100% {
     transform: perspective(25rem) rotateX(20deg) scale(0.9);
   }
 }
 
-
 @keyframes collapsingKeyframes-end {
-   from {    
+  from {
     transform: perspective(25rem) rotateX(20deg) scale(0.9);
   }
   to {
-    transform: translateZ(0) scale(1.0);
-  } 
+    transform: translateZ(0) scale(1);
+  }
 }
 
-#testbtn{
-  position: absolute;
-    top: 45rem;
-    left: 34rem;
-    z-index: 999;
+
+@keyframes collapsingKeyframesByChip {
+  0% {
+    transform: translateZ(0.75rem);
+  }
+  100% {
+    transform: rotateX(-8deg) translateZ(0.75rem);
+  }
 }
 
-html {
-  font-size: 16px;
+@keyframes collapsingKeyframesByChip-end {
+  from {
+    transform:  rotateX(-8deg) translateZ(0.75rem);
+  }
+  to {
+    transform: translateZ(0.75rem);
+  }
 }
 
-.container {
-  width: 120rem;
-  height: 67.5rem;
-  position: relative;
-  background:black;
+
+@keyframes addChip {
+  from {
+    opacity:0;
+  }
+  to {
+    opacity:1;
+  }
 }
+
 
 .betArea {
   width: 45rem;
-  height: 12.625rem;
+  height: 12.5625rem;
   position: absolute;
-  top: 47.6875rem;
+  bottom: 7.25rem;
   left: 39rem;
   transform-origin: center;
   transform-style: preserve-3d;
-  animation: collapsingKeyframes-end 0.6s linear forwards;  
-     
-  svg.win{
-    filter:url(#filter0_ii_1724_13078);
+  animation: collapsingKeyframes-end 0.6s linear forwards;
+  z-index: 3;
+  
+  > svg.win {
+    filter: url(#filter0_ii_1724_13078);
+    z-index: 4;
   }
-    
+
+  > svg {
+    filter: url(#blurFilter);
+  }
+
+  .svg-tie,
+  .bet-text-player-pair,
+  .bet-text-tie,
+  .bet-text-banker-pair {
+    transition: transform 0.5s linear;
+  }
+
   &.close {
-        animation: collapsingKeyframes 0.6s linear forwards;
+    animation: collapsingKeyframes 0.6s linear forwards;
+    height: 13.75rem;
+
+    .svg-tie {
+      transform: translate(-50%, 1.125rem);
+    }
+
+    .betTextArea {
+      .bet-text {
+        &.bet-text-player-pair,
+        &.bet-text-tie {
+          transform: translate(-50%, 0.75rem);
+        }
+        &.bet-text-banker-pair {
+          transform: translate(50%, 0.75rem);
+        }
+      }
+    }
+    
+    .betChipArea{
+      animation: collapsingKeyframesByChip 0.6s linear forwards;
+    }
+  }
+
+  .betWinEffect {
+    width: 0;
+    height: 0;
+    position: absolute;
   }
 
   .svg-eve {
-    transition: transform 0.6s ease;        
+    transition: transform 0.6s ease;
   }
 
   .svg-player-pair {
     width: 15rem;
-    height: 100%;
-    left: 0%;    
+    left: 0%;
     top: 0;
     position: absolute;
 
-    
-    .svg-eve{
-       transform-origin: left bottom;
-    }
     .svg-eve:hover ~ defs {
       .svg-eve-fill {
         stop:first-child {
@@ -81,44 +129,17 @@ html {
           stop-opacity: 0.9; /* * 改变渐变底色 */
         }
       }
-      
-      .svg-eve-border {
-        stop:first-child {
-          stop-color: #003380;
-          stop-opacity: 100%; /* 改变渐变底色 */
-        }
-        stop:last-child {
-          stop-color: #0F52B7;
-          stop-opacity: 0.9; /* * 改变渐变底色 */
-        }
-      }
     }
   }
 
   .svg-banker-pair {
     width: 15rem;
-    height: 100%;
-    right: 0;    
+    right: 0;
     top: 0;
     position: absolute;
 
-    .svg-eve{
-       transform-origin: right bottom;
-    }
-    
     .svg-eve:hover ~ defs {
       .svg-eve-fill {
-        stop:first-child {
-          stop-color: #490000;
-          stop-opacity: 100%; /* 改变渐变底色 */
-        }
-        stop:last-child {
-          stop-color: #9e0000;
-          stop-opacity: 0.9; /* * 改变渐变底色 */
-        }
-      }
-      
-      .svg-eve-border {
         stop:first-child {
           stop-color: #490000;
           stop-opacity: 100%; /* 改变渐变底色 */
@@ -133,15 +154,10 @@ html {
 
   .svg-player {
     width: 18.25rem;
-    height: 7.75rem;
-    left: 4.25rem;
+    right: 50%;
     top: 0;
     position: absolute;
 
-    .svg-eve{
-       transform-origin:70% top;
-    }
-    
     .svg-eve:hover ~ defs {
       .svg-eve-fill {
         stop:first-child {
@@ -153,44 +169,17 @@ html {
           stop-opacity: 0.9; /* * 改变渐变底色 */
         }
       }
-      
-      .svg-eve-border {
-        stop:first-child {
-          stop-color: #003380;
-          stop-opacity: 100%; /* 改变渐变底色 */
-        }
-        stop:last-child {
-          stop-color: #0F52B7;
-          stop-opacity: 0.9; /* * 改变渐变底色 */
-        }
-      }
     }
   }
 
   .svg-banker {
     width: 18.25rem;
-    height: 7.75rem;
-    right: 4.25rem;
+    left: 50%;
     top: 0;
     position: absolute;
 
-    .svg-eve{
-       transform-origin:30% top;
-    }
-    
     .svg-eve:hover ~ defs {
       .svg-eve-fill {
-        stop:first-child {
-          stop-color: #490000;
-          stop-opacity: 100%; /* 改变渐变底色 */
-        }
-        stop:last-child {
-          stop-color: #9e0000;
-          stop-opacity: 0.9; /* * 改变渐变底色 */
-        }
-      }
-      
-      .svg-eve-border {
         stop:first-child {
           stop-color: #490000;
           stop-opacity: 100%; /* 改变渐变底色 */
@@ -206,17 +195,11 @@ html {
   .svg-tie {
     width: 25rem;
     height: 4.875rem;
-    left:10.0625rem;
-    bottom: 0;
+    left: 50%;
+    top: 7.75rem;
     position: absolute;
- 
-    
-    
-    .svg-eve{
-       transform-origin: bottom;
-    }
-    
-    
+    transform: translate(-50%, 0);
+
     .svg-eve:hover ~ defs {
       .svg-eve-fill {
         stop:first-child {
@@ -228,17 +211,6 @@ html {
           stop-opacity: 0.9; /* * 改变渐变底色 */
         }
       }
-      
-      .svg-eve-border {
-        stop:first-child {
-          stop-color: #0B7453;
-          stop-opacity: 100%; /* 改变渐变底色 */
-        }
-        stop:last-child {
-          stop-color: #26FF7A;
-          stop-opacity: 0.1; /* * 改变渐变底色 */
-        }
-      }
     }
   }
 
@@ -247,6 +219,7 @@ html {
     height: 100%;
     position: relative;
     pointer-events: none;
+    z-index: 5;
 
     .bet-text {
       /* 庄 */
@@ -290,11 +263,11 @@ html {
         font-family: "Noto Sans TC";
         font-style: normal;
         font-weight: 400;
-        font-size: 25px;
+        font-size: 1.5625rem;
         color: #ffffff;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.04rem;
         text-align: center;
-        line-height: 25px;
+        line-height: 1.5625rem;
       }
 
       .bet-text-num {
@@ -303,7 +276,7 @@ html {
         font-family: "Noto Sans TC";
         font-style: normal;
         font-weight: 400;
-        font-size: 18px;
+        font-size: 1.125rem;
         line-height: 100%;
         /* identical to box height, or 18px */
         text-align: center;
@@ -312,6 +285,8 @@ html {
       }
     }
   }
+
+
 
   .betArea-bakText-banker {
     left: 23.4375rem;
@@ -339,5 +314,271 @@ html {
     font-style: normal;
     color: rgba(0, 0, 0, 0.15);
     position: absolute;
+  }
+
+  .betChipArea {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    pointer-events: none;
+    animation: collapsingKeyframesByChip-end 0.6s linear forwards;
+    z-index: 5;
+
+    > div {
+      display:flex;
+      flex-direction: column-reverse;
+      position: absolute;
+
+      &.bet-chip-banker {
+        right: 19rem;        
+        bottom: 6.5rem;
+      }
+
+      &.bet-chip-player {
+        left: 19rem;
+        bottom: 9.5rem;
+      }
+
+      &.bet-chip-playerpair {
+        left: 3rem;        
+        bottom:4.25rem;
+
+      }
+
+      &.bet-chip-bankerpair {
+        right: 3rem;
+        bottom:4.25rem;
+      }
+
+      &.bet-chip-tie {
+        left: 18.5rem;
+        bottom:2rem;
+      }
+
+      .chip-stack {
+        width: 2.5rem;
+        height:0.25REM;
+        position:relative;
+        
+        .game-chip {
+          width: 2.5rem;
+          height: 2.5rem;
+          /* Inside auto layout */
+          bottom:0;
+          flex: none;
+          order: 0;
+          flex-grow: 0;
+          position: absolute;
+          background-size: cover;
+          background-position: center;
+          border-radius: 1.25rem;
+          animation: addChip 1s ease forwards;
+
+          &.chips-1 {
+            background-image: $image-url,
+              linear-gradient(180deg, #fb8f02 0%, #be7000 100%);
+          }
+
+          &.chips-2 {
+            background-image: $image-url,
+              linear-gradient(180deg, #f950a2 0%, #ea275d 100%);
+          }
+
+          &.chips-3 {
+            background-image: $image-url,
+              linear-gradient(180deg, #17aaff 0%, #625fff 100%);
+          }
+
+          &.chips-4 {
+            background-image: $image-url,
+              linear-gradient(180deg, #26ff7a 0%, #0b7453 100%);
+          }
+
+          &.chips-5 {
+            background-image: $image-url,
+              linear-gradient(180deg, #7128ea 0%, #702449 100%);
+          }
+
+          &.chips-6 {
+            background-image: $image-url,
+              linear-gradient(180deg, #44c8c0 0%, #339f6a 100%);
+          }
+
+          &.chips-7 {
+            background-image: $image-url,
+              linear-gradient(180deg, #72fb0c 0%, #87ba2f 100%);
+          }
+
+          &.chips-8 {
+            background-image: $image-url,
+              linear-gradient(180deg, #ff5b53 0%, #ea311d 100%);
+          }
+
+          > .game-chipValue {
+            position: absolute;
+            top: 0.5rem;
+            width: 100%;
+            /* 字体大小，可以根据需要调整 */
+            text-align: center;
+            /* 文字居中，可选 */
+            font-family: Roboto;
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.1rem;
+            text-align: center;
+            color: #ffffff;
+            height: auto;
+          }
+        }
+
+        .game-chipTotal {
+          position: absolute;
+          top: -1.25rem;
+          left: 50%;
+          width: fit-content;
+          height: 2.625rem;
+          z-index: 9;
+          display: none;
+          transition: opacity 1s ease-out;
+          transform: translate(-50%, -100%);
+
+          .game-chipTotal-content {
+            width: fit-content;
+            height: 1.875rem;
+            border: 0.0625rem solid #cbcbcb;
+            background: #00000099;
+            border-radius: 3.125rem;
+            border-bottom: none;
+            position: relative;
+            box-sizing: border-box;
+ 
+            .game-chipTotal-arrow {
+              position: absolute;
+              bottom: 0px;
+              left: 50%;
+              transform: translate(-50%, 100%);
+              width: 1.1875rem;
+              height: 0.75rem;
+
+              .check {
+                display: none;
+              }
+
+              .nocheck {
+                display: block;
+              }
+            }
+
+            .game-chipTotal-leftLine {
+              position: absolute;
+              width: calc(50% - 0.5rem);
+              height: 50%;
+              bottom: -0.0625rem;
+              left: -0.0625rem;
+              border-radius: 0 1.5625rem;
+              border-bottom: 0.0625rem solid #cbcbcb;
+              border-left: 0.0625rem solid #cbcbcb;
+            }
+
+            .game-chipTotal-rightLine {
+              position: absolute;
+              width: calc(50% - 0.5rem);
+              height: 50%;
+              bottom: -0.0625rem;
+              right: -0.0625rem;
+              border-radius: 5625rem 0;
+              border-bottom: 0.0625rem solid #cbcbcb;
+              border-right: 0.0625rem solid #cbcbcb;
+            }
+
+            .game-chipTotal-icon {
+              width: 1.375rem;
+              height: 1.375rem;
+              left: 0.5625rem;
+              top: 0.25rem;
+              position: absolute;
+              flex-shrink: 0;
+              background-image: $image-url;
+              background-size: cover;
+              background-position: center;
+              background-color: #636363;
+              clip-path: circle(50% at 50% 50%);
+            }
+
+            .game-chipTotal-checkIcon {
+              position: absolute;
+              top: 0.3125rem;
+              right: 0.625rem;
+              width: 1.25rem;
+              height: 1.25rem;
+              background-size: cover;
+              background-position: center;
+              display: none;
+            }
+
+            .game-chipTotal-value {
+              margin-left: 2.5rem;
+              margin-right: 1.25rem;
+              min-width: 2rem;
+              height: 100%;
+              color: #fff;
+              text-align: center;
+              font-family: Roboto;
+              font-size: 1.25rem;
+              font-style: normal;
+              font-weight: 500;
+              line-height: 1.875rem;
+              width: fit-content;
+            }
+          }
+
+          &.show{
+            // opacity: 1.0;
+            display: block;
+          }
+
+          &.confirm-bet {
+            .game-chipTotal-content {
+              border: 0.0625rem solid #ffb423;
+              background: rgba(184, 135, 10, 0.6);
+              border-bottom: none;
+              
+
+              .game-chipTotal-leftLine {
+                border-left: 0.0625rem solid #ffb423;
+                border-bottom: 0.0625rem solid #ffb423;
+              }
+
+              .game-chipTotal-rightLine {
+                border-right: 0.0625rem solid #ffb423;
+                border-bottom: 0.0625rem solid #ffb423;
+              }
+
+              .game-chipTotal-arrow {
+                .check {
+                  display: block;
+                }
+
+                .nocheck {
+                  display: none;
+                }
+              }
+
+              .game-chipTotal-icon {
+                background-color: #b59f67;
+              }
+              .game-chipTotal-checkIcon {
+                display: block;
+              }
+
+              .game-chipTotal-value {
+                margin-right: 2.5rem;
+              }
+            }
+          }
+        }
+      } 
+    }
   }
 }

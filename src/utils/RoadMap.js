@@ -1071,9 +1071,13 @@ export class RoadMapAPI {
 
                     if (road.x >= xDisplay) {
                         if (extraLine == true) {
-                            baseX = roadPosLeft + ((road.x - xDisplay) * imgWidth) + parseInt((road.x - xDisplay) / 2);
-                            baseY = roadPosTop + (road.y * imgHeight) + parseInt(road.y / 2);
+                            //debugger;
+                            // baseX = roadPosLeft + ((road.x - xDisplay) * imgWidth) + parseInt((road.x - xDisplay) / 2);
+                            // baseY = roadPosTop + (road.y * imgHeight) + parseInt(road.y / 2);
+                            baseX = roadPosLeft + ((road.x - xDisplay) * imgWidth);
+                            baseY = roadPosTop + (road.y * imgHeight);
                         } else {
+                            //debugger;
                             baseX = roadPosLeft + ((road.x - xDisplay) * imgWidth);
                             baseY = roadPosTop + (road.y * imgHeight);
                         }
@@ -1083,8 +1087,8 @@ export class RoadMapAPI {
                             road.dataImg = this.generateVirtualDom("img");
                             road.dataImg.virtualStyle.display = "none";
                             road.dataImg.virtualStyle.position = "absolute";
-                            road.dataImg.virtualStyle.width = (imgWidth - 1) + "px";
-                            road.dataImg.virtualStyle.height = (imgHeight - 1) + "px";
+                            road.dataImg.virtualStyle.width = (imgWidth) / 16 + "rem";
+                            road.dataImg.virtualStyle.height = (imgHeight) / 16 + "rem";
                         }
 
                         switch (road.color) {
@@ -1118,8 +1122,8 @@ export class RoadMapAPI {
 
                         // 重新設定 position
                         if (road.dataImg != null) {
-                            road.dataImg.virtualStyle.left = baseX + "px";
-                            road.dataImg.virtualStyle.top = baseY + "px";
+                            road.dataImg.virtualStyle.left = (baseX / 16) + "rem";
+                            road.dataImg.virtualStyle.top = (baseY / 16) + "rem";
 
                             road.dataImg.setCssText();
                             if (!road.dataImg.isAppended) {
@@ -1576,8 +1580,8 @@ export class RoadMapAPI {
                         road.dataImg = this.generateVirtualDom("img");
                         road.dataImg.virtualStyle.display = "none";
                         road.dataImg.virtualStyle.position = "absolute";
-                        road.dataImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.dataImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
+                        road.dataImg.virtualStyle.width = ((this.bigRoadCfg.width) / 16) + "rem";
+                        road.dataImg.virtualStyle.height = ((this.bigRoadCfg.height) / 16) + "rem";
                         road.dataImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1595,11 +1599,11 @@ export class RoadMapAPI {
                         road.divText.virtualStyle.display = "none";
                         road.divText.virtualStyle.position = "absolute";
                         road.divText.virtualStyle.color = "#008000";
-                        road.divText.virtualStyle.fontSize = "9px";
-                        road.divText.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.divText.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
+                        road.divText.virtualStyle.fontSize = "0.5625rem";
+                        road.divText.virtualStyle.width = ((this.bigRoadCfg.width) / 16) + "rem";
+                        road.divText.virtualStyle.height = ((this.bigRoadCfg.height) / 16) + "rem";
                         road.divText.virtualStyle.textAlign = "center";
-                        road.divText.virtualStyle.lineHeight = (this.bigRoadCfg.height - 1) + "px";
+                        road.divText.virtualStyle.lineHeight = ((this.bigRoadCfg.height) / 16) + "rem";
                         road.divText.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1616,8 +1620,8 @@ export class RoadMapAPI {
                         road.tieImg = this.generateVirtualDom("img");
                         road.tieImg.virtualStyle.display = "none";
                         road.tieImg.virtualStyle.position = "absolute";
-                        road.tieImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.tieImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
+                        road.tieImg.virtualStyle.width = ((this.bigRoadCfg.width) / 16) + "rem";
+                        road.tieImg.virtualStyle.height = ((this.bigRoadCfg.height) / 16) + "rem";
                         road.tieImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1694,8 +1698,8 @@ export class RoadMapAPI {
                         road.ppImg = this.generateVirtualDom("img");
                         road.ppImg.virtualStyle.display = "none";
                         road.ppImg.virtualStyle.position = "absolute";
-                        road.ppImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.ppImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
+                        road.ppImg.virtualStyle.width = ((this.bigRoadCfg.width) / 16) + "rem";
+                        road.ppImg.virtualStyle.height = ((this.bigRoadCfg.height) / 16) + "rem";
                         road.ppImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1712,8 +1716,8 @@ export class RoadMapAPI {
                         road.bpImg = this.generateVirtualDom("img");
                         road.bpImg.virtualStyle.display = "none";
                         road.bpImg.virtualStyle.position = "absolute";
-                        road.bpImg.virtualStyle.width = (this.bigRoadCfg.width - 1) + "px";
-                        road.bpImg.virtualStyle.height = (this.bigRoadCfg.height - 1) + "px";
+                        road.bpImg.virtualStyle.width = ((this.bigRoadCfg.width) / 16) + "rem";
+                        road.bpImg.virtualStyle.height = ((this.bigRoadCfg.height) / 16) + "rem";
                         road.bpImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -1770,8 +1774,8 @@ export class RoadMapAPI {
 
                     // 重新設定 position
                     if (road.divText != null) {
-                        road.divText.virtualStyle.left = baseX + "px";
-                        road.divText.virtualStyle.top = baseY + "px";
+                        road.divText.virtualStyle.left = (baseX / 16) + "rem";
+                        road.divText.virtualStyle.top = (baseY / 16) + "rem";
                         road.divText.setCssText();
                         if (!road.divText.isAppended) {
                             oRoadMap.appendChild(road.divText);
@@ -1779,8 +1783,8 @@ export class RoadMapAPI {
                     }
 
                     if (road.dataImg != null) {
-                        road.dataImg.virtualStyle.left = baseX + "px";
-                        road.dataImg.virtualStyle.top = baseY + "px";
+                        road.dataImg.virtualStyle.left = (baseX / 16) + "rem";
+                        road.dataImg.virtualStyle.top = (baseY / 16) + "rem";
                         road.dataImg.setCssText();
                         if (!road.dataImg.isAppended) {
                             oRoadMap.appendChild(road.dataImg);
@@ -1788,8 +1792,8 @@ export class RoadMapAPI {
                     }
 
                     if (road.tieImg != null) {
-                        road.tieImg.virtualStyle.left = baseX + "px";
-                        road.tieImg.virtualStyle.top = baseY + "px";
+                        road.tieImg.virtualStyle.left = (baseX / 16) + "rem";
+                        road.tieImg.virtualStyle.top = (baseY / 16) + "rem";
                         road.tieImg.setCssText();
                         if (!road.tieImg.isAppended) {
                             oRoadMap.appendChild(road.tieImg);
@@ -1799,9 +1803,9 @@ export class RoadMapAPI {
                     if (road.dragonDiv != null) {
                         if (road.isDragon == true) {
                             if (road.y > 0) {
-                                road.dragonDiv.style.top = parseInt((baseY + (this.bigRoadCfg.height / 2)) - 1) + "px";
-                                road.dragonDiv.style.height = "1px";
-                                road.dragonDiv.style.lineHeight = "1px";
+                                road.dragonDiv.style.top = (parseInt((baseY + (this.bigRoadCfg.height / 2))) / 16) + "rem";
+                                road.dragonDiv.style.height = "0.0625rem";
+                                road.dragonDiv.style.lineHeight = "0.0625rem";
                                 road.dragonDiv.style.display = "inline";
                                 road.dragonDiv.innerHTML = "";
 
@@ -1821,31 +1825,31 @@ export class RoadMapAPI {
 
                                     if (road.Number == (colFirstRoad.colCount - 1)) {
                                         // dragon start = dragon end
-                                        road.dragonDiv.style.left = parseInt(baseX - extenWidth) + "px";
-                                        road.dragonDiv.style.width = this.bigRoadCfg.width + "px";
+                                        road.dragonDiv.style.left = (parseInt(baseX - extenWidth) / 16) + "rem";
+                                        road.dragonDiv.style.width = (this.bigRoadCfg.width / 16) + "rem";
                                     } else {
                                         // dragon start
-                                        road.dragonDiv.style.left = parseInt(baseX - extenWidth) + "px";
-                                        road.dragonDiv.style.width = (this.bigRoadCfg.width + extenWidth) + "px";
+                                        road.dragonDiv.style.left = (parseInt(baseX - extenWidth) / 16) + "rem";
+                                        road.dragonDiv.style.width = ((this.bigRoadCfg.width + extenWidth) / 16) + "rem";
                                     }
                                 } else if (road.Number == (colFirstRoad.colCount - 1)) {
                                     // dragon end
-                                    road.dragonDiv.style.left = baseX + "px";
-                                    road.dragonDiv.style.width = parseInt(this.bigRoadCfg.width / 2) + "px";
+                                    road.dragonDiv.style.left = (baseX / 16) + "rem";
+                                    road.dragonDiv.style.width = (parseInt(this.bigRoadCfg.width / 2) / 16) + "rem";
                                 } else {
                                     // dragon body
-                                    road.dragonDiv.style.left = baseX + "px";
-                                    road.dragonDiv.style.width = this.bigRoadCfg.width + "px";
+                                    road.dragonDiv.style.left = (baseX / 16) + "rem";
+                                    road.dragonDiv.style.width = (this.bigRoadCfg.width / 16) + "rem";
                                 }
                             } else {
                                 // 龍不能是第一顆
                                 // 只能呈現文字
                                 if (colFirstRoad.colCount > 1) {
-                                    road.dragonDiv.style.left = baseX + "px";
-                                    road.dragonDiv.style.top = baseY + "px";
-                                    road.dragonDiv.style.width = this.bigRoadCfg.width + "px";
-                                    road.dragonDiv.style.height = this.bigRoadCfg.height + "px";
-                                    road.dragonDiv.style.lineHeight = this.bigRoadCfg.height + "px";
+                                    road.dragonDiv.style.left = (baseX / 16) + "rem";
+                                    road.dragonDiv.style.top = (baseY / 16) + "rem";
+                                    road.dragonDiv.style.width = (this.bigRoadCfg.width / 16) + "rem";
+                                    road.dragonDiv.style.height = (this.bigRoadCfg.height / 16) + "rem";
+                                    road.dragonDiv.style.lineHeight = (this.bigRoadCfg.height / 16) + "rem";
                                     road.dragonDiv.style.textAlign = "center";
 
                                     switch (road.data) {
@@ -1876,8 +1880,8 @@ export class RoadMapAPI {
                     }
 
                     if (road.ppImg != null) {
-                        road.ppImg.virtualStyle.left = baseX + "px";
-                        road.ppImg.virtualStyle.top = baseY + "px";
+                        road.ppImg.virtualStyle.left = (baseX / 16) + "rem";
+                        road.ppImg.virtualStyle.top = (baseY / 16) + "rem";
                         road.ppImg.setCssText();
                         if (!road.ppImg.isAppended) {
                             oRoadMap.appendChild(road.ppImg);
@@ -1885,8 +1889,8 @@ export class RoadMapAPI {
                     }
 
                     if (road.bpImg != null) {
-                        road.bpImg.virtualStyle.left = baseX + "px";
-                        road.bpImg.virtualStyle.top = baseY + "px";
+                        road.bpImg.virtualStyle.left = (baseX / 16) + "rem";
+                        road.bpImg.virtualStyle.top = (baseY / 16) + "rem";
                         road.bpImg.setCssText();
                         if (!road.bpImg.isAppended) {
                             oRoadMap.appendChild(road.bpImg);
@@ -2172,8 +2176,8 @@ export class RoadMapAPI {
                         road.dataImg = this.generateVirtualDom("img");
                         road.dataImg.virtualStyle.display = "none";
                         road.dataImg.virtualStyle.position = "absolute";
-                        road.dataImg.virtualStyle.width = (this.rawRoadCfg.width - 1) + "px";
-                        road.dataImg.virtualStyle.height = (this.rawRoadCfg.height - 1) + "px";
+                        road.dataImg.virtualStyle.width = ((this.rawRoadCfg.width) / 16) + "rem";
+                        road.dataImg.virtualStyle.height = ((this.rawRoadCfg.height) / 16) + "rem";
                         road.dataImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -2210,8 +2214,8 @@ export class RoadMapAPI {
                         road.ppImg = this.generateVirtualDom("img");
                         road.ppImg.virtualStyle.display = "none";
                         road.ppImg.virtualStyle.position = "absolute";
-                        road.ppImg.virtualStyle.width = (this.rawRoadCfg.width - 1) + "px";
-                        road.ppImg.virtualStyle.height = (this.rawRoadCfg.height - 1) + "px";
+                        road.ppImg.virtualStyle.width = ((this.rawRoadCfg.width) / 16) + "rem";
+                        road.ppImg.virtualStyle.height = ((this.rawRoadCfg.height) / 16) + "rem";
                         road.ppImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -2231,8 +2235,8 @@ export class RoadMapAPI {
 
                         road.bpImg.virtualStyle.display = "none";
                         road.bpImg.virtualStyle.position = "absolute";
-                        road.bpImg.virtualStyle.width = (this.rawRoadCfg.width - 1) + "px";
-                        road.bpImg.virtualStyle.height = (this.rawRoadCfg.height - 1) + "px";
+                        road.bpImg.virtualStyle.width = ((this.rawRoadCfg.width) / 16) + "rem";
+                        road.bpImg.virtualStyle.height = ((this.rawRoadCfg.height) / 16) + "rem";
                         road.bpImg.setAttribute("RoundNumber", road.RoundNumber);
 
                         if (road.isQueryRoad == false) {
@@ -2290,8 +2294,8 @@ export class RoadMapAPI {
                     }
 
                     if (road.dataImg != null) {
-                        road.dataImg.virtualStyle.left = baseX + "px";
-                        road.dataImg.virtualStyle.top = baseY + "px";
+                        road.dataImg.virtualStyle.left = (baseX / 16) + "rem";
+                        road.dataImg.virtualStyle.top = (baseY / 16) + "rem";
                         road.dataImg.setCssText();
                         if (!road.dataImg.isAppended) {
                             oRoadMap.appendChild(road.dataImg);
@@ -2299,8 +2303,8 @@ export class RoadMapAPI {
                     }
 
                     if (road.ppImg != null) {
-                        road.ppImg.virtualStyle.left = baseX + "px";
-                        road.ppImg.virtualStyle.top = baseY + "px";
+                        road.ppImg.virtualStyle.left = (baseX / 16) + "rem";
+                        road.ppImg.virtualStyle.top = (baseY / 16) + "rem";
                         road.ppImg.setCssText();
                         if (!road.ppImg.isAppended) {
                             oRoadMap.appendChild(road.ppImg);
@@ -2308,8 +2312,8 @@ export class RoadMapAPI {
                     }
 
                     if (road.bpImg != null) {
-                        road.bpImg.virtualStyle.left = baseX + "px";
-                        road.bpImg.virtualStyle.top = baseY + "px";
+                        road.bpImg.virtualStyle.left = (baseX / 16) + "rem";
+                        road.bpImg.virtualStyle.top = (baseY / 16) + "rem";
                         road.bpImg.setCssText();
                         if (!road.bpImg.isAppended) {
                             oRoadMap.appendChild(road.bpImg);

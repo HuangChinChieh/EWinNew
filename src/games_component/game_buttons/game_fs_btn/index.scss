@@ -1,6 +1,6 @@
 .game-screen-box {
     // padding: 30px 20px;
-    margin-left: 25px;
+    margin-left: 1.5625rem;
 
     span {
         display: block;
@@ -8,9 +8,9 @@
 
     .fullscreen,
     .exitfullscreen {
-        margin-right: 4px !important;
-        width: 33px;
-        height: 33px;
+        margin-right: 0.25rem !important;
+        width: 2.0625rem;
+        height: 2.0625rem;
         cursor: pointer;
     }
 
@@ -37,9 +37,3 @@
 }
 
 
-
-@media screen and (max-width: 1200px) {
-    .game-screen-box {
-        margin-left: 7px;
-    }
-}

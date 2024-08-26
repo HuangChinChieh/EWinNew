@@ -679,16 +679,16 @@ export class EWinGameLobbyClient {
         const connectServer = (c, events) => {
 
             c.start({ withCredentials: false })
-                .done((function () {
+                .done(() => {
                     //這邊的this有問題，由於使用箭頭函式，無法使用call or bind，採用傳入解決
                     if (this.onConnected != null)
                         this.onConnected();
-                }).bind(events))
-                .fail((function (error) {
+                })
+                .fail(() => {
                     if (this.onDisconnect != null) {
                         this.onDisconnect();
                     }
-                }).bind(events));
+                });
         };
 
         if (this.EWinUrl != null)
@@ -702,11 +702,11 @@ export class EWinGameLobbyClient {
 
         this.conn.disconnected(() => {
             setTimeout(() => {
-                connectServer.call(this, this.conn);
+                connectServer(this.conn, { onConnected: this.onConnected, onDisconnect: this.onDisconnect });
             }, 1000);
         });
 
-        this.conn.stateChanged((state) => {
+        this.conn.stateChanged((state) => {              
             this.currentState = state.newState;
         });
 
