@@ -3,11 +3,35 @@ import './index.scss';
 
 const CountdownCircle = (props) => {
     const animationDom = useRef(null);//需要動態修改變量的Dom
+    let prevCountdownData = useRef(null);
+
+    let timer = useRef(0);
+    // const countdownData = {
+    //     remainingSecond:60,
+    //     lastQueryDate:new Date(),
+    //     tableTimeoutSecond:60
+    // };
+
     const refreshCountdown = () => {
+       
         const countdownData = props.getCountdownInfo();
         let countdownSecond = countdownData.remainingSecond * 1000 - (new Date() - countdownData.lastQueryDate);
         let percentage;
         let polygonText;
+
+
+        if (prevCountdownData.current == null) {
+            prevCountdownData.current = countdownData;
+        } else {
+            let prevCountdownSecond = prevCountdownData.current.remainingSecond * 1000 - (new Date() - prevCountdownData.current.lastQueryDate);
+
+            if (Math.abs(prevCountdownSecond - countdownSecond) < 1000) {
+                countdownSecond = prevCountdownSecond;
+            } else {
+                //重新調準時間
+                prevCountdownData.current = countdownData;
+            }
+        }
 
         countdownSecond = countdownSecond < 0 ? 0 : countdownSecond;
         percentage = countdownSecond / (countdownData.tableTimeoutSecond * 1000);
@@ -33,58 +57,39 @@ const CountdownCircle = (props) => {
         }
 
         if (percentage > 0.33) {
-            animationDom.className = `countdown-circle green`;
+            animationDom.current.className = `countdown-circle green`;
         } else if (percentage > 0.15) {
-            animationDom.className = `countdown-circle yellow`;
+            animationDom.current.className = `countdown-circle yellow`;
         } else {
-            animationDom.className = `countdown-circle red`;
+            animationDom.current.className = `countdown-circle red`;
         }
 
-        animationDom.style.setProperty('--PathContent', polygonText);
-        animationDom.querySelector('.countdown-text').innerText = Math.ceil(percentage).toString();
+        animationDom.current.style.setProperty('--PathContent', polygonText);
+        animationDom.current.querySelector('.countdown-text').innerText = Math.ceil(countdownSecond / 1000).toString();
         //由於倒數時間更動頻繁，不適合用state
+
+        if (parseInt(countdownSecond / 1000) === 0) {
+            props.setIsCanBet(false);   
+            animationDom.current.classList.remove("show");                     
+        }else{            
+             requestAnimationFrame(refreshCountdown);
+             animationDom.current.classList.add("show");
+        }        
     };
 
-    useEffect(() => {
-        if(props.isCanBet){
-            let timer;
-        
-            function animate() {
-                refreshCountdown();
-                timer = requestAnimationFrame(animate);
-            }
-    
-            animate();
-    
-            return () => { cancelAnimationFrame(timer) };
-        }       
+    useEffect(() => {       
+        if (props.isCanBet) {         
+            requestAnimationFrame(refreshCountdown);          
+        } 
     }, [props.isCanBet]);
 
 
 
     return (
         <div className='countdown-circle-box' >
-            {/* {!isOnCountdown
-                ?
-                <div className={`countdown-circle red done`}>
-                    <div className="countdown-text">{props.RemainingSecond}</div>
-                </div>
-                :
-                <div className={`countdown-circle ${props.RemainingSecond >= 20 ? 'green' : props.seconds <= 9 ? 'red' : 'yellow'}`} style={{ '--countdown-duration': `${tableTimeoutSecond}s` }}>
-                    <div className="countdown-text">{props.RemainingSecond}</div>
-                </div>
-            } */}
-
-
-            {
-                props.isCanBet ?
-                    <div ref={animationDom} className="countdown-circle">
+            <div ref={animationDom} className="countdown-circle">
                         <div className="countdown-text"></div>
-                    </div>
-                    :
-                    <div className={`countdown-circle red done`}>
-                    </div>
-            }
+            </div>
         </div>
     );
 };

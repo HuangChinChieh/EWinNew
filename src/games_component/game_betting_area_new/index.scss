@@ -60,7 +60,8 @@ $image-url: url('/img/games/chips/chip-basic.png');
   transform-style: preserve-3d;
   animation: collapsingKeyframes-end 0.6s linear forwards;
   z-index: 3;
-  
+  cursor: pointer;
+
   > svg.win {
     filter: url(#filter0_ii_1724_13078);
     z-index: 4;
@@ -80,6 +81,7 @@ $image-url: url('/img/games/chips/chip-basic.png');
   &.close {
     animation: collapsingKeyframes 0.6s linear forwards;
     height: 13.75rem;
+    cursor: not-allowed;
 
     .svg-tie {
       transform: translate(-50%, 1.125rem);
@@ -285,8 +287,6 @@ $image-url: url('/img/games/chips/chip-basic.png');
       }
     }
   }
-
-
 
   .betArea-bakText-banker {
     left: 23.4375rem;

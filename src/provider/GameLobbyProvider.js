@@ -1,23 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { set } from "lodash";
 import React, { createContext, useCallback, useState, useEffect } from "react";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 
 
 // Create two different contexts
 const WalletContext = createContext();
-const RealNameContext = createContext();
 const BetLimitContext = createContext();
 const FavorsContext = createContext();
 const MusicIsPlayingContext = createContext();
 const LobbyPersonalContext=createContext();
+const CashUnitContext = createContext();
+const UserInfoContext = createContext();
+
 
 export {
-  WalletContext,
-  RealNameContext,
+  WalletContext,  
   BetLimitContext,
   FavorsContext,
   MusicIsPlayingContext,
-  LobbyPersonalContext
+  LobbyPersonalContext,
+  CashUnitContext,
+  UserInfoContext
 };
 
 // Create a Context Provider to provide shared values
@@ -30,12 +34,21 @@ const GameLobbyProvider = (props) => {
     CurrencyName: "",
     Balance: 0,
   });
-  const [favors, setFavors] = useState([]);
-  const [realName, setRealName] = useState("");
+  const [userInfo, setUserInfo] = useState({
+    LoginAccount: "",
+    RealName: "",
+    IsGuestAccount: false,
+    UserAccountType: 0,
+    AllowBetType: true,
+    UserCountry: "",
+    UserLevel: 0
+  });
+  const [favors, setFavors] = useState([]);  
   const [betLimit, setBetLimit] = useState("");
   const [musicIsPlaying,setMusicIsPlaying]=useState(false);
   const [lobbyPersonal,setLobbyPersonal]=useState(false);
-
+  const [cashUnit, setCashUnit] = useState("");
+  const [userGameSetList, setUserGameSetList] = useState([]);
   
 
   // Game Lobby related useEffect
@@ -93,8 +106,17 @@ const GameLobbyProvider = (props) => {
         });
       }
 
-      setRealName(userInfo.RealName);      
+      setUserInfo({
+        LoginAccount: userInfo.LoginAccount,
+        RealName: userInfo.RealName,
+        IsGuestAccount: userInfo.IsGuestAccount,
+        UserAccountType: userInfo.UserAccountType,
+        AllowBetType: userInfo.AllowBetType,
+        UserCountry: userInfo.UserCountry,
+        UserLevel: userInfo.UserLevel
+      });      
       setFavors(favorsObj);
+      setCashUnit(userInfo.Company.CashUnit);
     });   
   }, []);
 
@@ -121,22 +143,99 @@ const GameLobbyProvider = (props) => {
     });
   }, [lobbyClient]);
 
-  const updateRealName = useCallback(() => {
-    updateInfo((userInfo) => {
-      setRealName(userInfo.RealName);
+  const updateUserInfo = useCallback((obj) => {
+    const setFun = (setObj)=>{
+      setUserInfo((prevObj) => {
+        let checkChange = false;
+        let newObj = {...prevObj};
+  
+        for (const key in prevObj){
+          if(prevObj[key] !==  setObj[key]){
+            checkChange = true;
+            newObj[key] = setObj[key];
+          }          
+        }
+  
+        if(checkChange){
+          return newObj;
+        }else{
+          return prevObj;
+        }
+      });
+    };
+    
+    if(obj){
+      setFun(obj);
+    }else{
+      updateInfo((userInfo) => {
+        setFun(userInfo);  
+          let checkChange = false;
+          let newUser = {...prevUser};
+  
+          for (const key in prevUser){
+            if(prevUser[key] !==  userInfo[key]){
+              checkChange = true;
+              newUser[key] = userInfo[key];
+            }          
+          }
+  
+          if(checkChange){
+            return newUser;
+          }else{
+            return prevUser;
+          }  
+      });
+    }       
+  }, [updateInfo]);
+
+  const setUserInfoProperty = useCallback((key, value) => {
+    setUserInfo((prevUser) => {   
+      if(key in prevUser){
+        let newUser = {...prevUser};
+        newUser[key] =  value;
+        return newUser;
+      }else{
+        return prevUser;
+      }
     });
   }, [updateInfo]);
 
-  const updateWallet = useCallback(() => {
-    updateInfo((userInfo) => {
-      let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
-      let setObj = {
-        CurrencyType: wallet.CurrencyType,
-        CurrencyName: wallet.CurrencyName,
-        Balance: wallet.Balance,
-      };
-      setWallet(setObj);
-    });
+
+  const updateWallet = useCallback((obj) => {
+    const setFun = (setObj)=>{
+      setWallet((prevObj) => {
+        let checkChange = false;
+        let newObj = {...prevObj};
+
+        for (const key in prevObj){
+          if(prevObj[key] !==  setObj[key]){
+            checkChange = true;
+            newObj[key] = setObj[key];
+          }          
+        }
+
+        if(checkChange){
+          return newObj;
+        }else{
+          return prevObj;
+        }
+      });
+    };
+
+    if(obj){
+      setFun(obj);
+    }else{
+      updateInfo((userInfo) => {
+        let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
+        // let setObj = {
+        //   CurrencyType: wallet.CurrencyType,
+        //   CurrencyName: wallet.CurrencyName,
+        //   Balance: wallet.Balance,
+        // };
+        setFun(wallet);
+      });
+    }       
+    
   }, [CT, CurrencyType, updateInfo]);
 
   const updateBetLimit = useCallback((betLimit) => {
@@ -151,14 +250,16 @@ const GameLobbyProvider = (props) => {
     <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
       <LobbyPersonalContext.Provider value={{ lobbyPersonal,setLobbyPersonal }}>
       <FavorsContext.Provider value={{ favors, updateFavors }}>
-        <WalletContext.Provider value={{ wallet, updateWallet }}>
-          <RealNameContext.Provider value={{ realName, updateRealName }}>
+        <WalletContext.Provider value={{ wallet, updateWallet, setWallet}}>
+          <UserInfoContext.Provider value={{ userInfo, updateUserInfo, setUserInfoProperty }}>
+          <CashUnitContext value={{ cashUnit, setCashUnit }}>
             <BetLimitContext.Provider
               value={{ betLimit, updateBetLimit }}
             >
               {props.children}
             </BetLimitContext.Provider>
-          </RealNameContext.Provider>
+            </CashUnitContext>
+          </UserInfoContext.Provider>
         </WalletContext.Provider>
       </FavorsContext.Provider>
       </LobbyPersonalContext.Provider> 

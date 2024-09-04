@@ -1,7 +1,8 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useContext } from 'react';
 import './index.scss';
 import { md5 } from 'js-md5';
 import kingkeyPlayer from 'utils/kingkeyPlayer'
+import { BaccaratTableNotifyContext } from '../../view/game_views'
 
 const GameVideo = (props) => {
     //vpDomain
@@ -14,11 +15,13 @@ const GameVideo = (props) => {
     const playerType = useRef(vpDomain);
     let playerTryCount = 0;
     const videoDom = useRef(null);
-    const magnifierType = useRef(1);
+    const magnifierType = useRef(2);
     const magnifierCanvas = useRef(null);
+    const magnifierOffScreenCanvas = useRef(null);
     const magnifierWorker = useRef(null)
     const videoIntervalNumber = useRef(-1);
     const videoLastReceiveDate = useRef(new Date());
+    const { NotifyOn, NotifyOff } = useContext(BaccaratTableNotifyContext);
     const height = "67.5rem";
     //const height = "720px";
     const width = "120rem";
@@ -211,15 +214,19 @@ const GameVideo = (props) => {
         videoTag = player.current.getVideoElement();
         switch (magnifierType.current) {
             case 0:
+                magnifierCanvas.current.style.display = "none";
                    return;
             case 1:
                 //sourceRect = { x:40 * htmlFontSize, y:0 * htmlFontSize, width: 60 * htmlFontSize, height: 33.75 * htmlFontSize}; 
-                sourceRect = { x:0, y:120 , width: 800 , height: 448}; 
+                magnifierCanvas.current.style.display = "block";
+                sourceRect = { x:0, y:0.25 * videoTag.videoHeight , width: videoTag.videoWidth , height: videoTag.videoHeight}; 
+               
                 //sourceRect = { x:0, y:0 , width: 800 , height: 448}; 
                 break;   
             case 2:
-                sourceRect = { x:30 * htmlFontSize, y:0 * htmlFontSize, width: 0.3 * videoTag.videoHeight , height: 0.6 * videoTag.videoHeight}; 
-                return;
+                magnifierCanvas.current.style.display = "block";
+                sourceRect = { x:0.2 * videoTag.videoWidth, y:0.2 * videoTag.videoHeight, width: 0.6 * videoTag.videoWidth , height: 0.6 * videoTag.videoHeight}; 
+                break;
             default:
                 break;
         }
@@ -239,26 +246,69 @@ const GameVideo = (props) => {
         requestAnimationFrame(updateMagnifier);  
     }
 
+    const handleTableChange = (event)=>{
+        debugger
+        //console.log("event=" + JSON.stringify(event.detail) + "handleTableChange In Video");        
+        if(event.detail.tableStatus === "StopBet"){
+            magnifierType.current = 1;
+            updateMagnifier();
+
+            // setTimeout(() => {
+            //     magnifierType.current = 0;
+            // }, 5000);
+        }else{
+            magnifierType.current = 0; 
+        }
+    };
+
+    const handleFirstDrawing = (event)=>{        
+        //console.log("event=" + JSON.stringify(event.detail) + "handleFirstDrawing In Video");
+
+        magnifierType.current = 2;
+        updateMagnifier();
+
+        setTimeout(() => {
+            magnifierType.current = 0;
+        }, 20000);
+    };
+
+    const resize = (event)=>{
+        player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
+    };
 
     useEffect(() => {
-        window.addEventListener('resize', () => {
-            player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
-        });
+        window.addEventListener('resize', resize);
 
         //設定Worker與Canvas
         if ('transferControlToOffscreen' in magnifierCanvas.current) {
             //啟用背景搭配offscreen
-            let offscreenCanvas = magnifierCanvas.current.transferControlToOffscreen();
-            offscreenCanvas.width = 1920;
-            offscreenCanvas.height = 1080;
-            
+            let offscreenCanvas;
+
+            if(magnifierOffScreenCanvas.current == null){
+                offscreenCanvas = magnifierCanvas.current.transferControlToOffscreen();
+                offscreenCanvas.width = 1920;
+                offscreenCanvas.height = 1080;
+                magnifierOffScreenCanvas.current = offscreenCanvas;
+            }else{
+                offscreenCanvas = magnifierOffScreenCanvas.current;
+            }
+                                  
             magnifierWorker.current = new Worker(new URL('./offscreenWorker.js', import.meta.url));
             magnifierWorker.current.postMessage({ canvas: offscreenCanvas, cmd: "init" }, [offscreenCanvas]);
         }
 
+        NotifyOn("TableChange",handleTableChange);
+        NotifyOn("FirstDrawing",handleFirstDrawing);
+
+
         return (() => {
             if (magnifierWorker.current != null)
                 magnifierWorker.current.terminate();
+                        
+            NotifyOff("TableChange",handleTableChange);
+            NotifyOff("FirstDrawing",handleFirstDrawing);
+
+            window.removeEventListener('resize', resize);
         });
     }, []);
 
@@ -282,7 +332,7 @@ const GameVideo = (props) => {
             <div id="divVideoArea" ref={videoDom}>
 
             </div>
-            <button style={{ position: "absolute", bottom: "20px", "z-index": "99999", width: "200px" }} onClick={updateMagnifier}>測試</button>
+            <button style={{ position: "absolute", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={updateMagnifier}>測試</button>
 
             {/* <div id="idBadVideoMessage" class="SwitchSourceDiv" style="">
                 <div class="SwitchSourceN">
@@ -301,8 +351,8 @@ const GameVideo = (props) => {
                 </div>
             </div> */}
 
-            <div class="magnifierDiv">
-                <canvas class="magnifier" ref={magnifierCanvas}></canvas>
+            <div className="magnifierDiv">
+                <canvas className="magnifier" ref={magnifierCanvas}></canvas>
             </div>
         </>
     )

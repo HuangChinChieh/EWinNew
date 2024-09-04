@@ -1,17 +1,15 @@
 .countdown-circle-box {
 
-    width: 6rem;
-    height: 6rem;
-    top:14rem;
-    left: 50%;
+    width: 5rem;
+    height: 5rem;
+    margin: 19rem auto 0;
     pointer-events: none;
-    position: absolute;
-    z-index: 2;
-    transform: translateX(-50%);
+    position: relative;
+    z-index: 1;
 
     .countdown-circle {
-        width: 5.8125rem;
-        height: 5.8125rem;
+        width: 4.8125rem;
+        height: 4.8125rem;
         // border: 10px solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
         position: relative;
@@ -21,11 +19,10 @@
         justify-content: center;
         transition: all 1s ease-out;
         transform: scale(1) rotate(44deg);
-        opacity: 0;
 
         .countdown-text {
             z-index: 1;
-            font-size: 2.6rem;
+            font-size: 2.4rem;
             text-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.6);
             font-weight: bold;
             transform: scale(1) rotate(-44deg);
@@ -89,7 +86,11 @@
                 }
             }
 
-            
+            &.done {
+                transition: all 1s ease;
+                transform: scale(2) rotate(44deg);
+                opacity: 0;
+            }
 
             &:before {
                 content: "";
@@ -103,10 +104,7 @@
 
         }
 
-        &.show {
-            transition: all 1s ease;                
-            opacity: 1.0;
-        }
+
 
     }
 
@@ -159,3 +157,4 @@
 
 
 }
+

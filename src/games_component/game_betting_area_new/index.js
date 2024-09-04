@@ -10,16 +10,17 @@ const GameBettingArea = (props) => {
   const chipMaxCount = 5;
 
   const handleAddBetValue = (event, areaType) => {
-
-    moveChipAnimation(areaType,()=>{
-      props.dispatchOrderData({
-        type: "addBet",
-        payload: {
-          areaType: areaType,
-          selChipData: props.selChipData
-        }
-      });
-    });   
+    if(props.isCanBet){
+      moveChipAnimation(areaType,()=>{
+        props.dispatchOrderData({
+          type: "addBet",
+          payload: {
+            areaType: areaType,
+            selChipData: props.selChipData
+          }
+        });
+      });  
+    } 
   };
 
 
@@ -35,28 +36,28 @@ const GameBettingArea = (props) => {
   };
 
   const generateTotalValueDom = (areaData) => {
-    return (<div class="chip-stack">
+    return (<div className="chip-stack">
       <div className={"game-chipTotal " + ((areaData.unConfirmValue === 0) ? "confirm-bet " : " ") + ((areaData.totalValue > 0) ? "show " : " ")}>
-        <div class="game-chipTotal-content">
-          <div class="game-chipTotal-icon">
+        <div className="game-chipTotal-content">
+          <div className="game-chipTotal-icon">
 
           </div>
-          <div class="game-chipTotal-checkIcon">
+          <div className="game-chipTotal-checkIcon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="none">
               <path d="M18.3828 4.11719C18.8711 4.60547 18.8711 5.39844 18.3828 5.88672L8.38281 15.8867C7.89453 16.375 7.10156 16.375 6.61328 15.8867L1.61328 10.8867C1.125 10.3984 1.125 9.60547 1.61328 9.11719C2.10156 8.62891 2.89453 8.62891 3.38281 9.11719L7.5 13.2305L16.6172 4.11719C17.1055 3.62891 17.8984 3.62891 18.3867 4.11719H18.3828Z" fill="white" />
             </svg>
           </div>
-          <div class="game-chipTotal-value">{areaData.totalValue}</div>
-          <div class="game-chipTotal-leftLine"></div>
-          <div class="game-chipTotal-rightLine"></div>
-          <div class="game-chipTotal-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" class="nocheck" viewBox="0 0 19 12" fill="none">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.93836 10.5638C8.1075 12.4821 10.8926 12.4821 12.0618 10.5638L18.5001 0H0.5L6.93836 10.5638Z" fill="black" fill-opacity="0.6" />
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.3425 9.98552C10.5309 11.3382 8.4691 11.3382 7.6575 9.98552L1.6662 1.70469e-05H17.3338L11.3425 9.98552ZM0.5 0L0.50001 1.70469e-05L6.80001 10.5C8.00001 12.5 11 12.5 12.2 10.5L18.5 1.70469e-05L18.5 0H0.5Z" fill="#CBCBCB" />
+          <div className="game-chipTotal-value">{areaData.totalValue}</div>
+          <div className="game-chipTotal-leftLine"></div>
+          <div className="game-chipTotal-rightLine"></div>
+          <div className="game-chipTotal-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" className="nocheck" viewBox="0 0 19 12" fill="none">
+              <path fillRule="evenodd" clipRule="evenodd" d="M6.93836 10.5638C8.1075 12.4821 10.8926 12.4821 12.0618 10.5638L18.5001 0H0.5L6.93836 10.5638Z" fill="black" fillOpacity="0.6" />
+              <path fillRule="evenodd" clipRule="evenodd" d="M11.3425 9.98552C10.5309 11.3382 8.4691 11.3382 7.6575 9.98552L1.6662 1.70469e-05H17.3338L11.3425 9.98552ZM0.5 0L0.50001 1.70469e-05L6.80001 10.5C8.00001 12.5 11 12.5 12.2 10.5L18.5 1.70469e-05L18.5 0H0.5Z" fill="#CBCBCB" />
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="check" viewBox="0 0 19 12" fill="none">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M6.72352 10.5611C7.89265 12.4794 10.6778 12.4794 11.8469 10.5611L18.2853 -0.00268555H0.285156L6.72352 10.5611Z" fill="#B8870A" fill-opacity="0.6" />
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1277 9.98284C10.3161 11.3355 8.25426 11.3355 7.44266 9.98284L1.45136 -0.0026685H17.119L11.1277 9.98284ZM0.285156 -0.00268555L0.285166 -0.0026685L6.58517 10.4973C7.78517 12.4973 10.7852 12.4973 11.9852 10.4973L18.2852 -0.0026685L18.2852 -0.00268555H0.285156Z" fill="#FFB423" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="check" viewBox="0 0 19 12" fill="none">
+              <path fillRule="evenodd" clipRule="evenodd" d="M6.72352 10.5611C7.89265 12.4794 10.6778 12.4794 11.8469 10.5611L18.2853 -0.00268555H0.285156L6.72352 10.5611Z" fill="#B8870A" fillOpacity="0.6" />
+              <path fillRule="evenodd" clipRule="evenodd" d="M11.1277 9.98284C10.3161 11.3355 8.25426 11.3355 7.44266 9.98284L1.45136 -0.0026685H17.119L11.1277 9.98284ZM0.285156 -0.00268555L0.285166 -0.0026685L6.58517 10.4973C7.78517 12.4973 10.7852 12.4973 11.9852 10.4973L18.2852 -0.0026685L18.2852 -0.00268555H0.285156Z" fill="#FFB423" />
             </svg>
           </div>
         </div>
@@ -156,7 +157,7 @@ const GameBettingArea = (props) => {
 
   return (
     <div className={"betArea " + (props.isCanBet ? "" : "close")}>
-      <svg class="betWinEffect">
+      <svg className="betWinEffect">
         <filter id="blurFilter">
           <feGaussianBlur stdDeviation="1" />
         </filter>
@@ -167,9 +168,9 @@ const GameBettingArea = (props) => {
           width="200%"
           height="200%"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feBlend
             mode="normal"
             in="SourceGraphic"
@@ -222,24 +223,24 @@ const GameBettingArea = (props) => {
         </filter>
       </svg>
       <svg
-        class="svg-player-pair"
+        className="svg-player-pair"
         viewBox="0 0 240 221"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        pointer-events="none"
+        pointerEvents="none"
       >
         <path
-          class="svg-eve"
+          className="svg-eve"
           d="M0.5 0.5 H74.0041 C70.441 10.336 68.5 20.9427 68.5 32 C68.5 83.0861 109.914 124.5 161 124.5 H238.031 L161.791 201.5 H80 C36.0961 201.5 0.5 165.904 0.5 122 V0.5Z"
           fill="url(#paint0_linear_1640_16820)"
           stroke="url(#paint1_linear_1640_16820)"
-          pointer-events="visibleFill"
-          shape-rendering="geometricPrecision"
+          pointerEvents="visibleFill"
+          shapeRendering="geometricPrecision"
           onClick={(event) => (handleAddBetValue(event, 'PlayerPair'))}
         />
         <defs>
           <linearGradient
-            class="svg-eve-fill"
+            className="svg-eve-fill"
             id="paint0_linear_1640_16820"
             x1="119.615"
             y1="0"
@@ -247,11 +248,11 @@ const GameBettingArea = (props) => {
             y2="202"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0F52B7" stop-opacity="0.9" />
-            <stop offset="1" stop-color="#003380" />
+            <stop stopColor="#0F52B7" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#003380" />
           </linearGradient>
           <linearGradient
-            class="svg-eve-border"
+            className="svg-eve-border"
             id="paint1_linear_1640_16820"
             x1="119.615"
             y1="0"
@@ -259,30 +260,30 @@ const GameBettingArea = (props) => {
             y2="202"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#17AAFF" />
-            <stop offset="1" stop-color="#625FFF" />
+            <stop stopColor="#17AAFF" />
+            <stop offset="1" stopColor="#625FFF" />
           </linearGradient>
         </defs>
       </svg>
       <svg
-        class="svg-banker-pair"
+        className="svg-banker-pair"
         viewBox="0 0 240 221"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        pointer-events="none"
+        pointerEvents="none"
       >
         <path
-          class="svg-eve"
+          className="svg-eve"
           d="M163.996 0.5  H239.5V122C239.5 165.904 203.904 201.5 160 201.5H78.2086L1.96871 124.5H77C128.086 124.5 169.5 83.0861 169.5 32C169.5 20.9427 167.559 10.336 163.996 0.5Z"
           fill="url(#paint0_linear_1640_16822)"
           stroke="url(#paint1_linear_1640_16822)"
-          pointer-events="visibleFill"
-          shape-rendering="geometricPrecision"
+          pointerEvents="visibleFill"
+          shapeRendering="geometricPrecision"
           onClick={(event) => (handleAddBetValue(event, 'BankerPair'))}
         />
         <defs>
           <linearGradient
-            class="svg-eve-fill"
+            className="svg-eve-fill"
             id="paint0_linear_1640_16822"
             x1="120.385"
             y1="0"
@@ -290,11 +291,11 @@ const GameBettingArea = (props) => {
             y2="202"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#B70F0F" stop-opacity="0.9" />
-            <stop offset="1" stop-color="#720000" />
+            <stop stopColor="#B70F0F" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#720000" />
           </linearGradient>
           <linearGradient
-            class="svg-eve-border"
+            className="svg-eve-border"
             id="paint1_linear_1640_16822"
             x1="120.385"
             y1="0"
@@ -302,30 +303,30 @@ const GameBettingArea = (props) => {
             y2="202"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FF5B53" />
-            <stop offset="1" stop-color="#EA311D" />
+            <stop stopColor="#FF5B53" />
+            <stop offset="1" stopColor="#EA311D" />
           </linearGradient>
         </defs>
       </svg>
       <svg
-        class="svg-banker"
+        className="svg-banker"
         viewBox="0 0 292 142"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        pointer-events="none"
+        pointerEvents="none"
       >
         <path
-          class="svg-eve"
+          className="svg-eve"
           d="M0.5,0.5H285.932C289.535 10.324 291.5 20.9328 291.5 32C291.5 82.5339 250.534 123.5 200 123.5H0.5V0.5Z"
           fill="url(#paint0_linear_1640_16818)"
           stroke="url(#paint1_linear_1640_16818)"
-          pointer-events="visibleFill"
-          shape-rendering="geometricPrecision"
+          pointerEvents="visibleFill"
+          shapeRendering="geometricPrecision"
           onClick={(event) => (handleAddBetValue(event, 'Banker'))}
         />
         <defs>
           <linearGradient
-            class="svg-eve-fill"
+            className="svg-eve-fill"
             id="paint0_linear_1640_16818"
             x1="146"
             y1="0"
@@ -333,11 +334,11 @@ const GameBettingArea = (props) => {
             y2="124"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#B70F0F" stop-opacity="0.9" />
-            <stop offset="1" stop-color="#720000" />
+            <stop stopColor="#B70F0F" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#720000" />
           </linearGradient>
           <linearGradient
-            class="svg-eve-border"
+            className="svg-eve-border"
             id="paint1_linear_1640_16818"
             x1="146"
             y1="0"
@@ -345,28 +346,28 @@ const GameBettingArea = (props) => {
             y2="124"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#FF5B53" />
-            <stop offset="1" stop-color="#EA311D" />
+            <stop stopColor="#FF5B53" />
+            <stop offset="1" stopColor="#EA311D" />
           </linearGradient>
         </defs>
       </svg>
       <svg
-        class="svg-player"
+        className="svg-player"
         viewBox="0 0 292 142"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          class="svg-eve"
+          className="svg-eve"
           d="M6.06847, 0.5H291.5V123.5H92C41.4661 123.5 0.5 82.5339 0.5 32C0.5 20.9328 2.46535 10.324 6.06847 0.5Z"
           fill="url(#paint0_linear_1640_16816)"
           stroke="url(#paint1_linear_1640_16816)"
-          shape-rendering="geometricPrecision"
+          shapeRendering="geometricPrecision"
           onClick={(event) => (handleAddBetValue(event, 'Player'))}
         />
         <defs>
           <linearGradient
-            class="svg-eve-fill"
+            className="svg-eve-fill"
             id="paint0_linear_1640_16816"
             x1="146"
             y1="0"
@@ -374,11 +375,11 @@ const GameBettingArea = (props) => {
             y2="124"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0F52B7" stop-opacity="0.9" />
-            <stop offset="1" stop-color="#003380" />
+            <stop stopColor="#0F52B7" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#003380" />
           </linearGradient>
           <linearGradient
-            class="svg-eve-border"
+            className="svg-eve-border"
             id="paint1_linear_1640_16816"
             x1="146"
             y1="0"
@@ -386,30 +387,30 @@ const GameBettingArea = (props) => {
             y2="124"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#17AAFF" />
-            <stop offset="1" stop-color="#625FFF" />
+            <stop stopColor="#17AAFF" />
+            <stop offset="1" stopColor="#625FFF" />
           </linearGradient>
         </defs>
       </svg>
       <svg
-        class="svg-tie"
+        className="svg-tie"
         viewBox="0 0 400 78"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        pointer-events="none"
+        pointerEvents="none"
       >
         <path
-          class="svg-eve"
+          className="svg-eve"
           d="M1.19869 77.5L77.4386 0.5H322.561L398.801 77.5H1.19869Z"
           fill="url(#paint0_linear_1640_16824)"
           stroke="url(#paint1_linear_1640_16824)"
-          pointer-events="visibleFill"
-          shape-rendering="crispEdges"
+          pointerEvents="visibleFill"
+          shapeRendering="crispEdges"
           onClick={(event) => (handleAddBetValue(event, 'Tie'))}
         />
         <defs>
           <linearGradient
-            class="svg-eve-fill"
+            className="svg-eve-fill"
             id="paint0_linear_1640_16824"
             x1="200"
             y1="0"
@@ -417,11 +418,11 @@ const GameBettingArea = (props) => {
             y2="78"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#0FB766" stop-opacity="0.9" />
-            <stop offset="1" stop-color="#064F2C" />
+            <stop stopColor="#0FB766" stopOpacity="0.9" />
+            <stop offset="1" stopColor="#064F2C" />
           </linearGradient>
           <linearGradient
-            class="svg-eve-border"
+            className="svg-eve-border"
             id="paint1_linear_1640_16824"
             x1="200"
             y1="0"
@@ -429,65 +430,65 @@ const GameBettingArea = (props) => {
             y2="78"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#26FF7A" />
-            <stop offset="1" stop-color="#0B7453" />
+            <stop stopColor="#26FF7A" />
+            <stop offset="1" stopColor="#0B7453" />
           </linearGradient>
         </defs>
       </svg>
-      <div class="betTextArea">
-        <div class="bet-text bet-text-banker">
-          <div class="bet-text-title">庄</div>
-          <div class="bet-text-num">1:0:9</div>
+      <div className="betTextArea">
+        <div className="bet-text bet-text-banker">
+          <div className="bet-text-title">庄</div>
+          <div className="bet-text-num">1:0:9</div>
         </div>
-        <div class="bet-text bet-text-player">
-          <div class="bet-text-title">閒</div>
-          <div class="bet-text-num">1:0:9</div>
+        <div className="bet-text bet-text-player">
+          <div className="bet-text-title">閒</div>
+          <div className="bet-text-num">1:0:9</div>
         </div>
-        <div class="bet-text bet-text-banker-pair">
-          <div class="bet-text-title">庄對</div>
-          <div class="bet-text-num">1:0:9</div>
+        <div className="bet-text bet-text-banker-pair">
+          <div className="bet-text-title">庄對</div>
+          <div className="bet-text-num">1:0:9</div>
         </div>
-        <div class="bet-text bet-text-player-pair">
-          <div class="bet-text-title">閒對</div>
-          <div class="bet-text-num">1:0:9</div>
+        <div className="bet-text bet-text-player-pair">
+          <div className="bet-text-title">閒對</div>
+          <div className="bet-text-num">1:0:9</div>
         </div>
-        <div class="bet-text bet-text-tie">
-          <div class="bet-text-title">和</div>
-          <div class="bet-text-num">1:0:9</div>
+        <div className="bet-text bet-text-tie">
+          <div className="bet-text-title">和</div>
+          <div className="bet-text-num">1:0:9</div>
         </div>
-        <div class="betArea-bakText-banker">庄</div>
-        <div class="betArea-bakText-player">閒</div>
+        <div className="betArea-bakText-banker">庄</div>
+        <div className="betArea-bakText-player">閒</div>
       </div>
-      <div class="betChipArea">
-        <div class="bet-chip-banker">
+      <div className="betChipArea">
+        <div className="bet-chip-banker">
           {props.orderData.Banker.chips.map(
             (chipData, index, array) =>
               array.length - index <= chipMaxCount && generateChipDom(chipData)
           )}
           {generateTotalValueDom(props.orderData.Banker)}
         </div>
-        <div class="bet-chip-player">
+        <div className="bet-chip-player">
           {props.orderData.Player.chips.map(
             (chipData, index, array) =>
               array.length - index <= chipMaxCount && generateChipDom(chipData)
           )}
           {generateTotalValueDom(props.orderData.Player)}
         </div>
-        <div class="bet-chip-bankerpair">
+        <div className="bet-chip-bankerpair">
           {props.orderData.BankerPair.chips.map(
             (chipData, index, array) =>
               array.length - index <= chipMaxCount && generateChipDom(chipData)
           )}
           {generateTotalValueDom(props.orderData.BankerPair)}
         </div>
-        <div class="bet-chip-playerpair">
+        <div className="bet-chip-playerpair">
           {props.orderData.PlayerPair.chips.map(
             (chipData, index, array) =>
               array.length - index <= chipMaxCount && generateChipDom(chipData)
           )}
           {generateTotalValueDom(props.orderData.PlayerPair)}
         </div>
-        <div class="bet-chip-tie">
+        <div className="bet-chip-tie">
           {props.orderData.Tie.chips.map(
             (chipData, index, array) =>
               array.length - index <= chipMaxCount && generateChipDom(chipData)

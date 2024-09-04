@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext, useRef, useCallback, useMemo, useReducer } from 'react';
-
+import React, { useState, useEffect, useContext, useRef, useCallback, useMemo, useReducer, createContext } from 'react';
+import { Notify } from 'utils/Notify';
 import CountdownCircle from 'games_component/game_count_down_circle';
-import { WalletContext } from '../../provider/GameLobbyProvider';
-import { SubscribeContext } from '../../provider/GameBaccaratProvider'
+import { WalletContext, CashUnitContext, UserInfoContext } from '../../provider/GameLobbyProvider';
+import { BaccaratSubscribeContext } from '../../provider/GameBaccaratProvider'
 import './index.scss';
 import { useHistory, useParams } from 'react-router-dom';
 //import { animationMoveChip } from './orderAnimation';
@@ -17,34 +17,59 @@ import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { orderReducer, initialOrderData } from './orderData';
 import { forEach } from 'lodash';
 import { generateUUIDv4 } from 'utils/guid';
+import { AlertContext } from '../../component/alert';
+
+const BaccaratTableNotifyContext = createContext();
 
 const GameView = (props) => {
+    //常數，props，plugin
     const GameType = "BA";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
+    const gameSetID = props.GameSetID;    
+    let isTableRefreshing = false;
+    let isGameQuerying = false;
+    const history = useHistory();
+    const { AddSubscribe, RemoveSubscribe, GetGameClient } = useContext(BaccaratSubscribeContext);
+    const { wallet, updateWallet } = useContext(WalletContext)
+    const tableNotify = useRef(null);
+    const notifyEvents = ["HeartBeat", "GreatRoad", "GuestEntry", "GuestLeave",
+        "GameSetChange", "BetChange", "TableChange", "PeekingCard", "FirstDrawing", "RoundDrawCard"
+    ];
+    const { alertMsg } = useContext(AlertContext)
+
+
+    //table相關
     const gameSetID = props.GameSetID;
     const gameClient = EWinGameBaccaratClient.getInstance();
     const lobbyClient = EWinGameLobbyClient.getInstance();
     const tableInfo = useRef(null);
+    const queryInfo = useRef(null);
     const [useBetLimit, setUseBetLimit] = useState(null); //目前使用的限紅    
-    const [roundInfo, setRoundInfo] = useState('');
+    const [roundNumber, setRoundNumber] = useState('');
+    const [shoeNumber, setShoeNumber] = useState('');
     const [refreshStreamType, setRefreshStreamType] = useState(0);//串流種類，0=HD，1=SD 
     const [shoeResult, setShoeResult] = useState('');
     const countdownInfo = useRef({ lastQueryDate: null, tableTimeoutSecond: 60, remainingSecond: 0 });
-    const [isCanBet, setIsCanBet] = useState(false);
-    const [winAreas, setWinAreas] = useState(["Banker", "Tie"]);
-    const [orderData, dispatchOrderData] = useReducer(orderReducer, initialOrderData);
 
-    const [totalBetValue, setTotalBetValue] = useState(0);
-    const { wallet, updateWallet } = useContext(WalletContext)
-    const { AddSubscribe, RemoveSubscribe } = useContext(SubscribeContext)
-    const history = useHistory();
+    //電投相關資訊
+    const    [PADAvailable, setPADAvailable] = useState(false);
+    const    [onlineUserCount, setOnlineUserCount] = useState(false);
+    const { cashUnit, setCashUnit } = useContext(CashUnitContext);
+    const { userInfo, setUserInfoProperty, updateUserInfo } = useContext(UserInfoContext);
+
+    //投注相關
+    const [isCanBet, setIsCanBet] = useState(false);
+    const [winAreas, setWinAreas] = useState(["Banker", "Tie"]);    
+    const [orderData, dispatchOrderData] = useReducer(orderReducer, initialOrderData);
     const [selChipData, setSelChipData] = useState(null);
 
+    //視頻相關
     const [videoResolutionType, setVideoResolutionType] = useState(0);
     const [streamName, setStreamName] = useState("");
-    const [videoSourceList, setVideoSourceList] = useState([])
-    const [vpDomain, setVpDomain] = useState("")
+    const [videoSourceList, setVideoSourceList] = useState([]);
+    const [vpDomain, setVpDomain] = useState("");
+    const [GameSetPoint, setGameSetPoint] = useState(0)
     //0=std/1=HD
 
     const chipsItems = [
@@ -58,6 +83,9 @@ const GameView = (props) => {
         { styleIndex: 8, chipValue: 10000 }
     ];
 
+
+    const gameClient = GetGameClient();
+    const orderSequence = 0;
 
     useEffect(() => {
         //初次載入，撈取桌台資料
@@ -174,7 +202,6 @@ debugger;
                     gameClient.RefreshSubscribe(gameSetID, tableNumber, refreshStreamType, (s, o) => {
                         if (s) {
                             if (o.ResultCode === 0) {
-                                debugger;
                                 resolve(o);
                             } else {
                                 reject("RefreshSubscribeError");
@@ -186,7 +213,7 @@ debugger;
                 } else {
                     reject("AddSubscribeError");
                 }
-            });
+            }, handleNotify);
         }).then(() => {
             intervalIDByRefreshSubscribe = setInterval(() => {
                 gameClient.RefreshSubscribe(gameSetID, tableNumber, refreshStreamType, (s, o) => {
@@ -234,6 +261,7 @@ debugger;
                             //傳統桌台，使用桌台限紅
                             //資訊會從GetTableInfo取得
                         } else {
+                            debugger;
                             setUseBetLimit(result.value);
                         }
                         //#endregion
@@ -266,7 +294,7 @@ debugger;
 
         resize();
         window.addEventListener('resize', resize);
-        
+        tableNotify.current = new Notify();
 
         return () => {
             clearInterval(intervalIDByRefreshSubscribe);
@@ -371,74 +399,297 @@ debugger;
 
     //#endregion
 
+    //#region 主資訊刷新
     const refreshTableInfo = () => {
-        gameClient.GetTableInfo(tableNumber, gameSetID, (success, o) => {
-            if (success) {
-                if (o.ResultCode === 0) {
-                    handleTableInfo(o);
+        if (isTableRefreshing === false) {
+            gameClient.GetTableInfo(tableNumber, gameSetID, (success, o) => {
+                isTableRefreshing = false;
+
+                if (success) {
+                    if (o.ResultCode === 0) {
+                        handleTableInfo(o);
+                    }
                 }
-            }
-        });
+            });
+
+            isTableRefreshing = true;
+        }
     };
 
-    const handleTableInfo = (tableInfo) => {
-        tableInfo.current = tableInfo;
-        setRoundInfo(tableInfo.RoundInfo);
-        setShoeResult(tableInfo.ShoeResult);
+    const queryGame = () => {
+        if (isGameQuerying === false) {
+            gameClient.Query(gameSetID, tableNumber, (success, o) => {
+                isGameQuerying = false;
+
+                if (success) {
+                    if (o.ResultCode === 0) {
+                        handleTableInfo(o);
+                    }
+                }
+            });
+
+            isGameQuerying = true;
+        }
+    };
+
+    const handleTableInfo = (tableInfoData) => {
+        //1.要求出碼
+        //2.
+
+
+        let prevStatus = tableInfo.current != null ? tableInfo.current.Status : "";
+        //let prevRoundInfo = tableInfo.current != null ? {roundNumber:roundNumber, shoeNumber:shoeNumber} : {roundNumber:0, shoeNumber:0};
+        let countdownSecond;        
+        let roundInfoArray = tableInfoData.RoundInfo.split('-');
+
+        tableInfo.current = tableInfoData;
+
+        if(roundInfoArray.length > 0){
+            setShoeNumber(roundInfoArray[0]);
+            setRoundNumber(roundInfoArray[1]);
+        }
+        
+        setShoeResult(tableInfoData.ShoeResult);
+        //setBaccaratType(tableInfoData.BaccaratType)
 
         //處理倒數計時相關資料
         countdownInfo.current.lastQueryDate = new Date();
-        countdownInfo.current.remainingSecond = tableInfo.RemainingSecond;
-        countdownInfo.current.tableTimeoutSecond = tableInfo.TableTimeoutSecond;
+        countdownInfo.current.remainingSecond = tableInfoData.RemainingSecond;
+        countdownInfo.current.tableTimeoutSecond = tableInfoData.TableTimeoutSecond;
 
+        countdownSecond = countdownInfo.current.remainingSecond * 1000 - (new Date() - countdownInfo.current.lastQueryDate);
         //設定視頻串流
-        setStreamName(handleStreamArray(tableInfo.Stream));
+        setStreamName(handleStreamArray(tableInfoData.Stream));
 
-        switch (tableInfo.Status) {
+        switch (tableInfoData.Status) {
             case GameType + ".Close":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".NewRound":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".OpenBet":
-                setIsCanBet(true);
+            
                 break;
             case GameType + ".StopBet":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".GameResult":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".Cancel":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".Delete":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".Shuffling":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".NoService":
-                setIsCanBet(false);
+            
                 break;
             case GameType + ".AccidentPending":
-                setIsCanBet(false);
+            
                 break;
             default:
                 //視為Close
                 break;
         }
+
+        
+        //#region 可以投注，資料判斷
+        //1.投注時間檢查
+    
+        // if (Math.ceil(countdownSecond / 1000) <= 0) 
+        //     nextIsCanBet = false;           
+        
+
+        // if (tableInfo.current.Status !== (GameType + ".OpenBet")) {
+
+        // }
+            
+    
+
+        // if(wallet.Balance + orderData.totalValue < 0)
+        //     nextIsCanBet = false;  
+        
+        // if(baccaratType === 0 || baccaratType === 1)
+
+
+        // //#endregion
+
+
+
+        // if (Math.ceil(countdownSecond / 1000) <= 0) {
+        //     nextIsCanBet = false;           
+        // }
+
+        // if (tableInfo.current.Status !== (GameType + ".OpenBet")) {
+        //     nextIsCanBet = false;           
+        // }
+
+      
+        
+        // setIsCanBet(nextIsCanBet);
+        if (tableInfo.current.Status === (GameType + ".OpenBet")) {
+            tableInfo.current.Status = GameType + ".StopBet";
+        }
+
+
+        if (prevStatus !== tableInfo.current.Status) {
+            const statusText = tableInfo.current.Status.split('.')[1];
+            tableNotify.current.notify("TableChange", { tableStatus: statusText });
+        }
+                
+    };
+
+    const handleQuery = (Q) => {
+        let wallet = Q.UserInfo.Wallet.find((x) => x.CurrencyType === wallet.CurrencyType);
+        queryInfo.current = Q;
+        
+        updateUserInfo({
+            LoginAccount:Q.UserInfo.LoginAccount,
+            RealName:Q.UserInfo.RealName,
+            IsGuestAccount:Q.UserInfo,
+            UserCountry:Q.UserInfo            
+        });
+
+        updateWallet({
+        CurrencyType:wallet.CurrencyType,
+        CurrencyName:wallet.CurrencyName,
+        Balance:wallet.CurrencyBalanceType
+        });
+
+        setCashUnit(Q.cashUnit);
+        setGameSetPoint(Q.GameSetOrder.TotalUserChip);
+
+
+        checkIsCanBet();
+    };
+
+ 
+
+    const checkIsCanBet = () =>{
+        const Q = queryInfo.current;
+        const T =  tableInfo.current;
+        let ret = false;
+        let checkGameAvail = false;
+
+        // if(Q.AllowOrder && queryInfo.current.AllowBet){}
+
+        if (T.Status !== (GameType + ".OpenBet")) {
+            if(T.BaccaratType === 0 || T.BaccaratType ===1){
+                //傳統
+                if(gameSetID == null || gameSetID === 0){
+                    //alertMsg("尚未出碼, 點擊要求出碼",)
+                }else{
+                    checkGameAvail = true;
+                }
+            }else if(T.BaccaratType === 2 || T.BaccaratType === 3){
+                //快速電投，網投
+                if((wallet.Balance + orderData.totalValue) > 0){
+                    checkGameAvail = true;
+                }
+            }
+        } 
+
+        if(checkGameAvail){
+            if(Q.GameSetOrder.GameSetRoadMapNumber == null || (tableNumber === Q.GameSetOrder.GameSetRoadMapNumber))
+            {
+                if(Q.UserInfo.AllowBet){
+                    if ((Q.PADAvailable === true) || (T.BaccaratType === 3)) {
+
+                    }else{
+
+                    }
+                }else{
+                    setIsCanBet(false);
+
+                    if (Q.UserInfo.UserAccountType === 0)
+                        alertMsg(4, ("您的帳戶無法投注"));
+                    else
+                    alertMsg(4, ("股東或代理帳戶無法投注, 請使用一般帳戶進行遊戲"));
+                }
+            }else{
+                setIsCanBet(false);
+                alertMsg("", "桌號已更換, 請點選切換到新桌號", ()=>{});
+            }
+        }
+    };
+
+    //#endregion
+
+
+
+
+
+    //#region notify相關
+    const handleNotify = (type, args) => {
+        if (notifyEvents.includes(type)) {
+            if (type === "TableChange") {
+                //如果是桌台狀態改變，重新撈取桌台資訊確認最新的桌台狀態
+                if (args.Action !== "") {
+                    refreshTableInfo();
+                }
+            } else {
+                tableNotify.current.notify(type, args);
+            }
+        }
+    };
+
+    const NotifyOn = useCallback((eventName, cb) => {
+        //debugger
+        if (notifyEvents.includes(eventName)) {
+            tableNotify.current.on(eventName, cb);
+        }
+    }, []);
+
+
+    const NotifyOff = useCallback((eventName, cb) => {
+        if (notifyEvents.includes(eventName)) {
+            tableNotify.current.off(eventName, cb);
+        }
+    }, []);
+    //#endregion 
+
+    //#region 投注相關
+
+    const AddBet = (areaType) =>{
+
+    };
+
+    const confirmBet = (tableType) => {
+        let methodName;
+
+        switch (tableType) {
+            case 0:
+                methodName = "AddBetType0";
+                break;
+            case 1:
+                methodName = "AddBetType1";
+                break;
+            case 2:
+                methodName = "AddBetType2";
+                break;
+            default:
+                methodName = "AddBetType2";
+                break;
+        }
+
+        if(orderData.unConfirmValue > 0){
+            gameClient[methodName](wallet.CurrencyType, tableNumber, shoeNumber, roundNumber, );
+        }                
     };
 
 const roadMapNumber='';
 const shoeNumber='';
 const roundNumber='';
-const orderSequence=0;
 
     //#region 工單
     const SetBetType0Cmd = useCallback((cmd, cb) => {
-        gameClient.SetBetType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence + 1, cmd,(s, o) => {
+        orderSequence = orderSequence + 1;
+        gameClient.SetBetType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence , cmd,(s, o) => {
           if (s) {
             if (o.ResultCode === 0) {
               cb(o);
@@ -483,8 +734,12 @@ const orderSequence=0;
         return countdownInfo.current;
     }, []);
 
-    const getTableInfo = useCallback(() => {
-        return tableInfo.current;
+    const getTableInfo = useCallback((isRefresh, cb) => {
+        if (isRefresh) {
+            refreshTableInfo(cb);
+        } else {
+            cb(tableInfo.current);
+        }
     }, []);
 
     const resize = () => {
@@ -512,54 +767,49 @@ const orderSequence=0;
 
 
 
-
-    const memoCountdownCircle = useMemo(() => (
-        <div className="game-content">
-
-        </div>
-    ), [isCanBet, getCountdownInfo]);
-
     return (
-        <div className="game-view-wrap">
+        <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
+            <div className="game-view-wrap">
 
-            {/* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
-                <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
-                <GameChat />
-                <GameFooterArea />
-                <GameBettingArea isCanBet={isCanBet} /> 
-                */
-                roundInfo === "" ? (<div></div>) : (
-                    <div className='game-view-box' >
-                        <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName}></GameVideo>
-                        <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
-                        <GameBettingArea isCanBet={true}
-                            winAreas={winAreas}
-                            selChipData={selChipData}
-                            orderData={orderData}
-                            dispatchOrderData={dispatchOrderData}
-                        ></GameBettingArea>
-                        <GameFooterArea totalBetValue={totalBetValue} 
-                                        chipItems={chipsItems}
-                                        SetBetType0Cmd={SetBetType0Cmd}
-                                        SetGameSetCmd={SetGameSetCmd}
-                                        AddChip={AddChip}
-                                        GetTableInfoList={GetTableInfoList}> 
-                            <GameChipsButton chipsItems={chipsItems}
-                                isCanBet={true}
+                {/* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
+    <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
+    <GameChat />
+    <GameFooterArea />
+    <GameBettingArea isCanBet={isCanBet} /> 
+    */
+                    roundNumber === "" ? (<div></div>) : (
+                        <div className='game-view-box' >
+                            <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>
+                            <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName} getTableInfo={getTableInfo}></GameVideo>
+                            <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
+                            <GameBettingArea isCanBet={isCanBet}
+                                winAreas={winAreas}
                                 selChipData={selChipData}
-                                setSelChipData={setSelChipData}
                                 orderData={orderData}
-                                dispatchOrderData={dispatchOrderData}></GameChipsButton>
+                                dispatchOrderData={dispatchOrderData}
+                            ></GameBettingArea>
+                            <GameFooterArea totalBetValue={totalBetValue} chipItems={chipsItems}
+                                chipItems={chipsItems}
+                                SetBetType0Cmd={SetBetType0Cmd}
+                                SetGameSetCmd={SetGameSetCmd}
+                                AddChip={AddChip}
+                                GetTableInfoList={GetTableInfoList}>
+                                <GameChipsButton chipsItems={chipsItems}
+                                    isCanBet={isCanBet}
+                                    selChipData={selChipData}
+                                    setSelChipData={setSelChipData}
+                                    orderData={orderData}
+                                    dispatchOrderData={dispatchOrderData}></GameChipsButton>
+                            </GameFooterArea>
+                        </div>
 
-                                
-                        </GameFooterArea>
-                    </div>
+                    )
+                }
 
-                )
-            }
-
-        </div>
+            </div>
+        </BaccaratTableNotifyContext.Provider>
     );
 };
 
 export default GameView;
+export { BaccaratTableNotifyContext };

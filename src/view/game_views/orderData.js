@@ -1,4 +1,10 @@
 const initialOrderData = {
+  totalValue: 0,
+  confirmValue: 0,
+  unConfirmValue: 0,
+  orderSequence:0,
+
+
   Tie: {
     totalValue: 0,
     confirmValue: 0,
@@ -36,7 +42,9 @@ function orderReducer(state, action) {
 
   switch (action.type) {
     case 'addBet':
-      //待補上動畫                             
+      //待補上動畫
+      newOrderData.totalValue += action.payload.selChipData.chipValue;
+      newOrderData.unConfirmValue += action.payload.selChipData.chipValue;
       newOrderData[action.payload.areaType].totalValue += action.payload.selChipData.chipValue;
       newOrderData[action.payload.areaType].unConfirmValue += action.payload.selChipData.chipValue;
       newOrderData[action.payload.areaType].chips.push({
@@ -48,7 +56,10 @@ function orderReducer(state, action) {
 
       return newOrderData
     case 'doubleBet':
-      //待補上動畫                             
+      //待補上動畫                  
+      newOrderData.totalValue += newOrderData.totalValue;
+      newOrderData.unConfirmValue += newOrderData.totalValue;
+
       for (let areaType in newOrderData) {
         if (newOrderData[areaType].totalValue !== 0) {
           newOrderData[areaType].unConfirmValue += newOrderData[areaType].totalValue;
@@ -60,8 +71,13 @@ function orderReducer(state, action) {
       }
 
       return newOrderData;
-    case 'cancelBet':
-      //待補上動畫                             
+    case 'clearBet':
+      //待補上動畫          
+      newOrderData.totalValue = 0;
+      newOrderData.confirmValue = 0;
+      newOrderData.unConfirmValue = 0;
+      newOrderData.orderSequence = 0;
+
       for (let areaType in newOrderData) {
         newOrderData[areaType].unConfirmValue = 0;
         newOrderData[areaType].totalValue = 0;
@@ -71,12 +87,19 @@ function orderReducer(state, action) {
 
       return newOrderData;
     case 'confirmBet':
+      newOrderData.confirmValue += newOrderData.unConfirmValue;
+      newOrderData.unConfirmValue = 0;
+
       for (let areaType in newOrderData) {
-        newOrderData[areaType].unConfirmValue = 0;
         newOrderData[areaType].confirmValue += newOrderData[areaType].unConfirmValue;
+        newOrderData[areaType].unConfirmValue = 0;
       }
 
+      newOrderData.orderSequence +=1 ;
+
       return newOrderData;
+
+
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }
