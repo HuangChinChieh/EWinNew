@@ -13,9 +13,10 @@ import GameBettingArea from 'games_component/game_betting_area_new';
 import GameRoadMap from 'games_component/game_road_map';
 import GameVideo from 'games_component/game_video';
 import { EWinGameBaccaratClient } from 'signalr/bk/EWinGameBaccaratClient';
+import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { orderReducer, initialOrderData } from './orderData';
 import { forEach } from 'lodash';
-
+import { generateUUIDv4 } from 'utils/guid';
 
 const GameView = (props) => {
     const GameType = "BA";
@@ -23,6 +24,7 @@ const GameView = (props) => {
     const tableNumber = props.TableNumber;
     const gameSetID = props.GameSetID;
     const gameClient = EWinGameBaccaratClient.getInstance();
+    const lobbyClient = EWinGameLobbyClient.getInstance();
     const tableInfo = useRef(null);
     const [useBetLimit, setUseBetLimit] = useState(null); //目前使用的限紅    
     const [roundInfo, setRoundInfo] = useState('');
@@ -134,7 +136,7 @@ const GameView = (props) => {
                             }
                         }
                     }
-
+debugger;
                     if (directSetBetLimit !== null) {
                         setBetLimit(tableNumber, gameSetID, directSetBetLimit, (success) => {
                             if (success) {
@@ -429,6 +431,52 @@ const GameView = (props) => {
         }
     };
 
+const roadMapNumber='';
+const shoeNumber='';
+const roundNumber='';
+const orderSequence=0;
+
+    //#region 工單
+    const SetBetType0Cmd = useCallback((cmd, cb) => {
+        gameClient.SetBetType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence + 1, cmd,(s, o) => {
+          if (s) {
+            if (o.ResultCode === 0) {
+              cb(o);
+            }
+          }
+        });
+      }, [gameClient]);
+
+      const SetGameSetCmd = useCallback((cmd, cb) => {
+          gameClient.SetGameSetCmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, cmd, (s, o) => {
+            if (s) {
+              if (o.ResultCode === 0) {
+                cb(o);
+              }
+            }
+          });
+        }, [gameClient]);
+
+        const AddChip = useCallback((addChipValue, cb) => {
+            gameClient.AddChip(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, addChipValue, (s, o) => {
+              if (s) {
+                if (o.ResultCode === 0) {
+                  cb(o);
+                }
+              }
+            });
+          }, [gameClient]);
+
+          const GetTableInfoList = useCallback((areaCode, cb) => {
+            lobbyClient.GetTableInfoList(areaCode, gameSetID,(s, o) => {
+                if (s) {
+                  if (o.ResultCode === 0) {
+                    cb(o);
+                  }
+                }
+              });
+            }, [lobbyClient]);
+    //#endregion
 
 
     const getCountdownInfo = useCallback(() => {
@@ -490,13 +538,20 @@ const GameView = (props) => {
                             orderData={orderData}
                             dispatchOrderData={dispatchOrderData}
                         ></GameBettingArea>
-                        <GameFooterArea totalBetValue={totalBetValue} chipItems={chipsItems}>
+                        <GameFooterArea totalBetValue={totalBetValue} 
+                                        chipItems={chipsItems}
+                                        SetBetType0Cmd={SetBetType0Cmd}
+                                        SetGameSetCmd={SetGameSetCmd}
+                                        AddChip={AddChip}
+                                        GetTableInfoList={GetTableInfoList}> 
                             <GameChipsButton chipsItems={chipsItems}
                                 isCanBet={true}
                                 selChipData={selChipData}
                                 setSelChipData={setSelChipData}
                                 orderData={orderData}
                                 dispatchOrderData={dispatchOrderData}></GameChipsButton>
+
+                                
                         </GameFooterArea>
                     </div>
 
