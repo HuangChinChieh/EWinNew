@@ -99,7 +99,7 @@ const BettingHistory = (props) => {
         if (gameLobbyClient !== null) {
             gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
-                    console.log(o);
+                    
                     if (o.ResultCode === 0) {
                         console.log(o.SummaryList.GameCode)
                         setTableData(o.SummaryList);

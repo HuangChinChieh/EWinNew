@@ -5,7 +5,7 @@ import { moveChipAnimation } from '../../animation/betAnimation/baccaratBasicAni
 const GameChipsButton = ((props) => {   
     const handleDoubleBet = ()=>{
         const promiseArray = [];
-        debugger;
+
         for(let areaType in props.orderData){
             if(props.orderData[areaType].totalValue > 0){
                 promiseArray.push(new Promise((resolve, reject)=>{
@@ -25,7 +25,7 @@ const GameChipsButton = ((props) => {
         <div className={'game-chips-area ' +  (props.isCanBet && 'can-bet')}>
             {/* {(!props.onGameSetAction && props.isCanBet) && <span onClick={handleConfirm} className='confirm'>確認</span>} */}
             <span onClick={() => props.dispatchOrderData({ type:"confirmBet"})} className='confirm'>確認</span>
-            <span onClick={() => props.dispatchOrderData({ type:"cancelBet"})} className='cancel'>撤銷</span>
+            <span onClick={() => props.dispatchOrderData({ type:"clearBet"})} className='cancel'>撤銷</span>
             <div className="game-chips-box">
            
                     {

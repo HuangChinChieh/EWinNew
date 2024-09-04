@@ -66,7 +66,7 @@ const BettingHistoryDetail = ({
                             return acc;
                         }, []);
                         setHistoryDays(filteredData);
-                        console.log('historyDays',historyDays);
+                        //console.log('historyDays',historyDays);
 
                     } else {
                         console.log('GetHistorySummary: 系統錯誤處理',o.Message);

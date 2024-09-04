@@ -1,63 +1,57 @@
 import React, { createContext, useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { EWinGameBaccaratClient } from 'signalr/bk/EWinGameBaccaratClient';
 
-const NotifyContext = createContext();
-const SubscribeContext = createContext();
+const BaccaratSubscribeContext = createContext();
 
 export {
-  NotifyContext,
-  SubscribeContext
+  BaccaratSubscribeContext
 };
 
-class Notify extends EventTarget {
-  on(eventName, callback) {
-    this.addEventListener(eventName, callback);
-  }
 
-  off(eventName, callback) {
-    this.removeEventListener(eventName, callback);
-  }
-
-  notify(eventName, data) {
-    const event = new CustomEvent(eventName, data);
-    this.dispatchEvent(event);
-  }
-}
 
 //處理訂閱服務來自於Client的推送通知
-const GameBaccaratProvider =  (props) => {
-  const events = ["HeartBeat", "GreatRoad", "GuestEntry", "GuestLeave", "GameSetChange"];
+const GameBaccaratProvider = (props) => {
+  const events = ["HeartBeat", "GreatRoad", "GuestEntry", "GuestLeave", "GameSetChange", "BetChange", "TableChange", "PeekingCard", "FirstDrawing", "RoundDrawCard"];
   const gameClient = useRef(null);
   const tableNumberArray = useRef([]);
-  const notify = useRef(new Notify());  
+  const notifyDictionary = useRef({});
   const [isConnected, setIsConnected] = useState(false);
 
-  const initGameClient = useCallback(() => {   
+
+  const initGameClient = useCallback(() => {
     // 遊戲大廳  
-    let client;  
+    let client;
     gameClient.current = EWinGameBaccaratClient.getInstance(props.CT, props.EWinUrl);
     client = gameClient.current;
 
     client.handleReceiveMsg((Msg) => {
-      console.log(Msg);
-      notify.current.notify(Msg.Type, Msg.Args);
+      console.log(JSON.stringify(Msg));
+      if ("Type" in Msg) {
+        if (events.includes(Msg.Type)) {
+          if(Msg.Type === "GreatRoad"){
+
+          }else{
+            notifyDictionary.current[Msg.Args.TableNumber](Msg.Type, Msg.Args);
+          }         
+        }
+      }
     });
 
-    client.handleConnected(() => {      
-      setIsConnected(true);      
+    client.handleConnected(() => {
+      setIsConnected(true);
     });
 
     client.handleReconnected((Msg) => {
-      
+
     });
 
 
     client.handleReconnecting(() => {
-      
+
     });
 
     client.handleDisconnect(() => {
-      
+
     });
 
     if (client.state() !== 1) {
@@ -65,60 +59,53 @@ const GameBaccaratProvider =  (props) => {
     }
   }, [props.CT, props.EWinUrl]);
 
-  const NotifyOn = useCallback((eventName, cb) => {    
-    if (events.includes(eventName)) {
-      notify.on(eventName, cb);
-    }
-  }, []);
 
-  const NotifyOff = useCallback((eventName, cb) => {
-    if (events.includes(eventName)) {
-      notify.off(eventName, cb);
-    }
-  }, []);
-
-  const AddSubscribe = useCallback((RoadMapNumber, cb) => {    
+  const AddSubscribe = useCallback((RoadMapNumber, cb, handleNotify) => {
     tableNumberArray.current.push(RoadMapNumber);
-
+    notifyDictionary.current[RoadMapNumber] = handleNotify;
+    
     //訂閱桌台
     gameClient.current.AddSubscribe(tableNumberArray.current.join(""), (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
-          if(cb)
+          if (cb)
             cb(true);
         } else {
-          if(cb)
-          cb(false);
+          if (cb)
+            cb(false);
         }
       } else {
-        if(cb)
-        cb(false);
+        if (cb)
+          cb(false);
       }
     })
   }, []);
 
   const RemoveSubscribe = useCallback((RoadMapNumber, cb) => {
     tableNumberArray.current = tableNumberArray.current.filter(item => item !== RoadMapNumber);
-
+    
+    if(RoadMapNumber in notifyDictionary.current){
+      delete notifyDictionary.current[RoadMapNumber];
+    }
     //訂閱桌台
     gameClient.current.AddSubscribe(tableNumberArray.current.join(""), (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
-          if(cb)
-          cb(true);
-        } else{
-          if(cb)
-          cb(false);
+          if (cb)
+            cb(true);
+        } else {
+          if (cb)
+            cb(false);
         }
-      }else{
-        if(cb)
-        cb(false);
+      } else {
+        if (cb)
+          cb(false);
       }
     })
   }, []);
 
   const ClearSubscribe = (cb) => {
-    gameClient.ClearSubscribe((s, o) => {
+    gameClient.current.ClearSubscribe((s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
           cb(true);
@@ -131,6 +118,10 @@ const GameBaccaratProvider =  (props) => {
     })
   };
 
+  const GetGameClient = useCallback(() => {
+    return gameClient.current;
+  }, [])
+
 
   useEffect(() => {
     //尚未初始化，執行初始化
@@ -140,12 +131,12 @@ const GameBaccaratProvider =  (props) => {
 
     return () => {
       //每次離開時destroy client
-      if (gameClient.current.currentState === 1) {        
+      if (gameClient.current.currentState === 1) {
         ClearSubscribe((s) => {
           gameClient.current = null;
           EWinGameBaccaratClient.destroyInstance();
         });
-      } else {        
+      } else {
         gameClient.current = null;
         EWinGameBaccaratClient.destroyInstance();
       }
@@ -154,7 +145,7 @@ const GameBaccaratProvider =  (props) => {
 
   useEffect(() => {
     //尚未初始化，執行初始化
-   console.log("test entry");
+    console.log("test entry");
 
 
     return (() => {
@@ -163,17 +154,13 @@ const GameBaccaratProvider =  (props) => {
     });
   }, []);
 
-  if (isConnected) {    
+  if (isConnected) {
     return (
-      <SubscribeContext.Provider value={{
-        AddSubscribe, RemoveSubscribe
+      <BaccaratSubscribeContext.Provider value={{
+        AddSubscribe, RemoveSubscribe, GetGameClient
       }}>
-        <NotifyContext.Provider value={{
-          NotifyOn, NotifyOff
-        }}>
-          {props.children}
-        </NotifyContext.Provider>
-      </SubscribeContext.Provider>
+        {props.children}
+      </BaccaratSubscribeContext.Provider>
     )
   } else {
     return (<div></div>);

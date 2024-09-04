@@ -97,9 +97,9 @@ const Main = () => {
             intervalIDRef.current = setInterval(() => {
                 const currentTime = new Date().toLocaleString();
                 lobbyClient.KeepSID((s, o) => {
-                    console.log("KeepSIDs:" + s);
-                    console.log("KeepSID:" + JSON.stringify(o));
-                    console.log("Current Time:", currentTime);
+                    // console.log("KeepSIDs:" + s);
+                    // console.log("KeepSID:" + JSON.stringify(o));
+                    // console.log("Current Time:", currentTime);
                 });
             }, 30000);
 
