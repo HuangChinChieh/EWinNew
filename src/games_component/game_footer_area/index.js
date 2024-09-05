@@ -25,7 +25,16 @@ const GameFooterArea = (props) => {
                 </div>
             </div>
             <div className='middle-box'>
-                    {middleBtnType === "Chip" ? props.children : (middleBtnType === "GameSet" ? <GameControlButton chipItems={props.chipItems}/> : <div></div>)}            
+                    {middleBtnType === "Chip" ? props.children : (middleBtnType === "GameSet" ? 
+                    <GameControlButton chipItems={props.chipItems}
+                                roadMapNumber={props.roadMapNumber}
+                                gameSetID={props.gameSetID}
+                                shoeNumber={props.shoeNumber}
+                                roundNumber={props.roundNumber}
+                                orderSequence={props.orderSequence}
+                                gameClient={props.gameClient}
+
+                    /> : <div></div>)}            
             </div>
             <div className='right-box'>
                 <div className='box-area'>

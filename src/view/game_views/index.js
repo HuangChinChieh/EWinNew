@@ -12,11 +12,8 @@ import GameChipsButton from 'games_component/game_buttons/game_chips_btn';
 import GameBettingArea from 'games_component/game_betting_area_new';
 import GameRoadMap from 'games_component/game_road_map';
 import GameVideo from 'games_component/game_video';
-import { EWinGameBaccaratClient } from 'signalr/bk/EWinGameBaccaratClient';
-import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { orderReducer, initialOrderData } from './orderData';
 import { forEach } from 'lodash';
-import { generateUUIDv4 } from 'utils/guid';
 import { AlertContext } from '../../component/alert';
 
 const BaccaratTableNotifyContext = createContext();
@@ -26,7 +23,6 @@ const GameView = (props) => {
     const GameType = "BA";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
-    const gameSetID = props.GameSetID;    
     let isTableRefreshing = false;
     let isGameQuerying = false;
     const history = useHistory();
@@ -41,8 +37,6 @@ const GameView = (props) => {
 
     //table相關
     const gameSetID = props.GameSetID;
-    const gameClient = EWinGameBaccaratClient.getInstance();
-    const lobbyClient = EWinGameLobbyClient.getInstance();
     const tableInfo = useRef(null);
     const queryInfo = useRef(null);
     const [useBetLimit, setUseBetLimit] = useState(null); //目前使用的限紅    
@@ -82,7 +76,6 @@ const GameView = (props) => {
         { styleIndex: 7, chipValue: 5000 },
         { styleIndex: 8, chipValue: 10000 }
     ];
-
 
     const gameClient = GetGameClient();
     const orderSequence = 0;
@@ -682,54 +675,6 @@ debugger;
         }                
     };
 
-const roadMapNumber='';
-const shoeNumber='';
-const roundNumber='';
-
-    //#region 工單
-    const SetBetType0Cmd = useCallback((cmd, cb) => {
-        orderSequence = orderSequence + 1;
-        gameClient.SetBetType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence , cmd,(s, o) => {
-          if (s) {
-            if (o.ResultCode === 0) {
-              cb(o);
-            }
-          }
-        });
-      }, [gameClient]);
-
-      const SetGameSetCmd = useCallback((cmd, cb) => {
-          gameClient.SetGameSetCmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, cmd, (s, o) => {
-            if (s) {
-              if (o.ResultCode === 0) {
-                cb(o);
-              }
-            }
-          });
-        }, [gameClient]);
-
-        const AddChip = useCallback((addChipValue, cb) => {
-            gameClient.AddChip(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, addChipValue, (s, o) => {
-              if (s) {
-                if (o.ResultCode === 0) {
-                  cb(o);
-                }
-              }
-            });
-          }, [gameClient]);
-
-          const GetTableInfoList = useCallback((areaCode, cb) => {
-            lobbyClient.GetTableInfoList(areaCode, gameSetID,(s, o) => {
-                if (s) {
-                  if (o.ResultCode === 0) {
-                    cb(o);
-                  }
-                }
-              });
-            }, [lobbyClient]);
-    //#endregion
-
-
     const getCountdownInfo = useCallback(() => {
         return countdownInfo.current;
     }, []);
@@ -789,11 +734,12 @@ const roundNumber='';
                                 dispatchOrderData={dispatchOrderData}
                             ></GameBettingArea>
                             <GameFooterArea totalBetValue={totalBetValue} chipItems={chipsItems}
-                                chipItems={chipsItems}
-                                SetBetType0Cmd={SetBetType0Cmd}
-                                SetGameSetCmd={SetGameSetCmd}
-                                AddChip={AddChip}
-                                GetTableInfoList={GetTableInfoList}>
+                                roadMapNumber={tableNumber}
+                                gameSetID={gameSetID}
+                                shoeNumber={shoeNumber}
+                                roundNumber={roundNumber}
+                                orderSequence={orderSequence}
+                                gameClient={gameClient}>
                                 <GameChipsButton chipsItems={chipsItems}
                                     isCanBet={isCanBet}
                                     selChipData={selChipData}

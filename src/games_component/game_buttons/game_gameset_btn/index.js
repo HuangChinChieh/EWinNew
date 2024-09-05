@@ -5,9 +5,13 @@ import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { AlertContext } from 'component/alert';
 import { generateUUIDv4 } from 'utils/guid';
 import alertMsg from 'component/alert';
+import { FavorsContext,LobbyPersonalContext } from 'provider/GameLobbyProvider';
+import RoadMap from 'component/road_map';
+import { Link } from "react-router-dom";
 
 const GameControlButton = ((props) => {
     const lobbyClient = EWinGameLobbyClient.getInstance();
+    const gameClient = props.gameClient;
     const btnsItem = [
         { index: 1, btnName: "飛牌" },
         { index: 2, btnName: "加彩" },
@@ -95,8 +99,8 @@ const GameControlButton = ((props) => {
             switch (tableType) {
                 case 0:
                 case 1:
-                    // 待補 api.SetOrderType0Cmd
-                    lobbyClient.SetOrderType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence + 1, cmd, function (success, o) {
+                    // SetBetType0Cmd  game
+                    gameClient.SetOrderType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence + 1, cmd, function (success, o) {
                         if (success) {
                             if (o.ResultState == 0) {
 
@@ -132,8 +136,8 @@ const GameControlButton = ((props) => {
             switch (tableType) {
                 case 0:
                 case 1:
-                    // 待補 api.setGameSetCmd
-                    lobbyClient.SetGameSetCmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, cmd, function (success, o) {
+                    // SetGameSetCmd game
+                    gameClient.SetGameSetCmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, cmd, function (success, o) {
                         if (success) {
                             if (o.ResultState == 0) {
 
@@ -199,7 +203,11 @@ const GameControlButton = ((props) => {
         <div>
             {
                 onAddChip == true ? (
-                    <div><AddChip onAddChipClose={onAddChipClose} setrefreshTable={setrefreshTable} setChipVal={onChangeChipVal} />
+                    <div><AddChip onAddChipClose={onAddChipClose} setrefreshTable={setrefreshTable} setChipVal={onChangeChipVal} gameClient={gameClient}
+                                roadMapNumber={roadMapNumber}
+                                gameSetID={gameSetID}
+                                shoeNumber={shoeNumber}
+                                roundNumber={roundNumber}/>
                         <div className="game-chips-box">
                             {
                                 chipsItem.map((item) => (
@@ -212,7 +220,7 @@ const GameControlButton = ((props) => {
                             }
                         </div> </div>
                 ) : onChangeTable == true ? (
-                    <div><ChangeTable onChangeTableClose={onChangeTableClose} countryItem={countryItem} areaCode={areaCode} />
+                    <div><ChangeTable onChangeTableClose={onChangeTableClose} countryItem={countryItem} areaCode={areaCode} lobbyClient={lobbyClient} />
                         <div className="game-controls-box">
                             {
                                 btnsItem.map((item) => (
@@ -258,7 +266,7 @@ const App = () => {
 };
 
 const AddChip = (props) => {
-    const lobbyClient = EWinGameLobbyClient.getInstance();
+    const gameClient = props.gameClient;
     const handleClose = () => {
         if (props.onAddChipClose) {
             props.onAddChipClose();
@@ -272,7 +280,8 @@ const AddChip = (props) => {
         if (addChipValue > 0) {
 
             alertMsg('加彩', '是否要求加彩 ' + addChipValue, () => {
-                lobbyClient.AddChip(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, addChipValue, function (success, o) {
+                //AddChip game
+                gameClient.AddChip(generateUUIDv4(), props.gameSetID, props.roadMapNumber, props.shoeNumber, props.roundNumber, addChipValue, function (success, o) {
                     if (success) {
                         if (o.ResultState == 0) {
 
@@ -316,7 +325,7 @@ const AddChip = (props) => {
 };
 
 const ChangeTable = (props) => {
-    const lobbyClient = EWinGameLobbyClient.getInstance();
+    const lobbyClient = props.lobbyClient;
     const [tableList, setTableList] = useState([]);
     const [areaCode, setAreaCode] = useState('');
 
@@ -350,6 +359,7 @@ const ChangeTable = (props) => {
     }
 
     const refreshTableList = (areaCode) => {
+        //GetTableInfoList lobby
         lobbyClient.GetTableInfoList(areaCode, 0, (success, o) => {
             if (success) {
                 if (o.ResultCode === 0) {
@@ -368,6 +378,114 @@ const ChangeTable = (props) => {
             }
         });
     };
+
+    const SectionLiFavor2 = (props) => {
+        const { favors, updateFavors } = useContext(FavorsContext);
+    
+        const tableNumber = props.tableNumber;
+    
+        const handleClick = () => {
+            const lobbyClient = EWinGameLobbyClient.getInstance();
+            const index = favors.indexOf(tableNumber);
+            
+            //觸發收藏or取消收藏     
+            if (index === -1) {
+                //沒找到，新增收藏
+                favors.push(tableNumber);
+                lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors), (success, o) => {
+                    if (success) {
+                        if (o.ResultCode === 0) {
+                            updateFavors();
+                        }
+                    }
+                });
+            } else {
+                //有找到，移除收藏
+                favors.splice(index, 1);
+                lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors), (success, o) => {
+                    if (success) {
+                        if (o.ResultCode === 0) {
+                            updateFavors();
+                        }
+                    }
+                });
+            }
+        };
+        
+    // 
+        return (<span onClick={() => handleClick()} className={`${favors.includes(props.tableNumber) ? 'remove-to-favorites' : 'add-to-favorites'}`} />);
+    }
+    
+    
+    const SectionLiFavor1 = (props) => {
+        const { favors } = useContext(FavorsContext);
+        return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`}/>);
+    }
+    
+    const SectionLi = (props) => {
+        const [moreScale, setMoreScale] = useState('');
+        const [hoveredItem, setHoveredItem] = useState(null);
+        const mouseleave = () => {
+            setHoveredItem(null);
+            setMoreScale('');
+        }
+    
+        return (<li key={props.tableInfo.TableNumber}
+            onMouseEnter={() => setHoveredItem(props.tableInfo.TableNumber)}
+            onMouseLeave={mouseleave}
+            className='li-box'
+        >
+            <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber}/>
+            <div className={`games`}>
+                {props.tableInfo.Image 
+                    ? <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
+                    : <img src="http://bm.dev.mts.idv.tw/images/JINBEI1.png" alt="Default Table Image" />
+                }
+                <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={0} />
+            </div>
+            <p className='game-title'>
+                {props.tableInfo.TableNumber}
+            </p>
+            <p className='game-wallet'>
+                <span>{"CNY(暫)"}</span>
+                <span>
+              
+                </span>
+            </p>
+    
+            <div className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? 'visible' : ''} ${moreScale}`}>
+                <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
+                <div className={`games`}>
+                    {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table" />)}
+                </div>
+                <div className='info-box'>
+                    <p className='game-title'>
+                        {props.tableInfo.TableNumber}
+                    </p>
+                    <p className='game-wallet'>
+                        <span>{"CNY(暫)"}</span>
+                        <span>
+                        
+                        </span>
+                    </p>
+                    <div className='game-start' >
+                        <Link to={`/games/${props.tableInfo.TableNumber}`}>{"開始遊戲"}</Link>
+                    </div>
+                    <div className='game-table-wrap'>
+                        <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={1} />
+                    </div>
+                    <p className='game-dis'>
+                        {/* {props.tableInfo.Status} */}
+                    </p>
+                    
+    
+                    <div className='favorites-box'>
+                        <SectionLiFavor2 tableNumber={props.tableInfo.TableNumber}></SectionLiFavor2>
+                    </div>
+                </div>
+            </div>
+        </li>);
+    }
 
     return (
         <div className="divChangeTable">
