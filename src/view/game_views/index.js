@@ -16,6 +16,7 @@ import { orderReducer, initialOrderData } from './orderData';
 import { forEach } from 'lodash';
 import { AlertContext } from '../../component/alert';
 
+
 const BaccaratTableNotifyContext = createContext();
 
 const GameView = (props) => {
@@ -23,6 +24,7 @@ const GameView = (props) => {
     const GameType = "BA";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
+    const gameSetID = props.GameSetID;
     let isTableRefreshing = false;
     let isGameQuerying = false;
     const history = useHistory();
@@ -47,14 +49,14 @@ const GameView = (props) => {
     const countdownInfo = useRef({ lastQueryDate: null, tableTimeoutSecond: 60, remainingSecond: 0 });
 
     //電投相關資訊
-    const    [PADAvailable, setPADAvailable] = useState(false);
-    const    [onlineUserCount, setOnlineUserCount] = useState(false);
+    const [PADAvailable, setPADAvailable] = useState(false);
+    const [onlineUserCount, setOnlineUserCount] = useState(false);
     const { cashUnit, setCashUnit } = useContext(CashUnitContext);
     const { userInfo, setUserInfoProperty, updateUserInfo } = useContext(UserInfoContext);
 
     //投注相關
     const [isCanBet, setIsCanBet] = useState(false);
-    const [winAreas, setWinAreas] = useState(["Banker", "Tie"]);    
+    const [winAreas, setWinAreas] = useState(["Banker", "Tie"]);
     const [orderData, dispatchOrderData] = useReducer(orderReducer, initialOrderData);
     const [selChipData, setSelChipData] = useState(null);
 
@@ -63,7 +65,8 @@ const GameView = (props) => {
     const [streamName, setStreamName] = useState("");
     const [videoSourceList, setVideoSourceList] = useState([]);
     const [vpDomain, setVpDomain] = useState("");
-    const [GameSetPoint, setGameSetPoint] = useState(0)
+    const [GameSetPoint, setGameSetPoint] = useState(0);
+    const lobbyClient = "";
     //0=std/1=HD
 
     const chipsItems = [
@@ -82,9 +85,26 @@ const GameView = (props) => {
 
     useEffect(() => {
         //初次載入，撈取桌台資料
+        let initPromise;
         const PromiseArray = [];
         let intervalIDByRefreshSubscribe = -1;
         let intervalIDByTableInfo = -1;
+        let intervalIDByQueryGame = -1
+
+        //initPromise
+        initPromise = new Promise((resolve, reject) => {
+            gameClient.EntryRoadMap(gameSetID, props.CurrencyType, tableNumber, (success, o) => {
+                if (success) {
+                    if (o.ResultCode === 0) {
+                        resolve({ name: "EntryRoadMap", value: null });
+                    } else {
+                        reject("EntryRoadMapError");
+                    }
+                } else {
+                    reject("EntryRoadMapError");
+                }
+            })
+        });
 
         //promise1 取得桌台資料
         PromiseArray.push(new Promise((resolve, reject) => {
@@ -131,7 +151,7 @@ const GameView = (props) => {
 
                         if (betLimitList.length === 1) {
                             //只有一組限紅，直接設定
-                            if (betLimitList[0].CurrencyType === wallet.CurrencyType) {
+                            if (betLimitList[0].CurrencyType === props.CurrencyType) {
                                 //幣別必須要相等
                                 directSetBetLimit = betLimitList[0];
                             }
@@ -141,7 +161,7 @@ const GameView = (props) => {
                                 if (selBetLimit.BetLimitID === betLimit.BetLimitID) {
                                     directSetBetLimit = betLimit;
                                     break;
-                                } else if (betLimit.CurrencyType === wallet.CurrencyType) {
+                                } else if (betLimit.CurrencyType === props.CurrencyType) {
                                     const tempDistance = Math.abs(betLimit.MinBetPlayer - selBetLimit.MinBetPlayer) + Math.abs(selBetLimit.MaxBet - betLimit.MaxBet);
 
                                     if (distance !== -1) {
@@ -181,7 +201,7 @@ debugger;
         }
         //#endregion
 
-        //promise3 訂閱桌台資訊
+        //promise4 訂閱桌台資訊
         //#region promise3 訂閱桌台資訊
         //由於沒有回傳要處理state，從promise array移出
         //PromiseArray.push();
@@ -224,9 +244,7 @@ debugger;
 
         //#endregion
 
-        //promise4 取得視頻列表清單
-
-        //#region 取得視頻列表清單
+        //#region4 取得視頻列表清單
         PromiseArray.push(
             new Promise((resolve, reject) => {
                 getVideoSourceList((success, o) => {
@@ -240,7 +258,26 @@ debugger;
         );
         //#endregion
 
-        Promise.all(PromiseArray).then((results) => {
+        //#region5 取得查詢資料
+        PromiseArray.push(
+            new Promise((resolve, reject) => {
+                gameClient.Query(gameSetID, tableNumber, (success, o) => {
+                    if (success) {
+                        if (o.ResultCode === 0) {
+                            resolve({ name: "Query", value: o });
+                        } else {
+                            reject("QueryError");
+                        }
+                    } else {
+                        reject("QueryError");
+                    }
+                });
+            })
+        );
+        //#endregion
+
+        initPromise.then(() =>  Promise.all(PromiseArray))
+        .then((results) => {
             for (let result of results) {
                 switch (result.name) {
                     case "GetTableInfo":
@@ -254,7 +291,7 @@ debugger;
                             //傳統桌台，使用桌台限紅
                             //資訊會從GetTableInfo取得
                         } else {
-                            debugger;
+
                             setUseBetLimit(result.value);
                         }
                         //#endregion
@@ -271,13 +308,21 @@ debugger;
 
                         //#endregion
                         break;
+                    case "Query":
+                        handleQuery(result.value);
+                        break;
                     default:
                         break;
                 }
             }
-        }).then(() => {
+        })
+        .then(() => {
             intervalIDByTableInfo = setInterval(() => {
                 refreshTableInfo();
+            }, 5000);
+
+            intervalIDByQueryGame = setInterval(() => {
+                refreshQueryGame();
             }, 5000);
         });
 
@@ -290,9 +335,10 @@ debugger;
         tableNotify.current = new Notify();
 
         return () => {
-            clearInterval(intervalIDByRefreshSubscribe);
             //取消訂閱桌台
+            clearInterval(intervalIDByRefreshSubscribe);
             clearInterval(intervalIDByTableInfo);
+            clearInterval(intervalIDByQueryGame);
             RemoveSubscribe(tableNumber);
         };
     }, [tableNumber, gameSetID]);
@@ -303,7 +349,7 @@ debugger;
     const setBetLimit = (tableNumber, gameSetID, selBetLimit, cb) => {
 
         if (selBetLimit && selBetLimit.BetLimitID !== 0) {
-            gameClient.UserAccountSetBetLimit(tableNumber, wallet.CurrencyType, gameSetID, selBetLimit, (s, o) => {
+            gameClient.UserAccountSetBetLimit(tableNumber, props.CurrencyType, gameSetID, selBetLimit, (s, o) => {
                 if (s) {
                     if (o.ResultCode === 0) {
                         localStorage.setItem("SelBetLimit", JSON.stringify(selBetLimit));
@@ -409,14 +455,14 @@ debugger;
         }
     };
 
-    const queryGame = () => {
+    const refreshQueryGame = () => {
         if (isGameQuerying === false) {
             gameClient.Query(gameSetID, tableNumber, (success, o) => {
                 isGameQuerying = false;
 
                 if (success) {
                     if (o.ResultCode === 0) {
-                        handleTableInfo(o);
+                        handleQuery(o);
                     }
                 }
             });
@@ -431,184 +477,288 @@ debugger;
 
 
         let prevStatus = tableInfo.current != null ? tableInfo.current.Status : "";
-        //let prevRoundInfo = tableInfo.current != null ? {roundNumber:roundNumber, shoeNumber:shoeNumber} : {roundNumber:0, shoeNumber:0};
-        let countdownSecond;        
+        //let prevRoundInfo = tableInfo.current != null ? {roundNumber:roundNumber, shoeNumber:shoeNumber} : {roundNumber:0, shoeNumber:0};        
         let roundInfoArray = tableInfoData.RoundInfo.split('-');
 
         tableInfo.current = tableInfoData;
 
-        if(roundInfoArray.length > 0){
+        if (roundInfoArray.length > 0) {
             setShoeNumber(roundInfoArray[0]);
             setRoundNumber(roundInfoArray[1]);
         }
-        
+
         setShoeResult(tableInfoData.ShoeResult);
         //setBaccaratType(tableInfoData.BaccaratType)
 
+        //設定視頻串流
+        setStreamName(handleStreamArray(tableInfoData.Stream));
         //處理倒數計時相關資料
         countdownInfo.current.lastQueryDate = new Date();
         countdownInfo.current.remainingSecond = tableInfoData.RemainingSecond;
         countdownInfo.current.tableTimeoutSecond = tableInfoData.TableTimeoutSecond;
 
-        countdownSecond = countdownInfo.current.remainingSecond * 1000 - (new Date() - countdownInfo.current.lastQueryDate);
-        //設定視頻串流
-        setStreamName(handleStreamArray(tableInfoData.Stream));
+        if (gameSetID === 0) {
+
+        }
 
         switch (tableInfoData.Status) {
             case GameType + ".Close":
-            
+
                 break;
             case GameType + ".NewRound":
-            
+
                 break;
             case GameType + ".OpenBet":
-            
+
                 break;
             case GameType + ".StopBet":
-            
+
                 break;
             case GameType + ".GameResult":
-            
+
                 break;
             case GameType + ".Cancel":
-            
+
                 break;
             case GameType + ".Delete":
-            
+
                 break;
             case GameType + ".Shuffling":
-            
+
                 break;
             case GameType + ".NoService":
-            
+
                 break;
             case GameType + ".AccidentPending":
-            
+
                 break;
             default:
                 //視為Close
                 break;
         }
 
-        
-        //#region 可以投注，資料判斷
-        //1.投注時間檢查
-    
-        // if (Math.ceil(countdownSecond / 1000) <= 0) 
-        //     nextIsCanBet = false;           
-        
-
-        // if (tableInfo.current.Status !== (GameType + ".OpenBet")) {
-
-        // }
-            
-    
-
-        // if(wallet.Balance + orderData.totalValue < 0)
-        //     nextIsCanBet = false;  
-        
-        // if(baccaratType === 0 || baccaratType === 1)
-
-
-        // //#endregion
-
-
-
-        // if (Math.ceil(countdownSecond / 1000) <= 0) {
-        //     nextIsCanBet = false;           
-        // }
-
-        // if (tableInfo.current.Status !== (GameType + ".OpenBet")) {
-        //     nextIsCanBet = false;           
-        // }
-
-      
-        
-        // setIsCanBet(nextIsCanBet);
-        if (tableInfo.current.Status === (GameType + ".OpenBet")) {
-            tableInfo.current.Status = GameType + ".StopBet";
-        }
-
+        checkIsCanBetAndCheckGameSet();
 
         if (prevStatus !== tableInfo.current.Status) {
+            debugger;
             const statusText = tableInfo.current.Status.split('.')[1];
             tableNotify.current.notify("TableChange", { tableStatus: statusText });
         }
-                
     };
 
     const handleQuery = (Q) => {
-        let wallet = Q.UserInfo.Wallet.find((x) => x.CurrencyType === wallet.CurrencyType);
+        let walletByQ = Q.UserInfo.Wallet.find((x) => x.CurrencyType === props.CurrencyType);
         queryInfo.current = Q;
-        
+
         updateUserInfo({
-            LoginAccount:Q.UserInfo.LoginAccount,
-            RealName:Q.UserInfo.RealName,
-            IsGuestAccount:Q.UserInfo,
-            UserCountry:Q.UserInfo            
+            LoginAccount: Q.UserInfo.LoginAccount,
+            RealName: Q.UserInfo.RealName,
+            IsGuestAccount: Q.UserInfo.IsGuestAccount,
+            UserCountry: Q.UserInfo.UserCountry
         });
 
         updateWallet({
-        CurrencyType:wallet.CurrencyType,
-        CurrencyName:wallet.CurrencyName,
-        Balance:wallet.CurrencyBalanceType
+            CurrencyType: walletByQ.CurrencyType,
+            CurrencyName: walletByQ.CurrencyName,
+            Balance: walletByQ.Balance
         });
 
         setCashUnit(Q.cashUnit);
-        setGameSetPoint(Q.GameSetOrder.TotalUserChip);
+
+        if (gameSetID === 0) {
+            setGameSetPoint(wallet.Balance);
+        } else {
+            setGameSetPoint(Q.GameSetOrder.TotalUserChip);
+        }
 
 
-        checkIsCanBet();
+
+
+        checkIsCanBetAndCheckGameSet();
     };
 
- 
+    const checkIsCanBetAndCheckGameSet = () => {
+        if (queryInfo.current == null || tableInfo.current == null) {
+            return;
+        }
 
-    const checkIsCanBet = () =>{
         const Q = queryInfo.current;
-        const T =  tableInfo.current;
-        let ret = false;
-        let checkGameAvail = false;
-
+        const T = tableInfo.current;
+    
+        let countdownSecond = Math.ceil(countdownInfo.current.remainingSecond * 1000 - (new Date() - countdownInfo.current.lastQueryDate));
         // if(Q.AllowOrder && queryInfo.current.AllowBet){}
 
-        if (T.Status !== (GameType + ".OpenBet")) {
-            if(T.BaccaratType === 0 || T.BaccaratType ===1){
-                //傳統
-                if(gameSetID == null || gameSetID === 0){
-                    //alertMsg("尚未出碼, 點擊要求出碼",)
-                }else{
-                    checkGameAvail = true;
-                }
-            }else if(T.BaccaratType === 2 || T.BaccaratType === 3){
-                //快速電投，網投
-                if((wallet.Balance + orderData.totalValue) > 0){
-                    checkGameAvail = true;
-                }
-            }
-        } 
+        //table資訊檢查
+        // if (T.Status !== (GameType + ".OpenBet")) {
+        //     if (T.BaccaratType === 0 || T.BaccaratType === 1) {
+        //         //傳統
+        //         if (gameSetID == null || gameSetID === 0) {
+        //             //alertMsg("尚未出碼, 點擊要求出碼",)
+        //         } else {
+        //             checkGameAvail = true;
+        //         }
+        //     } else if (T.BaccaratType === 2 || T.BaccaratType === 3) {
+        //         //快速電投，網投
+        //         if ((wallet.Balance + orderData.totalValue) > 0) {
+        //             checkGameAvail = true;
+        //         }
+        //     }
+        // }
 
-        if(checkGameAvail){
-            if(Q.GameSetOrder.GameSetRoadMapNumber == null || (tableNumber === Q.GameSetOrder.GameSetRoadMapNumber))
-            {
-                if(Q.UserInfo.AllowBet){
+        //query資訊檢查
+      
+            let tableInfoList = Q.TableInfo.split('-');
+
+            if (!Q.GameSetOrder.GameSetRoadMapNumber || (tableNumber === Q.GameSetOrder.GameSetRoadMapNumber)) {
+                if (Q.UserInfo.AllowBet) {
                     if ((Q.PADAvailable === true) || (T.BaccaratType === 3)) {
+                        if (Q.GameSetOrder.GameSetState === 0 || Q.GameSetOrder.GameSetState === 1) {
+                            if (!Q.GameSetOrder.Cmd) {
+                                if (tableInfoList[2] !== 0) {
+                                    if (T.Status === (GameType + ".OpenBet")) {
+                                        switch ((T.BaccaratType)) {
+                                            case 0:
+                                                //電投，檢查是否有已經存在的指令
+                                                if (Q.SelfOrder.OrderCmd) {
+                                                    let cmdText = "";
 
-                    }else{
+                                                    switch (Q.SelfOrder.OrderCmd.toUpperCase()) {
+                                                        case "Pass".toUpperCase():
+                                                            cmdText = "飛牌";
+                                                            break;
+                                                        case "NextShoe".toUpperCase():
+                                                            cmdText = "換靴";
+                                                            break;
+                                                        case "ChangeDealer".toUpperCase():
+                                                            cmdText = "更換荷官";
+                                                            break;
+                                                        case "ContactMe".toUpperCase():
+                                                            cmdText = "請聯繫我";
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
 
+                                                    checkRealStopBet(false);
+
+
+                                                } else if (orderData.confirmValue !== 0) {
+                                                    checkRealStopBet(false);
+
+                                                    // if (Q.AllowCancelOrder == 1) {
+                                                    //     showMessageMask(5, mlp.getLanguageKey("下注成功, 等待現場開牌, 點選畫面可取消投注..."), function () {
+                                                    //         showMessage(mlp.getLanguageKey("取消投注"), mlp.getLanguageKey("是否確認要取消投注?"), function () {
+                                                    //             clearOrder();
+                                                    //         });
+                                                    //     });
+                                                    // } else {
+                                                    //     showMessageMask(5, mlp.getLanguageKey("下注成功, 等待現場開牌..."));
+                                                    // }
+                                                } else {
+                                                    //允許下注
+
+                                                    if (countdownSecond > 0 || ( countdownInfo.current.tableTimeoutSecond  === 0)) {
+                                                        setIsCanBet(true);
+
+                                                        var minBetValue = 0;
+
+                                                        // if (betLimit != null) {
+                                                        //     // 判斷最低檯紅
+                                                        //     minBetValue = Math.min(betLimit.MinBetBanker, betLimit.MinBetPlayer, betLimit.MinBetTie, betLimit.MinBetPair);
+                                                        // }
+
+                                                        // enableOrderButton();
+
+                                                        // if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
+                                                        //     hideMessageMask();
+                                                        // } else {
+                                                        //     showMessageMask(4, mlp.getLanguageKey("檯面數已低於檯紅, 請加彩繼續遊戲"));
+                                                        // }
+                                                    } else {
+                                                        checkRealStopBet(false);
+                                                    }
+                                                }
+                                                break;
+                                            case 1:
+
+                                                break;
+                                            case 2:
+                                                if (countdownSecond > 0) {
+                                                    setIsCanBet(true);
+
+                                                    var minBetValue = 0;
+
+                                                    // if (betLimit != null) {
+                                                    //     // 判斷最低檯紅
+                                                    //     minBetValue = Math.min(betLimit.MinBetBanker, betLimit.MinBetPlayer, betLimit.MinBetTie, betLimit.MinBetPair);
+                                                    // }
+
+                                                    // enableOrderButton();
+
+                                                    // if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
+                                                    //     hideMessageMask();
+                                                    // } else {
+                                                    //     showMessageMask(4, mlp.getLanguageKey("檯面數已低於檯紅, 請加彩繼續遊戲"));
+                                                    // }
+                                                } else {
+                                                    checkRealStopBet(false);
+                                                }
+                                                break;
+                                            case 3:
+                                                if (countdownSecond > 0) {
+                                                    setIsCanBet(true);
+
+                                                    var minBetValue = 0;
+
+                                                    // if (betLimit != null) {
+                                                    //     // 判斷最低檯紅
+                                                    //     minBetValue = Math.min(betLimit.MinBetBanker, betLimit.MinBetPlayer, betLimit.MinBetTie, betLimit.MinBetPair);
+                                                    // }
+
+                                                    // enableOrderButton();
+
+                                                    // if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
+                                                    //     hideMessageMask();
+                                                    // } else {
+                                                    //     showMessageMask(4, mlp.getLanguageKey("檯面數已低於檯紅, 請加彩繼續遊戲"));
+                                                    // }
+                                                } else {
+                                                    checkRealStopBet(false);
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    } else {
+                                        setIsCanBet(false);
+                                    }
+                                } else {
+                                    setIsCanBet(false);
+                                }
+                            } else {
+                                setIsCanBet(false);
+                            }
+                        } else {
+                            setIsCanBet(false);
+                        }
+                    } else {
+                        setIsCanBet(false);
                     }
-                }else{
+                } else {
                     setIsCanBet(false);
-
-                    if (Q.UserInfo.UserAccountType === 0)
-                        alertMsg(4, ("您的帳戶無法投注"));
-                    else
-                    alertMsg(4, ("股東或代理帳戶無法投注, 請使用一般帳戶進行遊戲"));
                 }
-            }else{
+            } else {
                 setIsCanBet(false);
-                alertMsg("", "桌號已更換, 請點選切換到新桌號", ()=>{});
             }
-        }
+     
+    };
+
+    const checkRealStopBet = (nextIsCanBet)=>{
+        setIsCanBet((prev) =>{
+            if(prev === true && nextIsCanBet === false){
+                tableNotify.current.notify("TableChange", { tableStatus: "RealStopBet" });
+            }
+        });
     };
 
     //#endregion
@@ -624,6 +774,10 @@ debugger;
                 //如果是桌台狀態改變，重新撈取桌台資訊確認最新的桌台狀態
                 if (args.Action !== "") {
                     refreshTableInfo();
+                }
+            } else if (type === "GameSetChange") {
+                if (args.GameSetID === gameSetID) {
+                    refreshQueryGame();
                 }
             } else {
                 tableNotify.current.notify(type, args);
@@ -648,7 +802,7 @@ debugger;
 
     //#region 投注相關
 
-    const AddBet = (areaType) =>{
+    const AddBet = (areaType) => {
 
     };
 
@@ -670,9 +824,9 @@ debugger;
                 break;
         }
 
-        if(orderData.unConfirmValue > 0){
-            gameClient[methodName](wallet.CurrencyType, tableNumber, shoeNumber, roundNumber, );
-        }                
+        if (orderData.unConfirmValue > 0) {
+            gameClient[methodName](props.CurrencyType, tableNumber, shoeNumber, roundNumber,);
+        }
     };
 
     const getCountdownInfo = useCallback(() => {
@@ -680,11 +834,7 @@ debugger;
     }, []);
 
     const getTableInfo = useCallback((isRefresh, cb) => {
-        if (isRefresh) {
-            refreshTableInfo(cb);
-        } else {
-            cb(tableInfo.current);
-        }
+        return tableInfo.current;
     }, []);
 
     const resize = () => {
@@ -725,7 +875,7 @@ debugger;
                     roundNumber === "" ? (<div></div>) : (
                         <div className='game-view-box' >
                             <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>
-                            <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName} getTableInfo={getTableInfo}></GameVideo>
+                            <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName}></GameVideo>
                             <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
                             <GameBettingArea isCanBet={isCanBet}
                                 winAreas={winAreas}

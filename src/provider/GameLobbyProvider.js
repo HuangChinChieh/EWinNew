@@ -9,13 +9,13 @@ const WalletContext = createContext();
 const BetLimitContext = createContext();
 const FavorsContext = createContext();
 const MusicIsPlayingContext = createContext();
-const LobbyPersonalContext=createContext();
+const LobbyPersonalContext = createContext();
 const CashUnitContext = createContext();
 const UserInfoContext = createContext();
 
 
 export {
-  WalletContext,  
+  WalletContext,
   BetLimitContext,
   FavorsContext,
   MusicIsPlayingContext,
@@ -26,7 +26,7 @@ export {
 
 // Create a Context Provider to provide shared values
 const GameLobbyProvider = (props) => {
-  const lobbyClient = EWinGameLobbyClient.getInstance();
+  const lobbyClient = EWinGameLobbyClient.getInstance();  
   const CurrencyType = props.CurrencyType;
   const CT = props.CT;
   const [wallet, setWallet] = useState({
@@ -43,22 +43,22 @@ const GameLobbyProvider = (props) => {
     UserCountry: "",
     UserLevel: 0
   });
-  const [favors, setFavors] = useState([]);  
+  const [favors, setFavors] = useState([]);
   const [betLimit, setBetLimit] = useState("");
-  const [musicIsPlaying,setMusicIsPlaying]=useState(false);
-  const [lobbyPersonal,setLobbyPersonal]=useState(false);
+  const [musicIsPlaying, setMusicIsPlaying] = useState(false);
+  const [lobbyPersonal, setLobbyPersonal] = useState(false);
   const [cashUnit, setCashUnit] = useState("");
   const [userGameSetList, setUserGameSetList] = useState([]);
-  
+
 
   // Game Lobby related useEffect
   useEffect(() => {
     const PromiseArray = [];
-    
+
     //UserInfo
     PromiseArray.push(new Promise(
-      (resolve) =>{
-        lobbyClient.GetUserInfo((s, o) => {          
+      (resolve) => {
+        lobbyClient.GetUserInfo((s, o) => {
           if (s) {
             if (o.ResultCode === 0) {
               resolve(o);
@@ -83,7 +83,7 @@ const GameLobbyProvider = (props) => {
 
 
     PromiseArray.push(new Promise(
-      (resolve) =>{
+      (resolve) => {
         lobbyClient.GetUserAccountProperty("EWinGame.Favor", (s, o) => {
           if (s) {
             if (o.ResultCode === 0) {
@@ -94,10 +94,10 @@ const GameLobbyProvider = (props) => {
       }
     ));
 
-    Promise.all(PromiseArray).then(([userInfo, favorsProp])=> {
+    Promise.all(PromiseArray).then(([userInfo, favorsProp]) => {
       let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
       let favorsObj = JSON.parse(favorsProp.PropertyValue)
-      
+
       if (wallet) {
         setWallet({
           CurrencyType: wallet.CurrencyType,
@@ -114,10 +114,10 @@ const GameLobbyProvider = (props) => {
         AllowBetType: userInfo.AllowBetType,
         UserCountry: userInfo.UserCountry,
         UserLevel: userInfo.UserLevel
-      });      
+      });
       setFavors(favorsObj);
       setCashUnit(userInfo.Company.CashUnit);
-    });   
+    });
   }, []);
 
   const updateInfo = useCallback((cb) => {
@@ -144,57 +144,42 @@ const GameLobbyProvider = (props) => {
   }, [lobbyClient]);
 
   const updateUserInfo = useCallback((obj) => {
-    const setFun = (setObj)=>{
+    const setFun = (setObj) => {      
       setUserInfo((prevObj) => {
         let checkChange = false;
-        let newObj = {...prevObj};
-  
-        for (const key in prevObj){
-          if(prevObj[key] !==  setObj[key]){
+        let newObj = { ...prevObj };
+
+        for (const key in prevObj) {
+          if (prevObj[key] !== setObj[key]) {
             checkChange = true;
             newObj[key] = setObj[key];
-          }          
+          }
         }
-  
-        if(checkChange){
+
+        if (checkChange) {
           return newObj;
-        }else{
+        } else {
           return prevObj;
         }
       });
     };
-    
-    if(obj){
+
+    if (obj) {
       setFun(obj);
-    }else{
+    } else {
       updateInfo((userInfo) => {
-        setFun(userInfo);  
-          let checkChange = false;
-          let newUser = {...prevUser};
-  
-          for (const key in prevUser){
-            if(prevUser[key] !==  userInfo[key]){
-              checkChange = true;
-              newUser[key] = userInfo[key];
-            }          
-          }
-  
-          if(checkChange){
-            return newUser;
-          }else{
-            return prevUser;
-          }  
+        setFun(userInfo);
       });
-    }       
+    }
   }, [updateInfo]);
 
   const setUserInfoProperty = useCallback((key, value) => {
-    setUserInfo((prevUser) => {   
-      if(key in prevUser){
-        let newUser = {...prevUser};
-        newUser[key] =  value;
+    setUserInfo((prevUser) => {
+      if (key in prevUser) {
+        let newUser = { ...prevUser };
+        newUser[key] = value;
         return newUser;
-      }else{
+      } else {
         return prevUser;
       }
     });
@@ -202,29 +187,29 @@ const GameLobbyProvider = (props) => {
 
 
   const updateWallet = useCallback((obj) => {
-    const setFun = (setObj)=>{
+    const setFun = (setObj) => {
       setWallet((prevObj) => {
         let checkChange = false;
-        let newObj = {...prevObj};
+        let newObj = { ...prevObj };
 
-        for (const key in prevObj){
-          if(prevObj[key] !==  setObj[key]){
+        for (const key in prevObj) {
+          if (prevObj[key] !== setObj[key]) {
             checkChange = true;
             newObj[key] = setObj[key];
-          }          
+          }
         }
 
-        if(checkChange){
+        if (checkChange) {
           return newObj;
-        }else{
+        } else {
           return prevObj;
         }
       });
     };
 
-    if(obj){
+    if (obj) {
       setFun(obj);
-    }else{
+    } else {
       updateInfo((userInfo) => {
         let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
         // let setObj = {
@@ -234,8 +219,8 @@ const GameLobbyProvider = (props) => {
         // };
         setFun(wallet);
       });
-    }       
-    
+    }
+
   }, [CT, CurrencyType, updateInfo]);
 
   const updateBetLimit = useCallback((betLimit) => {
@@ -245,24 +230,24 @@ const GameLobbyProvider = (props) => {
   const muteChange = useCallback(() => {
     setMusicIsPlaying(!musicIsPlaying)
   }, [CT, musicIsPlaying]);
-  
+
   return (
     <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
-      <LobbyPersonalContext.Provider value={{ lobbyPersonal,setLobbyPersonal }}>
-      <FavorsContext.Provider value={{ favors, updateFavors }}>
-        <WalletContext.Provider value={{ wallet, updateWallet, setWallet}}>
-          <UserInfoContext.Provider value={{ userInfo, updateUserInfo, setUserInfoProperty }}>
-          <CashUnitContext value={{ cashUnit, setCashUnit }}>
-            <BetLimitContext.Provider
-              value={{ betLimit, updateBetLimit }}
-            >
-              {props.children}
-            </BetLimitContext.Provider>
-            </CashUnitContext>
-          </UserInfoContext.Provider>
-        </WalletContext.Provider>
-      </FavorsContext.Provider>
-      </LobbyPersonalContext.Provider> 
+      <LobbyPersonalContext.Provider value={{ lobbyPersonal, setLobbyPersonal }}>
+        <FavorsContext.Provider value={{ favors, updateFavors }}>
+          <WalletContext.Provider value={{ wallet, updateWallet, setWallet }}>
+            <UserInfoContext.Provider value={{ userInfo, updateUserInfo, setUserInfoProperty }}>
+              <CashUnitContext.Provider value={{ cashUnit, setCashUnit }}>
+                <BetLimitContext.Provider
+                  value={{ betLimit, updateBetLimit }}
+                >
+                  {props.children}
+                </BetLimitContext.Provider>
+              </CashUnitContext.Provider>
+            </UserInfoContext.Provider>
+          </WalletContext.Provider>
+        </FavorsContext.Provider>
+      </LobbyPersonalContext.Provider>
     </MusicIsPlayingContext.Provider>
 
   );

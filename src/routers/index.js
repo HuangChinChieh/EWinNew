@@ -134,7 +134,7 @@ const Main = () => {
 
 
     if (!isServerConneted) {
-        return (<div></div>)
+        return (<div></div>);       
     } else {
         return (
             <div className="wrap-box">
@@ -154,7 +154,7 @@ const Main = () => {
                         </Route>
                         <Route path='/games/:gameId'>
                             <GameBaccaratProvider EWinUrl={EWinUrl} CT={CT}>
-                                <GameView CT={CT} GameSetID={0} TableNumber={'SOL_3513'} />
+                                <GameView CT={CT} GameSetID={0} TableNumber={'SOL_3513'} CurrencyType={currencyTypeRef.current} />
                             </GameBaccaratProvider>
                         </Route>
                         <Route path='/' component={Gamelobby}></Route>
@@ -164,6 +164,7 @@ const Main = () => {
         );
     }
 };
+
 
 // 加入判斷剔除不顯示的組件
 export default function Routers() {

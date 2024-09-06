@@ -711,7 +711,7 @@ export class EWinGameBaccaratClient {
     * @returns {void}
     */
     EntryRoadMap(GameSetID, CurrencyType, RoadMapNumber, cb) {
-        this.EWinHub.invoke("EntryRoadMap", this.CT, generateUUIDv4(), GameSetID, RoadMapNumber, CurrencyType).done(function (o) {
+        this.EWinHub.invoke("EntryRoadMap", this.CT, generateUUIDv4(), GameSetID, CurrencyType, RoadMapNumber).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
