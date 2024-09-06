@@ -24,7 +24,6 @@ const GameView = (props) => {
     const GameType = "BA";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
-    const gameSetID = props.GameSetID;
     let isTableRefreshing = false;
     let isGameQuerying = false;
     const history = useHistory();
@@ -883,7 +882,7 @@ debugger;
                                 orderData={orderData}
                                 dispatchOrderData={dispatchOrderData}
                             ></GameBettingArea>
-                            <GameFooterArea totalBetValue={totalBetValue} chipItems={chipsItems}
+                            <GameFooterArea chipItems={chipsItems}
                                 roadMapNumber={tableNumber}
                                 gameSetID={gameSetID}
                                 shoeNumber={shoeNumber}
