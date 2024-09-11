@@ -9,6 +9,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.7",
+    "bignumber.js": "^9.1.2",
     "i18next": "^23.7.18",
     "jquery": "1.7",
     "js-md5": "^0.8.3",

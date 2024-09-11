@@ -1,33 +1,12 @@
 import './index.scss';
-import '../../animation/betAnimation/orderAnimation.scss';
-import { moveChipAnimation } from '../../animation/betAnimation/baccaratBasicAnimation'
 
-const GameChipsButton = ((props) => {   
-    const handleDoubleBet = ()=>{
-        const promiseArray = [];
-
-        for(let areaType in props.orderData){
-            if(props.orderData[areaType].totalValue > 0){
-                promiseArray.push(new Promise((resolve, reject)=>{
-                    moveChipAnimation(areaType, ()=>{resolve()});
-                }));
-            }       
-        }
-
-        if(promiseArray.length > 0) {
-            Promise.all(promiseArray).then(()=>{            
-                props.dispatchOrderData({ type:"doubleBet"});
-            });
-        }       
-    };
-
+const GameChipsButton = ((props) => {      
     return (
         <div className={'game-chips-area ' +  (props.isCanBet && 'can-bet')}>
             {/* {(!props.onGameSetAction && props.isCanBet) && <span onClick={handleConfirm} className='confirm'>確認</span>} */}
-            <span onClick={() => props.dispatchOrderData({ type:"confirmBet"})} className='confirm'>確認</span>
-            <span onClick={() => props.dispatchOrderData({ type:"clearBet"})} className='cancel'>撤銷</span>
-            <div className="game-chips-box">
-           
+            <span onClick={() => {if(props.isCanBet){props.handleBet('confirmBet', null, null)}}} className='confirm'>確認</span>
+            <span onClick={() => {if(props.isCanBet){props.handleBet('clearBet', null, null)}}} className='cancel'>撤銷</span>
+            <div className="game-chips-box">           
                     {
                         props.chipsItems.map((item, index) => (
                             <div key={item.styleIndex}
@@ -39,7 +18,7 @@ const GameChipsButton = ((props) => {
                     }
             
             </div>
-            <span onClick={() => handleDoubleBet()} className='double'>加倍</span> 
+            <span onClick={() => {if(props.isCanBet){props.handleBet('doubleBet', null, null)}}} className='double'>加倍</span> 
         </div>
     )
 })
