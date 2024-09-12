@@ -255,6 +255,7 @@ const GameVideo = (props) => {
             // setTimeout(() => {
             //     magnifierType.current = 0;
             // }, 5000);
+        
         } else if (event.detail.tableStatus === "GameResult") {
             magnifierType.current = 0;
         } else {

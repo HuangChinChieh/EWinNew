@@ -890,7 +890,7 @@ debugger;
                                 orderSequence={orderSequence}
                                 gameClient={gameClient}>
                                 <GameChipsButton chipsItems={chipsItems}
-                                    isCanBet={isCanBet}
+                                    isCanBet={true}
                                     selChipData={selChipData}
                                     setSelChipData={setSelChipData}
                                     orderData={orderData}

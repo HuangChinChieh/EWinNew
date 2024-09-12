@@ -103,7 +103,7 @@ const GameControlButton = ((props) => {
                     gameClient.SetOrderType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence + 1, cmd, function (success, o) {
                         if (success) {
                             if (o.ResultState == 0) {
-
+                                processResult(o);
                             } else {
 
                             }
@@ -188,70 +188,88 @@ const GameControlButton = ((props) => {
         setChangeTable(false);
     }
 
-    //const processResult = (o) => {
-        //if (o != null) {
-            //Q = o;
+    const processResult = (o) => {
+        if (o != null) {
+            const Q = o;
 
-            //shoeNumber = Q.ShoeNumber;
-            //roundNumber = Q.RoundNumber;
-            //tableType = Q.TableType;
-            //orderSequence = Q.SelfOrder.OrderSequence;
-        //}
-    //}
+            shoeNumber = Q.ShoeNumber;
+            roundNumber = Q.RoundNumber;
+            tableType = Q.TableType;
+            orderSequence = Q.SelfOrder.OrderSequence;
+        }
+    }
 
     return (
-        <div>
+        <>
             {
-                onAddChip == true ? (
-                    <div><AddChip onAddChipClose={onAddChipClose} setrefreshTable={setrefreshTable} setChipVal={onChangeChipVal} gameClient={gameClient}
-                                roadMapNumber={roadMapNumber}
-                                gameSetID={gameSetID}
-                                shoeNumber={shoeNumber}
-                                roundNumber={roundNumber}/>
+                onAddChip ? (
+                    <div className="overlay">
+                        <AddChip 
+                            onAddChipClose={onAddChipClose} 
+                            setrefreshTable={setrefreshTable} 
+                            setChipVal={onChangeChipVal} 
+                            gameClient={gameClient}
+                            roadMapNumber={roadMapNumber}
+                            gameSetID={gameSetID}
+                            shoeNumber={shoeNumber}
+                            roundNumber={roundNumber} 
+                        />
                         <div className="game-chips-box">
                             {
                                 chipsItem.map((item) => (
-                                    <div key={item.index}
+                                    <div 
+                                        key={item.index}
                                         className={`chips-${item.styleIndex} ${props.selChipIndex === item.styleIndex ? 'act' : ''}`}
-                                        onClick={(event) => (onSetChipVal(item.chipsValue))}>
-                                        <div>{item.chipsValue}</div>
+                                        onClick={() => onSetChipVal(item.chipValue)}
+                                    >
+                                        <div>{item.chipValue}</div>
                                     </div>
                                 ))
                             }
-                        </div> </div>
-                ) : onChangeTable == true ? (
-                    <div><ChangeTable onChangeTableClose={onChangeTableClose} countryItem={countryItem} areaCode={areaCode} lobbyClient={lobbyClient} />
+                        </div>
+                    </div>
+                ) : onChangeTable ? (
+                    <div>
+                        <ChangeTable 
+                            onChangeTableClose={onChangeTableClose} 
+                            countryItem={countryItem} 
+                            areaCode={areaCode} 
+                            lobbyClient={lobbyClient} 
+                        />
                         <div className="game-controls-box">
                             {
                                 btnsItem.map((item) => (
-                                    <div key={item.index}
+                                    <div 
+                                        key={item.index}
                                         className={`controlBtn ${selIndex === item.index ? 'act' : ''}`}
-                                        onClick={(event) => (handleSelControl(event, item.index))}
+                                        onClick={(event) => handleSelControl(event, item.index)}
                                     >
                                         <div>{item.btnName}</div>
                                     </div>
                                 ))
                             }
-
                         </div>
                     </div>
-                ) :
-                    (<div className="game-controls-box">
+                ) : (
+                    <div className="game-controls-block">
+                    <div className="close_icon" onClick={()=>props.updateMiddleBtnType('Chip')}></div>
+                    <div className="game-controls-box">
                         {
                             btnsItem.map((item) => (
-                                <div key={item.index}
+                                <div 
+                                    key={item.index}
                                     className={`controlBtn ${selIndex === item.index ? 'act' : ''}`}
-                                    onClick={(event) => (handleSelControl(event, item.index))}
+                                    onClick={(event) => handleSelControl(event, item.index)}
                                 >
                                     <div>{item.btnName}</div>
                                 </div>
                             ))
                         }
-
-                    </div>)
+                    </div></div>
+                )
             }
-        </div>
-    )
+        </>
+    );
 })
 
 const App = () => {

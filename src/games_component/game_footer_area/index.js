@@ -33,8 +33,8 @@ const GameFooterArea = (props) => {
                                 roundNumber={props.roundNumber}
                                 orderSequence={props.orderSequence}
                                 gameClient={props.gameClient}
-
-                    /> : <div></div>)}            
+                                updateMiddleBtnType={updateMiddleBtnType}
+                                /> : <div></div>)}            
             </div>
             <div className='right-box'>
                 <div className='box-area'>
