@@ -1,6 +1,4 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { moveChipAnimation } from '../animation/betAnimation/baccaratBasicAnimation'
-import '../animation/betAnimation/orderAnimation.scss';
 import './index.scss';
 
 // 之後會優化代碼
@@ -10,17 +8,7 @@ const GameBettingArea = (props) => {
   const chipMaxCount = 5;
 
   const handleAddBetValue = (event, areaType) => {
-    if(props.isCanBet){
-      moveChipAnimation(areaType,()=>{
-        props.dispatchOrderData({
-          type: "addBet",
-          payload: {
-            areaType: areaType,
-            selChipData: props.selChipData
-          }
-        });
-      });  
-    } 
+    props.handleBet("addBet", { areaType: areaType }, null)
   };
 
 

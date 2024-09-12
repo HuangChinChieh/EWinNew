@@ -157,7 +157,7 @@ const GameBaccaratProvider = (props) => {
   if (isConnected) {
     return (
       <BaccaratSubscribeContext.Provider value={{
-        AddSubscribe, RemoveSubscribe, GetGameClient
+        AddSubscribe, RemoveSubscribe, GetGameClient, isConnected
       }}>
         {props.children}
       </BaccaratSubscribeContext.Provider>

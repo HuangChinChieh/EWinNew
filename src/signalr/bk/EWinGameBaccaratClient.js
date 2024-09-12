@@ -556,6 +556,8 @@ export class EWinGameBaccaratClient {
     * @returns {void}
     */
     UserAccountSetBetLimit(RoadMapNumber, CurrencyType, GameSetID, BetLimitID, cb) {
+        debugger
+        
         this.EWinHub.invoke("UserAccountSetBetLimit", this.CT, generateUUIDv4(), RoadMapNumber, CurrencyType, GameSetID, BetLimitID).done(function (o) {
             if (cb)
                 cb(true, o);

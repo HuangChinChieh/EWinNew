@@ -39,7 +39,7 @@ const GameLobbyProvider = (props) => {
     RealName: "",
     IsGuestAccount: false,
     UserAccountType: 0,
-    AllowBetType: true,
+    AllowBetType: 0,
     UserCountry: "",
     UserLevel: 0
   });
