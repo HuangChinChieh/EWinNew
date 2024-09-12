@@ -5,7 +5,7 @@ import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { AlertContext } from 'component/alert';
 import { generateUUIDv4 } from 'utils/guid';
 import alertMsg from 'component/alert';
-import { FavorsContext,LobbyPersonalContext } from 'provider/GameLobbyProvider';
+import { FavorsContext, LobbyPersonalContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const GameControlButton = ((props) => {
         { index: 7, btnName: "請聯繫我" },
         { index: 8, btnName: "完場" }
     ];
- 
+
     const chipsItem = props.chipItems;
 
     const countryItem = [
@@ -204,42 +204,43 @@ const GameControlButton = ((props) => {
             {
                 onAddChip ? (
                     <div className="overlay">
-                        <AddChip 
-                            onAddChipClose={onAddChipClose} 
-                            setrefreshTable={setrefreshTable} 
-                            setChipVal={onChangeChipVal} 
+                        <AddChip
+                            onAddChipClose={onAddChipClose}
+                            setrefreshTable={setrefreshTable}
+                            setChipVal={onChangeChipVal}
                             gameClient={gameClient}
                             roadMapNumber={roadMapNumber}
                             gameSetID={gameSetID}
                             shoeNumber={shoeNumber}
-                            roundNumber={roundNumber} 
+                            roundNumber={roundNumber}
                         />
-                        <div className="game-chips-box">
-                            {
-                                chipsItem.map((item) => (
-                                    <div 
-                                        key={item.index}
-                                        className={`chips-${item.styleIndex} ${props.selChipIndex === item.styleIndex ? 'act' : ''}`}
-                                        onClick={() => onSetChipVal(item.chipValue)}
-                                    >
-                                        <div>{item.chipValue}</div>
-                                    </div>
-                                ))
-                            }
-                        </div>
+                        <div className='game-chips-area'>
+                            <div className="game-chips-box">
+                                {
+                                    chipsItem.map((item) => (
+                                        <div
+                                            key={item.index}
+                                            className={`chips-${item.styleIndex} ${props.selChipIndex === item.styleIndex ? 'act' : ''}`}
+                                            onClick={() => onSetChipVal(item.chipValue)}
+                                        >
+                                            <div>{item.chipValue}</div>
+                                        </div>
+                                    ))
+                                }
+                            </div></div>
                     </div>
                 ) : onChangeTable ? (
-                    <div>
-                        <ChangeTable 
-                            onChangeTableClose={onChangeTableClose} 
-                            countryItem={countryItem} 
-                            areaCode={areaCode} 
-                            lobbyClient={lobbyClient} 
+                    <div className="gamesetChangeTable">
+                        <ChangeTable
+                            onChangeTableClose={onChangeTableClose}
+                            countryItem={countryItem}
+                            areaCode={areaCode}
+                            lobbyClient={lobbyClient}
                         />
                         <div className="game-controls-box">
                             {
                                 btnsItem.map((item) => (
-                                    <div 
+                                    <div
                                         key={item.index}
                                         className={`controlBtn ${selIndex === item.index ? 'act' : ''}`}
                                         onClick={(event) => handleSelControl(event, item.index)}
@@ -252,20 +253,19 @@ const GameControlButton = ((props) => {
                     </div>
                 ) : (
                     <div className="game-controls-block">
-                    <div className="close_icon" onClick={()=>props.updateMiddleBtnType('Chip')}></div>
-                    <div className="game-controls-box">
-                        {
-                            btnsItem.map((item) => (
-                                <div 
-                                    key={item.index}
-                                    className={`controlBtn ${selIndex === item.index ? 'act' : ''}`}
-                                    onClick={(event) => handleSelControl(event, item.index)}
-                                >
-                                    <div>{item.btnName}</div>
-                                </div>
-                            ))
-                        }
-                    </div></div>
+                        <div className="game-controls-box">
+                            {
+                                btnsItem.map((item) => (
+                                    <div
+                                        key={item.index}
+                                        className={`controlBtn ${selIndex === item.index ? 'act' : ''}`}
+                                        onClick={(event) => handleSelControl(event, item.index)}
+                                    >
+                                        <div>{item.btnName}</div>
+                                    </div>
+                                ))
+                            }
+                        </div></div>
                 )
             }
         </>
@@ -399,13 +399,13 @@ const ChangeTable = (props) => {
 
     const SectionLiFavor2 = (props) => {
         const { favors, updateFavors } = useContext(FavorsContext);
-    
+
         const tableNumber = props.tableNumber;
-    
+
         const handleClick = () => {
             const lobbyClient = EWinGameLobbyClient.getInstance();
             const index = favors.indexOf(tableNumber);
-            
+
             //觸發收藏or取消收藏     
             if (index === -1) {
                 //沒找到，新增收藏
@@ -429,17 +429,17 @@ const ChangeTable = (props) => {
                 });
             }
         };
-        
-    // 
+
+        // 
         return (<span onClick={() => handleClick()} className={`${favors.includes(props.tableNumber) ? 'remove-to-favorites' : 'add-to-favorites'}`} />);
     }
-    
-    
+
+
     const SectionLiFavor1 = (props) => {
         const { favors } = useContext(FavorsContext);
-        return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`}/>);
+        return (<span className={`${favors.includes(props.tableNumber) ? 'has-favorites' : ''}`} />);
     }
-    
+
     const SectionLi = (props) => {
         const [moreScale, setMoreScale] = useState('');
         const [hoveredItem, setHoveredItem] = useState(null);
@@ -447,15 +447,15 @@ const ChangeTable = (props) => {
             setHoveredItem(null);
             setMoreScale('');
         }
-    
+
         return (<li key={props.tableInfo.TableNumber}
             onMouseEnter={() => setHoveredItem(props.tableInfo.TableNumber)}
             onMouseLeave={mouseleave}
             className='li-box'
         >
-            <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber}/>
+            <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber} />
             <div className={`games`}>
-                {props.tableInfo.Image 
+                {props.tableInfo.Image
                     ? <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
                     : <img src="http://bm.dev.mts.idv.tw/images/JINBEI1.png" alt="Default Table Image" />
                 }
@@ -467,10 +467,10 @@ const ChangeTable = (props) => {
             <p className='game-wallet'>
                 <span>{"CNY(暫)"}</span>
                 <span>
-              
+
                 </span>
             </p>
-    
+
             <div className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? 'visible' : ''} ${moreScale}`}>
                 <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
                 <div className={`games`}>
@@ -483,7 +483,7 @@ const ChangeTable = (props) => {
                     <p className='game-wallet'>
                         <span>{"CNY(暫)"}</span>
                         <span>
-                        
+
                         </span>
                     </p>
                     <div className='game-start' >
@@ -495,8 +495,8 @@ const ChangeTable = (props) => {
                     <p className='game-dis'>
                         {/* {props.tableInfo.Status} */}
                     </p>
-                    
-    
+
+
                     <div className='favorites-box'>
                         <SectionLiFavor2 tableNumber={props.tableInfo.TableNumber}></SectionLiFavor2>
                     </div>
