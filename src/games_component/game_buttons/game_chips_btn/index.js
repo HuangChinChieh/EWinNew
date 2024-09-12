@@ -5,7 +5,7 @@ const GameChipsButton = ((props) => {
         <div className={'game-chips-area ' +  (props.isCanBet && 'can-bet')}>
             {/* {(!props.onGameSetAction && props.isCanBet) && <span onClick={handleConfirm} className='confirm'>確認</span>} */}
             <span onClick={() => {if(props.isCanBet){props.handleBet('confirmBet', null, null)}}} className='confirm'>確認</span>
-            <span onClick={() => {if(props.isCanBet){props.handleBet('clearBet', null, null)}}} className='cancel'>撤銷</span>
+            <span onClick={() => {if(props.isCanBet){props.handleBet('cancelBet', null, null)}}} className='cancel'>撤銷</span>
             <div className="game-chips-box">           
                     {
                         props.chipsItems.map((item, index) => (

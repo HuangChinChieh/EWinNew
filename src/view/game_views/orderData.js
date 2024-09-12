@@ -77,8 +77,7 @@ function orderReducer(state, action) {
       //待補上動畫          
       newOrderData.totalValue = 0;
       newOrderData.confirmValue = 0;
-      newOrderData.unConfirmValue = 0;
-      newOrderData.orderSequence = 0;
+      newOrderData.unConfirmValue = 0;     
 
       for (let areaType in newOrderData) {
         newOrderData[areaType].unConfirmValue = 0;
@@ -117,6 +116,12 @@ function orderReducer(state, action) {
 
       return newOrderData;
 
+
+      case 'resetOrderSequence':
+        newOrderData.orderSequence = 0;
+  
+        return newOrderData;
+  
 
     default:
       throw new Error(`Unhandled action type: ${action.type}`);

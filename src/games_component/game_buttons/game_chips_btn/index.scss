@@ -18,7 +18,7 @@
         flex: 1 0 auto;
         margin-bottom: 1.875rem;
 
-        div {
+        >div {
             /* icon/chip */
 
             width: 3.416875rem;
@@ -32,6 +32,7 @@
             background-position: center;
             border-radius: 1.7084375rem;
             cursor: pointer;
+            transition: transform 0.3s;
 
             &.chips-1 {
                 background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FB8F02 0%, #BE7000 100%);
@@ -81,7 +82,11 @@
                 }
             }
 
-            div {
+            &:hover {
+              transform: translateY(-20%);
+            }
+
+            >div {
                 position: absolute;
                 top: 0.88875rem;
                 left: 50%;
