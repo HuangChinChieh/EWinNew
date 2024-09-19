@@ -50,7 +50,8 @@ const GameView = (props) => {
     const [refreshStreamType, setRefreshStreamType] = useState(0);//串流種類，0=HD，1=SD 
     const [shoeResult, setShoeResult] = useState('');
     const countdownInfo = useRef({ lastQueryDate: null, tableTimeoutSecond: 60, remainingSecond: 0 });
-
+    const [BaccaratType, setBaccaratType] = useState(0); //0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
+    
     //電投相關資訊
     const [PADAvailable, setPADAvailable] = useState(false);
     const [onlineUserCount, setOnlineUserCount] = useState(false);
@@ -490,7 +491,7 @@ debugger;
         }
 
         setShoeResult(tableInfoData.ShoeResult);
-        //setBaccaratType(tableInfoData.BaccaratType)
+        setBaccaratType(tableInfoData.BaccaratType)
 
         //設定視頻串流
         setStreamName(handleStreamArray(tableInfoData.Stream));
@@ -1182,12 +1183,14 @@ debugger;
                             <GameFooterArea chipItems={chipsItems}
                                 roadMapNumber={tableNumber}
                                 gameSetID={gameSetID}
-                                shoeNumber={shoeNumber}
-                                roundNumber={roundNumber}
-                                orderSequence={orderSequence}
-                                gameClient={gameClient}>
+                                gameClient={gameClient}
+                                orderData={orderData}
+                                tableInfo={tableInfo.current}   
+                                BaccaratType={BaccaratType}
+                                handleQuery={handleQuery}
+                                >
                                 <GameChipsButton chipsItems={chipsItems}
-                                    isCanBet={true}
+                                    isCanBet={isCanBet}
                                     selChipData={selChipData}
                                     setSelChipData={setSelChipData}
                                     orderData={orderData}

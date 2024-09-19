@@ -10,9 +10,35 @@ import GameControlButton from 'games_component/game_buttons/game_gameset_btn';
 
 const GameFooterArea = (props) => {
     const [middleBtnType, setMiddleBtnType] = useState("Chip")
+    const BaccaratType = props.BaccaratType;
+
     const updateMiddleBtnType = useCallback((v) => {
         setMiddleBtnType(v);
     });
+
+    const showComponment = () => {
+        if (middleBtnType == "Chip") {
+            return props.children;
+        } else if (middleBtnType == "GameSet") {
+            if (BaccaratType == 0 || BaccaratType == 1) {
+                return <GameControlButton chipItems={props.chipItems}
+                    roadMapNumber={props.roadMapNumber}
+                    gameSetID={props.gameSetID}
+                    gameClient={props.gameClient}
+                    orderData={props.orderData}
+                    tableInfo={props.tableInfo}
+                    updateMiddleBtnType={updateMiddleBtnType}
+                    BaccaratType={BaccaratType}
+                    handleQuery={props.handleQuery}
+                />
+            } else {
+                return <div></div>
+            }
+
+        } else {
+            return <div></div>
+        }
+    }
 
     return (
         <div className='game-footer-area'>
@@ -25,21 +51,12 @@ const GameFooterArea = (props) => {
                 </div>
             </div>
             <div className='middle-box'>
-                    {middleBtnType === "Chip" ? props.children : (middleBtnType === "GameSet" ? 
-                    <GameControlButton chipItems={props.chipItems}
-                                roadMapNumber={props.roadMapNumber}
-                                gameSetID={props.gameSetID}
-                                shoeNumber={props.shoeNumber}
-                                roundNumber={props.roundNumber}
-                                orderSequence={props.orderSequence}
-                                gameClient={props.gameClient}
-                                updateMiddleBtnType={updateMiddleBtnType}
-                                /> : <div></div>)}            
+                {showComponment()}
             </div>
             <div className='right-box'>
                 <div className='box-area'>
-                    <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType}/>
-                    </div>
+                    {BaccaratType == 0 || BaccaratType == 1 ? <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType} /> : <div></div>}=
+                </div>
                 <div className='box-area'>
                     <GameTips />
                 </div>

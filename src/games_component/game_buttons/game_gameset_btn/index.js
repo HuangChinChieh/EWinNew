@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect, useContext } from 'react';
-import { useLanguage } from 'hooks';
 import './index.scss';
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { AlertContext } from 'component/alert';
-import { generateUUIDv4 } from 'utils/guid';
 import alertMsg from 'component/alert';
 import { FavorsContext, LobbyPersonalContext } from 'provider/GameLobbyProvider';
 import RoadMap from 'component/road_map';
@@ -37,14 +35,24 @@ const GameControlButton = ((props) => {
     const [refreshTable, setrefreshTable] = useState(false);
     const [onChangeChipVal, setChipVal] = useState(0);
     const { alertMsg } = useContext(AlertContext);
-    const isServerConnected = props.isServerConnected;
-    const tableType = props.tableType;
+    let baccaratType = props.BaccaratType;
     const gameSetID = props.gameSetID;
     const roadMapNumber = props.roadMapNumber;
-    const shoeNumber = props.shoeNumber;
-    const roundNumber = props.roundNumber;
-    const orderSequence = props.orderSequence;
-    const areaCode = props.areaCode;
+    const [shoeNumber, setShoeNumber] = useState(0);
+    const [roundNumber, setRoundNumber] = useState(0);
+    const orderSequence = props.orderData.orderSequence;
+    //const areaCode = props.areaCode;
+    const areaCode = "";
+
+    useEffect(() => {
+        let roundInfoArray = props.tableInfo.RoundInfo.split('-');
+console.log(gameClient);
+        if (roundInfoArray.length > 0) {
+            setShoeNumber(parseInt(roundInfoArray[0]));
+            setRoundNumber(parseInt(roundInfoArray[1]));
+        }
+
+    }, []);
 
     const handleSelControl = (event, index) => {
         //props.updateSelChipValue(event, index)
@@ -95,15 +103,15 @@ const GameControlButton = ((props) => {
     };
 
     const setRoundCmd = (cmd) => {
-        if (isServerConnected == true) {
-            switch (tableType) {
+        if (gameClient.currentState == 1) {
+            switch (baccaratType) {
                 case 0:
                 case 1:
                     // SetBetType0Cmd  game
-                    gameClient.SetOrderType0Cmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence + 1, cmd, function (success, o) {
+                    gameClient.SetBetType0Cmd(gameSetID, roadMapNumber, shoeNumber, roundNumber, orderSequence + 1, cmd, function (success, o) {
                         if (success) {
                             if (o.ResultState == 0) {
-                                processResult(o);
+                                props.handleQuery(o);
                             } else {
 
                             }
@@ -128,19 +136,21 @@ const GameControlButton = ((props) => {
                     break;
             }
 
+        } else {
+            alertMsg("錯誤", "伺服器斷線");
         }
     }
 
     const setGameSetCmd = (cmd) => {
-        if (isServerConnected == true) {
-            switch (tableType) {
+        if (gameClient.currentState == 1) {
+            switch (baccaratType) {
                 case 0:
                 case 1:
                     // SetGameSetCmd game
-                    gameClient.SetGameSetCmd(generateUUIDv4(), gameSetID, roadMapNumber, shoeNumber, roundNumber, cmd, function (success, o) {
+                    gameClient.SetGameSetCmd(gameSetID, roadMapNumber, shoeNumber, roundNumber, cmd, function (success, o) {
                         if (success) {
                             if (o.ResultState == 0) {
-
+                                props.handleQuery(o);
                             } else {
 
                             }
@@ -167,6 +177,8 @@ const GameControlButton = ((props) => {
                     break;
             }
 
+        } else {
+            alertMsg("錯誤", "伺服器斷線");
         }
     }
 
@@ -194,7 +206,7 @@ const GameControlButton = ((props) => {
 
             shoeNumber = Q.ShoeNumber;
             roundNumber = Q.RoundNumber;
-            tableType = Q.TableType;
+            //tableType = Q.TableType;
             orderSequence = Q.SelfOrder.OrderSequence;
         }
     }
@@ -299,10 +311,10 @@ const AddChip = (props) => {
 
             alertMsg('加彩', '是否要求加彩 ' + addChipValue, () => {
                 //AddChip game
-                gameClient.AddChip(generateUUIDv4(), props.gameSetID, props.roadMapNumber, props.shoeNumber, props.roundNumber, addChipValue, function (success, o) {
+                gameClient.AddChip(props.gameSetID, props.roadMapNumber, props.shoeNumber, props.roundNumber, addChipValue, function (success, o) {
                     if (success) {
                         if (o.ResultState == 0) {
-
+                            props.handleQuery(o);
                         } else {
 
                         }
