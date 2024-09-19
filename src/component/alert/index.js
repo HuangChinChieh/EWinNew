@@ -39,6 +39,7 @@ const AlertButton = ({ children }) => {
         if (cb) {
           cbRef.current = cb;
         }
+        setShowAlert(true);
     },[handleClose,handleOK]);
 
     return (
