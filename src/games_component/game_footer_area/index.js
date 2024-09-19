@@ -14,6 +14,25 @@ const GameFooterArea = (props) => {
         setMiddleBtnType(v);
     });
 
+    const middleComponent = () => {
+        switch (middleBtnType) {
+            case "Chip":
+                return props.children;
+            case "GameSet":
+                return (<GameControlButton chipItems={props.chipItems}
+                    roadMapNumber={props.roadMapNumber}
+                    gameSetID={props.gameSetID}
+                    shoeNumber={props.shoeNumber}
+                    roundNumber={props.roundNumber}
+                    orderSequence={props.orderSequence}
+                    gameClient={props.gameClient}
+                    updateMiddleBtnType={updateMiddleBtnType}
+                />);
+            default:
+                return (<div></div>);
+        }
+    }
+
     return (
         <div className='game-footer-area'>
             <div className='left-box'>
@@ -21,25 +40,16 @@ const GameFooterArea = (props) => {
                     <GameBalance />
                 </div>
                 <div className='box-area'>
-                    {/* <GameTotalBet totalBetValue={props.totalBetValue} /> */}
+                   <GameTotalBet totalBetValue={props.totalBetValue} />
                 </div>
             </div>
             <div className='middle-box'>
-                    {middleBtnType === "Chip" ? props.children : (middleBtnType === "GameSet" ? 
-                    <GameControlButton chipItems={props.chipItems}
-                                roadMapNumber={props.roadMapNumber}
-                                gameSetID={props.gameSetID}
-                                shoeNumber={props.shoeNumber}
-                                roundNumber={props.roundNumber}
-                                orderSequence={props.orderSequence}
-                                gameClient={props.gameClient}
-                                updateMiddleBtnType={updateMiddleBtnType}
-                                /> : <div></div>)}            
+                {middleComponent()}
             </div>
             <div className='right-box'>
                 <div className='box-area'>
-                    <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType}/>
-                    </div>
+                    <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType} />
+                </div>
                 <div className='box-area'>
                     <GameTips />
                 </div>

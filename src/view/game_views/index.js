@@ -12,8 +12,8 @@ import GameChipsButton from 'games_component/game_buttons/game_chips_btn';
 import GameBettingArea from 'games_component/game_betting_area_new';
 import GameRoadMap from 'games_component/game_road_map';
 import GameVideo from 'games_component/game_video';
+import CardResult from 'games_component/game_card_result';
 import { orderReducer, initialOrderData } from './orderData';
-import { forEach } from 'lodash';
 import { AlertContext } from '../../component/alert';
 import { moveChipAnimation } from 'games_component/animation/betAnimation/baccaratBasicAnimation'
 import 'games_component/animation/betAnimation/orderAnimation.scss';
@@ -66,6 +66,7 @@ const GameView = (props) => {
     const [orderData, dispatchOrderData] = useReducer(orderReducer, initialOrderData);
     const [selChipData, setSelChipData] = useState(null);
     const [emptyOrderCount, setEmptyOrderCount] = useState(0);
+    const cardResultControl = useRef();
 
     //視頻相關
     const [videoResolutionType, setVideoResolutionType] = useState(0);
@@ -183,7 +184,7 @@ const GameView = (props) => {
                             }
                         }
                     }
-debugger;
+
                     if (directSetBetLimit !== null) {
                         setBetLimit(tableNumber, gameSetID, directSetBetLimit, (success) => {
                             if (success) {
@@ -1194,7 +1195,7 @@ debugger;
         return countdownInfo.current;
     }, []);
 
-    const getTableInfo = useCallback((isRefresh, cb) => {
+    const getTableInfo = useCallback(() => {
         return tableInfo.current;
     }, []);
 
@@ -1270,6 +1271,7 @@ debugger;
                                 handleBet={handleBet}
                             ></GameBettingArea>
                             <GameFooterArea chipItems={chipsItems}
+                                totalBetValue={orderData.totalValue}
                                 roadMapNumber={tableNumber}
                                 gameSetID={gameSetID}
                                 shoeNumber={shoeNumber}
@@ -1283,6 +1285,7 @@ debugger;
                                     orderData={orderData}
                                     handleBet={handleBet}></GameChipsButton>
                             </GameFooterArea>
+                            <CardResult ref={cardResultControl}></CardResult>
                         </div>
 
                     )

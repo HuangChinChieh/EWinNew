@@ -1,17 +1,1019 @@
-.game-back-box {
-    width: 2.875rem;
-    height: 2.875rem;
-    background: rgba(70, 70, 91, 1);
-    border-radius: 3.125rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.openCardZoneWrapper {
+    position: relative;
+    width: 1920px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.8);
+    // background-image: url("../image/CardResultBG_L.png");
+    background-repeat: no-repeat;
+    -webkit-animation: bgleft 0.8s ease-out;
+    -moz-animation: bgleft 0.8s ease-out;
+    -o-animation: bgleft 0.8s ease-out;
+    animation: bgleft 0.8s ease-out;
 
-    a {
-        display: block;
-        width: 0.75rem;
-        height: 1.25rem;
-        margin-left: -0.1875rem;
-        background: url('../../img/games/back.png') no-repeat center center/contain;
+    .flip-container {
+        -webkit-perspective: 1000px;
+        -moz-perspective: 1000px;
+        -ms-perspective: 1000px;
+        -o-perspective: 1000px;
+        perspective: 1000px;
+        margin: 0px auto;
+        float: left;
+        margin-left: 0px;
+        margin-bottom: 0px;
+    }
+
+    .flip-container,
+    .front,
+    .back {
+        width: 148px;
+        height: 196px;
+    }
+
+    .flip-container2 {
+        -webkit-perspective: 1000px;
+        -moz-perspective: 1000px;
+        -ms-perspective: 1000px;
+        -o-perspective: 1000px;
+        perspective: 1000px;
+        margin: 0px auto;
+        float: left;
+        margin-left: 0px;
+        margin-bottom: 0px;
+    }
+
+    .flip-container2,
+    .front,
+    .back {
+        width: 148px;
+        height: 196px;
+    }
+
+    .flip-container2 .back {
+        -webkit-transform: rotateY(0deg);
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        -o-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+        z-index: 2;
+    }
+
+    .flip-container2 .front {
+        -webkit-transform: rotateY(180deg);
+        -moz-transform: rotateY(180deg);
+        -ms-transform: rotateY(180deg);
+        -o-transform: rotateY(180deg);
+        transform: rotateY(180deg);
+        z-index: 1;
+    }
+
+    .front,
+    .back {
+        backface-visibility: hidden;
+        -webkit-transition: .6s ease-out;
+        -moz-transition: 0.6s ease-out;
+        -o-transition: 0.6s ease-out;
+        transition: 0.6s ease-out;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .front img,
+    .back img {
+        width: 148px;
+        height: 196px;
+        overflow: hidden;
+    }
+
+    .front {
+        z-index: 2;
+        -webkit-transform: rotateY(0deg);
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        -o-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+    }
+
+    .back {
+        z-index: 1;
+        -webkit-transform: rotateY(-180deg);
+        -moz-transform: rotateY(-180deg);
+        -ms-transform: rotateY(-180deg);
+        -o-transform: rotateY(-180deg);
+        transform: rotateY(-180deg);
+    }
+
+    .flip-container_t {
+        -webkit-perspective: 1000px;
+        -moz-perspective: 1000px;
+        -ms-perspective: 1000px;
+        -o-perspective: 1000px;
+        perspective: 1000px;
+        margin: 0px auto;
+        float: left;
+        margin-left: 0px;
+        margin-bottom: 0px;
+    }
+
+    .flip-container_t,
+    .front_t,
+    .back_t {
+        width: 196px;
+        height: 148px;
+    }
+
+    .flip-container2_t {
+        -webkit-perspective: 1000px;
+        -moz-perspective: 1000px;
+        -ms-perspective: 1000px;
+        -o-perspective: 1000px;
+        perspective: 1000px;
+        margin: 0px auto;
+        float: left;
+        margin-left: 0px;
+        margin-bottom: 0px;
+    }
+
+    .flip-container2_t,
+    .front_t,
+    .back_t {
+        width: 196px;
+        height: 148px;
+    }
+
+    .flip-container2_t .back_t {
+        -webkit-transform: rotateY(0deg);
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        -o-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+        z-index: 2;
+    }
+
+    .flip-container2_t .front_t {
+        -webkit-transform: rotateY(180deg);
+        -moz-transform: rotateY(180deg);
+        -ms-transform: rotateY(180deg);
+        -o-transform: rotateY(180deg);
+        transform: rotateY(180deg);
+        z-index: 1;
+    }
+
+    .front_t,
+    .back_t {
+        backface-visibility: hidden;
+        -webkit-transition: .6s ease-out;
+        -moz-transition: 0.6s ease-out;
+        -o-transition: 0.6s ease-out;
+        transition: 0.6s ease-out;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        -o-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .front_t img,
+    .back_t img {
+        width: 196px;
+        height: 148px;
+        overflow: hidden;
+    }
+
+    .front_t {
+        z-index: 2;
+        -webkit-transform: rotateY(0deg);
+        -moz-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        -o-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+    }
+
+    .back_t {
+        z-index: 1;
+        -webkit-transform: rotateY(-180deg);
+        -moz-transform: rotateY(-180deg);
+        -ms-transform: rotateY(-180deg);
+        -o-transform: rotateY(-180deg);
+        transform: rotateY(-180deg);
+    }
+
+
+    webkit-keyframes bgleft {
+        from {
+            opacity: 0.5;
+            background-position: -300px center;
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    @-moz-keyframes bgleft {
+        from {
+            opacity: 0.5;
+            background-position: -300px center;
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    @-o-keyframes bgleft {
+        from {
+            opacity: 0.5;
+            background-position: -300px center;
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    @keyframes bgleft {
+        from {
+            opacity: 0.5;
+            background-position: -300px center;
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    .openCardZoneWrapper::after {
+        content: "";
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 920px;
+        height: 289px;
+        // background-image: url("../image/CardResultBG_R.png");
+        background-repeat: no-repeat;
+        -webkit-animation: bgright 0.8s ease-out;
+        -moz-animation: bgright 0.8s ease-out;
+        -o-animation: bgright 0.8s ease-out;
+        animation: bgright 0.8s ease-out;
+        z-index: -1;
+    }
+
+    @-webkit-keyframes bgright {
+        from {
+            opacity: 0.5;
+            background-position: 300px center;
+
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    @-moz-keyframes bgright {
+        from {
+            opacity: 0.5;
+            background-position: 300px center;
+
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    @-o-keyframes bgright {
+        from {
+            opacity: 0.5;
+            background-position: 300px center;
+
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    @keyframes bgright {
+        from {
+            opacity: 0.5;
+            background-position: 300px center;
+
+        }
+
+        to {
+            opacity: 1.0;
+            background-position: 0px center;
+        }
+    }
+
+    #left_card {
+        position: relative;
+        float: left;
+        width: 960px;
+        height: 300px;
+    }
+
+    .left_cardE {
+        background: rgba(0, 166, 243, 0.2);
+        background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        background: linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+    }
+
+    .result_playerBG {
+        background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        background: linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        -webkit-animation: resultEffect 0.3s ease-out;
+        -moz-animation: resultEffect 0.3s ease-out;
+        -o-animation: resultEffect 0.3s ease-out;
+        animation: resultEffect 0.3s ease-out;
+        -webkit-animation-direction: alternate;
+        -moz-animation-direction: alternate;
+        -o-animation-direction: alternate;
+        animation-direction: alternate;
+        -moz-animation-iteration-count: infinite;
+        -webkit-animation-iteration-count: infinite;
+        -o-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+    }
+
+    @-webkit-keyframes resultEffect {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+        }
+    }
+
+    @-moz-keyframes resultEffect {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+        }
+    }
+
+    @-o-keyframes resultEffect {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+        }
+    }
+
+    @keyframes resultEffect {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.3), rgba(0, 166, 243, 0.0));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -moz-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: -o-linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+            background: linear-gradient(90deg, rgba(0, 166, 243, 0.8), rgba(0, 166, 243, 0.0));
+        }
+    }
+
+
+    #left_card #pCard1 {
+        position: absolute;
+        top: 50px;
+        left: 260px;
+        opacity: 0.0;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    #left_card #pCard2 {
+        position: absolute;
+        top: 50px;
+        left: 420px;
+        opacity: 0.0;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+        -webkit-animation-delay: 0.3s;
+        -moz-animation-delay: 0.3s;
+        -o-animation-delay: 0.3s;
+        animation-delay: 0.3s;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    #left_card #pCard3 {
+        position: absolute;
+        top: 75px;
+        left: 40px;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+    }
+
+    #right_card {
+        position: relative;
+        float: right;
+        width: 960px;
+        height: 300px;
+    }
+
+    .right_cardE {
+        background: rgba(173, 0, 0, 0.2);
+        background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+    }
+
+    .result_bankerBG {
+        background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        -webkit-animation: resultEffectB 0.3s ease-out;
+        -moz-animation: resultEffectB 0.3s ease-out;
+        -o-animation: resultEffectB 0.3s ease-out;
+        animation: resultEffectB 0.3s ease-out;
+        -webkit-animation-direction: alternate;
+        -moz-animation-direction: alternate;
+        -o-animation-direction: alternate;
+        animation-direction: alternate;
+        -moz-animation-iteration-count: infinite;
+        -webkit-animation-iteration-count: infinite;
+        -o-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+    }
+
+    @-webkit-keyframes resultEffectB {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+        }
+    }
+
+    @-o-keyframes resultEffectB {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+        }
+    }
+
+    @-moz-keyframes resultEffectB {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+        }
+    }
+
+    @keyframes resultEffectB {
+        from {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.3));
+        }
+
+        to {
+            background: -webkit-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -moz-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: -o-linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+            background: linear-gradient(90deg, rgba(173, 0, 0, 0.0), rgba(173, 0, 0, 0.8));
+        }
+    }
+
+    #right_card #bCard1 {
+        position: absolute;
+        top: 50px;
+        right: 420px;
+        opacity: 0.0;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    #right_card #bCard2 {
+        position: absolute;
+        top: 50px;
+        right: 260px;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+        opacity: 0.0;
+        -webkit-animation-delay: 0.3s;
+        -moz-animation-delay: 0.3s;
+        -o-animation-delay: 0.3s;
+        animation-delay: 0.3s;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    #right_card #bCard3 {
+        position: absolute;
+        top: 75px;
+        right: 40px;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+    }
+
+
+    #left_card img,
+    #right_card img {
+        border-radius: 12px;
+        -webkit-box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
+        -moz-box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
+        -o-box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
+    }
+
+    @-webkit-keyframes carddown {
+        from {
+            opacity: 0.5;
+            margin-top: -40px;
+        }
+
+        to {
+            opacity: 1.0;
+            margin-top: 0px;
+        }
+    }
+
+    @-moz-keyframes carddown {
+        from {
+            opacity: 0.5;
+            margin-top: -40px;
+        }
+
+        to {
+            opacity: 1.0;
+            margin-top: 0px;
+        }
+    }
+
+    @-o-keyframes carddown {
+        from {
+            opacity: 0.5;
+            margin-top: -40px;
+        }
+
+        to {
+            opacity: 1.0;
+            margin-top: 0px;
+        }
+    }
+
+    @keyframes carddown {
+        from {
+            opacity: 0.5;
+            margin-top: -40px;
+        }
+
+        to {
+            opacity: 1.0;
+            margin-top: 0px;
+        }
+    }
+
+
+    #idResult {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 289px;
+        text-align: center;
+    }
+
+    #idPlayerTitle {
+        position: absolute;
+        top: 51px;
+        right: 150px;
+        opacity: 0.0;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+        -webkit-animation-delay: 0.6s;
+        -moz-animation-delay: 0.6s;
+        -o-animation-delay: 0.6s;
+        animation-delay: 0.6s;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    #idPlayerPoint {
+        color: #00a6ea;
+        width: 170px;
+        height: 145px;
+        line-height: 145px;
+        text-align: center;
+        font-size: 120px;
+        font-weight: bolder;
+        -webkit-text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        -o-text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+    }
+
+    .PlayerPoint {
+        position: relative;
+        width: 170px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        color: rgba(0, 166, 243, 1.0);
+        font-size: 30px;
+        font-weight: bold;
+        background: rgba(0, 0, 0, 0.8);
+        background: -webkit-linear-gradient(90deg, rgba(0, 232, 255, 0.0), rgba(19, 27, 43, 0.5), rgba(19, 27, 43, 0.5), rgba(0, 232, 255, 0.0));
+        background: -moz-linear-gradient(90deg, rgba(0, 232, 255, 0.0), rgba(19, 27, 43, 0.5), rgba(19, 27, 43, 0.5), rgba(0, 232, 255, 0.0));
+        background: -o-linear-gradient(90deg, rgba(0, 232, 255, 0.0), rgba(19, 27, 43, 0.5), rgba(19, 27, 43, 0.5), rgba(0, 232, 255, 0.0));
+        background: linear-gradient(90deg, rgba(0, 232, 255, 0.0), rgba(19, 27, 43, 0.5), rgba(19, 27, 43, 0.5), rgba(0, 232, 255, 0.0));
+    }
+
+    /*.PlayerPoint::before{
+       content: "";
+       position: absolute;
+       top:1px;
+       left: -5px;
+       width: 180px;
+       height: 2px;
+       background: -webkit-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       background: -moz-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       background: -o-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       background: linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7);
+   }
+   .PlayerPoint::after{
+       content: "";
+       position: absolute;
+       bottom:1px;
+       left: -5px;
+       width: 180px;
+       height: 2px;
+       background: -webkit-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       background: -moz-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       background: -o-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       background: linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
+       -webkit-box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       -moz-box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       -o-box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+   }*/
+    .PlayerPointW {
+        width: 170px;
+        height: 50px;
+        /*box-shadow: inset 0px 0px 10px 2px #0082b6;*/
+        -webkit-text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        -o-text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    #idBankerTitle {
+        position: absolute;
+        top: 51px;
+        left: 150px;
+        opacity: 0.0;
+        -webkit-animation: carddown 0.8s ease-out;
+        -moz-animation: carddown 0.8s ease-out;
+        -o-animation: carddown 0.8s ease-out;
+        animation: carddown 0.8s ease-out;
+        -webkit-animation-delay: 0.6s;
+        -moz-animation-delay: 0.6s;
+        -o-animation-delay: 0.6s;
+        animation-delay: 0.6s;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    #idBankerPoint {
+        color: #ea0101;
+        width: 170px;
+        height: 145px;
+        line-height: 145px;
+        text-align: center;
+        font-size: 120px;
+        font-weight: bolder;
+        -webkit-text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        -o-text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+    }
+
+    .BankerPoint {
+        position: relative;
+        width: 170px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        color: rgba(235, 0, 0, 1.0);
+        font-size: 30px;
+        font-weight: bold;
+        background: rgba(0, 0, 0, 0.8);
+        background: -webkit-linear-gradient(90deg, rgba(241, 32, 0, 0.0), rgba(43, 20, 25, 0.5), rgba(43, 20, 25, 0.5), rgba(241, 32, 0, 0.0));
+        background: -moz-linear-gradient(90deg, rgba(241, 32, 0, 0.0), rgba(43, 20, 25, 0.5), rgba(43, 20, 25, 0.5), rgba(241, 32, 0, 0.0));
+        background: -o-linear-gradient(90deg, rgba(241, 32, 0, 0.0), rgba(43, 20, 25, 0.5), rgba(43, 20, 25, 0.5), rgba(241, 32, 0, 0.0));
+        background: linear-gradient(90deg, rgba(241, 32, 0, 0.0), rgba(43, 20, 25, 0.5), rgba(43, 20, 25, 0.5), rgba(241, 32, 0, 0.0));
+    }
+
+    /*.BankerPoint::before{
+       content: "";
+       position: absolute;
+       top:1px;
+       left: -5px;
+       width: 180px;
+       height: 2px;
+       background: -webkit-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       background: -moz-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       background: -o-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       background: linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       -webkit-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
+       -moz-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
+       -o-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
+       box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
+   }
+   .BankerPoint::after{
+       content: "";
+       position: absolute;
+       bottom:1px;
+       left: -5px;
+       width: 180px;
+       height: 2px;
+       background: -webkit-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       background: -moz-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       background: -o-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       background: linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
+       -webkit-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       -moz-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       -o-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+   }*/
+    .BankerPointW {
+        width: 170px;
+        height: 50px;
+        /*box-shadow: inset 0px 0px 10px 2px #0082b6;*/
+        -webkit-text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        -o-text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .result_banker .WinnerText {
+        font-weight: bold;
+        text-align: center;
+        width: 180px;
+        height: 180px;
+        line-height: 185px;
+        background: #333;
+        background: -webkit-linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
+        background: -moz-linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
+        background: -o-linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
+        background: linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
+        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        margin: 0px auto;
+        margin-top: 60px;
+        border-radius: 200px;
+        opacity: 0;
+        -webkit-animation: WinnerText 0.3s ease-out;
+        -moz-animation: WinnerText 0.3s ease-out;
+        -o-animation: WinnerText 0.3s ease-out;
+        animation: WinnerText 0.3s ease-out;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    .result_player .WinnerText {
+        color:#fff;
+        font-weight: bold;
+        text-align: center;
+        width: 180px;
+        height: 180px;
+        line-height: 185px;
+        background: #333;
+        background: -webkit-linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
+        background: -moz-linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
+        background: -o-linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
+        background: linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
+        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 8px rgba(0, 171, 240, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        margin: 0px auto;
+        margin-top: 60px;
+        border-radius: 200px;
+        opacity: 0;
+        -webkit-animation: WinnerText 0.3s ease-out;
+        -moz-animation: WinnerText 0.3s ease-out;
+        -o-animation: WinnerText 0.3s ease-out;
+        animation: WinnerText 0.3s ease-out;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    .result_tie .WinnerText {
+        font-weight: bold;
+        text-align: center;
+        width: 180px;
+        height: 180px;
+        line-height: 185px;
+        background: #333;
+        background: -webkit-linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
+        background: -moz-linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
+        background: -o-linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
+        background: linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
+        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 8px rgba(108, 240, 2, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        margin: 0px auto;
+        margin-top: 60px;
+        border-radius: 200px;
+        opacity: 0;
+        -webkit-animation: WinnerText 0.3s ease-out; 
+        -moz-animation: WinnerText 0.3s ease-out;
+        -o-animation: WinnerText 0.3s ease-out;
+        animation: WinnerText 0.3s ease-out;
+        -webkit-animation-fill-mode: forwards;
+        -moz-animation-fill-mode: forwards;
+        -o-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+    }
+
+    @-webkit-keyframes WinnerText {
+        0% {
+            opacity: 0.5;
+            font-size: 10px;
+        }
+
+        98% {
+            opacity: 1.0;
+            font-size: 55px;
+        }
+
+        100% {
+            opacity: 1.0;
+            font-size: 50px;
+        }
+    }
+
+    @-moz-keyframes WinnerText {
+        0% {
+            opacity: 0.5;
+            font-size: 10px;
+        }
+
+        98% {
+            opacity: 1.0;
+            font-size: 55px;
+        }
+
+        100% {
+            opacity: 1.0;
+            font-size: 50px;
+        }
+    }
+
+    @-o-keyframes WinnerText {
+        0% {
+            opacity: 0.5;
+            font-size: 10px;
+        }
+
+        98% {
+            opacity: 1.0;
+            font-size: 55px;
+        }
+
+        100% {
+            opacity: 1.0;
+            font-size: 50px;
+        }
+    }
+
+    @keyframes WinnerText {
+        0% {
+            opacity: 0.5;
+            font-size: 10px;
+        }
+
+        98% {
+            opacity: 1.0;
+            font-size: 55px;
+        }
+
+        100% {
+            opacity: 1.0;
+            font-size: 50px;
+        }
     }
 }
