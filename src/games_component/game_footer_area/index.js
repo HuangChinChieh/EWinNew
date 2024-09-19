@@ -16,7 +16,7 @@ const GameFooterArea = (props) => {
         setMiddleBtnType(v);
     });
 
-    const showComponment = () => {
+    const showComponent = () => {
         if (middleBtnType == "Chip") {
             return props.children;
         } else if (middleBtnType == "GameSet") {
@@ -51,7 +51,7 @@ const GameFooterArea = (props) => {
                 </div>
             </div>
             <div className='middle-box'>
-                {showComponment()}
+                {showComponent()}
             </div>
             <div className='right-box'>
                 <div className='box-area'>
