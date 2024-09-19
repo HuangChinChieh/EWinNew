@@ -13,6 +13,7 @@ import GameBettingArea from 'games_component/game_betting_area_new';
 import GameRoadMap from 'games_component/game_road_map';
 import GameVideo from 'games_component/game_video';
 import { orderReducer, initialOrderData } from './orderData';
+import { forEach } from 'lodash';
 import { AlertContext } from '../../component/alert';
 import { moveChipAnimation } from 'games_component/animation/betAnimation/baccaratBasicAnimation'
 import 'games_component/animation/betAnimation/orderAnimation.scss';
@@ -85,8 +86,8 @@ const GameView = (props) => {
         { styleIndex: 8, chipValue: 10000 }
     ];
 
-
     const gameClient = GetGameClient();
+    const orderSequence = 0;
 
     useEffect(() => {
         //初次載入，撈取桌台資料
@@ -182,7 +183,7 @@ const GameView = (props) => {
                             }
                         }
                     }
-
+debugger;
                     if (directSetBetLimit !== null) {
                         setBetLimit(tableNumber, gameSetID, directSetBetLimit, (success) => {
                             if (success) {
@@ -1189,9 +1190,6 @@ const GameView = (props) => {
         }
     };
 
-    //#endregion
-
-
     const getCountdownInfo = useCallback(() => {
         return countdownInfo.current;
     }, []);
@@ -1271,9 +1269,15 @@ const GameView = (props) => {
                                 orderData={orderData}
                                 handleBet={handleBet}
                             ></GameBettingArea>
-                            <GameFooterArea totalBetValue={orderData.totalBetValue} chipItems={chipsItems}>
+                            <GameFooterArea chipItems={chipsItems}
+                                roadMapNumber={tableNumber}
+                                gameSetID={gameSetID}
+                                shoeNumber={shoeNumber}
+                                roundNumber={roundNumber}
+                                orderSequence={orderSequence}
+                                gameClient={gameClient}>
                                 <GameChipsButton chipsItems={chipsItems}
-                                    isCanBet={isCanBet}
+                                    isCanBet={true}
                                     selChipData={selChipData}
                                     setSelChipData={setSelChipData}
                                     orderData={orderData}

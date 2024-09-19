@@ -1,0 +1,545 @@
+﻿html {
+    font-size: 16px
+}
+
+body {
+    width: 1920px;
+    height: 1080px;
+    font-family: "Microsoft JhengHei";
+}
+
+.game-controls-block {
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 0.75rem;
+    position: absolute;
+    width: 32.5875rem;
+    height: 6rem;
+    /*left: 47.5625rem;
+    top: 62.1875rem;*/
+    top:13rem;
+}
+
+.game-controls-block .close_icon {
+    display:flex;
+    width:1rem;
+    height:1rem;
+    right:0;
+    position: absolute;
+    cursor: pointer;
+    background: url('../../../img/games/Vector.png')
+}
+
+.game-controls-box {
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 0.75rem;
+    position: absolute;
+    width: 32.5875rem;
+    height: 3.416875rem;
+    /*left: 47.5625rem;
+    top: 62.1875rem;*/
+    top:2rem;
+
+
+    div {
+        /* icon/chip */
+
+        width: 3.416875rem;
+        height: 3.416875rem;
+        /* Inside auto layout */
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        border-radius: 1.7084375rem;
+
+        &.controlBtn {
+            background-color: #8E8E8E;
+        }
+
+        &.controlBtn:nth-child(1) > div {
+            font-size: 1.09375rem;
+        }
+
+        &.controlBtn:nth-child(2) > div {
+            font-size: 1.09375rem;
+        }
+
+        &.controlBtn:nth-child(3) > div {
+            font-size: 1.09375rem;
+        }
+
+        &.controlBtn:nth-child(4) > div {
+            font-size: 1.09375rem;
+        }
+
+        &.controlBtn:nth-child(8) > div {
+            font-size: 1.09375rem;
+        }
+
+        &.act {
+            &::before {
+                content: '';
+                background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
+                display: block;
+                width: 4.125rem;
+                height: 4.125rem;
+                border-radius: 4.125rem;
+                position: absolute;
+                left: 0;
+                top: 0;
+                transform: translate(-9%, -9%);
+            }
+        }
+
+        div {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            /* 字体大小，可以根据需要调整 */
+            text-align: center;
+            /* 文字居中，可选 */
+            font-family: "Microsoft JhengHei";
+            /*font-size: 1.09375rem;*/
+            font-size: 0.7rem;
+            font-weight: 500;
+            line-height: 1.28125rem;
+            text-align: center;
+            color: #FFFFFF;
+            height: auto;
+            top: 0.88875rem;
+        }
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 11;
+  }
+
+.divAddChip {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16.8rem;
+    height: 13.43rem;
+    border-radius: 6px 0px 0px 0px;
+    padding: 16px 15px 16px 15px;
+    gap: 16px;
+    border: 1px 0px 0px 0px;
+    opacity: 0px;
+    background: #292933;
+    border: 1px solid #F4CD44
+}
+
+.divAddChip .title {
+    height: 1.375rem;
+    padding: 2rem;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 16.41px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.divAddChip .value {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 6px;
+    width: 100%;
+    height: 3rem;
+}
+
+.divAddChip .value .v1 {
+    display: flex;
+    align-items: center;
+    padding: 2px 22px 2px 8px;
+    gap: 6px;
+    width: 100%;
+    height: 100%;
+    background: rgba(41, 41, 51, 0.8);
+    border: 1px solid #46465B;
+    border-radius: 50px;
+}
+
+.divAddChip .value .v1 .v11 {
+    text-align: center;
+    width: 100%;
+    color: #FFFFFF;
+}
+
+.divAddChip .divBtn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 1.5rem;
+    gap: 1rem;
+    width: 100%;
+    height: 40px;
+    flex: none;
+    order: 3;
+    flex-grow: 0;
+}
+
+.divAddChip .divBtn .btn {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 6.83rem;
+    height: 2.5rem;
+    background: rgba(141, 141, 159, 0.3);
+    border: 1px solid #46465B;
+    border-radius: 21px;
+    font-size: 18px;
+    line-height: 150%;
+    color: #FFFFFF;
+}
+
+$image-url: url('https://s3-alpha-sig.figma.com/img/fc1f/0b41/cbbe1f8d780bb261ca0bfe6f03c60be0?Expires=1717372800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=pG1iqZ4paAHG5yWXtH4q~sIr2OZJh6CLZHDRLsTBRhzvqS5CpCHCUr3y0ILsJqo6DOdNGj6LE~z2qHRWt1is9HZJyzQdP75TJIgpp02pnvwhWDyEzPKcq59GRPvY8iSTBJUxhvYgUocWr7ZZLUi-luIcjGlD-UQfbmovsBCm60791znOFb3OOnKQKO25knqoUWDbogmcubf5oThS8~-MmhS-BF8X5AgOeGHvHJ2HRWhIvCeKQ6qLctP7cuA~cOEHOo56bUqeoch~olqf7x~x42sm7YAeNKfmSIhgCtAW8UK7xAUEUaPIvr~fkbWRGwOTVRhypRvU~ZBWwqm4YyvkEw__');
+
+.game-chips-box {
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 0.75rem;
+    position: absolute;
+    width: 32.5875rem;
+    height: 3.416875rem;
+    left: 54rem;
+    top: 62rem;
+    z-index: 11;
+
+    div {
+        /* icon/chip */
+
+        width: 3.416875rem;
+        height: 3.416875rem;
+        /* Inside auto layout */
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        border-radius: 1.7084375rem;
+
+        &.chips-1 {
+            background-image: $image-url, linear-gradient(180deg, #FB8F02 0%, #BE7000 100%);
+        }
+
+        &.chips-2 {
+            background-image: $image-url, linear-gradient(180deg, #F950A2 0%, #EA275D 100%);
+        }
+
+        &.chips-3 {
+            background-image: $image-url, linear-gradient(180deg, #17AAFF 0%, #625FFF 100%);
+        }
+
+        &.chips-4 {
+            background-image: $image-url, linear-gradient(180deg, #26FF7A 0%, #0B7453 100%);
+        }
+
+        &.chips-5 {
+            background-image: $image-url, linear-gradient(180deg, #7128EA 0%, #702449 100%);
+        }
+
+        &.chips-6 {
+            background-image: $image-url, linear-gradient(180deg, #44C8C0 0%, #339F6A 100%);
+        }
+
+        &.chips-7 {
+            background-image: $image-url, linear-gradient(180deg, #72FB0C 0%, #87BA2F 100%);
+        }
+
+        &.chips-8 {
+            background-image: $image-url, linear-gradient(180deg, #FF5B53 0%, #EA311D 100%);
+        }
+
+        &.act {
+
+            &::before {
+                content: '';
+                background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
+                display: block;
+                width: 4.125rem;
+                height: 4.125rem;
+                border-radius: 4.125rem;
+                position: absolute;
+                left: 0;
+                top: 0;
+                transform: translate(-9%, -9%);
+            }
+        }
+
+        div {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            /* 字体大小，可以根据需要调整 */
+            text-align: center;
+            /* 文字居中，可选 */
+            font-family: Roboto;
+            font-size: 1.09375rem;
+            font-weight: 500;
+            line-height: 1.28125rem;
+            text-align: center;
+            color: #FFFFFF;
+            height: auto;
+            top: 0.88875rem;
+        }
+    }
+}
+
+.divChangeTable {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 67.5rem;
+    height: 45rem;
+    border-radius: 6px 0px 0px 0px;
+    padding: 16px 15px 16px 15px;
+    gap: 16px;
+    border: 1px 0px 0px 0px;
+    opacity: 0px;
+    background: #292933;
+    border: 1px solid #F4CD44;
+    z-index: 1
+}
+
+.divChangeTable .header {
+    display: flex;
+    width: 100%;
+    height: 3rem;
+    gap: 0px;
+    opacity: 0px;
+    background: rgba(41, 41, 51, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 1)
+}
+
+.divChangeTable .header .title {
+    display: flex;
+    width: 30%;
+    font-family: Noto Sans TC;
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 2.06rem;
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: #FFFFFF
+}
+
+.divChangeTable .header .search {
+    display: flex;
+    width: 20.3125rem;
+    height: 2.75rem;
+    top: 1.125rem;
+    left: 21.25rem;
+    gap: 0.375rem;
+    border-radius: 50px;
+    border: 1px;
+    opacity: 0px;
+    background: rgba(41, 41, 51, 0.8);
+    border: 1px solid var(--sec-c-outline, rgba(70, 70, 91, 1))
+}
+
+.divChangeTable .header .search .location {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAILSURBVHgB7ZY7TsNAEIZ/PzAlOYI5AXADU9LBCcA3wOIhUWGqFAkEKgqQnBsAJRXmBOQGmBuEliReZqJEipLd9ThCNPBJ0SY7k/nHs+Oxgb+Gg5o0m7dhEARRWSIcB3BUbzDwemdncVEjjFy41bqLPM8/VwqRNpCDfDhEcnoa9wTh4EqcOp3s3HX9F5MowzbPwxv7QoBX5cCBqKwphHACOzu7eH5+erX5WUt9eZkd0JJhCSiBvePj+NFkryq1qGw66Mw7NrtRuN2+36Ul1Nmo9BdfX1gfjbDF3w0hwlYriww2+DDnFBlEk5OT+Hpmq0dH0qd14QrpVuPkc210mGRdZ0Oz3Z8THXN0NN7rLwrrK2YVNtA3GUhkwaaUs4a6wmWpPjTbYbOZhfObvEddHC4moz5RV1gppZ1Aq6t4mBVP06yxsoIHnS8ln8OAbxZ2c/0+NoMAL9RQnBiXlxuoUScGYx0gV1eZdUxWUFDTrZuM1uYajconLM+FzWgV9n23C0snW+Cr7WJZ4SSJWdSauYHK/4iex9RI74B5GMxhPdspogFCYzKGEKmvSJjGZE739U2VH90BN+wLAeKR6XlOSkthcSnoDSSFELEwN5qtjK6L7Ukz/qwwMyljMr/Pz2QSLVCD2q+3TLuddelptD/52aUuFjffFB9LQGd5SI20QZ8GlTjBb0JvnyF/8I+Qb4Savm43lSVMAAAAAElFTkSuQmCC');
+    width: 30px;
+    height: 30px;
+    gap: 0px;
+    opacity: 0px;
+    margin-left: 8px;
+    margin-top: 6px;
+}
+
+.divChangeTable .header .search .upper {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAADpSURBVHgB7dHLDYJAEAbgARNuBEqgA22BDrQCNRYAHDhwEk4cIIAVrHZgB7ZCCZ45LA5GDFmecyX7JySTZWa/zS6AjMxqo7RFGDLTMMDhHMyqglsQnEsgJsuYU9eww/lInFfbQtdhj0iIpatp8IpjZgEhec6uiBRYnpp58f8f4pybnXWLgjXI75DfIPgehXz/UmDDg4qJCKbcbOAg9iniQpqyu6LAsTuId24PvdkQoqpge16/twctxSjIKDSHUZFJaAzDDZ+IuBRkFhrBgIosgiawxchiaAAjISSoSZIwF4EtfhEFkZFZeT62wYl+j0N5UAAAAABJRU5ErkJggg==');
+    width: 26px;
+    height: 26px;
+    gap: 0px;
+    opacity: 0px;
+    margin-top: 10px;
+}
+
+.divChangeTable .header .place {
+    width: 14.1875tem;
+    height: 1.6875rem;
+    padding: 0px 7.875rem 0px 0px;
+    gap: 0.375rem;
+    opacity: 0px;
+    color: rgba(141, 141, 159, 1);
+    display: flex;
+    margin-top: 10px;
+}
+
+.divChangeTable .header .place .place1 {
+    height: 1.6875rem;
+    top: -0.03125rem;
+    gap: 0px;
+    opacity: 0px;
+    font-family: Noto Sans TC;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0.04em;
+    text-align: left;
+    margin-right: 10px;
+}
+
+.divChangeTable .header .place .place2 {
+    height: 1.6875rem;
+    top: -0.03125rem;
+    gap: 0px;
+    opacity: 0px;
+    font-family: Noto Sans TC;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0.04em;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.divChangeTable .header .place .Vector {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAAbCAYAAABWb153AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAiSURBVHgB3cYxEQAACAJANKmFyGBSPBdS8NMXuSMdGhafB9MeBUdID++BAAAAAElFTkSuQmCC');
+    width: 2px;
+    height: 27px;
+    top: 0.5px;
+    left: 44px;
+    gap: 0px;
+    border: 0.8px 0px 0px 0px;
+    opacity: 0px;
+    angle: 0 deg;
+}
+
+.divChangeTable .header .close {
+    width: 2.375rem;
+    height: 2.375rem;
+    gap: 0px;
+    opacity: 0px;
+    position: fixed;
+    right: 10px;
+}
+
+.divChangeTable .header .close .closeOutline {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAN1SURBVHgBzZlBSCJRGMef0sGDyBxldg6CFCqUshB4WTZsly0jMAKjQ+DJU8RCEUtFh9AOYrBEB+nUpUMuC0HQtixJy16EILJEpRA6zIrHQTzMrX3/WUfMTEdHc/7weKMzMj++N/O+7/urIyr1+PhophOGoTIgkQ4BQ6fTFYkK6UibokCAcJ2d/bLx/F9zKnVryGTuSLlcJqVSSbrGZDIRljUTjmOJ0zksOp0jxdHRt9f0VI4Ci+3cTzEgwHiedx8dHbtPT38aCoUCaUcsy5JgMCA6HI7c8LD9goIKSn6nCJDCuXd29sbi8e8GOUqdCqAez3thfX0lSSGTra7XtQBj7u/zvtXVDUsud0e6KYDGYl8fBgetx82iqWsGd3h4FNjdjTFqo/aSTCYj2dj4IkxPTx68BDlAmsCFQhGG9FClUpnQ1WEEQQjQezaEHGgEd3Lyo+dwtdrejuJeDSH19RfjmXtNOFl7ezHpea///kkE8baOj09bevXMNVNluS1gqH279TVwTDgcdbe7v3VT2CmwnVWSgaQq4O1tdiyR+P3qS1uvePyblBDkzxIgiDOZjK2f0ZOFpUa2kqMoR9C2v39gIBoRUimdXDiWAC8vr1xaiJ4ssKAYwbEEmErdmInGhEoJsx71HEomojGBCWyIIMPz2lleWagxqf4DFgqqit6eqFyWkoUBgIZ+ZI5WwnZDKoCaFgBF9BBaE2pFKlECNBqNRGtiWQ6TAMCiwzFEtCaOk7ZBQY++Fa0h0ZjABDbpJeG4N5rbZ9BLY5YAJyY+5tBlaUVgqTT61Wrm2uv9oJllRoNPpxyOJUDYEXNzs0ktbDeI3siIo2qRVDdqjuOSfr+v71H0eN4Jdrv9Qv78pHFHwzIzMz/RbRdBqRC98/OTs4ZNE4QT0WjooR9LjXvCCqn3a57lYqvVery0FFTkPHVTm5urAnya+u+fOQvo7NHh00PqLkRfpctbW1sRpqYmlVkfkAzJMExgayvSQ/PIRBYXg8LCwvyL5lFL+y2fz/uCwc+WbjdVNtsQiURCndtvtcLbHQ5H3InEH0YtKKLm98+Ky8uLF6oNzDpIJpvNjqXTGVssdtCRBez1fqIJwZfEnqvUq+7URLclk1eudPpG6gjRdKGvqTXRUWOijENVgmIE+Z6euu6Zid4EGIUbUxm1f0NgFNX+DfEPBoKcj1G69sQAAAAASUVORK5CYII=');
+    width: 40px;
+    height: 40px;
+    top: 10px;
+    gap: 0px;
+    opacity: 0px;
+    position: fixed;
+}
+
+.divChangeTable .header .close .closeicon {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACpSURBVHgB7dRLDYAwDAbgDgVIQAIScIYEpIADJCABCeCglGQkI9njH+uBw/6k2WHrvsMeRDU1sTDzKHVIzVJtRs+dmdDwO1sKc5AnPSGRhSuKeZBdqkOh1m4exYoQFFNBAGxSQxKYLgJgMNIgi4wxpwyLZ+q0pRPPwXsviDayM3D1NZCOwXdWhDjz5RiDjzGEoQ4hSALL/lSjSACDetzmgTMP90tPzX9yAfyxby07ZHVkAAAAAElFTkSuQmCC');
+    position: fixed;
+    width: 26px;
+    height: 26px;
+    top: 1rem;
+    gap: 0px;
+    opacity: 0px;
+    right: 15px;
+}
+
+.divChangeTable .country {
+    width: 20.3125rem;
+    padding: 0px 1px;
+    gap: 10px;
+    opacity: 0px;
+    margin-left: 30%;
+    background-color: rgba(43, 43, 43, 0.5);
+    border-radius: 22px;
+    display: none;
+}
+
+.divChangeTable .country .countryItem {
+    width: 20.1875rem;
+    height: 2.73rem;
+    gap: 6px;
+    border-radius: 50px;
+    border: 1px solid var(--sec-c-outline, #46465b);
+    opacity: 0px;
+    display: flex;
+    margin: 5px 0px;
+}
+
+.divChangeTable .country .countryItem .location {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAILSURBVHgB7ZY7TsNAEIZ/PzAlOYI5AXADU9LBCcA3wOIhUWGqFAkEKgqQnBsAJRXmBOQGmBuEliReZqJEipLd9ThCNPBJ0SY7k/nHs+Oxgb+Gg5o0m7dhEARRWSIcB3BUbzDwemdncVEjjFy41bqLPM8/VwqRNpCDfDhEcnoa9wTh4EqcOp3s3HX9F5MowzbPwxv7QoBX5cCBqKwphHACOzu7eH5+erX5WUt9eZkd0JJhCSiBvePj+NFkryq1qGw66Mw7NrtRuN2+36Ul1Nmo9BdfX1gfjbDF3w0hwlYriww2+DDnFBlEk5OT+Hpmq0dH0qd14QrpVuPkc210mGRdZ0Oz3Z8THXN0NN7rLwrrK2YVNtA3GUhkwaaUs4a6wmWpPjTbYbOZhfObvEddHC4moz5RV1gppZ1Aq6t4mBVP06yxsoIHnS8ln8OAbxZ2c/0+NoMAL9RQnBiXlxuoUScGYx0gV1eZdUxWUFDTrZuM1uYajconLM+FzWgV9n23C0snW+Cr7WJZ4SSJWdSauYHK/4iex9RI74B5GMxhPdspogFCYzKGEKmvSJjGZE739U2VH90BN+wLAeKR6XlOSkthcSnoDSSFELEwN5qtjK6L7Ukz/qwwMyljMr/Pz2QSLVCD2q+3TLuddelptD/52aUuFjffFB9LQGd5SI20QZ8GlTjBb0JvnyF/8I+Qb4Savm43lSVMAAAAAElFTkSuQmCC');
+    width: 30px;
+    height: 30px;
+    margin-left: 8px;
+    margin-top: 6px;
+}
+
+.divChangeTable .country .countryItem .name {
+    width: 14.0625rem;
+    height: 1.6875rem;
+    gap: 6px;
+    opacity: 0px;
+}
+
+.divChangeTable .country .countryItem .place {
+    width: 14.1875tem;
+    height: 1.6875rem;
+    gap: 0.375rem;
+    opacity: 0px;
+    color: white;
+    display: flex;
+    margin-top: 10px;
+    padding: 0px 11rem 0px 0px;
+}
+
+.divChangeTable .country .countryItem .place .place1 {
+    height: 1.6875rem;
+    top: -0.03125rem;
+    gap: 0px;
+    opacity: 0px;
+    font-family: Noto Sans TC;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0.04em;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.divChangeTable .country .countryItem .check {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACISURBVHgB7ZXBDYAgDEU7AiM4iiM4ghs4gm7giIzgCN8mxoQDouBvQgIv6Yk2D9omiHSaBcAg1qhkxYXXcGJBILmZhU1E4uktbFiih4vGnnOTEsmU++yidmnCmFOEPzPRxO1LMRiDf5OBuV1PMliscER20CUJGV+SkPElEZmdJJA5WP0rnWo4ASAj6dL1UbviAAAAAElFTkSuQmCC');
+    width: 26px;
+    height: 26px;
+    gap: 0px;
+    opacity: 0px;
+    margin-top: 10px;
+}
