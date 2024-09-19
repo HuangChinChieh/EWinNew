@@ -53,7 +53,7 @@ const GameView = (props) => {
     const [refreshStreamType, setRefreshStreamType] = useState(0);//串流種類，0=HD，1=SD 
     const [shoeResult, setShoeResult] = useState('');
     const countdownInfo = useRef({ lastQueryDate: null, tableTimeoutSecond: 60, remainingSecond: 0 });
-    const [BaccaratType, setBaccaratType] = useState(0); //0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
+    const [baccaratType, setBaccaratType] = useState(0); //0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
     
     //電投相關資訊
     const [PADAvailable, setPADAvailable] = useState(false);
@@ -88,8 +88,7 @@ const GameView = (props) => {
         { styleIndex: 8, chipValue: 10000 }
     ];
 
-    const gameClient = GetGameClient();
-    const orderSequence = 0;
+    const gameClient = GetGameClient();    
 
     useEffect(() => {
         //初次載入，撈取桌台資料
@@ -583,9 +582,6 @@ const GameView = (props) => {
         } else {
             setUserPoint(Q.GameSetOrder.TotalUserChip + Q.GameSetOrder);
         }
-
-
-
 
         checkIsCanBetAndCheckGameSet();
     };
@@ -1278,7 +1274,7 @@ const GameView = (props) => {
                                 gameClient={gameClient}
                                 orderData={orderData}
                                 tableInfo={tableInfo.current}   
-                                BaccaratType={BaccaratType}
+                                BaccaratType={baccaratType}
                                 handleQuery={handleQuery}
                                 >
                                 <GameChipsButton chipsItems={chipsItems}
