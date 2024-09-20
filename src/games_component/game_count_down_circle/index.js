@@ -19,7 +19,7 @@ const CountdownCircle = (props) => {
         let percentage;
         let polygonText;
 
-
+        countdownData.tableTimeoutSecond = 0;
         if (prevCountdownData.current == null) {
             prevCountdownData.current = countdownData;
         } else {
@@ -35,11 +35,7 @@ const CountdownCircle = (props) => {
 
         countdownSecond = countdownSecond < 0 ? 0 : countdownSecond;
 
-        if(countdownData.tableTimeoutSecond == 0){
-            percentage = 1;
-        } else {
-            percentage = countdownSecond / (countdownData.tableTimeoutSecond * 1000);
-        }
+        percentage = countdownSecond / (countdownData.tableTimeoutSecond * 1000);
 
         //原先設計原型做法為以正方形為基準，描繪一個多邊形(最多六邊，少則三邊)，去控制消失的邊長，基於原先設計，去做處理，如果直接畫圓會較為簡單清晰
         if (percentage === 1) {
@@ -61,11 +57,11 @@ const CountdownCircle = (props) => {
         }
 
         if (percentage > 0.33) {
-            animationDom.current.className = `countdown-circle green`;
+            animationDom.current.className = `countdown-circle green show`;
         } else if (percentage > 0.15) {
-            animationDom.current.className = `countdown-circle yellow`;
+            animationDom.current.className = `countdown-circle yellow show`;
         } else {
-            animationDom.current.className = `countdown-circle red`;
+            animationDom.current.className = `countdown-circle red show`;
         }
 
         animationDom.current.style.setProperty('--PathContent', polygonText);
@@ -85,7 +81,7 @@ const CountdownCircle = (props) => {
     };
 
     useEffect(() => {
-        if (props.isCanBet) {
+        if (props.isCanBet && props.getCountdownInfo().tableTimeoutSecond !== 0) {
             requestAnimationFrame(refreshCountdown);
         }
     }, [props.isCanBet]);
@@ -94,7 +90,7 @@ const CountdownCircle = (props) => {
 
     return (
         <div className='countdown-circle-box' >
-            <div ref={animationDom} className={"countdown-circle " + (props.isCanBet ? "show" : "")}>
+            <div ref={animationDom} className={"countdown-circle " + ((props.isCanBet && props.getCountdownInfo().tableTimeoutSecond !== 0) ? "show" : "")}>
                         <div className="countdown-text"></div>
             </div>
         </div>
