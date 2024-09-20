@@ -219,13 +219,17 @@ const GameVideo = (props) => {
             case 1:
                 //sourceRect = { x:40 * htmlFontSize, y:0 * htmlFontSize, width: 60 * htmlFontSize, height: 33.75 * htmlFontSize}; 
                 magnifierCanvas.current.style.display = "block";
-                sourceRect = { x: 0, y: 0.25 * videoTag.videoHeight, width: videoTag.videoWidth, height: videoTag.videoHeight };
+                if(videoTag != 0){
+                    sourceRect = { x: 0, y: 0.25 * videoTag.videoHeight, width: videoTag.videoWidth, height: videoTag.videoHeight };
+                }
 
                 //sourceRect = { x:0, y:0 , width: 800 , height: 448}; 
                 break;
             case 2:
                 magnifierCanvas.current.style.display = "block";
-                sourceRect = { x: 0.2 * videoTag.videoWidth, y: 0.2 * videoTag.videoHeight, width: 0.6 * videoTag.videoWidth, height: 0.6 * videoTag.videoHeight };
+                if(videoTag != 0){
+                    sourceRect = { x: 0.2 * videoTag.videoWidth, y: 0.2 * videoTag.videoHeight, width: 0.6 * videoTag.videoWidth, height: 0.6 * videoTag.videoHeight };
+                }
                 break;
             default:
                 break;
@@ -234,13 +238,20 @@ const GameVideo = (props) => {
 
 
         if (magnifierWorker.current != null) {
-
-            window.createImageBitmap(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height).then(bitmap => {
-                magnifierWorker.current.postMessage({ imageBitmap: bitmap, cmd: "process" }, [bitmap]);
-            })
+    
+           if (window || "createImageBitmap" in window) {
+              if(videoTag != 0){
+                window.createImageBitmap(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height).then(bitmap => {
+                 magnifierWorker.current.postMessage({ imageBitmap: bitmap, cmd: "process" }, [bitmap]);
+                 })
+              }
+            }
         } else {
             ctx = magnifierCanvas.current.getContext("2d");
-            ctx.drawImage(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, magnifierCanvas.current.width, magnifierCanvas.current.height);
+            if(videoTag != 0){
+                ctx.drawImage(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, magnifierCanvas.current.width, magnifierCanvas.current.height);    
+            }
+            
         }
 
         requestAnimationFrame(updateMagnifier);
