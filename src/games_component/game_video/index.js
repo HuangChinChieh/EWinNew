@@ -336,7 +336,7 @@ const GameVideo = (props) => {
             <div id="divVideoArea" ref={videoDom}>
 
             </div>
-            <button style={{ position: "absolute", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={updateMagnifier}>測試</button>
+           
 
             {/* <div id="idBadVideoMessage" class="SwitchSourceDiv" style="">
                 <div class="SwitchSourceN">

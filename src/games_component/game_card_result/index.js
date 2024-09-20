@@ -95,22 +95,26 @@ const Card = (props) => {
     };
 
 
-    useEffect(() => {
-        props.getImage(cardInfoToImgFile(props.singleCardInfo, props.isT), (imgDom) => {
-            backDom.appendChild(imgDom);
-        })
+    useEffect(() => {       
+        if (props.singleCardInfo !== "" && props.singleCardInfo !== "00") {
+            props.getImage(cardInfoToImgFile(props.singleCardInfo, props.isT), (imgDom) => {
+              
+                backDom.current.appendChild(imgDom);
+            });
 
-        if (props.isT) {
-            props.getImage("card_back_t.png", (imgDom) => {
-                frontDom.appendChild(imgDom);
-            })
-        } else {
-            props.getImage("card_back.png", (imgDom) => {
-                frontDom.appendChild(imgDom);
-            })
-        }
-
-    });
+            if (props.isT) {
+                props.getImage("card_back_t.png", (imgDom) => {
+                 
+                    frontDom.current.appendChild(imgDom);
+                })
+            } else {
+                props.getImage("card_back.png", (imgDom) => {
+                 
+                    frontDom.current.appendChild(imgDom);
+                })
+            }
+        }        
+    },[props.singleCardInfo]);
 
     if (props.singleCardInfo !== "" && props.singleCardInfo !== "00") {
         return (<div id={props.id} className={getParentClass()}>{getChildDom()}</div>);
@@ -150,8 +154,8 @@ const CardResult = forwardRef((props, ref) => {
     const [bankerPoint, setBankerPoint] = useState("");
     const imageCache = useRef({});
 
-    const onReady = () => {
-        if (cardInfo !== "") {
+    const onReady = (_cardInfo) => {
+        if (_cardInfo !== "") {
             let tp1 = "";
             let tp2 = "";
             let tp3 = "";
@@ -159,21 +163,21 @@ const CardResult = forwardRef((props, ref) => {
             let tb2 = "";
             let tb3 = "";
 
-            tp1 = cardInfo.substring(0, 2);
-            tp2 = cardInfo.substring(2, 2);
-            tb1 = cardInfo.substring(4, 2);
-            tb2 = cardInfo.substring(6, 2);
+            tp1 = _cardInfo.substring(0, 2);
+            tp2 = _cardInfo.substring(2, 4);
+            tb1 = _cardInfo.substring(4, 6);
+            tb2 = _cardInfo.substring(6, 8);
 
-            if (cardInfo.length > 8) {
-                tp3 = cardInfo.substring(8, 2);
+            if (_cardInfo.length > 8) {
+                tp3 = _cardInfo.substring(8, 10);
                 // 過濾 00
                 if (tp3 === "00") {
                     tp3 = "";
                 }
             }
 
-            if (cardInfo.length > 10) {
-                tb3 = cardInfo.substring(10, 2);
+            if (_cardInfo.length > 10) {
+                tb3 = _cardInfo.substring(10, 12);
                 // 過濾 00
                 if (tb3 === "00") {
                     tb3 = "";
@@ -202,23 +206,17 @@ const CardResult = forwardRef((props, ref) => {
 
             jobList.current.push({ cmd: "cBCard3", data: tb3, delay: 50 });
             jobList.current.push({ cmd: "fBCard3", delay: 50 });
-
-            jobList.current.push({ cmd: "updateWinner", delay: 100 });
+            jobList.current.push({ cmd: "updateWinner", data: {playerPoint: countingPoint(tp1 + tp2 + tp3), bankerPoint: countingPoint(tb1 + tb2 + tb3)}, delay: 100 });
             jobList.current.push({ cmd: "completedCallback", delay: 500 });
 
             startJob();
         }
     };
 
-    const updateWinner = () => {
-        let playerPoint = 0;
-        let bankerPoint = 0;
+    const updateWinner = (playerPoint, bankerPoint) => {
         // let isBankerPair = false;
         // let isPlayerPair = false;
 
-
-        playerPoint = countingPoint(p1CardInfo + p2CardInfo + p3CardInfo);
-        bankerPoint = countingPoint(b1CardInfo + b2CardInfo + b3CardInfo);
 
         // if (p1CardInfo !== "") {
         //     if (p1CardInfo.substring(1, 1) === p2CardInfo.substring(1, 1)) {
@@ -271,11 +269,11 @@ const CardResult = forwardRef((props, ref) => {
                 let pStr = "";
                 let pointValue = "";
 
-                if (cardInfo !== "") {
-                    pStr = cardInfo.substring(0, 2);
+                if (_cardInfo !== "") {
+                    pStr = _cardInfo.substring(0, 2);
                     _cardInfo = _cardInfo.substring(2);
 
-                    pointValue = pStr.substring(1, 1);
+                    pointValue = pStr.substring(1, 2);
                     switch (pointValue) {
                         case "1":
                             retValue += 1;
@@ -377,7 +375,7 @@ const CardResult = forwardRef((props, ref) => {
             //let allowNextJob = true;
 
             isJobRunning.current = true;
-            jobRunningId.current = jobId;
+            jobRunningId.current = jobId.current;
 
             nextJob = jobList.current[0];
             if (nextJob) {
@@ -414,7 +412,7 @@ const CardResult = forwardRef((props, ref) => {
         let Job;
 
         if (jobRunningId.current === jobId.current) {
-            if (jobList.length > 0) {
+            if (jobList.current.length > 0) {
                 Job = jobList.current[0];
                 jobList.current.splice(0, 1);
 
@@ -426,6 +424,7 @@ const CardResult = forwardRef((props, ref) => {
                             if ("data" in Job)
                                 singleCardInfo = Job["data"];
 
+                            
                             setP1CardInfo(singleCardInfo);
                             setP1Flip(false);
 
@@ -484,11 +483,11 @@ const CardResult = forwardRef((props, ref) => {
                             setB3Flip(true);
                             break;
                         case "updateWinner":
-                            updateWinner();
+                            updateWinner(Job["data"]["playerPoint"], Job["data"]["bankerPoint"]);
                             break;
                         case "completedCallback":
-                            if (completedCallback)
-                                completedCallback();
+                            if (completedCallback.current != null)
+                                completedCallback.current();
                             break;
                         default:
                             break;
@@ -508,16 +507,18 @@ const CardResult = forwardRef((props, ref) => {
         jobId.current = jobId.current + 1;
 
         if (isJobRunning.current === true) {
-            if (completedCallback.current == null) {
+            if (completedCallback.current != null) {
                 completedCallback.current();
                 completedCallback.current = null;
             }
         }
 
+
+        completedCallback.current = _cbCompleted;
         stopJob();
 
         setCardInfo(_cardInfo);
-        onReady();
+        onReady(_cardInfo);
     };
 
     const closeCardResult = () => {
@@ -588,13 +589,15 @@ const CardResult = forwardRef((props, ref) => {
 
 
 
-    const getImage = useCallback((imgSrcName, cb) => {
+    const getImage = useCallback((imgSrcName, cb) => { 
         if (imgSrcName in imageCache.current) {
 
             if (imageCache.current[imgSrcName].complete) {
+                if(cb)
                 cb(imageCache.current[imgSrcName].cloneNode(true));
             } else {
                 imageCache.current[imgSrcName].addEventListener('load', () => {
+                    if(cb)
                     cb(imageCache.current[imgSrcName].cloneNode(true));
                 });
             }
@@ -602,9 +605,10 @@ const CardResult = forwardRef((props, ref) => {
 
         } else {
             const image = new Image();
-            image.src = "Images/cards/" + imgSrcName;
+            image.src = "/images/cardImg/cards/" + imgSrcName;
             imageCache.current[imgSrcName] = image;
             imageCache.current[imgSrcName].addEventListener('load', () => {
+                if(cb)
                 cb(imageCache.current[imgSrcName].cloneNode(true));
             });
         }
@@ -635,8 +639,8 @@ const CardResult = forwardRef((props, ref) => {
     }));
 
     return (
-        <div className={"openCardZoneWrapper " + isOpening && "isOpening"}>
-            <div id="left_card" className={"left_cardE openCard " + (resultType === "Banker" && "result_bankerBG")}>
+        <div className={"open_card_main " + (isOpening ? "isOpening" : "")}>
+            <div id="left_card" className={"left_cardE openCard " + (resultType === "Banker" ? "result_bankerBG" : "")}>
                 <div id="idPlayerTitle">
                     <div id="idPlayerPoint">{playerPoint}</div>
                     <div className="PlayerPoint">

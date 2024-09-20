@@ -68,12 +68,18 @@ const CountdownCircle = (props) => {
         animationDom.current.querySelector('.countdown-text').innerText = Math.ceil(countdownSecond / 1000).toString();
         //由於倒數時間更動頻繁，不適合用state
 
-        if (parseInt(countdownSecond / 1000) === 0) {
-            props.setIsCanBet(false);   
-            animationDom.current.classList.remove("show");                     
-        }else{            
-             requestAnimationFrame(refreshCountdown);
-             animationDom.current.classList.add("show");
+
+        if(countdownData.tableTimeoutSecond === 0){
+            requestAnimationFrame(refreshCountdown);
+            animationDom.current.classList.add("show"); 
+        }else{
+            if (parseInt(countdownSecond / 1000) === 0) {
+                props.setIsCanBet(false);   
+                animationDom.current.classList.remove("show");                     
+            }else{            
+                 requestAnimationFrame(refreshCountdown);
+                 animationDom.current.classList.add("show");
+            }        
         }        
     };
 
