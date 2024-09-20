@@ -13,7 +13,7 @@ const CountdownCircle = (props) => {
     // };
 
     const refreshCountdown = () => {
-       
+
         const countdownData = props.getCountdownInfo();
         let countdownSecond = countdownData.remainingSecond * 1000 - (new Date() - countdownData.lastQueryDate);
         let percentage;
@@ -70,20 +70,20 @@ const CountdownCircle = (props) => {
 
 
         if (parseInt(countdownSecond / 1000) === 0) {
-            if(countdownData.tableTimeoutSecond !== 0){
-                props.setIsCanBet(false);   
-            }   else{
-                requestAnimationFrame(refreshCountdown);    
-            }                                       
-        }else{            
-            requestAnimationFrame(refreshCountdown);      
-        }            
+            if (countdownData.tableTimeoutSecond !== 0) {
+                props.setIsCanBet(false);
+            } else {
+                requestAnimationFrame(refreshCountdown);
+            }
+        } else {
+            requestAnimationFrame(refreshCountdown);
+        }
     };
 
-    useEffect(() => {       
-        if (props.isCanBet) {         
-            requestAnimationFrame(refreshCountdown);          
-        } 
+    useEffect(() => {
+        if (props.isCanBet) {
+            requestAnimationFrame(refreshCountdown);
+        }
     }, [props.isCanBet]);
 
 
@@ -91,7 +91,7 @@ const CountdownCircle = (props) => {
     return (
         <div className='countdown-circle-box' >
             <div ref={animationDom} className={"countdown-circle " + props.isCanBet ? "show" : ""}>
-                        <div className="countdown-text"></div>
+                <div className="countdown-text"></div>
             </div>
         </div>
     );
