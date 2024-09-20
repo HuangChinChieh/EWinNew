@@ -121,8 +121,7 @@ function orderReducer(state, action) {
         newOrderData.orderSequence = 0;
   
         return newOrderData;
-  
-
+     
     default:
       throw new Error(`Unhandled action type: ${action.type}`);
   }

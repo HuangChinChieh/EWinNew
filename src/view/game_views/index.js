@@ -297,8 +297,7 @@ const GameView = (props) => {
                             if (gameSetID !== 0) {
                                 //傳統桌台，使用桌台限紅
                                 //資訊會從GetTableInfo取得
-                            } else {
-                                debugger
+                            } else {                            
                                 setUseBetLimit(result.value);
                             }
                             //#endregion
@@ -1259,6 +1258,10 @@ const GameView = (props) => {
     */
                     roundNumber === "" ? (<div></div>) : (
                         <div className='game-view-box' >
+                         <button style={{ position: "absolute", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={()=>{
+                            //cardResultControl.current.OpenCard("4Q1J251Q3547",()=>{})
+                            setIsCanBet(true);
+                            }}>測試</button>                        
                             <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>
                             <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName}></GameVideo>
                             <GameRoadMap shoeResult={shoeResult}></GameRoadMap>

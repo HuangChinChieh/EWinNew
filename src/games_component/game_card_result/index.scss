@@ -1,7 +1,7 @@
-.openCardZoneWrapper {
-    position: relative;
-    width: 1920px;
-    height: 300px;
+.open_card_main {
+    position: absolute;
+    width: 120rem;
+    height: 20rem;
     background: rgba(0, 0, 0, 0.8);
     // background-image: url("../image/CardResultBG_L.png");
     background-repeat: no-repeat;
@@ -9,6 +9,14 @@
     -moz-animation: bgleft 0.8s ease-out;
     -o-animation: bgleft 0.8s ease-out;
     animation: bgleft 0.8s ease-out;
+    bottom: 0;
+    z-index: 10;
+    display: none;
+    
+    &.isOpening{
+        display: block;
+
+    }
 
     .flip-container {
         -webkit-perspective: 1000px;
@@ -25,8 +33,8 @@
     .flip-container,
     .front,
     .back {
-        width: 148px;
-        height: 196px;
+        width: 9.25rem;
+        height: 12.25rem;
     }
 
     .flip-container2 {
@@ -44,8 +52,8 @@
     .flip-container2,
     .front,
     .back {
-        width: 148px;
-        height: 196px;
+        width: 9.25rem;
+        height: 12.25rem;
     }
 
     .flip-container2 .back {
@@ -85,8 +93,8 @@
 
     .front img,
     .back img {
-        width: 148px;
-        height: 196px;
+        width: 9.25rem;
+        height: 12.25rem;
         overflow: hidden;
     }
 
@@ -123,8 +131,8 @@
     .flip-container_t,
     .front_t,
     .back_t {
-        width: 196px;
-        height: 148px;
+        width: 12.25rem;
+        height: 9.25rem;
     }
 
     .flip-container2_t {
@@ -142,8 +150,8 @@
     .flip-container2_t,
     .front_t,
     .back_t {
-        width: 196px;
-        height: 148px;
+        width: 12.25rem;
+        height: 9.25rem;
     }
 
     .flip-container2_t .back_t {
@@ -183,8 +191,8 @@
 
     .front_t img,
     .back_t img {
-        width: 196px;
-        height: 148px;
+        width: 12.25rem;
+        height: 9.25rem;
         overflow: hidden;
     }
 
@@ -210,7 +218,7 @@
     webkit-keyframes bgleft {
         from {
             opacity: 0.5;
-            background-position: -300px center;
+            background-position: -20rem center;
         }
 
         to {
@@ -222,7 +230,7 @@
     @-moz-keyframes bgleft {
         from {
             opacity: 0.5;
-            background-position: -300px center;
+            background-position: -20rem center;
         }
 
         to {
@@ -234,7 +242,7 @@
     @-o-keyframes bgleft {
         from {
             opacity: 0.5;
-            background-position: -300px center;
+            background-position: -20rem center;
         }
 
         to {
@@ -246,7 +254,7 @@
     @keyframes bgleft {
         from {
             opacity: 0.5;
-            background-position: -300px center;
+            background-position: -20rem center;
         }
 
         to {
@@ -274,7 +282,7 @@
     @-webkit-keyframes bgright {
         from {
             opacity: 0.5;
-            background-position: 300px center;
+            background-position: 20rem center;
 
         }
 
@@ -287,7 +295,7 @@
     @-moz-keyframes bgright {
         from {
             opacity: 0.5;
-            background-position: 300px center;
+            background-position: 20rem center;
 
         }
 
@@ -300,7 +308,7 @@
     @-o-keyframes bgright {
         from {
             opacity: 0.5;
-            background-position: 300px center;
+            background-position: 20rem center;
 
         }
 
@@ -313,7 +321,7 @@
     @keyframes bgright {
         from {
             opacity: 0.5;
-            background-position: 300px center;
+            background-position: 20rem center;
 
         }
 
@@ -326,8 +334,8 @@
     #left_card {
         position: relative;
         float: left;
-        width: 960px;
-        height: 300px;
+        width: 50%;
+        height: 100%;
     }
 
     .left_cardE {
@@ -424,8 +432,8 @@
 
     #left_card #pCard1 {
         position: absolute;
-        top: 50px;
-        left: 260px;
+        top: 3.125rem;
+        left: 16.25rem;
         opacity: 0.0;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
@@ -439,8 +447,8 @@
 
     #left_card #pCard2 {
         position: absolute;
-        top: 50px;
-        left: 420px;
+        top: 3.125rem;
+        left: 26.25rem;
         opacity: 0.0;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
@@ -458,8 +466,8 @@
 
     #left_card #pCard3 {
         position: absolute;
-        top: 75px;
-        left: 40px;
+        top: 4.6875rem;
+        left: 2.5rem;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
         -o-animation: carddown 0.8s ease-out;
@@ -469,8 +477,8 @@
     #right_card {
         position: relative;
         float: right;
-        width: 960px;
-        height: 300px;
+        width: 50%;
+        height: 100%;
     }
 
     .right_cardE {
@@ -566,8 +574,8 @@
 
     #right_card #bCard1 {
         position: absolute;
-        top: 50px;
-        right: 420px;
+        top: 3.125rem;
+        right: 26.25rem;
         opacity: 0.0;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
@@ -581,8 +589,8 @@
 
     #right_card #bCard2 {
         position: absolute;
-        top: 50px;
-        right: 260px;
+        top: 3.125rem;
+        right: 16.25rem;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
         -o-animation: carddown 0.8s ease-out;
@@ -600,8 +608,8 @@
 
     #right_card #bCard3 {
         position: absolute;
-        top: 75px;
-        right: 40px;
+        top: 4.6875rem;
+        right: 2.5rem;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
         -o-animation: carddown 0.8s ease-out;
@@ -611,11 +619,11 @@
 
     #left_card img,
     #right_card img {
-        border-radius: 12px;
-        -webkit-box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
-        -moz-box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
-        -o-box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
-        box-shadow: inset 0px 0px 10px 3px #fff, 0px 5px 10px 1px rgba(0, 0, 0, 0.5);
+        border-radius: 0.75rem;
+        -webkit-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
+        -moz-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
+        -o-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
     }
 
     @-webkit-keyframes carddown {
