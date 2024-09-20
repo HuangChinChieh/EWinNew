@@ -72,9 +72,11 @@ const CountdownCircle = (props) => {
         if (parseInt(countdownSecond / 1000) === 0) {
             if(countdownData.tableTimeoutSecond !== 0){
                 props.setIsCanBet(false);   
-            }                                          
+            }   else{
+                requestAnimationFrame(refreshCountdown);    
+            }                                       
         }else{            
-             requestAnimationFrame(refreshCountdown);          
+            requestAnimationFrame(refreshCountdown);      
         }            
     };
 
