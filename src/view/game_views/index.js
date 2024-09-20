@@ -582,11 +582,21 @@ const GameView = (props) => {
         } else {
             setUserPoint(Q.GameSetOrder.TotalUserChip + Q.GameSetOrder);
         }
+        
+        if (Q.SelfOrder) {
+            dispatchOrderData({
+                type: "processOrderData",
+                payload: {
+                    SelfOrder: Q.SelfOrder
+                }
+            });
+        }
 
         checkIsCanBetAndCheckGameSet();
     };
 
     const checkIsCanBetAndCheckGameSet = () => {
+        debugger
         if (queryInfo.current == null || tableInfo.current == null) {
             return;
         }
@@ -689,6 +699,7 @@ const GameView = (props) => {
                                             }
                                             break;
                                         case 1:
+                                            
                                             if (Q.SelfOrder.OrderCmd) {
                                                 let cmdText = "";
 
@@ -710,7 +721,6 @@ const GameView = (props) => {
                                                 }
 
                                                 checkRealStopBet(false);
-
 
                                             } else if (orderData.confirmValue !== 0) {
                                                 checkRealStopBet(false);
@@ -1273,8 +1283,8 @@ const GameView = (props) => {
                                 gameSetID={gameSetID}
                                 gameClient={gameClient}
                                 orderData={orderData}
-                                tableInfo={tableInfo.current}   
-                                BaccaratType={baccaratType}
+                                getTableInfo={getTableInfo}   
+                                baccaratType={baccaratType}
                                 handleQuery={handleQuery}
                                 >
                                 <GameChipsButton chipsItems={chipsItems}

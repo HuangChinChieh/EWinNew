@@ -10,7 +10,7 @@ import GameControlButton from 'games_component/game_buttons/game_gameset_btn';
 
 const GameFooterArea = (props) => {
     const [middleBtnType, setMiddleBtnType] = useState("Chip")
-    const BaccaratType = props.BaccaratType;
+    const BaccaratType = props.baccaratType;
 
     const updateMiddleBtnType = useCallback((v) => {
         setMiddleBtnType(v);
@@ -26,9 +26,9 @@ const GameFooterArea = (props) => {
                     gameSetID={props.gameSetID}
                     gameClient={props.gameClient}
                     orderData={props.orderData}
-                    tableInfo={props.tableInfo}
+                    getTableInfo={props.getTableInfo}
                     updateMiddleBtnType={updateMiddleBtnType}
-                    BaccaratType={BaccaratType}
+                    baccaratType={BaccaratType}
                     handleQuery={props.handleQuery}
                 />
             } else {

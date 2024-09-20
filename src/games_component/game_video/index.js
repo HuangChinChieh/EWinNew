@@ -234,10 +234,12 @@ const GameVideo = (props) => {
 
 
         if (magnifierWorker.current != null) {
-
-            window.createImageBitmap(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height).then(bitmap => {
-                magnifierWorker.current.postMessage({ imageBitmap: bitmap, cmd: "process" }, [bitmap]);
-            })
+    
+           if (window || "createImageBitmap" in window) {
+              window.createImageBitmap(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height).then(bitmap => {
+               magnifierWorker.current.postMessage({ imageBitmap: bitmap, cmd: "process" }, [bitmap]);
+               })
+            }
         } else {
             ctx = magnifierCanvas.current.getContext("2d");
             ctx.drawImage(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height, 0, 0, magnifierCanvas.current.width, magnifierCanvas.current.height);
