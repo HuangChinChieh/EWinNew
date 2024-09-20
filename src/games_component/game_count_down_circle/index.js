@@ -69,18 +69,13 @@ const CountdownCircle = (props) => {
         //由於倒數時間更動頻繁，不適合用state
 
 
-        if(countdownData.tableTimeoutSecond === 0){
-            requestAnimationFrame(refreshCountdown);
-            animationDom.current.classList.add("show"); 
-        }else{
-            if (parseInt(countdownSecond / 1000) === 0) {
+        if (parseInt(countdownSecond / 1000) === 0) {
+            if(countdownData.tableTimeoutSecond !== 0){
                 props.setIsCanBet(false);   
-                animationDom.current.classList.remove("show");                     
-            }else{            
-                 requestAnimationFrame(refreshCountdown);
-                 animationDom.current.classList.add("show");
-            }        
-        }        
+            }                                          
+        }else{            
+             requestAnimationFrame(refreshCountdown);          
+        }            
     };
 
     useEffect(() => {       
@@ -93,7 +88,7 @@ const CountdownCircle = (props) => {
 
     return (
         <div className='countdown-circle-box' >
-            <div ref={animationDom} className="countdown-circle">
+            <div ref={animationDom} className={"countdown-circle " + props.isCanBet ? "show" : ""}>
                         <div className="countdown-text"></div>
             </div>
         </div>
