@@ -595,7 +595,7 @@ const GameView = (props) => {
     };
 
     const checkIsCanBetAndCheckGameSet = () => {
-        debugger
+        
         if (queryInfo.current == null || tableInfo.current == null) {
             return;
         }
