@@ -1272,7 +1272,7 @@ const GameView = (props) => {
                             //cardResultControl.current.OpenCard("4Q1J251Q3547",()=>{})
                             setIsCanBet(true);
                             }}>測試</button>                        
-                            <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>
+                            <CountdownCircle isCanBet={true} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>
                             <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName}></GameVideo>
                             <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
                             <GameBettingArea isCanBet={isCanBet}
