@@ -34,8 +34,12 @@ const CountdownCircle = (props) => {
         }
 
         countdownSecond = countdownSecond < 0 ? 0 : countdownSecond;
-        percentage = countdownSecond / (countdownData.tableTimeoutSecond * 1000);
 
+        if(countdownData.tableTimeoutSecond == 0){
+            percentage = 1;
+        } else {
+            percentage = countdownSecond / (countdownData.tableTimeoutSecond * 1000);
+        }
 
         //原先設計原型做法為以正方形為基準，描繪一個多邊形(最多六邊，少則三邊)，去控制消失的邊長，基於原先設計，去做處理，如果直接畫圓會較為簡單清晰
         if (percentage === 1) {
@@ -90,7 +94,7 @@ const CountdownCircle = (props) => {
 
     return (
         <div className='countdown-circle-box' >
-            <div ref={animationDom} className={"countdown-circle " + props.isCanBet ? "show" : ""}>
+            <div ref={animationDom} className={"countdown-circle " + (props.isCanBet ? "show" : "")}>
                         <div className="countdown-text"></div>
             </div>
         </div>
