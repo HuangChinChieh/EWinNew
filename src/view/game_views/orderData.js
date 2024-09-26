@@ -74,16 +74,17 @@ function orderReducer(state, action) {
 
             return newOrderData;
         case 'clearBet':
-            //待補上動畫          
             newOrderData.totalValue = 0;
             newOrderData.confirmValue = 0;
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                newOrderData[areaType].unConfirmValue = 0;
-                newOrderData[areaType].totalValue = 0;
-                newOrderData[areaType].confirmValue = 0;
-                newOrderData[areaType].chips.length = 0;
+                if (newOrderData[areaType].totalValue != undefined) {
+                    newOrderData[areaType].unConfirmValue = 0;
+                    newOrderData[areaType].totalValue = 0;
+                    newOrderData[areaType].confirmValue = 0;
+                    newOrderData[areaType].chips.length = 0;
+                }
             }
 
             return newOrderData;
@@ -93,11 +94,13 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
-                newOrderData[areaType].unConfirmValue = 0;
-
-                newOrderData[areaType].confirmValue = 0;
-                newOrderData[areaType].chips.length = 0;
+                if (newOrderData[areaType].totalValue != undefined) {
+                    newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
+                    newOrderData[areaType].unConfirmValue = 0;
+    
+                    newOrderData[areaType].confirmValue = 0;
+                    newOrderData[areaType].chips.length = 0;
+                }
             }
 
             return newOrderData;
@@ -106,10 +109,12 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
-                newOrderData[areaType].unConfirmValue = 0;
-
-                newOrderData[areaType].unConfirmValue = 0;
+                if (newOrderData[areaType].confirmValue != undefined) {
+                    newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
+                    newOrderData[areaType].unConfirmValue = 0;
+    
+                    newOrderData[areaType].unConfirmValue = 0;
+                }
             }
 
             newOrderData.orderSequence += 1;
@@ -125,36 +130,96 @@ function orderReducer(state, action) {
                 return newOrderData;
             }                        
         case 'processOrderData':
-            newOrderData.confirmValue = new BigNumber(action.payload.SelfOrder.OrderBanker).plus(action.payload.SelfOrder.OrderPlayer).plus(action.payload.SelfOrder.OrderTie).plus(action.payload.SelfOrder.OrderBankerPair).plus(action.payload.SelfOrder.OrderPlayerPair).toNumber();
-            newOrderData.unConfirmValue = 0;
-            newOrderData.orderSequence = new BigNumber(action.payload.SelfOrder.OrderSequence).toNumber();
+            let isChanged = false;
+            let totalValue = 0;
+            let totalConfirmValue = 0;
+            let totalunConfirmValue = 0;
+            let OrderTie = new BigNumber(action.payload.SelfOrder.OrderTie);
+            let OrderBanker = new BigNumber(action.payload.SelfOrder.OrderBanker);
+            let OrderPlayer = new BigNumber(action.payload.SelfOrder.OrderPlayer);
+            let OrderBankerPair = new BigNumber(action.payload.SelfOrder.OrderBankerPair);
+            let OrderPlayerPair = new BigNumber(action.payload.SelfOrder.OrderPlayerPair);
+            let OrderSequence =new BigNumber(action.payload.SelfOrder.OrderSequence);
 
-            if (new BigNumber(newOrderData['Tie'].confirmValue).plus(newOrderData['Tie'].unConfirmValue).toNumber() == new BigNumber(action.payload.SelfOrder.OrderTie)) {
-                newOrderData['Tie'].confirmValue = new BigNumber(action.payload.SelfOrder.OrderTie).toNumber();
-                newOrderData['Tie'].unConfirmValue = 0;
+            if (state.unConfirmValue !== 0) {
+                if (new BigNumber(newOrderData['Tie'].confirmValue).plus(newOrderData['Tie'].unConfirmValue) == OrderTie) {
+                    newOrderData['Tie'].unConfirmValue = 0;               
+                    isChanged = true;
+                }
+
+                if (new BigNumber(newOrderData['Banker'].confirmValue).plus(newOrderData['Banker'].unConfirmValue) == OrderBanker) {
+                    newOrderData['Banker'].unConfirmValue = 0;
+                    isChanged = true;
+                }
+
+                if (new BigNumber(newOrderData['Player'].confirmValue).plus(newOrderData['Player'].unConfirmValue) == OrderPlayer) {
+                    newOrderData['Player'].unConfirmValue = 0;
+                    isChanged = true;
+                }
+
+                if (new BigNumber(newOrderData['BankerPair'].confirmValue).plus(newOrderData['BankerPair'].unConfirmValue) == OrderBankerPair) {
+                    newOrderData['BankerPair'].unConfirmValue = 0;
+                    isChanged = true;
+                }
+
+                if (new BigNumber(newOrderData['PlayerPair'].confirmValue).plus(newOrderData['PlayerPair'].unConfirmValue) == OrderPlayerPair) {
+                    newOrderData['PlayerPair'].unConfirmValue = 0;
+                    isChanged = true;
+                }
             }
 
-            if (new BigNumber(newOrderData['Banker'].confirmValue).plus(newOrderData['Banker'].unConfirmValue).toNumber() == new BigNumber(action.payload.SelfOrder.OrderBanker)) {
-                newOrderData['Banker'].confirmValue = new BigNumber(action.payload.SelfOrder.OrderBanker).toNumber();
-                newOrderData['Banker'].unConfirmValue = 0;
+            if (newOrderData['Tie'].confirmValue !== OrderTie.toNumber()) {
+                newOrderData['Tie'].confirmValue = OrderTie.toNumber();
+                isChanged = true;
             }
 
-            if (new BigNumber(newOrderData['Player'].confirmValue).plus(newOrderData['Player'].unConfirmValue).toNumber() == new BigNumber(action.payload.SelfOrder.OrderPlayer)) {
-                newOrderData['Player'].confirmValue = new BigNumber(action.payload.SelfOrder.OrderPlayer).toNumber();
-                newOrderData['Player'].unConfirmValue = 0;
+            if (newOrderData['Banker'].confirmValue !== OrderBanker.toNumber()) {
+                newOrderData['Banker'].confirmValue = OrderBanker.toNumber();
+                isChanged = true;
             }
 
-            if (new BigNumber(newOrderData['BankerPair'].confirmValue).plus(newOrderData['BankerPair'].unConfirmValue).toNumber() == new BigNumber(action.payload.SelfOrder.OrderBankerPair)) {
-                newOrderData['BankerPair'].confirmValue = new BigNumber(action.payload.SelfOrder.OrderBankerPair).toNumber();
-                newOrderData['BankerPair'].unConfirmValue = 0;
+            if (newOrderData['Player'].confirmValue !== OrderPlayer.toNumber()) {
+                newOrderData['Player'].confirmValue = OrderPlayer.toNumber();
+                isChanged = true;
             }
 
-            if (new BigNumber(newOrderData['PlayerPair'].confirmValue).plus(newOrderData['PlayerPair'].unConfirmValue).toNumber() == new BigNumber(action.payload.SelfOrder.OrderPlayerPair)) {
-                newOrderData['PlayerPair'].confirmValue = new BigNumber(action.payload.SelfOrder.OrderPlayerPair).toNumber();
-                newOrderData['PlayerPair'].unConfirmValue = 0;
+            if (newOrderData['BankerPair'].confirmValue !== OrderBankerPair.toNumber()) {
+                newOrderData['BankerPair'].confirmValue = OrderBankerPair.toNumber();
+                isChanged = true;
             }
 
-            return newOrderData;
+            if (newOrderData['PlayerPair'].confirmValue !== OrderPlayerPair.toNumber()) {
+                newOrderData['PlayerPair'].confirmValue = OrderPlayerPair.toNumber();
+                isChanged = true;
+            }
+            
+            if (newOrderData.orderSequence !== OrderSequence){
+                newOrderData.orderSequence = OrderSequence.toNumber();
+                isChanged = true;
+            }
+            
+            if (isChanged) {
+                for (let type in newOrderData) {
+                    if (newOrderData[type].totalValue != undefined) {
+                        newOrderData[type].totalValue = newOrderData[type].confirmValue + newOrderData[type].unConfirmValue;
+                        totalValue = new BigNumber(totalValue).toNumber() + new BigNumber(newOrderData[type].totalValue).toNumber();
+                        totalConfirmValue = new BigNumber(totalConfirmValue).toNumber() + new BigNumber(newOrderData[type].confirmValue).toNumber();
+                        totalunConfirmValue = new BigNumber(totalunConfirmValue).toNumber() + new BigNumber(newOrderData[type].unConfirmValue).toNumber();
+    
+                        if (newOrderData[type].totalValue == 0) {
+                            newOrderData[type].chips.length = 0;
+                        }
+                    }
+                }
+
+                newOrderData.totalValue = new BigNumber(totalValue).toNumber();
+                newOrderData.confirmValue = new BigNumber(totalConfirmValue).toNumber();
+                newOrderData.unConfirmValue = new BigNumber(totalunConfirmValue).toNumber();
+
+                return newOrderData
+            } else {
+                return state;
+            }
 
         default:
             throw new Error(`Unhandled action type: ${action.type}`);
