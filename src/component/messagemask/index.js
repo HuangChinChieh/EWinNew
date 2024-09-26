@@ -1,7 +1,7 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, useCallback, useState, memo } from 'react';
 
 const MsgMaskResult = forwardRef((props, ref) => {
-    //採用關閉，開啟曝露給父組件的設計方式
+    //嚙衝伐蕭嚙踝蕭嚙踝蕭嚙璀嚙罷嚙踝蕭嚙緯嚙磅嚙踝蕭嚙踝蕭嚙調件的設嚙緘嚙質式
     const [showMsgMask, setShowMsgMask] = useState(false);
     const [msgMaskAlertMsg, setMsgMaskAlertMsg] = useState('');
     const fn_click = useRef(null);

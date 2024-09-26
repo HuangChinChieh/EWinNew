@@ -556,7 +556,7 @@ const GameView = (props) => {
         }
 
         if (tableInfo.current.CardInfoRound != null && tableInfo.current.CardInfoRound !== "") {
-            if (prevTableInfo.CardInfoRound != null) {
+            if (prevTableInfo != null && prevTableInfo.CardInfoRound != null) {
                 if (prevTableInfo.CardInfoRound !== tableInfo.current.CardInfoRound) {
                     //開牌動畫                              
                     showResult();
@@ -603,6 +603,7 @@ const GameView = (props) => {
         }
 
         if (Q.SelfOrder) {
+            debugger;
             dispatchOrderData({
                 type: "processOrderData",
                 payload: {
@@ -747,10 +748,8 @@ const GameView = (props) => {
                                             } else {
                                                 //允許下注
 
-                                                if (countdownSecond > 0 || (countdownInfo.current.tableTimeoutSecond === 0)) {
-                                                    setIsCanBet(true);
-
-                                                    var minBetValue = 0;
+                                                if (countdownSecond > 0 || (countdownInfo.current.tableTimeoutSecond === 0)) {                                                  
+                                                    let minBetValue = 0;
 
                                                     if (useBetLimit != null) {
                                                         // 判斷最低檯紅
@@ -761,8 +760,10 @@ const GameView = (props) => {
 
                                                     if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
                                                         msgMaskResultControl.current.HideMask();
+                                                        setIsCanBet(true);
                                                     } else {
                                                         msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => { });
+                                                        
                                                     }
                                                 } else {
                                                     checkRealStopBet(false);
@@ -884,6 +885,7 @@ const GameView = (props) => {
                                 setIsCanBet(false);
                             }
                         } else {
+                            //有指令
                             setIsCanBet(false);
                         }
                     } else {
@@ -910,9 +912,6 @@ const GameView = (props) => {
     };
 
     //#endregion
-
-
-
 
 
     //#region notify相關
@@ -1344,34 +1343,36 @@ const GameView = (props) => {
 
         //區域顯示動畫
         if ((tableInfo.current.ShoeResult != null) && (tableInfo.current.ShoeResult !== "")) {
-            let winAreas = [];
-            const roundResult = tableInfo.current.ShoeResult.substring(tableInfo.current.ShoeResult.length - 1, 1);;
-            const roundResultObj = getResultObject(roundResult);
-            // 顯示動畫
-
-            switch (roundResultObj.WinnerType) {
-                case 1:
-                    winAreas.push("Player");
-                    break;
-                case 2:
-                    winAreas.push("Banker");
-                    break;
-                case 3:
-                    winAreas.push("Tie");
-                    break;
-                default:
-                    break;
-            }
-
-            if (roundResultObj.IsBankerPair === true) {
-                winAreas.push("BankerPair");
-            }
-          
-            if (roundResultObj.IsPlayerPair === true) {
-                winAreas.push("PlayerPair");
-            }
-
-           betAreaControl.current.ShowWinAreas(winAreas);
+            if(betAreaControl.current != null){
+                //判斷是否尚未初始化，剛進入桌台
+                let winAreas = [];
+                const roundResult = tableInfo.current.ShoeResult.substring(tableInfo.current.ShoeResult.length - 1, 1);;
+                const roundResultObj = getResultObject(roundResult);
+                // 顯示動畫
+    
+                switch (roundResultObj.WinnerType) {
+                    case 1:
+                        winAreas.push("Player");
+                        break;
+                    case 2:
+                        winAreas.push("Banker");
+                        break;
+                    case 3:
+                        winAreas.push("Tie");
+                        break;
+                    default:
+                        break;
+                }
+    
+                if (roundResultObj.IsBankerPair === true) {
+                    winAreas.push("BankerPair");
+                }
+              
+                if (roundResultObj.IsPlayerPair === true) {
+                    winAreas.push("PlayerPair");
+                }
+                betAreaControl.current.ShowWinAreas(winAreas);
+            }                                 
         }
 
         //撲克牌動畫
