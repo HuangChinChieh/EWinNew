@@ -79,10 +79,12 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                newOrderData[areaType].unConfirmValue = 0;
-                newOrderData[areaType].totalValue = 0;
-                newOrderData[areaType].confirmValue = 0;
-                newOrderData[areaType].chips.length = 0;
+                if (newOrderData[areaType].totalValue != undefined) {
+                    newOrderData[areaType].unConfirmValue = 0;
+                    newOrderData[areaType].totalValue = 0;
+                    newOrderData[areaType].confirmValue = 0;
+                    newOrderData[areaType].chips.length = 0;
+                }
             }
 
             return newOrderData;
@@ -92,11 +94,13 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
-                newOrderData[areaType].unConfirmValue = 0;
-
-                newOrderData[areaType].confirmValue = 0;
-                newOrderData[areaType].chips.length = 0;
+                if (newOrderData[areaType].totalValue != undefined) {
+                    newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
+                    newOrderData[areaType].unConfirmValue = 0;
+    
+                    newOrderData[areaType].confirmValue = 0;
+                    newOrderData[areaType].chips.length = 0;
+                }
             }
 
             return newOrderData;
@@ -105,10 +109,12 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
-                newOrderData[areaType].unConfirmValue = 0;
-
-                newOrderData[areaType].unConfirmValue = 0;
+                if (newOrderData[areaType].confirmValue != undefined) {
+                    newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
+                    newOrderData[areaType].unConfirmValue = 0;
+    
+                    newOrderData[areaType].unConfirmValue = 0;
+                }
             }
 
             newOrderData.orderSequence += 1;
@@ -192,10 +198,16 @@ function orderReducer(state, action) {
             
             if (isChanged) {
                 for (let type in newOrderData) {
-                    newOrderData[type].totalValue = newOrderData[type].confirmValue + newOrderData[type].unConfirmValue;
-                    totalValue = totalValue + newOrderData[type].totalValue;
-                    totalConfirmValue = totalConfirmValue + newOrderData[type].confirmValue;
-                    totalunConfirmValue = totalunConfirmValue + newOrderData[type].unConfirmValue;
+                    if (newOrderData[type].totalValue != undefined) {
+                        newOrderData[type].totalValue = newOrderData[type].confirmValue + newOrderData[type].unConfirmValue;
+                        totalValue = new BigNumber(totalValue).toNumber() + new BigNumber(newOrderData[type].totalValue).toNumber();
+                        totalConfirmValue = new BigNumber(totalConfirmValue).toNumber() + new BigNumber(newOrderData[type].confirmValue).toNumber();
+                        totalunConfirmValue = new BigNumber(totalunConfirmValue).toNumber() + new BigNumber(newOrderData[type].unConfirmValue).toNumber();
+    
+                        if (newOrderData[type].totalValue == 0) {
+                            newOrderData[type].chips.length = 0;
+                        }
+                    }
                 }
 
                 newOrderData.totalValue = new BigNumber(totalValue).toNumber();

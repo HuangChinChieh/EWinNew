@@ -41,7 +41,8 @@ const GameControlButton = (props) => {
     let baccaratType = props.baccaratType;
     const gameSetID = props.gameSetID;
     const roadMapNumber = props.roadMapNumber;
-    const orderSequence = props.orderData.orderSequence;
+    const orderSequence = useRef();
+    orderSequence.current = props.orderData.orderSequence;
     //const areaCode = props.areaCode;
     const getTableInfo = props.getTableInfo;
     const areaCode = "";
@@ -124,7 +125,7 @@ const GameControlButton = (props) => {
                         roadMapNumber,
                         tableInfo.shoeNumber,
                         tableInfo.roundNumber,
-                        orderSequence + 1,
+                        orderSequence.current + 1,
                         cmd,
                         function (success, o) {
                             if (success) {
@@ -138,7 +139,7 @@ const GameControlButton = (props) => {
                                     alertMsg("錯誤", "網路異常, 請重新操作");
                                 } else {
                                     if (o != null && o != "") {
-                                        alertMsg(o);
+                                        alertMsg(o.message);
                                     }
                                 }
                             }
@@ -183,7 +184,7 @@ const GameControlButton = (props) => {
                                     alertMsg("錯誤", "網路異常, 請重新操作");
                                 } else {
                                     if (o != null && o != "") {
-                                        alertMsg(o);
+                                        alertMsg(o.message);
                                     }
                                 }
                             }
@@ -333,7 +334,7 @@ const AddChip = (props) => {
                                 alertMsg("錯誤", "網路異常, 請重新操作");
                             } else {
                                 if (o != null && o != "") {
-                                    alertMsg(o);
+                                    alertMsg(o.message);
                                 }
                             }
                         }
