@@ -118,10 +118,12 @@ function orderReducer(state, action) {
 
 
         case 'resetOrderSequence':
-            newOrderData.orderSequence = 0;
-
-            return newOrderData;
-
+            if(newOrderData.orderSequence === 0){
+                return state;
+            }else{
+                newOrderData.orderSequence = 0;
+                return newOrderData;
+            }                        
         case 'processOrderData':
             newOrderData.confirmValue = new BigNumber(action.payload.SelfOrder.OrderBanker).plus(action.payload.SelfOrder.OrderPlayer).plus(action.payload.SelfOrder.OrderTie).plus(action.payload.SelfOrder.OrderBankerPair).plus(action.payload.SelfOrder.OrderPlayerPair).toNumber();
             newOrderData.unConfirmValue = 0;

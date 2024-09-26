@@ -54,7 +54,7 @@ const GameView = (props) => {
     const [shoeResult, setShoeResult] = useState('');
     const countdownInfo = useRef({ lastQueryDate: null, tableTimeoutSecond: 60, remainingSecond: 0 });
     const [baccaratType, setBaccaratType] = useState(0); //0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
-    
+
     //電投相關資訊
     const [PADAvailable, setPADAvailable] = useState(false);
     const [onlineUserCount, setOnlineUserCount] = useState(false);
@@ -63,11 +63,11 @@ const GameView = (props) => {
 
     //投注相關
     const [isCanBet, setIsCanBet] = useState(false);
-    const [winAreas, setWinAreas] = useState(["Banker", "Tie"]);
     const [orderData, dispatchOrderData] = useReducer(orderReducer, initialOrderData);
     const [selChipData, setSelChipData] = useState(null);
     const [emptyOrderCount, setEmptyOrderCount] = useState(0);
     const cardResultControl = useRef();
+    const betAreaControl = useRef();
 
     //視頻相關
     const [videoResolutionType, setVideoResolutionType] = useState(0);
@@ -88,7 +88,7 @@ const GameView = (props) => {
         { styleIndex: 8, chipValue: 10000 }
     ];
 
-    const gameClient = GetGameClient();    
+    const gameClient = GetGameClient();
 
     useEffect(() => {
         //初次載入，撈取桌台資料
@@ -297,7 +297,7 @@ const GameView = (props) => {
                             if (gameSetID !== 0) {
                                 //傳統桌台，使用桌台限紅
                                 //資訊會從GetTableInfo取得
-                            } else {                            
+                            } else {
                                 setUseBetLimit(result.value);
                             }
                             //#endregion
@@ -477,11 +477,15 @@ const GameView = (props) => {
     };
 
     const handleTableInfo = (tableInfoData) => {
+        //check
+        if (!tableInfo || Object.keys(tableInfoData).length === 0) {
+            return;
+        }
+
         //1.要求出碼
         //2.
 
-
-        let prevStatus = tableInfo.current != null ? tableInfo.current.Status : "";
+        let prevTableInfo = tableInfo.current;
         //let prevRoundInfo = tableInfo.current != null ? {roundNumber:roundNumber, shoeNumber:shoeNumber} : {roundNumber:0, shoeNumber:0};        
         let roundInfoArray = tableInfoData.RoundInfo.split('-');
 
@@ -544,13 +548,27 @@ const GameView = (props) => {
 
         checkIsCanBetAndCheckGameSet();
 
-        if (prevStatus !== tableInfo.current.Status) {
+        if (prevTableInfo && prevTableInfo.Status !== tableInfo.current.Status) {
             const statusText = tableInfo.current.Status.split('.')[1];
             tableNotify.current.notify("TableChange", { tableStatus: statusText });
+        }
+
+        if (tableInfo.current.CardInfoRound != null && tableInfo.current.CardInfoRound !== "") {
+            if (prevTableInfo.CardInfoRound != null) {
+                if (prevTableInfo.CardInfoRound !== tableInfo.current.CardInfoRound) {
+                    //開牌動畫                              
+                    showResult();
+                }
+            }
         }
     };
 
     const handleQuery = (Q) => {
+        if (!Q || Object.keys(Q).length === 0) {
+            return;
+        }
+
+
         let walletByQ = Q.UserInfo.Wallet.find((x) => x.CurrencyType === props.CurrencyType);
         //let roundInfoArray = Q.TableInfo.split('-');
 
@@ -581,7 +599,7 @@ const GameView = (props) => {
         } else {
             setUserPoint(Q.GameSetOrder.TotalUserChip + Q.GameSetOrder);
         }
-        
+
         if (Q.SelfOrder) {
             dispatchOrderData({
                 type: "processOrderData",
@@ -595,7 +613,7 @@ const GameView = (props) => {
     };
 
     const checkIsCanBetAndCheckGameSet = () => {
-        
+
         if (queryInfo.current == null || tableInfo.current == null) {
             return;
         }
@@ -698,7 +716,7 @@ const GameView = (props) => {
                                             }
                                             break;
                                         case 1:
-                                            
+
                                             if (Q.SelfOrder.OrderCmd) {
                                                 let cmdText = "";
 
@@ -950,7 +968,7 @@ const GameView = (props) => {
 
                                                 if (s) {
                                                     if (o.ResultState === 0) {
-                                                        dispatchOrderData({ type: "confirmBet" });
+                                                        //dispatchOrderData({ type: "confirmBet" });
                                                         setEmptyOrderCount(0);
                                                         handleQuery(o);
                                                     } else {
@@ -1074,7 +1092,7 @@ const GameView = (props) => {
                                     }
                                 });
                             } else if (tableInfo.current.BaccaratType === 2) {
-                                gameClient.ClearBetType1( tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, (s, o) => {
+                                gameClient.ClearBetType1(tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, (s, o) => {
                                     if (s) {
                                         if (o.ResultState === 0) {
                                             dispatchOrderData({ type: "clearBet" });
@@ -1096,7 +1114,7 @@ const GameView = (props) => {
                                     }
                                 });
                             } else if (tableInfo.current.BaccaratType === 3) {
-                                gameClient.ClearBetType2( tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, (s, o) => {
+                                gameClient.ClearBetType2(tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, (s, o) => {
                                     if (s) {
                                         if (o.ResultState === 0) {
                                             dispatchOrderData({ type: "clearBet" });
@@ -1124,7 +1142,7 @@ const GameView = (props) => {
                     }
                 } else {
                     alertMsg("錯誤", "不允許投注後取消", null);
-                }                
+                }
                 break;
             default:
                 break;
@@ -1197,6 +1215,123 @@ const GameView = (props) => {
         }
     };
 
+    //#endregion
+
+
+    //#region 開牌相關
+    const getResultObject = (r) => {
+        let result = {
+            WinnerType: 0,
+            IsBankerPair: false,
+            IsPlayerPair: false
+        }
+
+        switch (r) {
+            case "1":
+                result.WinnerType = 2;
+                break;
+            case "5":
+                result.WinnerType = 2;
+                result.IsBankerPair = true;
+                break;
+            case "9":
+                result.WinnerType = 2;
+                result.IsPlayerPair = true;
+                break;
+            case "D":
+                result.WinnerType = 2;
+                result.IsBankerPair = true;
+                result.IsPlayerPair = true;
+                break;
+            case "2":
+                result.WinnerType = 1;
+                break;
+            case "6":
+                result.WinnerType = 1;
+                result.IsBankerPair = true;
+                break;
+            case "A":
+                result.WinnerType = 1;
+                result.IsPlayerPair = true;
+                break;
+            case "E":
+                result.WinnerType = 1;
+                result.IsBankerPair = true;
+                result.IsPlayerPair = true;
+                break;
+            case "3":
+                result.WinnerType = 3;
+                break;
+            case "7":
+                result.WinnerType = 3;
+                result.IsBankerPair = true;
+                break;
+            case "B":
+                result.WinnerType = 3;
+                result.IsPlayerPair = true;
+                break;
+            case "F":
+                result.WinnerType = 3;
+                result.IsBankerPair = true;
+                result.IsPlayerPair = true;
+                break;
+            default:
+                break;
+        }
+
+        return result;
+    };
+
+    const showResult = () => {
+        //playSound("GetResult");
+        if (orderData.orderSequence !== 0) {
+            refreshQueryGame(); //有投注，確認是否贏錢，與更新贏錢相關資訊
+        }
+
+        //區域顯示動畫
+        if ((tableInfo.current.ShoeResult != null) && (tableInfo.current.ShoeResult !== "")) {
+            let winAreas = [];
+            const roundResult = tableInfo.current.ShoeResult.substring(tableInfo.current.ShoeResult.length - 1, 1);;
+            const roundResultObj = getResultObject(roundResult);
+            // 顯示動畫
+
+            switch (roundResultObj.WinnerType) {
+                case 1:
+                    winAreas.push("Player");
+                    break;
+                case 2:
+                    winAreas.push("Banker");
+                    break;
+                case 3:
+                    winAreas.push("Tie");
+                    break;
+                default:
+                    break;
+            }
+
+            if (roundResultObj.IsBankerPair === true) {
+                winAreas.push("BankerPair");
+            }
+          
+            if (roundResultObj.IsPlayerPair === true) {
+                winAreas.push("PlayerPair");
+            }
+
+           betAreaControl.current.ShowWinAreas(winAreas);
+        }
+
+        //撲克牌動畫
+        if (tableInfo.current.CardInfo != null && tableInfo.current.CardInfo !== "" && tableInfo.current.CardInfo !== "000000000000") {
+            cardResultControl.current.OpenCard(tableInfo.current.CardInfo, () => {
+                setTimeout(() => {
+                    cardResultControl.current.CloseCard();
+                }, 5000);
+            });
+        }
+    };
+
+    //#endregion
+
     const getCountdownInfo = useCallback(() => {
         return countdownInfo.current;
     }, []);
@@ -1254,8 +1389,6 @@ const GameView = (props) => {
         document.documentElement.style.fontSize = `${newFontSize}px`;
     };
 
-
-
     return (
         <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
             <div className="game-view-wrap">
@@ -1268,17 +1401,22 @@ const GameView = (props) => {
     */
                     roundNumber === "" ? (<div></div>) : (
                         <div className='game-view-box' >
-                         <button style={{ position: "absolute", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={()=>{
-                            //cardResultControl.current.OpenCard("4Q1J251Q3547",()=>{})
-                            setIsCanBet(true);
-                            }}>測試</button>                        
+                            <button style={{ position: "absolute", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={() => {
+                                cardResultControl.current.OpenCard("4Q1J251Q3542", () => { })
+                                //setIsCanBet(true);
+                            }}>測試</button>
+
+                            <button style={{ position: "absolute", left: "400px", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={() => {
+                                //cardResultControl.current.CloseCard();
+                                setIsCanBet(true);
+                            }}>測試2</button>
                             <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>
                             <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName}></GameVideo>
                             <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
                             <GameBettingArea isCanBet={isCanBet}
-                                winAreas={winAreas}
                                 orderData={orderData}
                                 handleBet={handleBet}
+                                ref={betAreaControl}
                             ></GameBettingArea>
                             <GameFooterArea chipItems={chipsItems}
                                 totalBetValue={orderData.totalValue}
@@ -1286,10 +1424,10 @@ const GameView = (props) => {
                                 gameSetID={gameSetID}
                                 gameClient={gameClient}
                                 orderData={orderData}
-                                getTableInfo={getTableInfo}   
+                                getTableInfo={getTableInfo}
                                 baccaratType={baccaratType}
                                 handleQuery={handleQuery}
-                                >
+                            >
                                 <GameChipsButton chipsItems={chipsItems}
                                     isCanBet={isCanBet}
                                     selChipData={selChipData}
