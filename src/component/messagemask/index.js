@@ -1,10 +1,9 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, useCallback, useState, memo } from 'react';
 
 const MsgMaskResult = forwardRef((props, ref) => {
-    //採用關閉，開啟曝露給父組件的設計方式
     const [showMsgMask, setShowMsgMask] = useState(false);
     const [msgMaskAlertMsg, setMsgMaskAlertMsg] = useState('');
-    const fn_click = useRef(null);
+    let fn_click = useRef(null);
 
     const showMessageMask = (msg) => {
         setMsgMaskAlertMsg(msg);
@@ -21,21 +20,23 @@ const MsgMaskResult = forwardRef((props, ref) => {
 
     }, []);
 
-    useImperativeHandle(ref, () => ({
-        ShowMask: (alertMsg, clickfunction) => {
-            hideMessageMask();
+    useImperativeHandle(ref, () => {
+        return {
+            ShowMask: (alertMsg, clickfunction) => {
+                hideMessageMask();
 
-            if (clickfunction) {
-                fn_click.current = clickfunction;
+                if (clickfunction) {
+                    fn_click.current = clickfunction;
+                }
+
+                showMessageMask(alertMsg);
+            },
+
+            HideMask: () => {
+                hideMessageMask();
             }
-
-            showMessageMask(alertMsg);
-        },
-
-        HideMask: () => {
-            hideMessageMask();
         }
-    }));
+    });
 
     return (
         showMsgMask ? <div style={{ minWidth: '100%', minHeight: '100vh', position: 'fixed', zIndex: 999999999999999999, backgroundColor: 'rgba(0, 0, 0, 0.4)', textAlign: 'center' }}
@@ -47,4 +48,4 @@ const MsgMaskResult = forwardRef((props, ref) => {
     )
 })
 
-export default memo(MsgMaskResult);
+export default MsgMaskResult;

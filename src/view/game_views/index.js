@@ -629,6 +629,7 @@ const GameView = (props) => {
                         default:
                             break;
                     }
+                    debugger
 
                     if (cmdText !== "") {
                         msgMaskResultControl.current.ShowMask(cmdText, () => { });
@@ -686,6 +687,7 @@ const GameView = (props) => {
                                 if (T.Status === (GameType + ".OpenBet")) {
                                     switch ((T.BaccaratType)) {
                                         case 0:
+                                        case 1:
                                             //電投，檢查是否有已經存在的指令
                                             if (Q.SelfOrder.OrderCmd) {
                                                 let cmdText = "";
@@ -711,8 +713,10 @@ const GameView = (props) => {
 
                                                 if (cmdText !== "") {
                                                     msgMaskResultControl.current.ShowMask(cmdText, () => { });
+                                                    checkRealStopBet(false);
                                                 } else {
                                                     msgMaskResultControl.current.HideMask();
+                                                    setIsCanBet(true);
                                                 }
                                             } else if (orderData.confirmValue !== 0) {
                                                 checkRealStopBet(false);
@@ -730,9 +734,8 @@ const GameView = (props) => {
                                                 //允許下注
 
                                                 if (countdownSecond > 0 || (countdownInfo.current.tableTimeoutSecond === 0)) {
-                                                    setIsCanBet(true);
 
-                                                    var minBetValue = 0;
+                                                    let minBetValue = 0;
 
                                                     if (useBetLimit != null) {
                                                         // 判斷最低檯紅
@@ -743,69 +746,12 @@ const GameView = (props) => {
 
                                                     if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
                                                         msgMaskResultControl.current.HideMask();
+                                                        setIsCanBet(true);
                                                     } else {
-                                                        msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => { });
-                                                    }
-                                                } else {
-                                                    checkRealStopBet(false);
-                                                }
-                                            }
-                                            break;
-                                        case 1:
-
-                                            if (Q.SelfOrder.OrderCmd) {
-                                                let cmdText = "";
-
-                                                switch (Q.SelfOrder.OrderCmd.toUpperCase()) {
-                                                    case "Pass".toUpperCase():
-                                                        cmdText = "飛牌";
-                                                        break;
-                                                    case "NextShoe".toUpperCase():
-                                                        cmdText = "換靴";
-                                                        break;
-                                                    case "ChangeDealer".toUpperCase():
-                                                        cmdText = "更換荷官";
-                                                        break;
-                                                    case "ContactMe".toUpperCase():
-                                                        cmdText = "請聯繫我";
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-
-                                                checkRealStopBet(false);
-
-                                            } else if (orderData.confirmValue !== 0) {
-                                                checkRealStopBet(false);
-
-                                                if (Q.AllowCancelOrder == 1) {
-                                                    msgMaskResultControl.current.ShowMask("下注成功, 等待現場開牌, 點選畫面可取消投注...", () => {
-                                                        msgMaskResultControl.current.ShowMask("是否確認要取消投注?", () => {
-                                                            //clearOrder();
+                                                        msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => {
+                                                            msgMaskResultControl.current.HideMask();
+                                                            checkRealStopBet(false);
                                                         });
-                                                    });
-                                                } else {
-                                                    msgMaskResultControl.current.ShowMask("下注成功, 等待現場開牌...", () => { });
-                                                }
-                                            } else {
-                                                //允許下注
-
-                                                if (countdownSecond > 0 || (countdownInfo.current.tableTimeoutSecond === 0)) {
-                                                    setIsCanBet(true);
-
-                                                    var minBetValue = 0;
-
-                                                    if (useBetLimit != null) {
-                                                        // 判斷最低檯紅
-                                                        minBetValue = Math.min(useBetLimit.Banker.Min, useBetLimit.Player.Min, useBetLimit.Tie.Min, useBetLimit.Pair.Min);
-                                                    }
-
-                                                    //enableOrderButton();
-
-                                                    if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
-                                                        msgMaskResultControl.current.HideMask();
-                                                    } else {
-                                                        msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => { });
                                                     }
                                                 } else {
                                                     checkRealStopBet(false);
@@ -813,47 +759,15 @@ const GameView = (props) => {
                                             }
                                             break;
                                         case 2:
-                                            if (countdownSecond > 0) {
-                                                setIsCanBet(true);
-
-                                                var minBetValue = 0;
-
-                                                if (useBetLimit != null) {
-                                                    // 判斷最低檯紅
-                                                    minBetValue = Math.min(useBetLimit.Banker.Min, useBetLimit.Player.Min, useBetLimit.Tie.Min, useBetLimit.Pair.Min);
-                                                }
-
-                                                //enableOrderButton();
-
-                                                if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
-                                                    msgMaskResultControl.current.HideMask();
-                                                } else {
-                                                    msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => { });
-                                                }
-                                            } else {
-                                                checkRealStopBet(false);
-                                            }
-                                            break;
                                         case 3:
                                             if (countdownSecond > 0) {
                                                 setIsCanBet(true);
-
-                                                var minBetValue = 0;
-
-                                                if (useBetLimit != null) {
-                                                    // 判斷最低檯紅
-                                                    minBetValue = Math.min(useBetLimit.Banker.Min, useBetLimit.Player.Min, useBetLimit.Tie.Min, useBetLimit.Pair.Min);
-                                                }
-
-                                                //enableOrderButton();
-
-                                                if ((new BigNumber(Q.GameSetOrder.TotalUserChip).plus(Q.GameSetOrder.TotalRewardValue)).toNumber() > minBetValue) {
-                                                    msgMaskResultControl.current.HideMask();
-                                                } else {
-                                                    msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => { });
-                                                }
+                                                msgMaskResultControl.current.HideMask();
                                             } else {
                                                 checkRealStopBet(false);
+                                                msgMaskResultControl.current.ShowMask("停止投注", () => {
+                                                    msgMaskResultControl.current.HideMask();
+                                                });
                                             }
                                             break;
                                         default:
@@ -1348,13 +1262,12 @@ const GameView = (props) => {
                                     orderData={orderData}
                                     handleBet={handleBet}></GameChipsButton>
                             </GameFooterArea>
-                            <CardResult ref={cardResultControl}></CardResult>
-                            <MsgMaskResult ref={msgMaskResultControl}></MsgMaskResult>
                         </div>
 
                     )
                 }
-
+                <CardResult ref={cardResultControl}></CardResult>
+                <MsgMaskResult ref={msgMaskResultControl}></MsgMaskResult>
             </div>
         </BaccaratTableNotifyContext.Provider>
     );

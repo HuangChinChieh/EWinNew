@@ -137,9 +137,8 @@ const GameBettingArea = (props) => {
         document.querySelector("." + winAreaClass).classList.add("win");
 
         setTimeout(() => {
-          if (document.querySelector("." + winAreaClass) && document.querySelector("." + winAreaClass).classList.contains("win")) {
             document.querySelector("." + winAreaClass).classList.remove("win");
-          }
+          
         }, 6000);
       }
     }
