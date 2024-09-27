@@ -1,17 +1,15 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import './index.scss';
 
 // 之後會優化代碼
 
-const GameBettingArea = (props) => {
+const GameBettingArea = forwardRef((props, ref) => {
   const betAreaPath = useRef(null);
   const chipMaxCount = 5;
-
+  const [winAreas, setWinAreas] = useState([]);
   const handleAddBetValue = (event, areaType) => {
     props.handleBet("addBet", { areaType: areaType }, null)
   };
-
-
 
   const generateChipDom = (chipData) => {
     return (
@@ -51,6 +49,35 @@ const GameBettingArea = (props) => {
         </div>
       </div>
     </div>)
+  };
+
+  const generateWinClassStr = (areaType) => {
+    let areaClass;
+    switch (areaType) {
+      case "Player":
+        areaClass = "svg-player";
+        break;
+      case "Banker":
+        areaClass = "svg-banker";
+        break;
+      case "PlayerPair":
+        areaClass = "svg-player-pair";
+        break;
+      case "BankerPair":
+        areaClass = "svg-banker-pair";
+        break;
+      case "Tie":
+        areaClass = "svg-tie";
+        break;
+      default:
+        break;
+    }
+
+    if (winAreas.includes(areaType)) {
+      return areaClass + " win";
+    } else {
+      return areaClass;
+    }
   };
 
   //初始化設定檔
@@ -109,40 +136,26 @@ const GameBettingArea = (props) => {
     }
   }, [props.isCanBet]);
 
-  //處理開獎區塊
-  useEffect(() => {
-    for (let winArea of props.winAreas) {
-      let winAreaClass = "";
-      switch (winArea) {
-        case "Player":
-          winAreaClass = "svg-player";
+  useImperativeHandle(ref, () => ({
+    ShowWinAreas: (winAreas) => {
+      let checkCanUse = true;
+      let canUseArea = ["Player", "Banker", "PlayerPair", "BankerPair", "Tie"];
+      for(let winArea of winAreas){
+        if(canUseArea.includes(winArea) === false){
+          checkCanUse = false;
           break;
-        case "Banker":
-          winAreaClass = "svg-banker";
-          break;
-        case "PlayerPair":
-          winAreaClass = "svg-player-pair";
-          break;
-        case "BankerPair":
-          winAreaClass = "svg-banker-pair";
-          break;
-        case "Tie":
-          winAreaClass = "svg-tie";
-          break;
-        default:
-          break;
+        }
       }
 
-      if (winAreaClass) {
-        document.querySelector("." + winAreaClass).classList.add("win");
-
-        setTimeout(() => {
-            document.querySelector("." + winAreaClass).classList.remove("win");
-          
-        }, 6000);
+      if(checkCanUse !== false){
+        setWinAreas(winAreas);
       }
+
+      setTimeout(() => {
+        setWinAreas([]);
+      }, 8000);
     }
-  }, [props.winAreas]);
+  }));
 
   return (
     <div className={"betArea " + (props.isCanBet ? "" : "close")}>
@@ -212,7 +225,7 @@ const GameBettingArea = (props) => {
         </filter>
       </svg>
       <svg
-        className="svg-player-pair"
+        className={generateWinClassStr("PlayerPair")}
         viewBox="0 0 240 221"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -255,7 +268,7 @@ const GameBettingArea = (props) => {
         </defs>
       </svg>
       <svg
-        className="svg-banker-pair"
+        className={generateWinClassStr("BankerPair")}
         viewBox="0 0 240 221"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -298,7 +311,7 @@ const GameBettingArea = (props) => {
         </defs>
       </svg>
       <svg
-        className="svg-banker"
+        className={generateWinClassStr("Banker")}
         viewBox="0 0 292 142"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -341,7 +354,7 @@ const GameBettingArea = (props) => {
         </defs>
       </svg>
       <svg
-        className="svg-player"
+        className={generateWinClassStr("Player")}
         viewBox="0 0 292 142"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -382,7 +395,7 @@ const GameBettingArea = (props) => {
         </defs>
       </svg>
       <svg
-        className="svg-tie"
+        className={generateWinClassStr("Tie")}
         viewBox="0 0 400 78"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -487,7 +500,7 @@ const GameBettingArea = (props) => {
       </div>
     </div>
   );
-};
+});
 
 
 

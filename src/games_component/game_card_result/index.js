@@ -97,19 +97,19 @@ const Card = (props) => {
 
     useEffect(() => {       
         if (props.singleCardInfo !== "" && props.singleCardInfo !== "00") {
+            frontDom.current.innerHTML ="";
+            backDom.current.innerHTML ="";
             props.getImage(cardInfoToImgFile(props.singleCardInfo, props.isT), (imgDom) => {
-              
                 backDom.current.appendChild(imgDom);
             });
 
             if (props.isT) {
-                props.getImage("card_back_t.png", (imgDom) => {
-                 
+                props.getImage("card_back_t.png", (imgDom) => {                    
                     frontDom.current.appendChild(imgDom);
                 })
             } else {
                 props.getImage("card_back.png", (imgDom) => {
-                 
+                  
                     frontDom.current.appendChild(imgDom);
                 })
             }
@@ -587,8 +587,6 @@ const CardResult = forwardRef((props, ref) => {
         return ret;
     };
 
-
-
     const getImage = useCallback((imgSrcName, cb) => { 
         if (imgSrcName in imageCache.current) {
 
@@ -633,6 +631,7 @@ const CardResult = forwardRef((props, ref) => {
         CloseCard: () => {
             closeCardResult();
         },
+
         ShowSingleCard: (cardType, faceValue) => {
             showSingleCard(cardType, faceValue);
         }
@@ -640,7 +639,7 @@ const CardResult = forwardRef((props, ref) => {
 
     return (
         <div className={"open_card_main " + (isOpening ? "isOpening" : "")}>
-            <div id="left_card" className={"left_cardE openCard " + (resultType === "Banker" ? "result_bankerBG" : "")}>
+            <div id="left_card" className={"left_cardE openCard " + (resultType === "Player" ? "result_playerBG" : "")}>
                 <div id="idPlayerTitle">
                     <div id="idPlayerPoint">{playerPoint}</div>
                     <div className="PlayerPoint">
@@ -661,7 +660,7 @@ const CardResult = forwardRef((props, ref) => {
                     </div>
                 </div>
             </div>
-            <div id="right_card" className={"right_cardE openCard " + (resultType === "Player" && "result_playerBG")}>
+            <div id="right_card" className={"right_cardE openCard " + (resultType === "Banker" ? "result_bankerBG" : "")}>
                 <div id="idBankerTitle">
                     <div id="idBankerPoint">{bankerPoint}</div>
                     <div className="BankerPoint">
@@ -676,5 +675,6 @@ const CardResult = forwardRef((props, ref) => {
             </div>
         </div>
     )
-})
+});
+
 export default memo(CardResult);

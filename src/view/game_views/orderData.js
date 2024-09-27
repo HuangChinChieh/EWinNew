@@ -63,7 +63,7 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = new BigNumber(newOrderData.unConfirmValue).plus(newOrderData.totalValue).toNumber();
 
             for (let areaType in newOrderData) {
-                if (newOrderData[areaType].totalValue !== 0) {
+                if (typeof newOrderData[areaType] !== "number" ) {
                     newOrderData[areaType].unConfirmValue = new BigNumber(newOrderData[areaType].unConfirmValue).plus(newOrderData[areaType].totalValue).toNumber();
                     newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).plus(newOrderData[areaType].totalValue).toNumber();
                     newOrderData[areaType].chips.push(
@@ -79,7 +79,7 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                if (newOrderData[areaType].totalValue != undefined) {
+                if (typeof newOrderData[areaType] !== "number" ) {
                     newOrderData[areaType].unConfirmValue = 0;
                     newOrderData[areaType].totalValue = 0;
                     newOrderData[areaType].confirmValue = 0;
@@ -94,7 +94,7 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                if (newOrderData[areaType].totalValue != undefined) {
+                if (typeof newOrderData[areaType] !== "number" ) {
                     newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
                     newOrderData[areaType].unConfirmValue = 0;
     
@@ -109,7 +109,7 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                if (newOrderData[areaType].confirmValue != undefined) {
+                if (typeof newOrderData[areaType] !== "number" ) {
                     newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
                     newOrderData[areaType].unConfirmValue = 0;
     
@@ -123,10 +123,12 @@ function orderReducer(state, action) {
 
 
         case 'resetOrderSequence':
-            newOrderData.orderSequence = 0;
-
-            return newOrderData;
-
+            if(newOrderData.orderSequence === 0){
+                return state;
+            }else{
+                newOrderData.orderSequence = 0;
+                return newOrderData;
+            }                        
         case 'processOrderData':
             let isChanged = false;
             let totalValue = 0;
@@ -198,7 +200,7 @@ function orderReducer(state, action) {
             
             if (isChanged) {
                 for (let type in newOrderData) {
-                    if (newOrderData[type].totalValue != undefined) {
+                    if (typeof newOrderData[type] !== "number" ) {
                         newOrderData[type].totalValue = newOrderData[type].confirmValue + newOrderData[type].unConfirmValue;
                         totalValue = new BigNumber(totalValue).toNumber() + new BigNumber(newOrderData[type].totalValue).toNumber();
                         totalConfirmValue = new BigNumber(totalConfirmValue).toNumber() + new BigNumber(newOrderData[type].confirmValue).toNumber();
