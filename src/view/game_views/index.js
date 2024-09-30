@@ -25,6 +25,7 @@ const BaccaratTableNotifyContext = createContext();
 
 const GameView = (props) => {
     //常數，props，plugin
+    debugger
     const GameType = "BA";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
@@ -327,11 +328,11 @@ const GameView = (props) => {
             .then(() => {
                 intervalIDByTableInfo = setInterval(() => {
                     refreshTableInfo();
-                }, 5000);
+                }, 30000);
 
                 intervalIDByQueryGame = setInterval(() => {
                     refreshQueryGame();
-                }, 5000);
+                }, 30000);
             });
 
 
