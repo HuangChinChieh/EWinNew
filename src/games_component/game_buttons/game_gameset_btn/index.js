@@ -240,7 +240,7 @@ const GameControlButton = (props) => {
                         <div className="game-chips-box">
                             {chipsItem.map((item) => (
                                 <div
-                                    key={item.index}
+                                    key={`chips${item.styleIndex}`}
                                     className={`chips-${item.styleIndex} ${props.selChipIndex === item.styleIndex ? "act" : ""
                                         }`}
                                     onClick={() => onSetChipVal(item.chipValue)}
@@ -262,7 +262,7 @@ const GameControlButton = (props) => {
                     <div className="game-controls-box">
                         {btnsItem.map((item) => (
                             <div
-                                key={item.index}
+                                 key={`change${item.index}`}
                                 className={`controlBtn ${selIndex === item.index ? "act" : ""}`}
                                 onClick={(event) => handleSelControl(event, item.index)}
                             >
@@ -276,7 +276,7 @@ const GameControlButton = (props) => {
                     <div className="game-controls-box">
                         {btnsItem.map((item) => (
                             <div
-                                key={item.index}
+                                key={`controls${item.index}`}
                                 className={`controlBtn ${selIndex === item.index ? "act" : ""}`}
                                 onClick={(event) => handleSelControl(event, item.index)}
                             >
