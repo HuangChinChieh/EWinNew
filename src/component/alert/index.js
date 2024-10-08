@@ -30,6 +30,9 @@ const AlertButton = ({ children }) => {
     };
 
     const alertMsg = useCallback((title, message, cb) => {
+        setTitle('');
+        setMessage('');
+        
         if (title) {
             setTitle(title);
         }

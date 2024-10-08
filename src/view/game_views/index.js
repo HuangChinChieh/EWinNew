@@ -25,7 +25,6 @@ const BaccaratTableNotifyContext = createContext();
 
 const GameView = (props) => {
     //常數，props，plugin
-    debugger
     const GameType = "BA";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
@@ -817,7 +816,12 @@ const GameView = (props) => {
 
                             switch (cmd.toUpperCase()) {
                                 case "Pause".toUpperCase():
-                                    msgMaskResultControl.current.ShowMask("正在要求暫停", () => { });
+                                    msgMaskResultControl.current.ShowMask("正在要求暫停", () => { 
+                                        alertMsg("繼續", "繼續遊戲?", () => { 
+                                            handleGameSetCmd("setGameSetCmd",{gameCmd: "Continue"})
+
+                                        });
+                                    });
                                     checkRealStopBet(false);
                                     break;
                                 case "Continue".toUpperCase():
@@ -845,15 +849,15 @@ const GameView = (props) => {
                                     reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
 
                                     alertMsg("小費", "已取消要求加彩" + reqAddChipValue + unitData.text, () => { 
-                                        handleGameSetCmd("clearGameSetCmd", null, null);
+                                        handleGameSetCmd("clearGameSetCmd", null);
                                     });
                                     checkRealStopBet(false);
                                     break;
                                 case "AddChip".toUpperCase():
                                     reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
 
-                                    alertMsg("加彩成功", "已加彩" + reqAddChipValue + unitData.text, () => { 
-                                        handleGameSetCmd("clearGameSetCmd", null, null);
+                                    alertMsg("加彩成功", "已加彩" + reqAddChipValue + unitData.text, () => { debugger
+                                        handleGameSetCmd("clearGameSetCmd", null);
                                     });
 
                                     msgMaskResultControl.current.ShowMask("", () => { });
@@ -909,6 +913,8 @@ const GameView = (props) => {
 
     //#region notify相關
     const handleNotify = (type, args) => {
+        console.log('type',type);
+        console.log('args',args);
         if (notifyEvents.includes(type)) {
             if (type === "TableChange") {
                 //如果是桌台狀態改變，重新撈取桌台資訊確認最新的桌台狀態
@@ -916,7 +922,6 @@ const GameView = (props) => {
                     refreshTableInfo();
                 }
             } else if (type === "GameSetChange") {
-                debugger
                 if (args.GameSetID === gameSetID) {
                     refreshQueryGame();
                 }
@@ -1380,12 +1385,12 @@ const GameView = (props) => {
 
     //#endregion
 
-    const handleGameSetCmd = useCallback((action, args, cb) => {
+    const handleGameSetCmd = useCallback((action, args) => {
         switch (action) {
             case "setGameSetCmd":
                     if (isConnected) {
                         if ("gameCmd" in args) {
-                            gameClient.SetGameSetCmd(props.gameSetID, tableNumber, shoeNumber, roundNumber, args.gameCmd, (s, o) => {
+                            gameClient.SetGameSetCmd(gameSetID, tableNumber, shoeNumber, roundNumber, args.gameCmd, (s, o) => {
                                 if (s) {
                                     if (o.ResultState === 0) {
                                         msgMaskResultControl.current.HideMask();
@@ -1414,7 +1419,7 @@ const GameView = (props) => {
                 break;
             case "clearGameSetCmd":
                     if (isConnected) {
-                        gameClient.ClearGameSetCmd(props.gameSetID, tableNumber, shoeNumber, roundNumber, (s, o) => {
+                        gameClient.ClearGameSetCmd(gameSetID, tableNumber, shoeNumber, roundNumber, (s, o) => {
                             if (s) {
                                 if (o.ResultState === 0) {
                                     msgMaskResultControl.current.HideMask();
@@ -1443,7 +1448,7 @@ const GameView = (props) => {
             default:
                 break;
         }
-    }, []);
+    }, [tableNumber, shoeNumber, roundNumber]);
     
     const handleAddTips = useCallback((action, args, cb) => {
         switch (action) {
@@ -1456,17 +1461,13 @@ const GameView = (props) => {
                             alertMsg("小費", "確定打賞小費"+ " " + args.tipsValue + " " + "元", () => {
                                 v = new BigNumber(args.tipsValue).dividedBy(unitData.value).toNumber();
 
-                                gameClient.AddTipsType0(props.gameSetID, tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, v, (s, o) => {
+                                gameClient.AddTipsType0(gameSetID, tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, v, (s, o) => {
                                     if (s) {
                                         if (o.ResultState === 0) {
                                             msgMaskResultControl.current.HideMask();
                                             handleQuery(o);
                                         } else {
-                                            handleGameSetCmd("setGameSetCmd",{gameCmd: "CancelAddTips:" + args.tipsValue}, () => {
-                                                setTimeout(() => {
-                                                    refreshQueryGame();
-                                                }, 3000);
-                                            })
+                                            handleGameSetCmd("setGameSetCmd",{gameCmd: "CancelAddTips:" + args.tipsValue})
                                         }
                                     } else {
                                         if (o === "Timeout"){
@@ -1567,7 +1568,13 @@ const GameView = (props) => {
 
                             <button style={{ position: "absolute", left: "400px", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={() => {
                                 //cardResultControl.current.CloseCard();
-                                setIsCanBet(true);
+                                //setIsCanBet(true);
+                                msgMaskResultControl.current.ShowMask("正在要求暫停", () => { 
+                                        alertMsg("繼續", "繼續遊戲?", () => { 
+                                            handleGameSetCmd("setGameSetCmd",{gameCmd: "Continue" })
+                                        });
+                                    });
+
                             }}>測試2</button>
                             <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>
                             <GameVideo CT={props.CT} vpDomain={vpDomain} tableNumber={tableNumber} streamName={streamName}></GameVideo>

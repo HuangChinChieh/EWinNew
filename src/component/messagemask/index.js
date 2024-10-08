@@ -39,8 +39,8 @@ const MsgMaskResult = forwardRef((props, ref) => {
     });
 
     return (
-        showMsgMask ? <div style={{ minWidth: '100%', minHeight: '100vh', position: 'fixed', zIndex: 999999999999999999, backgroundColor: 'rgba(0, 0, 0, 0.4)', textAlign: 'center' }}
-            onClick={() => { if (fn_click) fn_click(); }} >
+        showMsgMask ? <div style={{ minWidth: '100%', minHeight: '100vh', position: 'fixed', zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.4)', textAlign: 'center' }}
+            onClick={() => { if (fn_click.current) fn_click.current(); }} >
             <label style={{ fontSize: '50px', color: 'white', lineHeight: '100vh' }} >
                 {msgMaskAlertMsg}
             </label>

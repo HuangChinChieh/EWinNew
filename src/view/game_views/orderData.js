@@ -193,7 +193,7 @@ function orderReducer(state, action) {
                 isChanged = true;
             }
             
-            if (newOrderData.orderSequence !== OrderSequence){
+            if (newOrderData.orderSequence !== OrderSequence.toNumber()){
                 newOrderData.orderSequence = OrderSequence.toNumber();
                 isChanged = true;
             }
