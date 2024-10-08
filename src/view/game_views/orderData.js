@@ -129,7 +129,7 @@ function orderReducer(state, action) {
                 newOrderData.orderSequence = 0;
                 return newOrderData;
             }                        
-        case 'processOrderData':
+        case 'processOrderData':            
             let isChanged = false;
             let totalValue = 0;
             let totalConfirmValue = 0;
@@ -193,7 +193,7 @@ function orderReducer(state, action) {
                 isChanged = true;
             }
             
-            if (newOrderData.orderSequence !== OrderSequence){
+            if (newOrderData.orderSequence !== OrderSequence.toNumber()){
                 newOrderData.orderSequence = OrderSequence.toNumber();
                 isChanged = true;
             }

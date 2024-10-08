@@ -97,6 +97,8 @@ const GameControlButton = (props) => {
                     setGameSetCmd("Completed");
                 });
                 break;
+            default:
+                break;
         }
     };
 
@@ -113,7 +115,7 @@ const GameControlButton = (props) => {
     };
 
     const setRoundCmd = (cmd) => {
-        if (gameClient.currentState == 1) {
+        if (gameClient.currentState === 1) {
             switch (baccaratType) {
                 case 0:
                 case 1:
@@ -129,7 +131,7 @@ const GameControlButton = (props) => {
                         cmd,
                         function (success, o) {
                             if (success) {
-                                console.log('up',o);
+                                console.log('up', o);
                                 if (o.ResultState == 0) {
                                     props.handleQuery(o);
                                 } else {
@@ -154,6 +156,9 @@ const GameControlButton = (props) => {
                 case 3:
                     // 網投
                     break;
+                default:
+                    break;
+
             }
         } else {
             alertMsg("錯誤", "伺服器斷線");
@@ -262,7 +267,7 @@ const GameControlButton = (props) => {
                     <div className="game-controls-box">
                         {btnsItem.map((item) => (
                             <div
-                                 key={`change${item.index}`}
+                                key={`change${item.index}`}
                                 className={`controlBtn ${selIndex === item.index ? "act" : ""}`}
                                 onClick={(event) => handleSelControl(event, item.index)}
                             >
@@ -273,31 +278,20 @@ const GameControlButton = (props) => {
                 </div>
             ) : (
                 <div className="game-controls-block">
-                    <div className="game-controls-box">
+              
                         {btnsItem.map((item) => (
                             <div
                                 key={`controls${item.index}`}
-                                className={`controlBtn ${selIndex === item.index ? "act" : ""}`}
+                                className={`controlBtn ${selIndex === item.index ? "act" : ""} ${item.btnName}`}
                                 onClick={(event) => handleSelControl(event, item.index)}
                             >
-                                <div>{item.btnName}</div>
+                               {item.btnName}
                             </div>
                         ))}
-                    </div>
+            
                 </div>
             )}
         </>
-    );
-};
-
-const App = () => {
-    return (
-        <div>
-            <div className="box">
-                <h1>The Button has a ref</h1>
-                <GameControlButton />
-            </div>
-        </div>
     );
 };
 
@@ -471,8 +465,8 @@ const ChangeTable = (props) => {
             <span
                 onClick={() => handleClick()}
                 className={`${favors.includes(props.tableNumber)
-                        ? "remove-to-favorites"
-                        : "add-to-favorites"
+                    ? "remove-to-favorites"
+                    : "add-to-favorites"
                     }`}
             />
         );

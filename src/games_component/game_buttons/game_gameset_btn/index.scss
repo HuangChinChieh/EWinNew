@@ -1,17 +1,33 @@
-﻿.game-controls-block {
+﻿@import url("https://fonts.googleapis.com/css2?family=Yuji+Boku&display=swap");
+
+@keyframes initShow {
+
+    0% {
+        opacity: 0;;
+        
+    }
+
+    100% {
+        opacity: 1.0;
+    }
+}
+
+.game-controls-block {
     /* Auto layout */
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     padding: 0px;
     gap: 0.75rem;
     position: absolute;
-    width: 32.5875rem;
+    width: 100%;
     height: 6rem;
     /*left: 47.5625rem;
     top: 62.1875rem;*/
     top: 13rem;
+    animation: initShow 0.3s ease-out;
+
 
     .close_icon {
         display: flex;
@@ -23,93 +39,56 @@
         background: url('../../../img/games/Vector.png')
     }
 
-    .game-controls-box {
-        /* Auto layout */
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 0px;
-        gap: 0.75rem;
-        position: absolute;
-        width: 32.5875rem;
-        height: 3.416875rem;
-        /*left: 47.5625rem;
-        top: 62.1875rem;*/
-        top: 2rem;
+    .controlBtn {
+        /* icon/chip */
+        color: #afafaf;
+        width: 4.5rem;
+        height: 4.5rem;
+        flex: none;
+        order: 0;
+        flex-grow: 0;
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        border-radius: 4.5rem;
+        border: 2px solid #575767;
+        font-size: 1.0rem;
+        text-align: center;
+        line-height: 4.5rem;
+        opacity: 1.0;
+        transition: transform 0.1s ease-out, border-color 0.1s linear, background-color 0.1s linear;
+        transform-origin: center;
+        transform-style: preserve-3d;
+        transform: rotateX(-15deg);
+        font-family: "Yuji Boku", serif;
 
-
-        div {
-            /* icon/chip */
-
-            width: 3.416875rem;
-            height: 3.416875rem;
-            /* Inside auto layout */
-            flex: none;
-            order: 0;
-            flex-grow: 0;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            border-radius: 1.7084375rem;
-
-            &.controlBtn {
-                background-color: #8E8E8E;
-            }
-
-            &.controlBtn:nth-child(1) > div {
-                font-size: 1.09375rem;
-            }
-
-            &.controlBtn:nth-child(2) > div {
-                font-size: 1.09375rem;
-            }
-
-            &.controlBtn:nth-child(3) > div {
-                font-size: 1.09375rem;
-            }
-
-            &.controlBtn:nth-child(4) > div {
-                font-size: 1.09375rem;
-            }
-
-            &.controlBtn:nth-child(8) > div {
-                font-size: 1.09375rem;
-            }
-
-            &.act {
-                &::before {
-                    content: '';
-                    background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
-                    display: block;
-                    width: 4.125rem;
-                    height: 4.125rem;
-                    border-radius: 4.125rem;
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    transform: translate(-9%, -9%);
-                }
-            }
-
-            div {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                /* 字体大小，可以根据需要调整 */
-                text-align: center;
-                /* 文字居中，可选 */
-                font-family: "Microsoft JhengHei";
-                /*font-size: 1.09375rem;*/
-                font-size: 0.7rem;
-                font-weight: 500;
-                line-height: 1.28125rem;
-                text-align: center;
-                color: #FFFFFF;
-                height: auto;
-                top: 0.88875rem;
-            }
+        &:hover {
+            background-color: #292933;
+            border-color: #FFFFFF;
+            color: #FFFFFF;
+            cursor: pointer;
+            opacity: 1;
+            font-size: 1.1rem;
+            transform: translateY(-0.5rem) scale(1.1) perspective(25rem) rotateX(0deg);
+            //    animation: controlBtnAni 2s linear infinite alternate; 
         }
+
+        // div {
+        //     position: absolute;
+        //     left: 50%;
+        //     transform: translateX(-50%);
+        //     /* 字体大小，可以根据需要调整 */
+        //     text-align: center;
+        //     /* 文字居中，可选 */
+        //     font-family: "Microsoft JhengHei";
+        //     /*font-size: 1.09375rem;*/
+        //     font-weight: 500;
+        //     line-height: 1.28125rem;
+        //     text-align: center;
+        //     color: #FFFFFF;
+        //     height: auto;
+        //     top: 0.88875rem;
+        // }
     }
 }
 
@@ -350,23 +329,23 @@
                 background-color: #8E8E8E;
             }
 
-            &.controlBtn:nth-child(1) > div {
+            &.controlBtn:nth-child(1)>div {
                 font-size: 1.09375rem;
             }
 
-            &.controlBtn:nth-child(2) > div {
+            &.controlBtn:nth-child(2)>div {
                 font-size: 1.09375rem;
             }
 
-            &.controlBtn:nth-child(3) > div {
+            &.controlBtn:nth-child(3)>div {
                 font-size: 1.09375rem;
             }
 
-            &.controlBtn:nth-child(4) > div {
+            &.controlBtn:nth-child(4)>div {
                 font-size: 1.09375rem;
             }
 
-            &.controlBtn:nth-child(8) > div {
+            &.controlBtn:nth-child(8)>div {
                 font-size: 1.09375rem;
             }
 

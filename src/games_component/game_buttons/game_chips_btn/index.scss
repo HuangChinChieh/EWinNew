@@ -1,9 +1,23 @@
+@keyframes initShow {
+
+    0% {
+        opacity: 0;;
+        
+    }
+
+    100% {
+        opacity: 1.0;
+    }
+}
+
+
 .game-chips-area {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     width: 100%;
     height: 100%;
+    animation: initShow 0.3s ease-out;
 
     .game-chips-box {
         /* Auto layout */

@@ -25,7 +25,7 @@ const BaccaratTableNotifyContext = createContext();
 
 const GameView = (props) => {
     //常數，props，plugin
-    debugger
+    
     const GameType = "BA";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
@@ -915,8 +915,7 @@ const GameView = (props) => {
                 if (args.Action !== "") {
                     refreshTableInfo();
                 }
-            } else if (type === "GameSetChange") {
-                debugger
+            } else if (type === "GameSetChange") {                
                 if (args.GameSetID === gameSetID) {
                     refreshQueryGame();
                 }
@@ -1194,7 +1193,7 @@ const GameView = (props) => {
             default:
                 break;
         }
-    }, []);
+    }, [props.tableNumber, shoeNumber, roundNumber, orderData]);
 
     const checkOrderByBetlimit = (_orderData, _betLimit) => {
         let sumPair = new BigNumber(_orderData.PlayerPair.totalBetValue).plus(_orderData.BankerPair.totalBetValue).toNumber();
