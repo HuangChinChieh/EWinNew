@@ -240,6 +240,7 @@ const GameControlButton = (props) => {
                         roadMapNumber={roadMapNumber}
                         gameSetID={gameSetID}
                         getTableShoeInfo={getTableShoeInfo}
+                        alertMsg={alertMsg}
                     />
                     <div className="game-chips-area">
                         <div className="game-chips-box">
@@ -308,8 +309,9 @@ const AddChip = (props) => {
         let addChipValue = parseInt(document.querySelector(".v11").textContent);
 
         if (addChipValue > 0) {
-            alertMsg("加彩", "是否要求加彩 " + addChipValue, () => {
+            props.alertMsg("加彩", "是否要求加彩 " + addChipValue, () => {
                 //AddChip game
+                handleClose();
                 let tableInfo = props.getTableShoeInfo();
                 gameClient.AddChip(
                     props.gameSetID,

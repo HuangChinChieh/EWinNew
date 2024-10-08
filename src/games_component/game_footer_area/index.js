@@ -19,7 +19,7 @@ const GameFooterArea = (props) => {
     const showComponent = () => {
         if (middleBtnType === "Chip") {
             return props.children;
-        } else if (middleBtnType === "GameSet") {
+        } else if (middleBtnType === "GameSet") {debugger
             if (BaccaratType === 0 || BaccaratType === 1) {
                 return <GameControlButton chipItems={props.chipItems}
                     roadMapNumber={props.roadMapNumber}
