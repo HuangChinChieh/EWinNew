@@ -30,7 +30,9 @@ const GameBaccaratProvider = (props) => {
         if (events.includes(Msg.Type)) {
           if(Msg.Type === "GreatRoad"){
 
-          }else{
+          } else if (Msg.Type === "GameSetChange"){
+            notifyDictionary.current[Msg.Args.GameSetID](Msg.Type, Msg.Args);
+          } else {
             notifyDictionary.current[Msg.Args.TableNumber](Msg.Type, Msg.Args);
           }         
         }
@@ -60,12 +62,14 @@ const GameBaccaratProvider = (props) => {
   }, [props.CT, props.EWinUrl]);
 
 
-  const AddSubscribe = useCallback((RoadMapNumber, cb, handleNotify) => {
+  const AddSubscribe = useCallback((gameSetID ,GameSetNumber ,RoadMapNumber, cb, handleNotify) => {
     tableNumberArray.current.push(RoadMapNumber);
+    console.log("handleNotify",handleNotify);
     notifyDictionary.current[RoadMapNumber] = handleNotify;
+    notifyDictionary.current[gameSetID] = handleNotify;
     
     //訂閱桌台
-    gameClient.current.AddSubscribe(tableNumberArray.current.join(""), (s, o) => {
+    gameClient.current.AddSubscribe(GameSetNumber ,tableNumberArray.current.join(""), (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
           if (cb)
@@ -81,14 +85,14 @@ const GameBaccaratProvider = (props) => {
     })
   }, []);
 
-  const RemoveSubscribe = useCallback((RoadMapNumber, cb) => {
+  const RemoveSubscribe = useCallback((GameSetNumber ,RoadMapNumber, cb) => {
     tableNumberArray.current = tableNumberArray.current.filter(item => item !== RoadMapNumber);
     
     if(RoadMapNumber in notifyDictionary.current){
       delete notifyDictionary.current[RoadMapNumber];
     }
     //訂閱桌台
-    gameClient.current.AddSubscribe(tableNumberArray.current.join(""), (s, o) => {
+    gameClient.current.AddSubscribe(GameSetNumber ,tableNumberArray.current.join(""), (s, o) => {
       if (s) {
         if (o.ResultCode === 0) {
           if (cb)
