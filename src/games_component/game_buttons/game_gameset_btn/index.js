@@ -282,7 +282,7 @@ const GameControlButton = (props) => {
                             </div>
                         ))}
                     </div>
-                </div>
+                </>
             ) : (
                 <div className="game-controls-block">
               
