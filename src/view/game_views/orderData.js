@@ -129,7 +129,7 @@ function orderReducer(state, action) {
                 newOrderData.orderSequence = 0;
                 return newOrderData;
             }                        
-        case 'processOrderData':
+        case 'processOrderData':            
             let isChanged = false;
             let totalValue = 0;
             let totalConfirmValue = 0;
