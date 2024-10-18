@@ -30,6 +30,7 @@ const GameFooterArea = (props) => {
                     updateMiddleBtnType={updateMiddleBtnType}
                     baccaratType={BaccaratType}
                     handleQuery={props.handleQuery}
+                    entryRoadMap={props.entryRoadMap}
                 />
             } else {
                 return <div></div>

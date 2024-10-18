@@ -515,34 +515,34 @@ const GameView = (props) => {
         }
 
         switch (tableInfoData.Status) {
-            case GameType + ".Close":
+            case "Close":
 
                 break;
-            case GameType + ".NewRound":
+            case "NewRound":
 
                 break;
-            case GameType + ".OpenBet":
+            case "OpenBet":
 
                 break;
-            case GameType + ".StopBet":
+            case "StopBet":
 
                 break;
-            case GameType + ".GameResult":
+            case "GameResult":
 
                 break;
-            case GameType + ".Cancel":
+            case "Cancel":
 
                 break;
-            case GameType + ".Delete":
+            case "Delete":
 
                 break;
-            case GameType + ".Shuffling":
+            case "Shuffling":
 
                 break;
-            case GameType + ".NoService":
+            case "NoService":
 
                 break;
-            case GameType + ".AccidentPending":
+            case "AccidentPending":
 
                 break;
             default:
@@ -553,7 +553,7 @@ const GameView = (props) => {
         checkIsCanBetAndCheckGameSet();
 
         if (prevTableInfo && prevTableInfo.Status !== tableInfo.current.Status) {
-            const statusText = tableInfo.current.Status.split('.')[1];
+            const statusText = tableInfo.current.Status;
             tableNotify.current.notify("TableChange", { tableStatus: statusText });
         }
 
@@ -990,7 +990,7 @@ const GameView = (props) => {
             } else if (notBetAction === 6) {
                 msgMaskResultControl.current.ShowMask("桌號已更換, 請點選切換到新桌號" + " [" + Q.GameSetOrder.GameSetRoadMapNumber + "] ", () => {
                     //換桌 待補
-                    //entryRoadMap(gameSetRoadMapNumber);
+                    entryRoadMap(Q.GameSetOrder.GameSetRoadMapNumber);
                 });
             } else if (notBetAction === 7) {
                 msgMaskResultControl.current.ShowMask("洗牌中", () => { });
@@ -1004,10 +1004,31 @@ const GameView = (props) => {
 
     //#endregion
 
+    const entryRoadMap = useCallback((roadMapNumber) => {
+        gameClient.EntryRoadMap(gameSetID, props.CurrencyType, roadMapNumber,(s, o) => {
+            if (s) {
+                if (o.ResultState === 0) {
+                    history.push("/games/" + roadMapNumber);
+                    window.location.reload();
+                } else {
+                    alertMsg("登入賭桌錯誤:" + o.Message);
+                }
+            } else {
+                if (o === "Timeout") {
+                    alertMsg("網路異常, 請重新操作");
+                } else{
+                    if ((o != null) && (o !== "")){
+                        alertMsg(o);
+                    }
+                }
+
+                refreshQueryGame();
+            }
+        });
+    }, []);
+
     //#region notify相關
     const handleNotify = (type, args) => {
-        console.log("type", type);
-        console.log("args", args);
         if (notifyEvents.includes(type)) {
             if (type === "TableChange") {
                 //如果是桌台狀態改變，重新撈取桌台資訊確認最新的桌台狀態
@@ -1696,6 +1717,7 @@ const GameView = (props) => {
                                 getTableInfo={getTableInfo}
                                 baccaratType={baccaratType}
                                 handleQuery={handleQuery}
+                                entryRoadMap={entryRoadMap}
                             >
                                 <GameChipsButton chipsItems={chipsItems}
                                     isCanBet={isCanBet}

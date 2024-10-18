@@ -3,6 +3,7 @@ import "./index.scss";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { AlertContext } from "component/alert";
 import alertMsg from "component/alert";
+import ChangeTable from "component/changeTable";
 import {
     FavorsContext,
     LobbyPersonalContext,
@@ -27,9 +28,10 @@ const GameControlButton = (props) => {
     const chipsItem = props.chipItems;
 
     const countryItem = [
-        { name: "Korea", value: "KR" },
-        { name: "Japan", value: "JP" },
-        { name: "Chian", value: "CN" },
+        { name: "BM", value: "BM" },
+        { name: "測試用", value: "TEST" },
+        { name: "SH", value: "SH" },
+        { name: "All", value: "All" }
     ];
 
     const [selIndex, setSelIndex] = useState(0);
@@ -45,10 +47,13 @@ const GameControlButton = (props) => {
     orderSequence.current = props.orderData.orderSequence;
     //const areaCode = props.areaCode;
     const getTableInfo = props.getTableInfo;
-    const areaCode = "";
+    let areaCode = useRef();
 
     useEffect(() => {
         console.log(props.orderData);
+        let tableInfo = getTableInfo();
+
+        console.log('tableInfo',tableInfo);
     }, []);
 
     const handleSelControl = (event, index) => {
@@ -103,6 +108,8 @@ const GameControlButton = (props) => {
     const getTableShoeInfo = () => {
         let tableInfo = getTableInfo();
 
+        areaCode.current = tableInfo.AreaCode;
+
         let roundInfoArray = tableInfo.RoundInfo.split("-");
 
         if (roundInfoArray.length > 0) {
@@ -129,7 +136,7 @@ const GameControlButton = (props) => {
                         cmd,
                         function (success, o) {
                             if (success) {
-                                console.log('up',o);
+                                console.log('up', o);
                                 if (o.ResultState == 0) {
                                     props.handleQuery(o);
                                 } else {
@@ -253,25 +260,26 @@ const GameControlButton = (props) => {
                     </div>
                 </div>
             ) : onChangeTable ? (
-                <div className="gamesetChangeTable">
+                <>
                     <ChangeTable
                         onChangeTableClose={onChangeTableClose}
                         countryItem={countryItem}
                         areaCode={areaCode}
-                        lobbyClient={lobbyClient}
                     />
-                    <div className="game-controls-box">
-                        {btnsItem.map((item) => (
-                            <div
-                                 key={`change${item.index}`}
-                                className={`controlBtn ${selIndex === item.index ? "act" : ""}`}
-                                onClick={(event) => handleSelControl(event, item.index)}
-                            >
-                                <div>{item.btnName}</div>
-                            </div>
-                        ))}
+                    <div className="game-controls-block">
+                        <div className="game-controls-box">
+                            {btnsItem.map((item) => (
+                                <div
+                                    key={`controls${item.index}`}
+                                    className={`controlBtn ${selIndex === item.index ? "act" : ""}`}
+                                    onClick={(event) => handleSelControl(event, item.index)}
+                                >
+                                    <div>{item.btnName}</div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                </>
             ) : (
                 <div className="game-controls-block">
                     <div className="game-controls-box">
@@ -364,244 +372,6 @@ const AddChip = (props) => {
                 <div className="btn" onClick={handleClose}>
                     取消
                 </div>
-            </div>
-        </div>
-    );
-};
-
-const ChangeTable = (props) => {
-    const lobbyClient = props.lobbyClient;
-    const [tableList, setTableList] = useState([]);
-    const [areaCode, setAreaCode] = useState("");
-
-    useEffect(() => {
-        refreshTableList(props.areaCode);
-    }, []);
-
-    useEffect(() => {
-        refreshTableList(areaCode);
-    }, [areaCode]);
-
-    const handleClose = () => {
-        if (props.onChangeTableClose) {
-            props.onChangeTableClose();
-        }
-    };
-
-    const showSeleCountry = () => {
-        if (
-            window.getComputedStyle(document.getElementById("divCountrySel"))
-                .display == "none"
-        ) {
-            document.getElementById("divCountrySel").style.display = "block";
-        } else {
-            document.getElementById("divCountrySel").style.display = "none";
-        }
-    };
-
-    const seleCountry = (event, value) => {
-        alert(value);
-        document.getElementById("divCountrySel").style.display = "none";
-
-        setAreaCode(value);
-    };
-
-    const refreshTableList = (areaCode) => {
-        //GetTableInfoList lobby
-        lobbyClient.GetTableInfoList(areaCode, 0, (success, o) => {
-            if (success) {
-                if (o.ResultCode === 0) {
-                    let array = o.TableInfoList.map((data) => {
-                        return {
-                            TableNumber: data.TableNumber,
-                            Image: data.ImageList.find((image) => image.ImageType === 1),
-                            CurrencyType: data.CurrencyType,
-                            Status: data.Status,
-                            ShoeResult: data.ShoeResult,
-                        };
-                    });
-
-                    setTableList(array);
-                }
-            }
-        });
-    };
-
-    const SectionLiFavor2 = (props) => {
-        const { favors, updateFavors } = useContext(FavorsContext);
-
-        const tableNumber = props.tableNumber;
-
-        const handleClick = () => {
-            const lobbyClient = EWinGameLobbyClient.getInstance();
-            const index = favors.indexOf(tableNumber);
-
-            //觸發收藏or取消收藏
-            if (index === -1) {
-                //沒找到，新增收藏
-                favors.push(tableNumber);
-                lobbyClient.SetUserAccountProperty(
-                    "EWinGame.Favor",
-                    JSON.stringify(favors),
-                    (success, o) => {
-                        if (success) {
-                            if (o.ResultCode === 0) {
-                                updateFavors();
-                            }
-                        }
-                    }
-                );
-            } else {
-                //有找到，移除收藏
-                favors.splice(index, 1);
-                lobbyClient.SetUserAccountProperty(
-                    "EWinGame.Favor",
-                    JSON.stringify(favors),
-                    (success, o) => {
-                        if (success) {
-                            if (o.ResultCode === 0) {
-                                updateFavors();
-                            }
-                        }
-                    }
-                );
-            }
-        };
-
-        //
-        return (
-            <span
-                onClick={() => handleClick()}
-                className={`${favors.includes(props.tableNumber)
-                        ? "remove-to-favorites"
-                        : "add-to-favorites"
-                    }`}
-            />
-        );
-    };
-
-    const SectionLiFavor1 = (props) => {
-        const { favors } = useContext(FavorsContext);
-        return (
-            <span
-                className={`${favors.includes(props.tableNumber) ? "has-favorites" : ""
-                    }`}
-            />
-        );
-    };
-
-    const SectionLi = (props) => {
-        const [moreScale, setMoreScale] = useState("");
-        const [hoveredItem, setHoveredItem] = useState(null);
-        const mouseleave = () => {
-            setHoveredItem(null);
-            setMoreScale("");
-        };
-
-        return (
-            <li
-                key={props.tableInfo.TableNumber}
-                onMouseEnter={() => setHoveredItem(props.tableInfo.TableNumber)}
-                onMouseLeave={mouseleave}
-                className="li-box"
-            >
-                <SectionLiFavor1 tableNumber={props.tableInfo.TableNumber} />
-                <div className={`games`}>
-                    {props.tableInfo.Image ? (
-                        <img src={props.tableInfo.Image.ImageUrl} alt="Table Image" />
-                    ) : (
-                        <img
-                            src="http://bm.dev.mts.idv.tw/images/JINBEI1.png"
-                            alt="Default Table Image"
-                        />
-                    )}
-                    <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={0} />
-                </div>
-                <p className="game-title">{props.tableInfo.TableNumber}</p>
-                <p className="game-wallet">
-                    <span>{"CNY(暫)"}</span>
-                    <span></span>
-                </p>
-
-                <div
-                    className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? "visible" : ""
-                        } ${moreScale}`}
-                >
-                    <span
-                        className="close-hover-box"
-                        onClick={() => {
-                            setHoveredItem(null);
-                        }}
-                    ></span>
-                    <div className={`games`}>
-                        {props.tableInfo.Image && (
-                            <img src={props.tableInfo.Image.ImageUrl} alt="Table" />
-                        )}
-                    </div>
-                    <div className="info-box">
-                        <p className="game-title">{props.tableInfo.TableNumber}</p>
-                        <p className="game-wallet">
-                            <span>{"CNY(暫)"}</span>
-                            <span></span>
-                        </p>
-                        <div className="game-start">
-                            <Link to={`/games/${props.tableInfo.TableNumber}`}>
-                                {"開始遊戲"}
-                            </Link>
-                        </div>
-                        <div className="game-table-wrap">
-                            <RoadMap shoeResult={props.tableInfo.ShoeResult} roaMapType={1} />
-                        </div>
-                        <p className="game-dis">{/* {props.tableInfo.Status} */}</p>
-
-                        <div className="favorites-box">
-                            <SectionLiFavor2
-                                tableNumber={props.tableInfo.TableNumber}
-                            ></SectionLiFavor2>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        );
-    };
-
-    return (
-        <div className="divChangeTable">
-            <div className="header">
-                <span class="title">要求換桌</span>
-                <div class="search" onClick={showSeleCountry}>
-                    <div class="location"></div>
-
-                    <div class="place">
-                        <span class="place1">地點</span>
-                        <div class="Vector"></div>
-                        <span class="place2">korea</span>
-                    </div>
-                    <div class="upper"></div>
-                </div>
-                <div class="close" onClick={handleClose}>
-                    <div class="closeOutline"></div>
-                    <div class="closeicon"></div>
-                </div>
-            </div>
-            <div class="country" id="divCountrySel">
-                {props.countryItem.map((item) => (
-                    <div
-                        class="countryItem"
-                        onClick={(event) => seleCountry(event, item.value)}
-                    >
-                        <div class="location"></div>
-                        <div class="place">
-                            <span class="place1">{item.name}</span>
-                        </div>
-                        <div class="check"></div>
-                    </div>
-                ))}
-            </div>
-            <div className="section_box">
-                {tableList.map((data) => (
-                    <SectionLi key={data.TableNumber} tableInfo={data} />
-                ))}
             </div>
         </div>
     );
