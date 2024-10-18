@@ -30,6 +30,7 @@ const GameView = (props) => {
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
     const gameSetID = props.GameSetID;
+    const gameSetNumber = props.GameSetNumber;
     const sendCheck = useRef({
         isTableRefreshing: false,
         isGameQuerying: false,
@@ -71,6 +72,7 @@ const GameView = (props) => {
     const [emptyOrderCount, setEmptyOrderCount] = useState(0);
     const cardResultControl = useRef();
     const betAreaControl = useRef();
+    const [notBetAction, setNotBetAction] = useState(-1); //在不能投注的狀況下，工單指令等的額外處理 0=> 預設，無指令  1=> gameSetCmd 2=> orderCmd => 3=>有投注時，是否允許取消投注 4=> 檯面數低於檯紅 5=>無法投注 6=>換桌 7=>洗牌 
 
     //視頻相關
     const [videoResolutionType, setVideoResolutionType] = useState(0);
@@ -219,7 +221,7 @@ const GameView = (props) => {
         new Promise((resolve, reject) => {
 
             //訂閱桌台
-            AddSubscribe(tableNumber, (addSubscribeSuccess) => {
+            AddSubscribe(gameSetID, gameSetNumber, tableNumber, (addSubscribeSuccess) => {
                 if (addSubscribeSuccess) {
                     //刷新並取得桌台資訊
                     gameClient.RefreshSubscribe(gameSetID, tableNumber, refreshStreamType, (s, o) => {
@@ -348,7 +350,7 @@ const GameView = (props) => {
             clearInterval(intervalIDByRefreshSubscribe);
             clearInterval(intervalIDByTableInfo);
             clearInterval(intervalIDByQueryGame);
-            RemoveSubscribe(tableNumber);
+            RemoveSubscribe("", tableNumber);
         };
     }, [tableNumber, gameSetID]);
 
@@ -663,6 +665,14 @@ const GameView = (props) => {
         }
     }
 
+    const btnLeaveGame = () => {
+        gameClient.LeaveRoadMap(gameSetID, tableNumber, (s, o) => {
+            // 無論成功失敗
+
+            window.location.href = window.location.host;
+        });
+    }
+
     const checkIsCanBetAndCheckGameSet = () => {
 
         if (queryInfo.current == null || tableInfo.current == null) {
@@ -698,7 +708,8 @@ const GameView = (props) => {
 
         if (!Q.GameSetOrder.GameSetRoadMapNumber || (tableNumber === Q.GameSetOrder.GameSetRoadMapNumber)) {
             if (Q.UserInfo.AllowBet) {
-                if ((Q.PADAvailable === true) || (T.BaccaratType === 3)) {
+                if ((Q.PADAvailable === true) || (T.BaccaratType === 3)) { //BaccaratType 0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
+                    //-1=尚未建立(暫存)/0=建立/1=進行中/2=暫停/3=完場/4=結算完成/5=取消
                     if (Q.GameSetOrder.GameSetState === 0 || Q.GameSetOrder.GameSetState === 1) {
                         if (!Q.GameSetOrder.Cmd) {
                             if (tableInfoList[2] !== 0) {
@@ -708,47 +719,15 @@ const GameView = (props) => {
                                         case 1:
                                             //電投，檢查是否有已經存在的指令
                                             if (Q.SelfOrder.OrderCmd) {
-                                                let cmdText = "";
-
-                                                switch (Q.SelfOrder.OrderCmd.toUpperCase()) {
-                                                    case "Pass".toUpperCase():
-                                                        cmdText = "飛牌";
-                                                        break;
-                                                    case "NextShoe".toUpperCase():
-                                                        cmdText = "換靴";
-                                                        break;
-                                                    case "ChangeDealer".toUpperCase():
-                                                        cmdText = "更換荷官";
-                                                        break;
-                                                    case "ContactMe".toUpperCase():
-                                                        cmdText = "請聯繫我";
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-
                                                 checkRealStopBet(false);
 
-                                                if (cmdText !== "") {
-                                                    msgMaskResultControl.current.ShowMask(cmdText, () => { });
-                                                    checkRealStopBet(false);
-                                                } else {
-                                                    msgMaskResultControl.current.HideMask();
-                                                    setIsCanBet(true);
-                                                }
+                                                setIsCanBet(false);
+                                                setNotBetAction(2);
                                             } else if (orderData.confirmValue !== 0) {
                                                 checkRealStopBet(false);
 
-                                                if (Q.AllowCancelOrder == 1) {
-                                                    msgMaskResultControl.current.ShowMask("下注成功, 等待現場開牌, 點選畫面可取消投注...", () => {
-                                                        msgMaskResultControl.current.ShowMask("是否確認要取消投注?", () => {
-                                                            //clearOrder();
-                                                            handleBet("cancelBet", null, null);
-                                                        });
-                                                    });
-                                                } else {
-                                                    msgMaskResultControl.current.ShowMask("下注成功, 等待現場開牌...", () => { });
-                                                }
+                                                setIsCanBet(false);
+                                                setNotBetAction(3);
                                             } else {
                                                 //允許下注
 
@@ -767,10 +746,8 @@ const GameView = (props) => {
                                                         msgMaskResultControl.current.HideMask();
                                                         setIsCanBet(true);
                                                     } else {
-                                                        msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => {
-                                                            msgMaskResultControl.current.HideMask();
-                                                            checkRealStopBet(false);
-                                                        });
+                                                        setIsCanBet(false);
+                                                        setNotBetAction(4);
                                                     }
                                                 } else {
                                                     checkRealStopBet(false);
@@ -794,109 +771,31 @@ const GameView = (props) => {
                                     }
                                 } else {
                                     setIsCanBet(false);
+                                    setNotBetAction(7);
                                 }
                             } else {
                                 setIsCanBet(false);
+                                setNotBetAction(7);
                             }
                         } else {
-                            //有指令
-                            let tmpIndex;
-                            let cmd;
-                            let value;
-                            let reqAddChipValue;
-                            let unitData = getDisplayUnit();
-
-                            tmpIndex = Q.GameSetOrder.Cmd.indexOf(":");
-                            if (tmpIndex != -1) {
-                                cmd = Q.GameSetOrder.Cmd.substr(0, tmpIndex).trim();
-                                value = Q.GameSetOrder.Cmd.substr(tmpIndex + 1).trim();
-                            } else {
-                                cmd = Q.GameSetOrder.Cmd;
-                                value = "";
-                            }
-
-                            switch (cmd.toUpperCase()) {
-                                case "Pause".toUpperCase():
-                                    msgMaskResultControl.current.ShowMask("正在要求暫停", () => { 
-                                        alertMsg("繼續", "繼續遊戲?", () => { 
-                                            handleGameSetCmd("setGameSetCmd",{gameCmd: "Continue"})
-
-                                        });
-                                    });
-                                    checkRealStopBet(false);
-                                    break;
-                                case "Continue".toUpperCase():
-                                    msgMaskResultControl.current.ShowMask("正在要求繼續遊戲", () => { });
-                                    checkRealStopBet(false);
-                                    break;
-                                case "RequireAddChip".toUpperCase():
-
-                                    if ((value != null) && (value !== "")) {
-                                        reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
-
-                                        msgMaskResultControl.current.ShowMask("正在要求加彩" + reqAddChipValue + unitData.text, () => { });
-                                    } else {
-                                        msgMaskResultControl.current.ShowMask("正在加彩", () => { });
-                                    }
-
-                                    checkRealStopBet(false);
-                                    break;
-                                case "RequireAddTips".toUpperCase():
-                                    // pad 要求客戶打賞小費
-                                    handleAddTips("addTips",{tipsValue: new BigNumber(value).toNumber()});
-                                    checkRealStopBet(false);
-                                    break;
-                                case "CancelAddChip".toUpperCase():
-                                    reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
-
-                                    alertMsg("小費", "已取消要求加彩" + reqAddChipValue + unitData.text, () => { 
-                                        handleGameSetCmd("clearGameSetCmd", null);
-                                    });
-                                    checkRealStopBet(false);
-                                    break;
-                                case "AddChip".toUpperCase():
-                                    reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
-
-                                    alertMsg("加彩成功", "已加彩" + reqAddChipValue + unitData.text, () => { debugger
-                                        handleGameSetCmd("clearGameSetCmd", null);
-                                    });
-
-                                    msgMaskResultControl.current.ShowMask("", () => { });
-                                    checkRealStopBet(false);
-                                    break;
-                                case "AddTips".toUpperCase():
-                                    msgMaskResultControl.current.ShowMask("正在要求提供小費" + value + "元", () => { });
-                                    checkRealStopBet(false);
-                                    break;
-                                case "CancelAddTips".toUpperCase():
-                                    msgMaskResultControl.current.ShowMask("等待要求取消小費", () => { });
-                                    checkRealStopBet(false);
-                                    break;
-                                case "Completed".toUpperCase():
-                                    msgMaskResultControl.current.ShowMask("正在要求完場", () => { });
-                                    checkRealStopBet(false);
-                                    break;
-                                case "ChangeTable".toUpperCase():
-                                    msgMaskResultControl.current.ShowMask("正在要求更換賭桌至" + " " + value, () => { });
-                                    checkRealStopBet(false);
-                                    break;
-                                default:
-                                    break;
-                            }
-
                             setIsCanBet(false);
+                            setNotBetAction(1);
                         }
                     } else {
                         setIsCanBet(false);
+                        setNotBetAction(2);
                     }
                 } else {
                     setIsCanBet(false);
+                    setNotBetAction(2);
                 }
             } else {
                 setIsCanBet(false);
+                setNotBetAction(5);
             }
         } else {
             setIsCanBet(false);
+            setNotBetAction(6);
         }
 
     };
@@ -909,24 +808,219 @@ const GameView = (props) => {
         });
     };
 
-    //#endregion
+    useEffect(() => {
+        const Q = queryInfo.current;
+        const T = tableInfo.current;
 
+        if (isCanBet) {
+            msgMaskResultControl.current.HideMask();
+        } else {
+            //0=> 預設，無指令  1=> gameSetCmd 2=> orderCmd => 3=>有投注時，是否允許取消投注 4=> 檯面數低於檯紅 5=>無法投注 6=>換桌 7=>洗牌 
+            setIsCanBet(false);
+            if (notBetAction === 1) {
+                let tmpIndex;
+                let cmd;
+                let value;
+                let reqAddChipValue;
+                let unitData = getDisplayUnit();
+
+                tmpIndex = Q.GameSetOrder.Cmd.indexOf(":");
+                if (tmpIndex != -1) {
+                    cmd = Q.GameSetOrder.Cmd.substr(0, tmpIndex).trim();
+                    value = Q.GameSetOrder.Cmd.substr(tmpIndex + 1).trim();
+                } else {
+                    cmd = Q.GameSetOrder.Cmd;
+                    value = "";
+                }
+
+                switch (cmd.toUpperCase()) {
+                    case "Pause".toUpperCase():
+                        msgMaskResultControl.current.ShowMask("正在要求暫停", () => {
+                            alertMsg("繼續", "繼續遊戲?", () => {
+                                handleGameSetCmd("setGameSetCmd", { gameCmd: "Continue" })
+                            });
+                        });
+                        break;
+                    case "Continue".toUpperCase():
+                        msgMaskResultControl.current.ShowMask("正在要求繼續遊戲", () => { });
+                        break;
+                    case "RequireAddChip".toUpperCase():
+
+                        if ((value != null) && (value !== "")) {
+                            reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
+
+                            msgMaskResultControl.current.ShowMask("正在要求加彩" + reqAddChipValue + unitData.text, () => { });
+                        } else {
+                            msgMaskResultControl.current.ShowMask("正在加彩", () => { });
+                        }
+
+                        break;
+                    case "RequireAddTips".toUpperCase():
+                        // pad 要求客戶打賞小費
+                        handleAddTips("addTips", { tipsValue: new BigNumber(value).toNumber() });
+
+                        break;
+                    case "CancelAddChip".toUpperCase():
+                        reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
+
+                        alertMsg("小費", "已取消要求加彩" + reqAddChipValue + unitData.text, () => {
+                            handleGameSetCmd("clearGameSetCmd", null);
+                        });
+
+                        break;
+                    case "AddChip".toUpperCase():
+                        reqAddChipValue = new BigNumber(value).dividedBy(unitData.value).toNumber();
+
+                        alertMsg("加彩成功", "已加彩" + reqAddChipValue + unitData.text, () => {
+                            handleGameSetCmd("clearGameSetCmd", null);
+                        });
+
+                        msgMaskResultControl.current.ShowMask("", () => { });
+
+                        break;
+                    case "AddTips".toUpperCase():
+                        msgMaskResultControl.current.ShowMask("正在要求提供小費" + value + "元", () => { });
+
+                        break;
+                    case "CancelAddTips".toUpperCase():
+                        msgMaskResultControl.current.ShowMask("等待要求取消小費", () => { });
+
+                        break;
+                    case "Completed".toUpperCase():
+                        msgMaskResultControl.current.ShowMask("正在要求完場", () => { });
+
+                        break;
+                    case "ChangeTable".toUpperCase():
+                        msgMaskResultControl.current.ShowMask("正在要求更換賭桌至" + " " + value, () => { });
+
+                        break;
+                    default:
+                        break;
+                }
+            } else if (notBetAction === 2) {
+                msgMaskResultControl.current.HideMask();
+                //BaccaratType 0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
+                if ((Q.PADAvailable === true) || (T.BaccaratType === 3)) { 
+                    //-1=尚未建立(暫存)/0=建立/1=進行中/2=暫停/3=完場/4=結算完成/5=取消
+
+                    if (Q.GameSetOrder.GameSetState === 0 || Q.GameSetOrder.GameSetState === 1) {
+                        let cmdText = "";
+    
+                        switch (Q.SelfOrder.OrderCmd.toUpperCase()) {
+                            case "Pass".toUpperCase():
+                                cmdText = "飛牌";
+                                break;
+                            case "NextShoe".toUpperCase():
+                                cmdText = "換靴";
+                                break;
+                            case "ChangeDealer".toUpperCase():
+                                cmdText = "更換荷官";
+                                break;
+                            case "ContactMe".toUpperCase():
+                                cmdText = "請聯繫我";
+                                break;
+                            default:
+                                break;
+                        }
+    
+                        if (cmdText !== "") {
+                            msgMaskResultControl.current.ShowMask(cmdText, () => { });
+                        } else {
+                            setIsCanBet(true);
+                        }
+                    } else {
+                        switch (Q.GameSetOrder.GameSetState) {
+                            case 2:
+                                if (Q.GameSetOrder.Cmd.toUpperCase() == "Continue".toUpperCase()) {
+                                    msgMaskResultControl.current.ShowMask("正在要求繼續遊戲", () => { });
+                                } else {
+                                    msgMaskResultControl.current.ShowMask("暫停, 請再次點選要求繼續遊戲", () => {
+                                        alertMsg("繼續", "繼續遊戲?", () => {
+                                            handleGameSetCmd("setGameSetCmd", { gameCmd: "Continue" })
+                                        });
+                                    });
+                                }
+                                break;
+                            case 3:
+                            case 4:
+                                window.sessionStorage.removeItem("GameSetID");
+                                msgMaskResultControl.current.ShowMask("結束遊戲, 請點選回列表頁", () => {
+                                    btnLeaveGame();
+                                });
+                                break;
+                            case 5:
+                                window.sessionStorage.removeItem("GameSetID");
+                                msgMaskResultControl.current.ShowMask("本場取消, 請點選回列表頁", () => {
+                                    btnLeaveGame();
+                                });
+                                break;
+                        }
+                    }
+                } else {
+                    if (Q.GameSetOrder.GameSetState == 3) {
+                        window.sessionStorage.removeItem("GameSetID");
+                        msgMaskResultControl.current.ShowMask("結束遊戲, 請點選回列表頁", () => {
+                            btnLeaveGame();
+                        });
+                    } else if (Q.GameSetOrder.GameSetState == 5) {
+                        window.sessionStorage.removeItem("GameSetID");
+                        msgMaskResultControl.current.ShowMask("本場取消, 請點選回列表頁", () => {
+                            btnLeaveGame();
+                        });
+                    } else {
+                        msgMaskResultControl.current.ShowMask("等待電投手準備完成", () => { });
+                    }
+                }
+
+            } else if (notBetAction === 3) {
+                if (Q.AllowCancelOrder === 1) {
+                    msgMaskResultControl.current.ShowMask("下注成功, 等待現場開牌, 點選畫面可取消投注...", () => {
+                        msgMaskResultControl.current.ShowMask("是否確認要取消投注?", () => {
+                            handleBet("cancelBet", null, null);
+                        });
+                    });
+                } else {
+                    msgMaskResultControl.current.ShowMask("下注成功, 等待現場開牌...", () => { });
+                }
+            } else if (notBetAction === 4) {
+                msgMaskResultControl.current.ShowMask("檯面數已低於檯紅, 請加彩繼續遊戲", () => {
+                    msgMaskResultControl.current.HideMask();
+                });
+            } else if (notBetAction === 5) {
+                msgMaskResultControl.current.ShowMask("您的帳戶無法投注", () => { });
+            } else if (notBetAction === 6) {
+                msgMaskResultControl.current.ShowMask("桌號已更換, 請點選切換到新桌號" + " [" + Q.GameSetOrder.GameSetRoadMapNumber + "] ", () => {
+                    //換桌 待補
+                    //entryRoadMap(gameSetRoadMapNumber);
+                });
+            } else if (notBetAction === 7) {
+                msgMaskResultControl.current.ShowMask("洗牌中", () => { });
+            } else {
+                msgMaskResultControl.current.HideMask();
+            }
+
+        }
+
+    }, [isCanBet, notBetAction]);
+
+    //#endregion
 
     //#region notify相關
     const handleNotify = (type, args) => {
-        console.log('type',type);
-        console.log('args',args);
+        console.log("type", type);
+        console.log("args", args);
         if (notifyEvents.includes(type)) {
             if (type === "TableChange") {
                 //如果是桌台狀態改變，重新撈取桌台資訊確認最新的桌台狀態
                 if (args.Action !== "") {
                     refreshTableInfo();
                 }
-            } else if (type === "GameSetChange") {
-                
+            } else if (type === "GameSetChange") {//工單暫停通知
                 if (args.GameSetID === gameSetID) {
                     refreshQueryGame();
                 }
+            } else if (type === "BetChange") { //加彩成功後通知
+                refreshQueryGame();
             } else {
                 tableNotify.current.notify(type, args);
             }
@@ -1270,7 +1364,6 @@ const GameView = (props) => {
     };
     //#endregion
 
-
     //#region 開牌相關
     const getResultObject = (r) => {
         let result = {
@@ -1387,14 +1480,18 @@ const GameView = (props) => {
 
     //#endregion
 
-    const handleGameSetCmd = useCallback((action, args) => {
-        switch (action) {
-            case "setGameSetCmd":
+    const handleGameSetCmd = (action, args) => {
+        let roundInfoArray = tableInfo.current.RoundInfo.split('-');
+
+        if (roundInfoArray.length > 0) {
+
+            switch (action) {
+                case "setGameSetCmd":
                     if (isConnected) {
                         if ("gameCmd" in args) {
-                            gameClient.SetGameSetCmd(gameSetID, tableNumber, shoeNumber, roundNumber, args.gameCmd, (s, o) => {
+                            gameClient.SetGameSetCmd(gameSetID, tableNumber, roundInfoArray[0], roundInfoArray[1], args.gameCmd, (s, o) => {
                                 if (s) {
-                                    if (o.ResultState === 0) {
+                                    if (o.ResultCode === 0) {
                                         msgMaskResultControl.current.HideMask();
                                         handleQuery(o);
                                     } else {
@@ -1403,14 +1500,14 @@ const GameView = (props) => {
                                         }, 3000);
                                     }
                                 } else {
-                                    if (o === "Timeout"){
+                                    if (o === "Timeout") {
                                         alertMsg("網路異常, 請重新操作");
                                     } else {
-                                        if ((o != null) && (o !== "")){
+                                        if ((o != null) && (o !== "")) {
                                             alertMsg(o.message);
                                         }
                                     }
-    
+
                                     refreshQueryGame();
                                 }
                             });
@@ -1418,10 +1515,10 @@ const GameView = (props) => {
                     } else {
                         alertMsg("錯誤", "伺服器斷線", null);
                     }
-                break;
-            case "clearGameSetCmd":
+                    break;
+                case "clearGameSetCmd":
                     if (isConnected) {
-                        gameClient.ClearGameSetCmd(gameSetID, tableNumber, shoeNumber, roundNumber, (s, o) => {
+                        gameClient.ClearGameSetCmd(gameSetID, tableNumber, roundInfoArray[0], roundInfoArray[1], (s, o) => {
                             if (s) {
                                 if (o.ResultState === 0) {
                                     msgMaskResultControl.current.HideMask();
@@ -1432,10 +1529,10 @@ const GameView = (props) => {
                                     }, 3000);
                                 }
                             } else {
-                                if (o === "Timeout"){
+                                if (o === "Timeout") {
                                     alertMsg("網路異常, 請重新操作");
                                 } else {
-                                    if ((o != null) && (o !== "")){
+                                    if ((o != null) && (o !== "")) {
                                         alertMsg(o.message);
                                     }
                                 }
@@ -1446,49 +1543,50 @@ const GameView = (props) => {
                     } else {
                         alertMsg("錯誤", "伺服器斷線", null);
                     }
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
         }
-    }, [tableNumber, shoeNumber, roundNumber]);
-    
+    };
+
     const handleAddTips = useCallback((action, args, cb) => {
         switch (action) {
             case "addTips":
-                    if (isConnected) {
-                        if ("tipsValue" in args) {
-                            let unitData = getDisplayUnit();
-                            let v;
+                if (isConnected) {
+                    if ("tipsValue" in args) {
+                        let unitData = getDisplayUnit();
+                        let v;
 
-                            alertMsg("小費", "確定打賞小費"+ " " + args.tipsValue + " " + "元", () => {
-                                v = new BigNumber(args.tipsValue).dividedBy(unitData.value).toNumber();
+                        alertMsg("小費", "確定打賞小費" + " " + args.tipsValue + " " + "元", () => {
+                            v = new BigNumber(args.tipsValue).dividedBy(unitData.value).toNumber();
 
-                                gameClient.AddTipsType0(gameSetID, tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, v, (s, o) => {
-                                    if (s) {
-                                        if (o.ResultState === 0) {
-                                            msgMaskResultControl.current.HideMask();
-                                            handleQuery(o);
-                                        } else {
-                                            handleGameSetCmd("setGameSetCmd",{gameCmd: "CancelAddTips:" + args.tipsValue})
-                                        }
+                            gameClient.AddTipsType0(gameSetID, tableNumber, shoeNumber, roundNumber, orderData.orderSequence + 1, v, (s, o) => {
+                                if (s) {
+                                    if (o.ResultState === 0) {
+                                        msgMaskResultControl.current.HideMask();
+                                        handleQuery(o);
                                     } else {
-                                        if (o === "Timeout"){
-                                            alertMsg("網路異常, 請重新操作");
-                                        } else {
-                                            if ((o != null) && (o !== "")){
-                                                alertMsg(o.message);
-                                            }
-                                        }
-        
-                                        refreshQueryGame();
+                                        handleGameSetCmd("setGameSetCmd", { gameCmd: "CancelAddTips:" + args.tipsValue })
                                     }
-                                });
-                            });
-                        }
+                                } else {
+                                    if (o === "Timeout") {
+                                        alertMsg("網路異常, 請重新操作");
+                                    } else {
+                                        if ((o != null) && (o !== "")) {
+                                            alertMsg(o.message);
+                                        }
+                                    }
 
-                    } else {
-                        alertMsg("錯誤", "伺服器斷線", null);
+                                    refreshQueryGame();
+                                }
+                            });
+                        });
                     }
+
+                } else {
+                    alertMsg("錯誤", "伺服器斷線", null);
+                }
                 break;
             default:
                 break;
@@ -1571,11 +1669,15 @@ const GameView = (props) => {
                             <button style={{ position: "absolute", left: "400px", bottom: "20px", "zIndex": "99999", width: "200px" }} onClick={() => {
                                 //cardResultControl.current.CloseCard();
                                 //setIsCanBet(true);
-                                msgMaskResultControl.current.ShowMask("正在要求暫停", () => { 
-                                        alertMsg("繼續", "繼續遊戲?", () => { 
-                                            handleGameSetCmd("setGameSetCmd",{gameCmd: "Continue" })
-                                        });
-                                    });
+                                //msgMaskResultControl.current.ShowMask("正在要求暫停", () => { 
+                                //alertMsg("繼續", "繼續遊戲?", () => { 
+                                //handleGameSetCmd("setGameSetCmd",{gameCmd: "Continue" })
+                                //});
+                                //});
+
+                                gameClient.SetGameSetID((s, o) => {
+
+                                });
 
                             }}>測試2</button>
                             <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} setIsCanBet={setIsCanBet}></CountdownCircle>

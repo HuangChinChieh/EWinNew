@@ -85,6 +85,16 @@ export class EWinGameBaccaratClient {
         });
     }
 
+    SetGameSetID(cb) {
+        this.EWinHub.invoke("SetGameSetID").done(function (o) {
+            if (cb)
+                cb(true, o);
+        }).fail(function (err) {
+            if (cb)
+                cb(false, err);
+        });
+    }
+
     //#region 屬性使用到的 Refrence Type
 
     /**
@@ -394,8 +404,8 @@ export class EWinGameBaccaratClient {
      * 
      * @returns {void}
      */
-    AddSubscribe(RoadMapNumberList, cb) {
-        this.EWinHub.invoke("AddSubscribe", this.CT, generateUUIDv4(), RoadMapNumberList).done(function (o) {
+    AddSubscribe(GameSetNumber, RoadMapNumberList, cb) {
+        this.EWinHub.invoke("AddSubscribe", this.CT, generateUUIDv4(), GameSetNumber, RoadMapNumberList).done(function (o) {
             if (cb)
                 cb(true, o);
         }).fail(function (err) {
