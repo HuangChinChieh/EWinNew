@@ -13,7 +13,7 @@ const GameBettingArea = forwardRef((props, ref) => {
 
   const generateChipDom = (chipData) => {
     return (
-      <div className="chip-stack">
+      <div className="chip-stack" key={chipData.index + "_" + chipData.chipValue}>
         <div className={"game-chip chips-" + chipData.styleIndex}>
           <div className='game-chipValue'>{chipData.chipValue}</div>
         </div>
