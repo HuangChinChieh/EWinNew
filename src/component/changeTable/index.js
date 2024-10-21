@@ -171,7 +171,7 @@ const ChangeTable = (props) => {
           <ul>
             {tableList.length > 0
               ? tableList.map((data) => (
-                  <SectionLi key={data.TableNumber} tableInfo={data} />
+                  <SectionLi key={data.TableNumber} tableInfo={data} entryRoadMap={props.entryRoadMap} />
                 ))
               : <span style={{ color:"#ffffff", fontSize:"1.375rem", fontWeight:"500", fontFamily:"Noto Sans TC" }}>No Data</span>}
           </ul>

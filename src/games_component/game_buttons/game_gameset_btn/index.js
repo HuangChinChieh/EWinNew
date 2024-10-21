@@ -50,10 +50,7 @@ const GameControlButton = (props) => {
     let areaCode = useRef();
 
     useEffect(() => {
-        console.log(props.orderData);
         let tableInfo = getTableInfo();
-
-        console.log('tableInfo',tableInfo);
     }, []);
 
     const handleSelControl = (event, index) => {
@@ -138,7 +135,6 @@ const GameControlButton = (props) => {
                         cmd,
                         function (success, o) {
                             if (success) {
-                                console.log('up', o);
                                 if (o.ResultState == 0) {
                                     props.handleQuery(o);
                                 } else {
@@ -270,6 +266,7 @@ const GameControlButton = (props) => {
                         onChangeTableClose={onChangeTableClose}
                         countryItem={countryItem}
                         areaCode={areaCode}
+                        entryRoadMap={props.entryRoadMap}
                     />
                     <div className="game-controls-box">
                         {btnsItem.map((item) => (
