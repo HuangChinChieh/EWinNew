@@ -1045,24 +1045,14 @@ const GameView = (props) => {
                               alertMsg("網路異常, 請重新操作");
                             else if (o != null && o !== "") alertMsg(o);
 
-                            refreshQueryGame();
-                          }
-                        }
-                      );
-                    } else if (tableInfo.current.BaccaratType === 2) {
-                      gameClient.AddBetType1(
-                        props.CurrencyType,
-                        tableNumber,
-                        shoeNumber,
-                        roundNumber,
-                        orderData.orderSequence + 1,
-                        orderData.Banker.unConfirmValue,
-                        orderData.Player.unConfirmValue,
-                        orderData.Tie.unConfirmValue,
-                        orderData.BankerPair.unConfirmValue,
-                        orderData.PlayerPair.unConfirmValue,
-                        (s, o) => {
-                          sendCheck.current.isSendBetData = false;
+                                                    refreshQueryGame();
+                                                }
+                                            });
+                                    } else if (tableInfo.current.BaccaratType === 2) {
+                                        gameClient.AddBetType1(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderData.orderSequence + 1
+                                            , orderData.Banker.unConfirmValue, orderData.Player.unConfirmValue, orderData.Tie.unConfirmValue, orderData.BankerPair.unConfirmValue, orderData.PlayerPair.unConfirmValue
+                                            , (s, o) => {
+                                                sendCheck.current.isSendBetData = false;
 
                           if (s) {
                             if (o.ResultState === 0) {
@@ -1080,24 +1070,14 @@ const GameView = (props) => {
                               alertMsg("網路異常, 請重新操作");
                             else if (o != null && o !== "") alertMsg(o);
 
-                            refreshQueryGame();
-                          }
-                        }
-                      );
-                    } else if (tableInfo.current.BaccaratType === 3) {
-                      gameClient.AddBetType2(
-                        props.CurrencyType,
-                        tableNumber,
-                        shoeNumber,
-                        roundNumber,
-                        orderData.orderSequence + 1,
-                        orderData.Banker.unConfirmValue,
-                        orderData.Player.unConfirmValue,
-                        orderData.Tie.unConfirmValue,
-                        orderData.BankerPair.unConfirmValue,
-                        orderData.PlayerPair.unConfirmValue,
-                        (s, o) => {
-                          sendCheck.current.isSendBetData = false;
+                                                    refreshQueryGame();
+                                                }
+                                            });
+                                    } else if (tableInfo.current.BaccaratType === 3) {
+                                        gameClient.AddBetType2(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderData.orderSequence + 1
+                                            , orderData.Banker.unConfirmValue, orderData.Player.unConfirmValue, orderData.Tie.unConfirmValue, orderData.BankerPair.unConfirmValue, orderData.PlayerPair.unConfirmValue
+                                            , (s, o) => {
+                                                sendCheck.current.isSendBetData = false;
 
                           if (s) {
                             if (o.ResultState === 0) {

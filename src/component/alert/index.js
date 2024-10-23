@@ -50,7 +50,7 @@ const AlertButton = ({ children }) => {
       }
       setShowAlert(true);
     },
-    [handleClose, handleOK]
+    []
   );
 
   return (
@@ -60,8 +60,10 @@ const AlertButton = ({ children }) => {
           <div className="modal">
             <h2>{title}</h2>
             <p>{message}</p>
-            <button onClick={handleOK}>OK</button>
-            <button onClick={handleClose}>关闭</button>
+            <div className="button-group">
+              <button onClick={handleOK}>確認</button>
+              <button onClick={handleClose}>取消</button>
+            </div>
           </div>
         </div>
       )}
