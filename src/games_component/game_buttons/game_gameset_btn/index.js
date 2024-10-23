@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, useContext, useCallback } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+import ReactDOM from 'react-dom';
 import "./index.scss";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { AlertContext } from "component/alert";
@@ -10,6 +11,7 @@ import {
 } from "provider/GameLobbyProvider";
 import RoadMap from "component/road_map";
 import { Link } from "react-router-dom";
+import { on } from "stream";
 
 const GameControlButton = (props) => {
     const lobbyClient = EWinGameLobbyClient.getInstance();
@@ -53,7 +55,7 @@ const GameControlButton = (props) => {
         console.log(props.orderData);
         let tableInfo = getTableInfo();
 
-        console.log('tableInfo',tableInfo);
+        console.log('tableInfo', tableInfo);
     }, []);
 
     const handleSelControl = (event, index) => {
@@ -226,7 +228,12 @@ const GameControlButton = (props) => {
     };
 
     const onSetChipVal = (chipsValue) => {
-        setChipVal(onChangeChipVal + chipsValue);
+        if (chipsValue <= -1) {
+            setChipVal(0);
+        } else {
+            setChipVal(onChangeChipVal + chipsValue);
+        }
+
         setAddChip(true);
     };
 
@@ -238,9 +245,11 @@ const GameControlButton = (props) => {
     return (
         <>
             {onAddChip ? (
-                <div className="overlay">
+
+                ReactDOM.createPortal(<div className="overlay">
                     <AddChip
                         onAddChipClose={onAddChipClose}
+                        onAddChipClear={()=>{setChipVal(0)}}
                         setrefreshTable={setrefreshTable}
                         setChipVal={onChangeChipVal}
                         gameClient={gameClient}
@@ -263,7 +272,8 @@ const GameControlButton = (props) => {
                             ))}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body)
             ) : onChangeTable ? (
                 <>
                     <ChangeTable
@@ -285,17 +295,17 @@ const GameControlButton = (props) => {
                 </>
             ) : (
                 <div className="game-controls-block">
-              
-                        {btnsItem.map((item) => (
-                            <div
-                                key={`controls${item.index}`}
-                                className={`controlBtn ${selIndex === item.index ? "act" : ""} ${item.btnName}`}
-                                onClick={(event) => handleSelControl(event, item.index)}
-                            >
-                               {item.btnName}
-                            </div>
-                        ))}
-            
+
+                    {btnsItem.map((item) => (
+                        <div
+                            key={`controls${item.index}`}
+                            className={`controlBtn ${selIndex === item.index ? "act" : ""} ${item.btnName}`}
+                            onClick={(event) => handleSelControl(event, item.index)}
+                        >
+                            {item.btnName}
+                        </div>
+                    ))}
+
                 </div>
             )}
         </>
@@ -307,6 +317,12 @@ const AddChip = (props) => {
     const handleClose = () => {
         if (props.onAddChipClose) {
             props.onAddChipClose();
+        }
+    };
+
+    const handleClear = () => {
+        if (props.onAddChipClear) {
+            props.onAddChipClear();
         }
     };
 
@@ -360,6 +376,9 @@ const AddChip = (props) => {
             <div className="divBtn">
                 <div className="btn" onClick={handleOK}>
                     確認
+                </div>
+                <div className="btn" onClick={handleClear}>
+                    重置
                 </div>
                 <div className="btn" onClick={handleClose}>
                     取消

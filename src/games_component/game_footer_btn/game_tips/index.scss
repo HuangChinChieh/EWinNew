@@ -13,6 +13,13 @@
     box-sizing: border-box;
     opacity: 0.75;
     margin-bottom: 1.5625rem;
+
+    &:hover{
+        background-color: #292933;
+        border-color: #FFFFFF;
+        cursor: pointer;
+    transition: all 0.3s;
+    }
     span {
         color: #FFF;
 

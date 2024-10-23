@@ -9,8 +9,9 @@ import GameOpenGameSetAction from 'games_component/game_footer_btn/game_open_gam
 import GameControlButton from 'games_component/game_buttons/game_gameset_btn';
 
 const GameFooterArea = (props) => {
-    const [middleBtnType, setMiddleBtnType] = useState("Chip")
-    const BaccaratType = props.baccaratType;
+    const [middleBtnType, setMiddleBtnType] = useState("GameSet")
+    //const BaccaratType = props.baccaratType;
+    const BaccaratType = 1;
 
     const updateMiddleBtnType = useCallback((v) => {
         setMiddleBtnType(v);

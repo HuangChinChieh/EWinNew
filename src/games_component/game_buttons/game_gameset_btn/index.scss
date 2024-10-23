@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Yuji+Boku&display=swap");
+﻿//@import url("https://fonts.googleapis.com/css2?family=Yuji+Boku&display=swap");
 
 @keyframes initShow {
 
@@ -15,6 +15,7 @@
 .game-controls-block {
     /* Auto layout */
     display: flex;
+    
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -56,11 +57,11 @@
         text-align: center;
         line-height: 4.5rem;
         opacity: 1.0;
-        transition: transform 0.1s ease-out, border-color 0.1s linear, background-color 0.1s linear;
+        transition: all 0.1s ease-out, border-color 0.1s linear, background-color 0.1s linear;
         transform-origin: center;
         transform-style: preserve-3d;
         transform: rotateX(-15deg);
-        font-family: "Yuji Boku", serif;
+        //font-family: "Yuji Boku", serif;
 
         &:hover {
             background-color: #292933;
@@ -69,7 +70,10 @@
             cursor: pointer;
             opacity: 1;
             font-size: 1.1rem;
-            transform: translateY(-0.5rem) scale(1.1) perspective(25rem) rotateX(0deg);
+            width: 5rem;
+            height: 5rem;
+            line-height: 5rem;
+            transform: translateY(-0.5rem) perspective(25rem) rotateX(0deg);
             //    animation: controlBtnAni 2s linear infinite alternate; 
         }
 
@@ -110,6 +114,7 @@
         align-items: flex-end;
         width: 100%;
         height: 100%;
+        animation: initShow 0.3s ease-out;
 
         .game-chips-box {
             /* Auto layout */
@@ -212,22 +217,21 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 16.8rem;
+        width: 28rem;
         height: 13.43rem;
-        border-radius: 6px 0px 0px 0px;
+        border-radius: 6px;
         padding: 16px 15px 16px 15px;
-        gap: 16px;
-        border: 1px 0px 0px 0px;
-        opacity: 0px;
-        background: #292933;
-        border: 1px solid #F4CD44
+        gap: 16px;           
+        background: rgb(21 21 23 / 90%);
+        border: 1px solid rgb(122 122 122 / 40%);;
+        animation: initShow 0.3s ease-out;
     }
 
     .divAddChip .title {
         height: 1.375rem;
         padding: 2rem;
         font-family: Roboto;
-        font-size: 20px;
+        font-size: 1.25rem;
         font-weight: 500;
         line-height: 16.41px;
         text-align: center;
@@ -252,7 +256,7 @@
         gap: 6px;
         width: 100%;
         height: 100%;
-        background: rgba(41, 41, 51, 0.8);
+        background: rgba(73, 73, 73, 0.4);
         border: 1px solid #46465B;
         border-radius: 50px;
     }
@@ -283,13 +287,18 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        width: 6.83rem;
+        width: 6.8rem;
         height: 2.5rem;
-        background: rgba(141, 141, 159, 0.3);
-        border: 1px solid #46465B;
-        border-radius: 21px;
-        font-size: 18px;
-        line-height: 150%;
+        background: rgba(73, 73, 73, 0.4);
+        border: 0.0625rem solid #46465B;
+        border-radius: 1.3125rem;
+        font-size: 1rem;
+        line-height: 2.5rem;
         color: #FFFFFF;
+        cursor: pointer;
+        transition: background-color 0.3s ease-out;
+        &:hover{
+            background: rgba(109, 109, 109, 0.9);
+        }
     }
 }
