@@ -1,8 +1,15 @@
 ﻿.gamesetChangeTable {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  top: 0;
+  position: fixed;
+  z-index: 10;
+
   .divChangeTable {
     position: fixed;
     /*top: 50%;*/
-    top: 35%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 67.5rem;
@@ -14,7 +21,7 @@
     opacity: 0px;
     background: #292933;
     border: 1px solid #f4cd44;
-    z-index: 1;
+    z-index: 10;
   }
 
   .divChangeTable .header {

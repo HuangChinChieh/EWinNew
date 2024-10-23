@@ -14,6 +14,7 @@ import {
   FavorsContext,
   LobbyPersonalContext,
 } from "provider/GameLobbyProvider";
+import ReactDOM from "react-dom";
 
 const ChangeTable = (props) => {
   const lobbyClient = EWinGameLobbyClient.getInstance();
@@ -21,6 +22,13 @@ const ChangeTable = (props) => {
   const [areaCode, setAreaCode] = useState("");
   const [areaCodeName, setAreaCodeName] = useState("");
   const history = useHistory();
+  
+  const countryItem = [
+    { name: "BM", value: "BM" },
+    { name: "測試用", value: "TEST" },
+    { name: "SH", value: "SH" },
+    { name: "All", value: "All" }
+];
 
   useEffect(() => {
     setAreaCode(props.areaCode.current);
@@ -132,53 +140,73 @@ const ChangeTable = (props) => {
     );
   };
 
-  return (
-    <div className="gamesetChangeTable">
-      <div className="divChangeTable">
-        <div className="header">
-          <span className="title">要求換桌</span>
-          <div className="search" onClick={showSeleCountry}>
-            <div className="location"></div>
-
-            <div className="place">
-              <span className="place1">地點</span>
-              <div className="Vector"></div>
-              <span className="place2">{areaCodeName}</span>
-            </div>
-            <div className="upper"></div>
-          </div>
-          <div className="close" onClick={handleClose}>
-            <div className="closeOutline"></div>
-            <div className="closeicon"></div>
-          </div>
-        </div>
-        <div className="country" id="divCountrySel">
-          {props.countryItem.map((item) => (
-            <div
-              key={item.value}
-              className="countryItem"
-              onClick={(event) => seleCountry(event, item.value, item.name)}
-            >
+  const DivChangeTable = () => {
+    return ReactDOM.createPortal(
+      <div className="gamesetChangeTable">
+        <div className="divChangeTable">
+          <div className="header">
+            <span className="title">要求換桌</span>
+            <div className="search" onClick={showSeleCountry}>
               <div className="location"></div>
+
               <div className="place">
-                <span className="place1">{item.name}</span>
+                <span className="place1">地點</span>
+                <div className="Vector"></div>
+                <span className="place2">{areaCodeName}</span>
               </div>
-              <div className="check"></div>
+              <div className="upper"></div>
             </div>
-          ))}
-        </div>
-        <div className="section_box">
-          <ul>
-            {tableList.length > 0
-              ? tableList.map((data) => (
-                  <SectionLi key={data.TableNumber} tableInfo={data} entryRoadMap={props.entryRoadMap} />
+            <div className="close" onClick={handleClose}>
+              <div className="closeOutline"></div>
+              <div className="closeicon"></div>
+            </div>
+          </div>
+          <div className="country" id="divCountrySel">
+            {countryItem.map((item) => (
+              <div
+                key={item.value}
+                className="countryItem"
+                onClick={(event) => seleCountry(event, item.value, item.name)}
+              >
+                <div className="location"></div>
+                <div className="place">
+                  <span className="place1">{item.name}</span>
+                </div>
+                <div className="check"></div>
+              </div>
+            ))}
+          </div>
+          <div className="section_box">
+            <ul>
+              {tableList.length > 0 ? (
+                tableList.map((data) => (
+                  <SectionLi
+                    key={data.TableNumber}
+                    tableInfo={data}
+                    entryRoadMap={props.entryRoadMap}
+                  />
                 ))
-              : <span style={{ color:"#ffffff", fontSize:"1.375rem", fontWeight:"500", fontFamily:"Noto Sans TC" }}>No Data</span>}
-          </ul>
+              ) : (
+                <span
+                  style={{
+                    color: "#ffffff",
+                    fontSize: "1.375rem",
+                    fontWeight: "500",
+                    fontFamily: "Noto Sans TC",
+                  }}
+                >
+                  No Data
+                </span>
+              )}
+            </ul>
+          </div>
         </div>
-      </div>
-    </div>
-  );
+      </div>,
+      document.body // 将组件渲染到 body，脱离原本的父层级
+    );
+  };
+
+  return <DivChangeTable></DivChangeTable>;
 };
 
 export default ChangeTable;

@@ -27,13 +27,6 @@ const GameControlButton = (props) => {
 
     const chipsItem = props.chipItems;
 
-    const countryItem = [
-        { name: "BM", value: "BM" },
-        { name: "測試用", value: "TEST" },
-        { name: "SH", value: "SH" },
-        { name: "All", value: "All" }
-    ];
-
     const [selIndex, setSelIndex] = useState(0);
     const [onAddChip, setAddChip] = useState(false);
     const [onChangeTable, setChangeTable] = useState(false);
@@ -264,7 +257,6 @@ const GameControlButton = (props) => {
                 <>
                     <ChangeTable
                         onChangeTableClose={onChangeTableClose}
-                        countryItem={countryItem}
                         areaCode={areaCode}
                         entryRoadMap={props.entryRoadMap}
                     />
@@ -282,17 +274,17 @@ const GameControlButton = (props) => {
                 </>
             ) : (
                 <div className="game-controls-block">
-              
-                        {btnsItem.map((item) => (
-                            <div
-                                key={`controls${item.index}`}
-                                className={`controlBtn ${selIndex === item.index ? "act" : ""} ${item.btnName}`}
-                                onClick={(event) => handleSelControl(event, item.index)}
-                            >
-                               {item.btnName}
-                            </div>
-                        ))}
-            
+
+                    {btnsItem.map((item) => (
+                        <div
+                            key={`controls${item.index}`}
+                            className={`controlBtn ${selIndex === item.index ? "act" : ""} ${item.btnName}`}
+                            onClick={(event) => handleSelControl(event, item.index)}
+                        >
+                            {item.btnName}
+                        </div>
+                    ))}
+
                 </div>
             )}
         </>
