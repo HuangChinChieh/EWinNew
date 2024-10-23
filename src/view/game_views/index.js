@@ -723,7 +723,7 @@ const GameView = (props) => {
             } else if (notBetAction === 3) {
                 if (Q.AllowCancelOrder === 1) {
                     msgMaskResultControl.current.ShowMask("下注成功, 等待現場開牌, 點選畫面可取消投注...", () => {
-                        msgMaskResultControl.current.ShowMask("是否確認要取消投注?", () => {
+                        alertMsg("取消投注?", "是否確認要取消投注?", () => {
                             handleBet("cancelBet", null, null);
                         });
                     });
@@ -754,9 +754,9 @@ const GameView = (props) => {
     //#endregion
 
     const entryRoadMap = useCallback((roadMapNumber) => {
-        gameClient.EntryRoadMap(gameSetID, props.CurrencyType, roadMapNumber, (s, o) => {
+        gameClient.EntryRoadMap(gameSetID, props.CurrencyType, roadMapNumber,(s, o) => {debugger
             if (s) {
-                if (o.ResultState === 0) {
+                if (o.ResultCode === 0) {
                     history.push("/games/" + roadMapNumber);
                     window.location.reload();
                 } else {
