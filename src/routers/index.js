@@ -21,6 +21,7 @@ import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import AlertButton from "component/alert";
 
 import "./index.scss";
+import { toNumber } from "lodash";
 
 const Main = () => {
   const EWinUrl = "https://ewin.dev.mts.idv.tw";
@@ -116,32 +117,35 @@ const Main = () => {
     }
   };
 
-  useEffect(() => {
-    const currentPath = history.location.pathname;
+  //useEffect(() => {
+    //const currentPath = history.location.pathname;
     //const aa = useParams();
     //console.log("aa",aa);
-    console.log("currentPath", currentPath);
+    //console.log("currentPath", currentPath);
     //history.location.params;
     //     localStorage.setItem('currentUrl', currentPath);
     //     setGetUrl(localStorage.getItem('currentUrl'))
-  }, [history.location.pathname]);
+  //}, [history.location.pathname]);
 
   const GameProvider = ({ match }) => {
-    const { gameId, gameSetID, gameSetNumber } = match.params;
+    const { gameId } = match.params;
+    let GameSetID = 0;
+    let GameSetNumber = '';
 
-    useEffect(() => {
-        console.log("gameId changed:", gameId);
-        console.log("gameSetID changed:", gameSetID);
-        console.log("gameSetNumber changed:", gameSetNumber);
-    }, [gameId, gameSetID, gameSetNumber]);
+    if (window.location.href.indexOf("gameSetID") > 0 && window.location.href.indexOf("gameSetNumber") > 0){
+      let url = new URL(window.location.href);
+      let params = new URLSearchParams(url.search);
+
+      GameSetID= toNumber(params.get('gameSetID'));
+      GameSetNumber = params.get('gameSetNumber');
+    }
 
     return (
         <GameBaccaratProvider EWinUrl={EWinUrl} CT={CT}>
             <GameView 
-                key={`${gameId}-${gameSetID}-${gameSetNumber}`}  
                 CT={CT} 
-                GameSetID={gameSetID || 0} 
-                GameSetNumber={gameSetNumber || ''} 
+                GameSetID={GameSetID} 
+                GameSetNumber={GameSetNumber} 
                 TableNumber={gameId} 
                 CurrencyType={currencyTypeRef.current} 
             />
@@ -167,7 +171,7 @@ const Main = () => {
               <Gamefavorite></Gamefavorite>
             </Route>
             <Route
-              path="/games/:gameId/:gameSetID?/:gameSetNumber?"
+              path="/games/:gameId"
               component={GameProvider}
             />
             <Route path="/" component={Gamelobby}></Route>
