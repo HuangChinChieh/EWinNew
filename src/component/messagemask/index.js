@@ -1,5 +1,5 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef, useCallback, useState, memo } from 'react';
-
+import './index.scss';
 const MsgMaskResult = forwardRef((props, ref) => {
     const [showMsgMask, setShowMsgMask] = useState(false);
     const [msgMaskAlertMsg, setMsgMaskAlertMsg] = useState('');
@@ -39,7 +39,7 @@ const MsgMaskResult = forwardRef((props, ref) => {
     });
 
     return (
-        showMsgMask ? <div style={{ minWidth: '100%', minHeight: '100vh', position: 'fixed', zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.4)', textAlign: 'center' }}
+        showMsgMask ? <div className={'maskcontainer'}
             onClick={() => { if (fn_click.current) fn_click.current(); }} >
             <label style={{ fontSize: '50px', color: 'white', lineHeight: '100vh' }} >
                 {msgMaskAlertMsg}
