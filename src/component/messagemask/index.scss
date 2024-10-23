@@ -1,0 +1,26 @@
+.logo-box {
+    margin-top: 7px;
+    margin-left: 6px;
+
+    a {
+        background: url('../../img/header/newlogo.png') no-repeat center center/contain;
+        width: 86px;
+        height: 45px;
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: 1082px) {
+
+    .logo-box {
+        margin-top: 6px;
+        margin-left: 0;
+
+        a {
+            background: url('../../img/header/newlogo.png') no-repeat center center/contain;
+            width: 30px;
+            height: 16px;
+        }
+    }
+
+}

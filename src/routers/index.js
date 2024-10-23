@@ -128,6 +128,8 @@ const Main = () => {
 
   const GameProvider = ({ match }) => {
     const { gameId, gameSetID, gameSetNumber } = match.params;
+    const tableNumber = useState(gameId);
+
 
     useEffect(() => {
         console.log("gameId changed:", gameId);
@@ -138,11 +140,10 @@ const Main = () => {
     return (
         <GameBaccaratProvider EWinUrl={EWinUrl} CT={CT}>
             <GameView 
-                key={`${gameId}-${gameSetID}-${gameSetNumber}`}  
                 CT={CT} 
                 GameSetID={gameSetID || 0} 
                 GameSetNumber={gameSetNumber || ''} 
-                TableNumber={gameId} 
+                TableNumber={tableNumber} 
                 CurrencyType={currencyTypeRef.current} 
             />
         </GameBaccaratProvider>
