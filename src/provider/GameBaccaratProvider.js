@@ -49,9 +49,13 @@ const GameBaccaratProvider = (props) => {
           if (Msg.Type === "GreatRoad") {
 
           } else if (Msg.Type === "GameSetChange") {
-            notifyDictionary.current[Msg.Args.GameSetID](Msg.Type, Msg.Args);
+            if(Msg.Args.GameSetID === gameSetData.current.GameSetID){
+              notifyDictionary.current[gameSetData.current.TableNumber](Msg.Type, Msg.Args);
+            }          
           } else {
-            notifyDictionary.current[Msg.Args.TableNumber](Msg.Type, Msg.Args);
+            if(Msg.Args.TableNumber in tableNumberArray.current){
+              notifyDictionary.current[Msg.Args.TableNumber](Msg.Type, Msg.Args);
+            }            
           }
         }
       }
