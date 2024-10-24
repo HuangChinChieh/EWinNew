@@ -887,7 +887,7 @@ const GameView = (props) => {
               history.replace("/games/" + roadMapNumber);
               window.location.reload();
             } else {
-              history.replace("/games/" + roadMapNumber + "/" + gameSetID + "/" + roadMapNumber);
+              history.replace("/games/" + roadMapNumber + "?gameSetID=" + gameSetID + "&gameSetNumber=" + roadMapNumber);
               window.location.reload();
             }
           } else {
@@ -2000,7 +2000,7 @@ const GameView = (props) => {
                 onClick={() => {
                   //setIsCanBet(true);
                   //handleBet("addBet", { areaType: "Banker" }, null)
-                  history.replace("/games/TEST_02/1339/Demo001339");
+                  history.replace("/games/TEST_02?gameSetID=1339&gameSetNumber=Demo001339");
                   //window.location.reload();
 
            
