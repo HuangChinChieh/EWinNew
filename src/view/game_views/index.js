@@ -261,7 +261,6 @@ const GameView = (props) => {
 
   const handleTableInfo = (tableInfoData) => {
     //check
-    debugger;
     if (!tableInfo || Object.keys(tableInfoData).length === 0) {
       return;
     }
@@ -280,12 +279,12 @@ const GameView = (props) => {
 
     tableInfo.current = tableInfoData;
 
-    if(tableInfoData.ShoeResult == null){
+    if (tableInfoData.ShoeResult == null) {
       setShoeResult("");
-    }else{
+    } else {
       setShoeResult(tableInfoData.ShoeResult);
     }
-    
+
     setBaccaratType(tableInfoData.BaccaratType);
 
     //設定視頻串流
@@ -485,17 +484,15 @@ const GameView = (props) => {
 
     let tableInfoList = Q.TableInfo.split("-");
     if (
-      !Q.GameSetOrder.GameSetRoadMapNumber ||
+      !Q.GameSetOrder.GameSetRoadMapNumber || 
       tableNumber === Q.GameSetOrder.GameSetRoadMapNumber
     ) {
       if (Q.UserInfo.AllowBet) {
         if (Q.PADAvailable === true || T.BaccaratType === 3) {
           //BaccaratType 0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
           //-1=尚未建立(暫存)/0=建立/1=進行中/2=暫停/3=完場/4=結算完成/5=取消
-          if (
-            Q.GameSetOrder.GameSetState === 0 ||
-            Q.GameSetOrder.GameSetState === 1
-          ) {
+          if (Q.GameSetOrder.GameSetState === 0 ||
+            Q.GameSetOrder.GameSetState === 1) {
             if (!Q.GameSetOrder.Cmd) {
               if (tableInfoList[2] !== 0) {
                 if (T.Status === GameType + ".OpenBet") {
@@ -1730,7 +1727,7 @@ const GameView = (props) => {
           );
         }).then((o) => {
           return new Promise((resolve, reject) => {
-            //#region 限紅設定
+            //#region 限紅設定          
             const selBetLimit = JSON.parse(localStorage.getItem("SelBetLimit"));
             let distance = -1;
             let directSetBetLimit = null;
@@ -1738,7 +1735,7 @@ const GameView = (props) => {
             if (o.BetLimitList && o.BetLimitList.length > 0) {
               const betLimitList = o.BetLimitList;
 
-              if (betLimitList.length === 1) {
+              if (betLimitList.length === 1 || selBetLimit == null) {
                 //只有一組限紅，直接設定
                 if (betLimitList[0].CurrencyType === props.CurrencyType) {
                   //幣別必須要相等
@@ -1949,7 +1946,7 @@ const GameView = (props) => {
       clearInterval(intervalIDByRefreshSubscribe);
       clearInterval(intervalIDByTableInfo);
       clearInterval(intervalIDByQueryGame);
-      RemoveSubscribe("", tableNumber);    
+      RemoveSubscribe("", tableNumber);
     };
   }, [tableNumber, gameSetID]);
 
@@ -2003,7 +2000,7 @@ const GameView = (props) => {
                   history.replace("/games/TEST_02?gameSetID=1339&gameSetNumber=Demo001339");
                   //window.location.reload();
 
-           
+
                 }}
               >
                 測試
