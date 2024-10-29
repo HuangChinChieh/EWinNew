@@ -127,8 +127,8 @@ const Main = () => {
     //     setGetUrl(localStorage.getItem('currentUrl'))
     //}, [history.location.pathname]);
 
-    const GameProvider = ({ match, EWinUrl, CT }) => {
-        const { gameId } = match.params;
+    const RouteGameViewComponent = ({ match, EWinUrl, CT }) => {
+        const { tableNumber } = match.params;
         let GameSetID = 0;
         let GameSetNumber = '';
 
@@ -146,7 +146,7 @@ const Main = () => {
                     CT={CT}
                     GameSetID={GameSetID}
                     GameSetNumber={GameSetNumber}
-                    TableNumber={gameId}
+                    TableNumber={tableNumber}
                     CurrencyType={currencyTypeRef.current}
                 />
             </GameBaccaratProvider>
@@ -171,9 +171,9 @@ const Main = () => {
                             <Gamefavorite></Gamefavorite>
                         </Route>
                         <Route
-                            path="/games/:gameId"
+                            path="/games/:tableNumber"
                             render={(props) => (
-                                <GameProvider {...props} EWinUrl={EWinUrl} CT={CT} />
+                                <RouteGameViewComponent {...props} EWinUrl={EWinUrl} CT={CT} />
                             )}
                         />
                         <Route path="/" component={Gamelobby}></Route>
