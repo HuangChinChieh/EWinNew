@@ -4,17 +4,34 @@ import './index.scss';
 
 const MsgMaskResult = forwardRef((props, ref) => {
     const [showMsgMask, setShowMsgMask] = useState(false);
-    const [msgMaskAlertMsg, setMsgMaskAlertMsg] = useState('');
-    const [msgMaskAlertTipMsg, setMsgMaskAlertTipMsg] = useState('');
+    const [leftMsg, setLeftMsg] = useState('');
+    const [rightMsg, setRightMsg] = useState('');
+    const [leftTip, setLeftTip] = useState('');
+    const [rightTip, setRightTip] = useState('');
     let fn_click = useRef(null);
 
-    const showMessageMask = (msg) => {
-        setMsgMaskAlertMsg(msg);
-        setShowMsgMask(true);
+    const showMessageMask = (msgText, tipText) => {
+        if(msgText && msgText.length > 0){
+            const msgMiddleIndex = Math.floor(msgText.length / 2);
+            setLeftMsg(msgText.slice(0, msgMiddleIndex));
+            setRightMsg(msgText.slice(msgMiddleIndex));
+        }
+        
+        if(tipText && tipText.length > 0){
+            const tipMiddleIndex = Math.floor(tipText.length / 2);
+
+       
+            setLeftTip(tipText.slice(0, tipMiddleIndex));
+            setRightTip(tipText.slice(tipMiddleIndex));
+
+        }   
     }
 
     const hideMessageMask = () => {
-        setMsgMaskAlertMsg('');
+        setLeftMsg('');
+        setRightMsg('');
+        setLeftTip('');
+        setRightTip('');
         fn_click.current = null;
         setShowMsgMask(false);
     }
@@ -25,20 +42,14 @@ const MsgMaskResult = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            ShowMask: (alertMsg, clickfunction, tipText) => {
+            ShowMask: (msgText, clickFunction, tipText) => {
                 hideMessageMask();
 
-                if (clickfunction) {
-                    fn_click.current = clickfunction;
+                if (clickFunction) {
+                    fn_click.current = clickFunction;
                 }
 
-                showMessageMask(alertMsg);
-
-                if (tipText) {
-                    setMsgMaskAlertTipMsg(tipText);
-                } else {
-                    setMsgMaskAlertTipMsg("");
-                }
+                showMessageMask(msgText, tipText);            
             },
 
             HideMask: () => {
@@ -49,17 +60,26 @@ const MsgMaskResult = forwardRef((props, ref) => {
 
     return (
         showMsgMask ?
-            ReactDOM.createPortal(<div className={'maskContainer ' + (msgMaskAlertTipMsg === "" ? "" : "hasTip")}
+            ReactDOM.createPortal(<div className={'maskContainer ' + ((leftMsg + rightMsg) === "" ? "" : "hasTip")}
                 onClick={() => { if (fn_click.current) fn_click.current(); }} >
+                <div className='left'>
+                    <label>
+                        {leftMsg}
+                    </label>
 
-                
-                <label >
-                    {msgMaskAlertMsg}
-                </label>
+                    <label className='maskTip'>
+                        {leftTip}
+                    </label>
+                </div>
 
-                <label className='maskTip'>
-                    {msgMaskAlertTipMsg}
-                </label>
+                <div className='right'>
+                    <label >
+                        {rightMsg}
+                    </label>
+                    <label className='maskTip'>
+                        {rightTip}
+                    </label>
+                </div>
                 <div className='backEffect'></div>
             </div>, document.querySelector('.game-view-wrap'))
             : <div></div>

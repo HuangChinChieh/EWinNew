@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { set } from "lodash";
-import React, { createContext, useCallback, useState, useEffect } from "react";
+import React, { createContext, useCallback, useState, useEffect, useRef } from "react";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 
 
@@ -12,6 +12,8 @@ const MusicIsPlayingContext = createContext();
 const LobbyPersonalContext = createContext();
 const CashUnitContext = createContext();
 const UserInfoContext = createContext();
+const GameSetListContext = createContext();
+const RefreshUserInfoContext = createContext();
 
 
 export {
@@ -21,12 +23,13 @@ export {
   MusicIsPlayingContext,
   LobbyPersonalContext,
   CashUnitContext,
-  UserInfoContext
+  UserInfoContext,
+  GameSetListContext
 };
 
 // Create a Context Provider to provide shared values
 const GameLobbyProvider = (props) => {
-  const lobbyClient = EWinGameLobbyClient.getInstance();  
+  const lobbyClient = EWinGameLobbyClient.getInstance();
   const CurrencyType = props.CurrencyType;
   const CT = props.CT;
   const [wallet, setWallet] = useState({
@@ -48,77 +51,10 @@ const GameLobbyProvider = (props) => {
   const [musicIsPlaying, setMusicIsPlaying] = useState(false);
   const [lobbyPersonal, setLobbyPersonal] = useState(false);
   const [cashUnit, setCashUnit] = useState("");
-  const [userGameSetList, setUserGameSetList] = useState([]);
+  const [gameSetList, setGameSetList] = useState([]);
+  const [hasNewGameSet, setHasNewGameSet] = useState(false);
 
 
-  // Game Lobby related useEffect
-  useEffect(() => {
-    const PromiseArray = [];
-
-    //UserInfo
-    PromiseArray.push(new Promise(
-      (resolve) => {
-        lobbyClient.GetUserInfo((s, o) => {
-          if (s) {
-            if (o.ResultCode === 0) {
-              resolve(o);
-            }
-          }
-        });
-      }
-    ));
-
-    //限紅部分不做設定，會隨著進入桌台而影響，這邊只做管理動作，不去做request
-    // PromiseArray.push(new Promise(
-    //   (resolve) =>{
-    //     lobbyClient.GetUserInfo((s, o) => {          
-    //       if (s) {
-    //         if (o.ResultCode === 0) {
-    //           resolve(o);
-    //         }
-    //       }
-    //     });
-    //   }
-    // ));
-
-
-    PromiseArray.push(new Promise(
-      (resolve) => {
-        lobbyClient.GetUserAccountProperty("EWinGame.Favor", (s, o) => {
-          if (s) {
-            if (o.ResultCode === 0) {
-              resolve(o);
-            }
-          }
-        });
-      }
-    ));
-
-    Promise.all(PromiseArray).then(([userInfo, favorsProp]) => {
-      let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
-      let favorsObj = JSON.parse(favorsProp.PropertyValue)
-
-      if (wallet) {
-        setWallet({
-          CurrencyType: wallet.CurrencyType,
-          CurrencyName: wallet.CurrencyName,
-          Balance: wallet.Balance,
-        });
-      }
-
-      setUserInfo({
-        LoginAccount: userInfo.LoginAccount,
-        RealName: userInfo.RealName,
-        IsGuestAccount: userInfo.IsGuestAccount,
-        UserAccountType: userInfo.UserAccountType,
-        AllowBetType: userInfo.AllowBetType,
-        UserCountry: userInfo.UserCountry,
-        UserLevel: userInfo.UserLevel
-      });
-      setFavors(favorsObj);
-      setCashUnit(userInfo.Company.CashUnit);
-    });
-  }, []);
 
   const updateInfo = useCallback((cb) => {
     lobbyClient.GetUserInfo((s, o) => {
@@ -144,7 +80,7 @@ const GameLobbyProvider = (props) => {
   }, [lobbyClient]);
 
   const updateUserInfo = useCallback((obj) => {
-    const setFun = (setObj) => {      
+    const setFun = (setObj) => {
       setUserInfo((prevObj) => {
         let checkChange = false;
         let newObj = { ...prevObj };
@@ -223,6 +159,49 @@ const GameLobbyProvider = (props) => {
 
   }, [CT, CurrencyType, updateInfo]);
 
+  const updateGameSetList = useCallback((listArray) => {
+    const setFun = (setArray) => {
+      setGameSetList((prevArray) => {
+        let checkChange = false;
+        let newArray = prevArray.filter(item => {
+          if (setArray.some(oldItem => oldItem.GameSetID === item.GameSetID)) {
+            return true;
+          } else {
+            checkChange = true; // 如果有移除的元素，設置標記
+            return false;
+          }
+        });
+
+        setArray.forEach(item => {
+          if (!prevArray.some(oldItem => oldItem.GameSetID === item.GameSetID)) {
+            newArray.push(item);
+            checkChange = true; // 如果有新增的元素，設置標記
+            setHasNewGameSet(true);
+          }
+        });
+
+        if (checkChange) {
+          return newArray;
+        } else {
+          return prevArray;
+        }
+      });
+    };
+
+    if (listArray) {
+      setFun(listArray);
+    } else {
+      updateInfo((userInfo) => {
+        if (userInfo.GameSetList != null) {
+          setFun(userInfo.GameSetList);
+        } else {
+          setFun([]);
+        }
+      });
+    }
+
+  }, [CT, CurrencyType, updateInfo]);
+
   const updateBetLimit = useCallback((betLimit) => {
     setBetLimit(betLimit);
   }, [CT]);
@@ -231,6 +210,123 @@ const GameLobbyProvider = (props) => {
     setMusicIsPlaying(!musicIsPlaying)
   }, [CT, musicIsPlaying]);
 
+
+
+  const refreshUserInfo = useCallback(() => {
+    lobbyClient.GetUserInfo((s, o) => {
+      if (s) {
+        if (o.ResultCode === 0) {
+          const _userInfo = o;
+          let wallet = _userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
+
+          if (wallet) {
+            updateWallet({
+              CurrencyType: wallet.CurrencyType,
+              CurrencyName: wallet.CurrencyName,
+              Balance: wallet.Balance,
+            });
+          }
+          if (userInfo.GameSetList != null) {
+            updateGameSetList(userInfo.GameSetList);
+          } else {
+            updateGameSetList([]);
+          }
+
+          updateUserInfo({
+            LoginAccount: userInfo.LoginAccount,
+            RealName: userInfo.RealName,
+            IsGuestAccount: userInfo.IsGuestAccount,
+            UserAccountType: userInfo.UserAccountType,
+            AllowBetType: userInfo.AllowBetType,
+            UserCountry: userInfo.UserCountry,
+            UserLevel: userInfo.UserLevel
+          });
+
+          if (userInfo.GameSetList != null) {
+            setGameSetList(userInfo.GameSetList);
+          }
+
+
+          setCashUnit(userInfo.Company.CashUnit);
+        }
+      }
+    });
+  }, [lobbyClient]);
+
+
+  // Game Lobby related useEffect
+  useEffect(() => {
+    const PromiseArray = [];
+
+    //UserInfo
+    PromiseArray.push(new Promise(
+      (resolve) => {
+        lobbyClient.GetUserInfo((s, o) => {
+          if (s) {
+            if (o.ResultCode === 0) {
+              resolve(o);
+            }
+          }
+        });
+      }
+    ));
+
+    //限紅部分不做設定，會隨著進入桌台而影響，這邊只做管理動作，不去做request
+    // PromiseArray.push(new Promise(
+    //   (resolve) =>{
+    //     lobbyClient.GetUserInfo((s, o) => {          
+    //       if (s) {
+    //         if (o.ResultCode === 0) {
+    //           resolve(o);
+    //         }
+    //       }
+    //     });
+    //   }
+    // ));
+
+
+    PromiseArray.push(new Promise(
+      (resolve) => {
+        lobbyClient.GetUserAccountProperty("EWinGame.Favor", (s, o) => {
+          if (s) {
+            if (o.ResultCode === 0) {
+              resolve(o);
+            }
+          }
+        });
+      }
+    ));
+
+    Promise.all(PromiseArray).then(([userInfo, favorsProp]) => {
+      let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
+      let favorsObj = JSON.parse(favorsProp.PropertyValue)
+
+      if (wallet) {
+        setWallet({
+          CurrencyType: wallet.CurrencyType,
+          CurrencyName: wallet.CurrencyName,
+          Balance: wallet.Balance,
+        });
+      }
+
+      if (userInfo.GameSetList != null) {
+        setGameSetList(userInfo.GameSetList);
+      }
+
+      setUserInfo({
+        LoginAccount: userInfo.LoginAccount,
+        RealName: userInfo.RealName,
+        IsGuestAccount: userInfo.IsGuestAccount,
+        UserAccountType: userInfo.UserAccountType,
+        AllowBetType: userInfo.AllowBetType,
+        UserCountry: userInfo.UserCountry,
+        UserLevel: userInfo.UserLevel
+      });
+      setFavors(favorsObj);
+      setCashUnit(userInfo.Company.CashUnit);
+    });
+  }, []);
+
   return (
     <MusicIsPlayingContext.Provider value={{ musicIsPlaying, muteChange }}>
       <LobbyPersonalContext.Provider value={{ lobbyPersonal, setLobbyPersonal }}>
@@ -238,10 +334,12 @@ const GameLobbyProvider = (props) => {
           <WalletContext.Provider value={{ wallet, updateWallet, setWallet }}>
             <UserInfoContext.Provider value={{ userInfo, updateUserInfo, setUserInfoProperty }}>
               <CashUnitContext.Provider value={{ cashUnit, setCashUnit }}>
-                <BetLimitContext.Provider
-                  value={{ betLimit, updateBetLimit }}
-                >
-                  {props.children}
+                <BetLimitContext.Provider value={{ betLimit, updateBetLimit }}>
+                  <GameSetListContext.Provider value={{ gameSetList, updateGameSetList, hasNewGameSet, setHasNewGameSet }}>
+                    <RefreshUserInfoContext.Provider value={{ refreshUserInfo }}>
+                      {props.children}
+                    </RefreshUserInfoContext.Provider>
+                  </GameSetListContext.Provider>
                 </BetLimitContext.Provider>
               </CashUnitContext.Provider>
             </UserInfoContext.Provider>

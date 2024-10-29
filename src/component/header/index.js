@@ -1,11 +1,12 @@
 import React, { useState, useEffect,useContext } from 'react';
 import Logo from 'component/logo';
-import { FavorsContext,WalletContext } from 'provider/GameLobbyProvider';
+import { FavorsContext, WalletContext } from 'provider/GameLobbyProvider';
 import FullscreenButton from 'component/buttons/fs_btn';
 import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
+import GameSetListButton from 'component/buttons/gameSetList_btn';
 import { useHistory } from 'react-router-dom';
 
 import './index.scss';
@@ -44,8 +45,7 @@ const Header = (props) => {
     };
   }, [lastScrollTop]);
 
-  const [isLightboxOpen, setLightboxOpen] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLightboxOpen, setLightboxOpen] = useState(false);  
   const [userName, setUserName] = useState('Jisdom');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -60,8 +60,7 @@ const Header = (props) => {
 
     // 在這裡添加檢查用戶名和密碼的邏輯
     if (userName === 'jisdom' && password === '777') {
-      // 登入成功
-      setIsLogged(true);
+      // 登入成功      
       setUserName('Jisdom');
       localStorage.setItem('isLogin', true)
       setLightboxOpen(false);
@@ -82,19 +81,7 @@ const Header = (props) => {
         <Logo />
         <div className='nav-box'>
           {/* 之後傳接api再處理判斷, 有可能不再這邊做登入處理 在父層登入 */}
-          {isLogged ? (
-            <div className='tool-box-left'>
-              {/* user-icon 部分設計沒有做相關UX, 之後有點擊互動時要抽出去寫成組件 */}
-              <span><span className='user-icon' /></span>
-              <span className='forpc'><span className='user-wallet' />
-              {/* {betLimitCurrencyType}*/}
-              </span>
-              <span className='forpc'><span>收藏({favors.length}) </span></span>
-              <span className='formb'><a className="user-favorite" href='/'></a></span>
-
-            </div>
-          ) : (
-            <div className='tool-box-left'>
+          <div className='tool-box-left'>
               <span><span className='user-icon' /></span>
               <span className='forpc'>
                 <span className='user-wallet' />
@@ -104,8 +91,8 @@ const Header = (props) => {
                 
               </span>
               <span><li className="user-favorite" onClick={() => handleGoGamefavorite()} ></li></span>
+              <GameSetListButton></GameSetListButton>
             </div>
-          )}
         </div>
         <div className={`hamb ${isOpen ? 'open' : ''}`} onClick={toggleHamburger}>
           <span />
