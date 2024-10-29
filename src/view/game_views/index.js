@@ -5,7 +5,6 @@ import React, {
   useContext,
   useRef,
   useCallback,
-  useMemo,
   useReducer,
   createContext,
 } from "react";
@@ -14,7 +13,8 @@ import CountdownCircle from "games_component/game_count_down_circle";
 import {
   WalletContext,
   CashUnitContext,
-  UserInfoContext,
+  UserInfoContext ,
+  GameSetListContext
 } from "../../provider/GameLobbyProvider";
 import { BaccaratSubscribeContext } from "../../provider/GameBaccaratProvider";
 import "./index.scss";
@@ -27,11 +27,11 @@ import GameRoadMap from "games_component/game_road_map";
 import GameVideo from "games_component/game_video";
 import CardResult from "games_component/game_card_result";
 import { orderReducer, initialOrderData } from "./orderData";
-import { AlertContext } from "../../component/alert";
+import { AlertContext } from "component/alert";
 import { moveChipAnimation } from "games_component/animation/betAnimation/baccaratBasicAnimation";
 import "games_component/animation/betAnimation/orderAnimation.scss";
 import BigNumber from "bignumber.js";
-import MsgMaskResult from "../../component/messagemask";
+import MsgMaskResult from "component/messagemask";
 
 const BaccaratTableNotifyContext = createContext();
 
@@ -88,8 +88,9 @@ const GameView = (props) => {
   // const [PADAvailable, setPADAvailable] = useState(false);
   // const [onlineUserCount, setOnlineUserCount] = useState(false);
   const { cashUnit, setCashUnit } = useContext(CashUnitContext);
-  const { userInfo, setUserInfoProperty, updateUserInfo } =
-    useContext(UserInfoContext);
+  const { userInfo, setUserInfoProperty, updateUserInfo } = useContext(UserInfoContext);
+  const { gameSetList } = useContext(GameSetListContext);
+
 
   //投注相關
   const [isCanBet, setIsCanBet] = useState(false);
