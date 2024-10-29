@@ -1,8 +1,11 @@
-import { useRef, useEffect, useImperativeHandle, forwardRef,  useState } from 'react';
+import { useRef, useEffect, useImperativeHandle, forwardRef, useState } from 'react';
+import ReactDOM from 'react-dom';
+import './index.scss';
 
 const MsgMaskResult = forwardRef((props, ref) => {
     const [showMsgMask, setShowMsgMask] = useState(false);
     const [msgMaskAlertMsg, setMsgMaskAlertMsg] = useState('');
+    const [msgMaskAlertTipMsg, setMsgMaskAlertTipMsg] = useState('');
     let fn_click = useRef(null);
 
     const showMessageMask = (msg) => {
@@ -22,7 +25,7 @@ const MsgMaskResult = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return {
-            ShowMask: (alertMsg, clickfunction) => {
+            ShowMask: (alertMsg, clickfunction, tipText) => {
                 hideMessageMask();
 
                 if (clickfunction) {
@@ -30,6 +33,12 @@ const MsgMaskResult = forwardRef((props, ref) => {
                 }
 
                 showMessageMask(alertMsg);
+
+                if (tipText) {
+                    setMsgMaskAlertTipMsg(tipText);
+                } else {
+                    setMsgMaskAlertTipMsg("");
+                }
             },
 
             HideMask: () => {
@@ -39,12 +48,21 @@ const MsgMaskResult = forwardRef((props, ref) => {
     });
 
     return (
-        showMsgMask ? <div style={{ minWidth: '100%', minHeight: '100vh', position: 'fixed', zIndex: 9999, backgroundColor: 'rgba(0, 0, 0, 0.4)', textAlign: 'center' }}
-            onClick={() => { if (fn_click.current) fn_click.current(); }} >
-            <label style={{ fontSize: '50px', color: 'white', lineHeight: '100vh' }} >
-                {msgMaskAlertMsg}
-            </label>
-        </div > : <div></div>
+        showMsgMask ?
+            ReactDOM.createPortal(<div className={'maskContainer ' + (msgMaskAlertTipMsg === "" ? "" : "hasTip")}
+                onClick={() => { if (fn_click.current) fn_click.current(); }} >
+
+                
+                <label >
+                    {msgMaskAlertMsg}
+                </label>
+
+                <label className='maskTip'>
+                    {msgMaskAlertTipMsg}
+                </label>
+                <div className='backEffect'></div>
+            </div>, document.querySelector('.game-view-wrap'))
+            : <div></div>
     )
 })
 

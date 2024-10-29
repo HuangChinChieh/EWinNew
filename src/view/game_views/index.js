@@ -259,11 +259,11 @@ const GameView = (props) => {
         }
     };
 
-    const handleTableInfo = (tableInfoData) => {
-        //check
-        if (!tableInfo || Object.keys(tableInfoData).length === 0) {
-            return;
-        }
+  const handleTableInfo = (tableInfoData) => {
+    //check
+    if (!tableInfo || Object.keys(tableInfoData).length === 0) {
+      return;
+    }
 
         //1.要求出碼
         //2.
@@ -279,13 +279,13 @@ const GameView = (props) => {
 
         tableInfo.current = tableInfoData;
 
-        if (tableInfoData.ShoeResult == null) {
-            setShoeResult("");
-        } else {
-            setShoeResult(tableInfoData.ShoeResult);
-        }
+    if (tableInfoData.ShoeResult == null) {
+      setShoeResult("");
+    } else {
+      setShoeResult(tableInfoData.ShoeResult);
+    }
 
-        setBaccaratType(tableInfoData.BaccaratType);
+    setBaccaratType(tableInfoData.BaccaratType);
 
         //設定視頻串流
         setStreamName(handleStreamArray(tableInfoData.Stream));
@@ -1690,57 +1690,57 @@ const GameView = (props) => {
             })
         );
 
-        //#region promise2 設定限紅
-        if (gameSetID !== 0) {
-            //傳統桌台，使用桌台限紅
-            //資訊會從GetTableInfo取得
-        } else {
-            //非傳統，使用個人限紅
-            PromiseArray.push(
-                new Promise((resolve, reject) => {
-                    gameClient.UserAccountGetBetLimitListByRoadMap(
-                        tableNumber,
-                        props.CurrencyType,
-                        gameSetID,
-                        (success, o) => {
-                            if (success) {
-                                if (o.ResultCode === 0) {
-                                    resolve(o);
-                                } else {
-                                    reject("GetBetLimitError");
-                                }
-                            } else {
-                                reject("GetBetLimitError");
-                            }
-                        }
-                    );
-                }).then((o) => {
-                    return new Promise((resolve, reject) => {
-                        //#region 限紅設定
-                        const selBetLimit = JSON.parse(localStorage.getItem("SelBetLimit"));
-                        let distance = -1;
-                        let directSetBetLimit = null;
+    //#region promise2 設定限紅
+    if (gameSetID !== 0) {
+      //傳統桌台，使用桌台限紅
+      //資訊會從GetTableInfo取得
+    } else {
+      //非傳統，使用個人限紅
+      PromiseArray.push(
+        new Promise((resolve, reject) => {
+          gameClient.UserAccountGetBetLimitListByRoadMap(
+            tableNumber,
+            props.CurrencyType,
+            gameSetID,
+            (success, o) => {
+              if (success) {
+                if (o.ResultCode === 0) {
+                  resolve(o);
+                } else {
+                  reject("GetBetLimitError");
+                }
+              } else {
+                reject("GetBetLimitError");
+              }
+            }
+          );
+        }).then((o) => {
+          return new Promise((resolve, reject) => {
+            //#region 限紅設定          
+            const selBetLimit = JSON.parse(localStorage.getItem("SelBetLimit"));
+            let distance = -1;
+            let directSetBetLimit = null;
 
                         if (o.BetLimitList && o.BetLimitList.length > 0) {
                             const betLimitList = o.BetLimitList;
 
-                            if (betLimitList.length === 1) {
-                                //只有一組限紅，直接設定
-                                if (betLimitList[0].CurrencyType === props.CurrencyType) {
-                                    //幣別必須要相等
-                                    directSetBetLimit = betLimitList[0];
-                                }
-                            } else if (betLimitList.length > 1) {
-                                //多組限紅，尋找跟上次選取差距最接近之限紅
-                                for (const betLimit of betLimitList) {
-                                    if (selBetLimit.BetLimitID === betLimit.BetLimitID) {
-                                        directSetBetLimit = betLimit;
-                                        break;
-                                    } else if (betLimit.CurrencyType === props.CurrencyType) {
-                                        const tempDistance =
-                                            Math.abs(
-                                                betLimit.MinBetPlayer - selBetLimit.MinBetPlayer
-                                            ) + Math.abs(selBetLimit.MaxBet - betLimit.MaxBet);
+              if (betLimitList.length === 1 || selBetLimit == null) {
+                //只有一組限紅，直接設定
+                if (betLimitList[0].CurrencyType === props.CurrencyType) {
+                  //幣別必須要相等
+                  directSetBetLimit = betLimitList[0];
+                }
+              } else if (betLimitList.length > 1) {
+                //多組限紅，尋找跟上次選取差距最接近之限紅
+                for (const betLimit of betLimitList) {
+                  if (selBetLimit.BetLimitID === betLimit.BetLimitID) {
+                    directSetBetLimit = betLimit;
+                    break;
+                  } else if (betLimit.CurrencyType === props.CurrencyType) {
+                    const tempDistance =
+                      Math.abs(
+                        betLimit.MinBetPlayer - selBetLimit.MinBetPlayer
+                      ) + Math.abs(selBetLimit.MaxBet - betLimit.MaxBet);
 
                                         if (distance !== -1) {
                                             if (tempDistance < distance) {
@@ -1930,14 +1930,14 @@ const GameView = (props) => {
         window.addEventListener("resize", resize);
         tableNotify.current = new Notify();
 
-        return () => {
-            //取消訂閱桌台
-            clearInterval(intervalIDByRefreshSubscribe);
-            clearInterval(intervalIDByTableInfo);
-            clearInterval(intervalIDByQueryGame);
-            RemoveSubscribe("", tableNumber);
-        };
-    }, [tableNumber, gameSetID]);
+    return () => {
+      //取消訂閱桌台
+      clearInterval(intervalIDByRefreshSubscribe);
+      clearInterval(intervalIDByTableInfo);
+      clearInterval(intervalIDByQueryGame);
+      RemoveSubscribe("", tableNumber);
+    };
+  }, [tableNumber, gameSetID]);
 
     useEffect(() => {
         cbRef.current.handleBet = handleBet;
@@ -1990,10 +1990,10 @@ const GameView = (props) => {
                                     //window.location.reload();
 
 
-                                }}
-                            >
-                                測試
-                            </button>
+                }}
+              >
+                測試
+              </button>
 
                             <button
                                 style={{
