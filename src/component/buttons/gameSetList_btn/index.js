@@ -51,7 +51,7 @@ const GameSetListButton = () => {
 
         if (hasNewGameSet && gameSetList.length > 0) {
             if (canAlertNewGameSet) {
-                alertMsg("提醒", "您有新的工單，是否點擊確認新工單<p>(可在設定關閉提醒)</p>", () => {
+                alertMsg("提醒", "您有新的工單，是否點擊確認新工單\n(可在設定關閉提醒)", () => {
                     showGameSetList();
                 });
             }
@@ -59,19 +59,22 @@ const GameSetListButton = () => {
 
     }, [gameSetList, hasNewGameSet, alertMsg, showGameSetList]);
 
-    useEffect(() => {
-        updateGameSetList([
-            {
-                GameSetID: 1,
-                GameSetNumber: "工單1",
-                RoadMapNumber: "test01"
-            }, {
-                GameSetID: 2,
-                GameSetNumber: "工單2",
-                RoadMapNumber: "test02"
-            }
-        ]);
-    }, [])
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         updateGameSetList([
+    //             {
+    //                 GameSetID: 1,
+    //                 GameSetNumber: "工單1",
+    //                 RoadMapNumber: "test01"
+    //             }, {
+    //                 GameSetID: 2,
+    //                 GameSetNumber: "工單2",
+    //                 RoadMapNumber: "test02"
+    //             }
+    //         ]);
+    //     }, 10000);
+        
+    // }, [])
 
     // useEffect(() => {
     //     // 在 component mount 時加入 click 事件監聽器
@@ -87,7 +90,7 @@ const GameSetListButton = () => {
     return (
         <div className='gameSetList-box'>
             <div className='gameSetList-box-content' onClick={showGameSetList}>
-                <div className='gameSetList-box-icon'></div>
+                <div className={hasNewGameSet ? "gameSetList-box-icon new" : "gameSetList-box-icon" }></div>
                 <div className='gameSetList-box-title'>無</div>
                 <div className='gameSetList-box-icon-arrow'></div>
             </div>

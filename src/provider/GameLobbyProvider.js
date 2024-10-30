@@ -53,8 +53,8 @@ const GameLobbyProvider = (props) => {
   const [cashUnit, setCashUnit] = useState("");
   const [gameSetList, setGameSetList] = useState([]);
   const [hasNewGameSet, setHasNewGameSet] = useState(false);
-
-
+  const intervalIDRef = useRef(0);
+  const isRefreshing = useRef(false);
 
   const updateInfo = useCallback((cb) => {
     lobbyClient.GetUserInfo((s, o) => {
@@ -213,44 +213,50 @@ const GameLobbyProvider = (props) => {
 
 
   const refreshUserInfo = useCallback(() => {
-    lobbyClient.GetUserInfo((s, o) => {
-      if (s) {
-        if (o.ResultCode === 0) {
-          const _userInfo = o;
-          let wallet = _userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
+    if(isRefreshing.current){
+      isRefreshing.current = true;
 
-          if (wallet) {
-            updateWallet({
-              CurrencyType: wallet.CurrencyType,
-              CurrencyName: wallet.CurrencyName,
-              Balance: wallet.Balance,
+      lobbyClient.GetUserInfo((s, o) => {
+        isRefreshing.current = false;
+
+        if (s) {
+          if (o.ResultCode === 0) {
+            const _userInfo = o;
+            let _wallet = _userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
+  
+            if (_wallet) {
+              updateWallet({
+                CurrencyType: _wallet.CurrencyType,
+                CurrencyName: _wallet.CurrencyName,
+                Balance: _wallet.Balance,
+              });
+            }
+  
+            if (_userInfo.GameSetList != null) {
+              updateGameSetList(_userInfo.GameSetList);
+            } else {
+              updateGameSetList([]);
+            }
+  
+            updateUserInfo({
+              LoginAccount: _userInfo.LoginAccount,
+              RealName: _userInfo.RealName,
+              IsGuestAccount: _userInfo.IsGuestAccount,
+              UserAccountType: _userInfo.UserAccountType,
+              AllowBetType: _userInfo.AllowBetType,
+              UserCountry: _userInfo.UserCountry,
+              UserLevel: _userInfo.UserLevel
             });
+  
+            if (_userInfo.GameSetList != null) {
+              setGameSetList(_userInfo.GameSetList);
+            }
+  
+            setCashUnit(_userInfo.Company.CashUnit);
           }
-          if (userInfo.GameSetList != null) {
-            updateGameSetList(userInfo.GameSetList);
-          } else {
-            updateGameSetList([]);
-          }
-
-          updateUserInfo({
-            LoginAccount: userInfo.LoginAccount,
-            RealName: userInfo.RealName,
-            IsGuestAccount: userInfo.IsGuestAccount,
-            UserAccountType: userInfo.UserAccountType,
-            AllowBetType: userInfo.AllowBetType,
-            UserCountry: userInfo.UserCountry,
-            UserLevel: userInfo.UserLevel
-          });
-
-          if (userInfo.GameSetList != null) {
-            setGameSetList(userInfo.GameSetList);
-          }
-
-
-          setCashUnit(userInfo.Company.CashUnit);
         }
-      }
-    });
+      });
+    }   
   }, [lobbyClient]);
 
 
@@ -323,8 +329,16 @@ const GameLobbyProvider = (props) => {
         UserLevel: userInfo.UserLevel
       });
       setFavors(favorsObj);
-      setCashUnit(userInfo.Company.CashUnit);
+      setCashUnit(userInfo.Company.CashUnit);      
+    }).then(() => {
+      intervalIDRef.current = setInterval(() => {
+        refreshUserInfo();
+      }, 5000);
     });
+
+    return ()=>{
+      clearInterval(intervalIDRef.current);
+    };
   }, []);
 
   return (
