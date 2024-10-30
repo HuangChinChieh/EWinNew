@@ -82,7 +82,7 @@ const Main = () => {
         }
 
         return clearInterval(intervalIDRef.current);
-    }, []);
+    }, [params]);
 
     const initLobbyClient = (CT) => {
         // 遊戲大廳
@@ -127,8 +127,8 @@ const Main = () => {
     //     setGetUrl(localStorage.getItem('currentUrl'))
     //}, [history.location.pathname]);
 
-    const RouteGameViewComponent = ({ match, EWinUrl, CT }) => {
-        const { tableNumber } = match.params;
+    const GameProvider = ({ match, EWinUrl, CT }) => {
+        const { gameId } = match.params;
         let GameSetID = 0;
         let GameSetNumber = '';
 
@@ -146,7 +146,7 @@ const Main = () => {
                     CT={CT}
                     GameSetID={GameSetID}
                     GameSetNumber={GameSetNumber}
-                    TableNumber={tableNumber}
+                    TableNumber={gameId}
                     CurrencyType={currencyTypeRef.current}
                 />
             </GameBaccaratProvider>
@@ -171,9 +171,9 @@ const Main = () => {
                             <Gamefavorite></Gamefavorite>
                         </Route>
                         <Route
-                            path="/games/:tableNumber"
+                            path="/games/:gameId"
                             render={(props) => (
-                                <RouteGameViewComponent {...props} EWinUrl={EWinUrl} CT={CT} />
+                                <GameProvider {...props} EWinUrl={EWinUrl} CT={CT} />
                             )}
                         />
                         <Route path="/" component={Gamelobby}></Route>

@@ -1,24 +1,62 @@
 @keyframes slideIn {
     from {
-      transform: translateY(-110%);
-      opacity: 0;
+        transform: translateY(-110%);
+        opacity: 0;
     }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
 
-  @keyframes slideOut {
-    from {
-      transform: translateY(0);
-      opacity: 1.0;
-    }
     to {
-      transform: translateY(-110%);
-      opacity: 0;
+        transform: translateY(0);
+        opacity: 1;
     }
-  }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1.0;
+    }
+
+    to {
+        transform: translateY(-110%);
+        opacity: 0;
+    }
+}
+
+@keyframes rotate{
+    0%{
+        transform: rotateZ(0deg);
+    }
+    5%{
+        transform: rotateZ(20deg);
+    }
+    10%{
+        transform: rotateZ(0deg);
+    }
+    15%{
+        transform: rotateZ(-20deg);
+    }
+    20%{
+        transform: rotateZ(0deg);
+    }    
+
+    25%{
+        transform: rotateZ(20deg);
+    }
+    30%{
+        transform: rotateZ(0deg);
+    }
+    35%{
+        transform: rotateZ(-20deg);
+    }
+    40%{
+        transform: rotateZ(0deg);
+    }    
+
+
+    100%{
+        transform: rotateZ(0deg);
+    }    
+}
 
 
 .gameSetList-box {
@@ -43,6 +81,23 @@
             cursor: pointer;
             transition: filter 0.3s;
             /* 添加過渡效果 */
+            position: relative;
+
+            &.new{               
+                animation: rotate 2.5s linear infinite;
+            }
+
+            &.new::before {
+                content: "";
+                position: absolute;
+                top: -2px;
+                right: -1px;
+                width: 8px;
+                height: 8px;
+                background-color: #fb3b3b;
+                border-radius: 50%;
+                /* 圓形 */
+            }
         }
 
         .gameSetList-box-title {
@@ -87,8 +142,8 @@
         font-size: 14px;
         color: #8d8d9f;
         animation: slideIn 0.4s ease forwards;
-        
-        &.hide{
+
+        &.hide {
             animation: slideOut 0.4s ease forwards;
         }
 
