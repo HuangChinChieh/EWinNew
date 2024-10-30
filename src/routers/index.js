@@ -54,7 +54,7 @@ const Main = () => {
                 const postData = {
                     Token: "1_0UE5XQQ_ca95cc8bfb4e442118d60c5b92a7af2e",
                     //LoginAccount: 'ddt1',
-                    LoginAccount: "ddt1",
+                    LoginAccount: "kevin0517",
                     LoginPassword: "1234",
                     CompanyCode: "demo",
                     UserIP: "",
@@ -81,8 +81,10 @@ const Main = () => {
             fetchDataBySeconds();
         }
 
-        return clearInterval(intervalIDRef.current);
-    }, [params]);
+        return () => { 
+            clearInterval(intervalIDRef.current)
+        };
+    }, []);
 
     const initLobbyClient = (CT) => {
         // 遊戲大廳

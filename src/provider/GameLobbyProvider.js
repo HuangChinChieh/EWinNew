@@ -263,7 +263,6 @@ const GameLobbyProvider = (props) => {
   // Game Lobby related useEffect
   useEffect(() => {
     const PromiseArray = [];
-
     //UserInfo
     PromiseArray.push(new Promise(
       (resolve) => {
@@ -295,7 +294,7 @@ const GameLobbyProvider = (props) => {
       (resolve) => {
         lobbyClient.GetUserAccountProperty("EWinGame.Favor", (s, o) => {
           if (s) {
-            if (o.ResultCode === 0) {
+            if (o.ResultCode === 0 || o.Message === "NoExist") {
               resolve(o);
             }
           }
@@ -314,7 +313,7 @@ const GameLobbyProvider = (props) => {
           Balance: wallet.Balance,
         });
       }
-
+      
       if (userInfo.GameSetList != null) {
         setGameSetList(userInfo.GameSetList);
       }
@@ -328,7 +327,12 @@ const GameLobbyProvider = (props) => {
         UserCountry: userInfo.UserCountry,
         UserLevel: userInfo.UserLevel
       });
-      setFavors(favorsObj);
+
+      if(favorsObj === null){
+        setFavors([]);
+      } else {
+        setFavors(favorsObj);
+      }
       setCashUnit(userInfo.Company.CashUnit);      
     }).then(() => {
       intervalIDRef.current = setInterval(() => {

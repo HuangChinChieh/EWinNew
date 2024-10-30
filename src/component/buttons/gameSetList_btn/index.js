@@ -100,8 +100,8 @@ const GameSetListButton = () => {
                         工單列表
                     </div>
                     {gameSetList.length > 0 && gameSetList.map((item, index) =>
-                        <div className='gameSetList-box-option' onClick={() => { entryTable(item.GameSetID, item.GameSetNumber, item.RoadMapNumber) }}>
-                            <div className='gameSetList-box-no'>{index}.</div>
+                        <div className='gameSetList-box-option' key={"gameSetBtn_" + item.GameSetID} onClick={() => { entryTable(item.GameSetID, item.GameSetNumber, item.RoadMapNumber) }}>
+                            <div className='gameSetList-box-no'>{index + 1}.</div>
                             <div className='gameSetList-box-title'>{item.GameSetNumber}</div>
                         </div>)}
                     <div className='gameSetList-box-options-footer'><div className='gameSetList-box-options-close' onClick={hideGameSetList}><i></i>關閉</div></div>
