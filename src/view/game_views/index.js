@@ -1771,7 +1771,7 @@ const GameView = (props) => {
                                 }
                             );
                         } else {
-                            clearBetLimit(tableNumber, (success) => {
+                            clearBetLimit((success) => {
                                 if (success) {
                                     resolve(null);
                                 } else {
