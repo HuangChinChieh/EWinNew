@@ -36,11 +36,15 @@ const BettingHistoryDetail = ({
 
 
     useEffect(() => {
-        bettingHistoryClick();
+        if(beginDate!=='' && endDate !== ''){
+            bettingHistoryClick();
+        }       
     }, [beginDate, endDate])
 
     useEffect(() => {
-        reacquireHistoryDetail(parameterData.gamecode,parameterData.querydate)
+        if(parameterData.gamecode !=='' && parameterData.querydate !==''){
+            reacquireHistoryDetail(parameterData.gamecode,parameterData.querydate);
+        }        
     }, [parameterData])
 
 
