@@ -26,7 +26,9 @@ const SummaryTable = ({
 
 
     useEffect(() => {
-        bettingHistoryClick();
+        if(beginDate!=='' && endDate !== ''){
+            bettingHistoryClick();
+        }
     }, [beginDate, endDate])
 
     // 顯示投注紀錄並取得投注資料

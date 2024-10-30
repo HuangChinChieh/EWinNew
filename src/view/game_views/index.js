@@ -612,7 +612,7 @@ const GameView = (props) => {
             if (Q.UserInfo != null) {
                 if (Q.UserInfo.Wallet != null) {
                     for (var i = 0; i < Q.UserInfo.Wallet.length; i++) {
-                        if (Q.UserInfo.Wallet[i].CurrencyType.toUpperCase() == c.toUpperCase()) {
+                        if (Q.UserInfo.Wallet[i].CurrencyType.toUpperCase() === c.toUpperCase()) {
                             retValue = Q.UserInfo.Wallet[i];
                             break;
                         }
@@ -1923,7 +1923,7 @@ const GameView = (props) => {
                 intervalIDByQueryGame = setInterval(() => {
                     refreshQueryGame();
                 }, 30000);
-            });
+            }).catch((result)=>{console.log(result)});
 
         setSelChipData({ ...chipsItems[0], index: 0 });
 

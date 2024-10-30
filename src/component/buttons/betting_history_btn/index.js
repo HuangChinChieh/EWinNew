@@ -1,27 +1,30 @@
 import { useState, useRef, useEffect } from 'react';
 import './index.scss';
-import SummaryTable from './summary_table'; 
+import SummaryTable from './summary_table';
 import BettingHistoryDetail from './betting_history_detail';
 
 
 const BettingHistory = () => {
 
-    
-    const [displayArea,setDisplayArea]=useState(2);
+
+    const [displayArea, setDisplayArea] = useState(2);
     const [beginDate, setBeginDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const settingsRef = useRef(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
-    const [parameterData,setParameterData]=useState({})
+    const [parameterData, setParameterData] = useState({
+        gamecode:'',
+        querydate:''
+    });
 
 
 
 
 
-    const passGamecodeAndQuerydate=(e, gamecode, querydate)=>{
+    const passGamecodeAndQuerydate = (e, gamecode, querydate) => {
         e.stopPropagation()
         setDisplayArea(0);
-        setParameterData({gamecode,querydate});
+        setParameterData({ gamecode:'', querydate:'' });
     };
 
     // 點擊區域外則關閉
@@ -56,7 +59,7 @@ const BettingHistory = () => {
         setEndDate(today.toISOString().split('T')[0]);
     }, []);
 
-    const updateDate = (beginDate, endDate) =>{
+    const updateDate = (beginDate, endDate) => {
         setBeginDate(beginDate);
         setEndDate(endDate);
     };
@@ -73,37 +76,38 @@ const BettingHistory = () => {
 
     return (
 
-            <div className='betting-history-box forpc'>
-                <div
-                    className={`betting-history ${isButtonClicked ? 'active' : ''}`}
-                    onClick={topBtnClick}
-                    ref={settingsRef}
-                >
+        <div className='betting-history-box forpc'>
+            <div
+                className={`betting-history ${isButtonClicked ? 'active' : ''}`}
+                onClick={topBtnClick}
+                ref={settingsRef}
+            >
+          
                     <div>
                         <div className={`hover-box ${displayArea === 1 ? 'visible' : ''}`}>
-                                <SummaryTable 
-                                    beginDate={beginDate} 
-                                    endDate={endDate} 
-                                    updateDate={updateDate}
-                                    passGamecodeAndQuerydate={passGamecodeAndQuerydate}
-                                />
+                            <SummaryTable
+                                beginDate={beginDate}
+                                endDate={endDate}
+                                updateDate={updateDate}
+                                passGamecodeAndQuerydate={passGamecodeAndQuerydate}
+                            />
 
                         </div>
 
                         <div className={`hover-box-detail ${displayArea === 0 ? 'visible' : ''}`}>
-                                <BettingHistoryDetail
-                                    beginDate={beginDate} 
-                                    endDate={endDate} 
-                                    setDisplayArea={setDisplayArea}
-                                    parameterData={parameterData}
-                                    passGamecodeAndQuerydate={passGamecodeAndQuerydate}
-                                />
+                            <BettingHistoryDetail
+                                beginDate={beginDate}
+                                endDate={endDate}
+                                setDisplayArea={setDisplayArea}
+                                parameterData={parameterData}
+                                passGamecodeAndQuerydate={passGamecodeAndQuerydate}
+                            />
 
                         </div>
                     </div>
-
-                </div>
+                
             </div>
+        </div>
     )
 }
 

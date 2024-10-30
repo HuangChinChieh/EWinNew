@@ -26,17 +26,16 @@ import { toNumber } from "lodash";
 const Main = () => {
     const EWinUrl = "https://ewin.dev.mts.idv.tw";
     const intervalIDRef = useRef(0);
-    const params = new URLSearchParams(window.location.search);
+   
     const currencyTypeRef = useRef("CNY");
     const [CT, setCT] = useState("");
     const [isServerConneted, setIsServerConneted] = useState(false);
 
     const location = useLocation();
-    const isGameView = location.pathname.includes("/games/");
-    const [getUrl, setGetUrl] = useState("");
-    const history = useHistory();
+    const isGameView = location.pathname.includes("/games/");    
 
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
         const CT = params["CT"];
         const CurrencyType = params["CurrencyType"];
 
@@ -95,14 +94,16 @@ const Main = () => {
         });
 
         lobbyClient.handleConnected(() => {
+    
             intervalIDRef.current = setInterval(() => {
                 const currentTime = new Date().toLocaleString();
                 lobbyClient.KeepSID((s, o) => {
-                    // console.log("KeepSIDs:" + s);
-                    // console.log("KeepSID:" + JSON.stringify(o));
-                    // console.log("Current Time:", currentTime);
+                  
+                    console.log("KeepSIDs:" + s);
+                    console.log("KeepSID:" + JSON.stringify(o));
+                    console.log("Current Time:", currentTime);
                 });
-            }, 30000);
+            }, 10000);
 
             setCT(CT);
             setIsServerConneted(true);
