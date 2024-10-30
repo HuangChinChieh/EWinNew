@@ -47,7 +47,7 @@ const GameLobbyProvider = (props) => {
     UserLevel: 0
   });
   const [favors, setFavors] = useState([]);
-  const [betLimit, setBetLimit] = useState("");
+  const [useBetLimit, setUseBetLimit] = useState(null);
   const [musicIsPlaying, setMusicIsPlaying] = useState(false);
   const [lobbyPersonal, setLobbyPersonal] = useState(false);
   const [cashUnit, setCashUnit] = useState("");
@@ -55,6 +55,33 @@ const GameLobbyProvider = (props) => {
   const [hasNewGameSet, setHasNewGameSet] = useState(false);
   const intervalIDRef = useRef(0);
   const isRefreshing = useRef(false);
+
+
+  const deepEqual = (obj1, obj2) =>{
+   
+      if (obj1 === obj2) return true; // 如果是同一物件或值一樣則返回 true
+  
+      if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+          return false; // 如果其中一個不是物件或是 null，返回 false
+      }
+  
+      // 獲取兩個物件的屬性列表
+      const keys1 = Object.keys(obj1);
+      const keys2 = Object.keys(obj2);
+  
+      // 比較屬性數量是否一致
+      if (keys1.length !== keys2.length) return false;
+  
+      // 遍歷屬性並進行遞迴比較
+      for (let key of keys1) {
+          if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
+              return false;
+          }
+      }
+  
+      return true;  
+  };
+
 
   const updateInfo = useCallback((cb) => {
     lobbyClient.GetUserInfo((s, o) => {
@@ -202,9 +229,33 @@ const GameLobbyProvider = (props) => {
 
   }, [CT, CurrencyType, updateInfo]);
 
-  const updateBetLimit = useCallback((betLimit) => {
-    setBetLimit(betLimit);
-  }, [CT]);
+
+  const updateUseBetLimit = (obj) => {
+    const setFun = (setObj) => {
+      setUseBetLimit((prevObj) => {
+        let isEqual = false;
+        let newObj = setObj;
+        isEqual = deepEqual(prevObj, newObj);
+        
+        if (isEqual) {
+          return prevObj;
+        } else {
+          return newObj;
+        }
+      });
+    };
+
+    if (obj) {
+      setFun(obj);
+    } else {
+      updateInfo((userInfo) => {
+        let _betLimit = userInfo.BetLimit;
+        setFun(_betLimit);
+      });
+    }
+  };
+
+
 
   const muteChange = useCallback(() => {
     setMusicIsPlaying(!musicIsPlaying)
@@ -238,6 +289,13 @@ const GameLobbyProvider = (props) => {
               updateGameSetList([]);
             }
   
+
+            if (_userInfo.BetLimit != null) {
+              updateUseBetLimit(_userInfo.BetLimit);
+            } else {
+              updateGameSetList(null);
+            }
+
             updateUserInfo({
               LoginAccount: _userInfo.LoginAccount,
               RealName: _userInfo.RealName,
@@ -302,8 +360,8 @@ const GameLobbyProvider = (props) => {
       }
     ));
 
-    Promise.all(PromiseArray).then(([userInfo, favorsProp]) => {
-      let wallet = userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
+    Promise.all(PromiseArray).then(([_userInfo, favorsProp]) => {
+      let wallet = _userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
       let favorsObj = JSON.parse(favorsProp.PropertyValue)
 
       if (wallet) {
@@ -314,18 +372,25 @@ const GameLobbyProvider = (props) => {
         });
       }
       
-      if (userInfo.GameSetList != null) {
-        setGameSetList(userInfo.GameSetList);
+      if (_userInfo.GameSetList != null) {
+        setGameSetList(_userInfo.GameSetList);
       }
 
+      if (_userInfo.BetLimit != null) {
+        updateUseBetLimit(_userInfo.BetLimit);
+      } else {
+        updateUseBetLimit(null);
+      }
+
+
       setUserInfo({
-        LoginAccount: userInfo.LoginAccount,
-        RealName: userInfo.RealName,
-        IsGuestAccount: userInfo.IsGuestAccount,
-        UserAccountType: userInfo.UserAccountType,
-        AllowBetType: userInfo.AllowBetType,
-        UserCountry: userInfo.UserCountry,
-        UserLevel: userInfo.UserLevel
+        LoginAccount: _userInfo.LoginAccount,
+        RealName: _userInfo.RealName,
+        IsGuestAccount: _userInfo.IsGuestAccount,
+        UserAccountType: _userInfo.UserAccountType,
+        AllowBetType: _userInfo.AllowBetType,
+        UserCountry: _userInfo.UserCountry,
+        UserLevel: _userInfo.UserLevel
       });
 
       if(favorsObj === null){
@@ -333,7 +398,7 @@ const GameLobbyProvider = (props) => {
       } else {
         setFavors(favorsObj);
       }
-      setCashUnit(userInfo.Company.CashUnit);      
+      setCashUnit(_userInfo.Company.CashUnit);      
     }).then(() => {
       intervalIDRef.current = setInterval(() => {
         refreshUserInfo();
@@ -352,7 +417,7 @@ const GameLobbyProvider = (props) => {
           <WalletContext.Provider value={{ wallet, updateWallet, setWallet }}>
             <UserInfoContext.Provider value={{ userInfo, updateUserInfo, setUserInfoProperty }}>
               <CashUnitContext.Provider value={{ cashUnit, setCashUnit }}>
-                <BetLimitContext.Provider value={{ betLimit, updateBetLimit }}>
+                <BetLimitContext.Provider value={{ useBetLimit }}>
                   <GameSetListContext.Provider value={{ gameSetList, updateGameSetList, hasNewGameSet, setHasNewGameSet }}>
                     <RefreshUserInfoContext.Provider value={{ refreshUserInfo }}>
                       {props.children}
