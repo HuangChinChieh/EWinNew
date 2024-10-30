@@ -380,7 +380,7 @@ const GameView = (props) => {
         if (gameSetID === 0) {
             setUserPoint(wallet.Balance);
         } else {
-            setUserPoint(Q.GameSetOrder.TotalUserChip + Q.GameSetOrder);
+            setUserPoint(Q.GameSetOrder.TotalUserChip + Q.GameSetOrder.TotalRewardValue);
         }
 
         if (Q.SelfOrder) {
@@ -982,6 +982,7 @@ const GameView = (props) => {
             switch (action) {
                 case "addBet":
                     // args => beforeSetChipCb, finishCb
+                    debugger
                     if (isCanBet) {
                         if (orderData.unConfirmValue + selChipData.chipValue <= userPoint) {
                             if ("areaType" in args) {
@@ -1040,7 +1041,7 @@ const GameView = (props) => {
 
                             if (isConnected) {
                                 //gameClient.
-
+debugger
                                 if (checkOrderByBetLimit(orderData, useBetLimit)) {
                                     //playSound("OrderAccept");
                                     if (!sendCheck.current.isSendBetData) {
