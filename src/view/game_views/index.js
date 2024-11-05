@@ -1,20 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {
-  useState,
-  useEffect,
-  useContext,
-  useRef,
-  useCallback,
-  useReducer,
-  createContext,
+    useState,
+    useEffect,
+    useContext,
+    useRef,
+    useCallback,
+    useReducer,
+    createContext,
 } from "react";
 import { Notify } from "utils/Notify";
 import CountdownCircle from "games_component/game_count_down_circle";
 import {
-  WalletContext,
-  CashUnitContext,
-  UserInfoContext ,
-  GameSetListContext
+    WalletContext,
+    CashUnitContext,
+    UserInfoContext,
+    GameSetListContext,
+    BetLimitContext,
+    RefreshUserInfoContext
 } from "../../provider/GameLobbyProvider";
 import { BaccaratSubscribeContext } from "../../provider/GameBaccaratProvider";
 import "./index.scss";
@@ -69,13 +71,14 @@ const GameView = (props) => {
         "RoundDrawCard",
     ];
     const { alertMsg } = useContext(AlertContext);
+    const { refreshUserInfo } = useContext(RefreshUserInfoContext);
     const msgMaskResultControl = useRef();
     const cbRef = useRef({});
 
     //table相關
     const tableInfo = useRef(null);
     const queryInfo = useRef(null);
-    const [useBetLimit, setUseBetLimit] = useState(null); //目前使用的限紅
+    //const [useBetLimit, setUseBetLimit] = useState(null); //目前使用的限紅
     const [refreshStreamType, setRefreshStreamType] = useState(0); //串流種類，0=HD，1=SD
     const [shoeResult, setShoeResult] = useState("");
     const countdownInfo = useRef({
@@ -85,13 +88,14 @@ const GameView = (props) => {
     });
     const [baccaratType, setBaccaratType] = useState(0); //0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
 
-  //電投相關資訊
-  // const [PADAvailable, setPADAvailable] = useState(false);
-  // const [onlineUserCount, setOnlineUserCount] = useState(false);
-  const { cashUnit, setCashUnit } = useContext(CashUnitContext);
-  const { userInfo, setUserInfoProperty, updateUserInfo } = useContext(UserInfoContext);
-  const { gameSetList } = useContext(GameSetListContext);
-
+    //電投相關資訊
+    // const [PADAvailable, setPADAvailable] = useState(false);
+    // const [onlineUserCount, setOnlineUserCount] = useState(false);
+    const { cashUnit, setCashUnit } = useContext(CashUnitContext);
+    const { userInfo, setUserInfoProperty, updateUserInfo } = useContext(UserInfoContext);
+    const { gameSetList } = useContext(GameSetListContext);
+    const { useBetLimit } = useContext(BetLimitContext);
+    const betLimit = useRef(null);
 
     //投注相關
     const [isCanBet, setIsCanBet] = useState(false);
@@ -261,11 +265,11 @@ const GameView = (props) => {
         }
     };
 
-  const handleTableInfo = (tableInfoData) => {
-    //check
-    if (!tableInfo || Object.keys(tableInfoData).length === 0) {
-      return;
-    }
+    const handleTableInfo = (tableInfoData) => {
+        //check
+        if (!tableInfo || Object.keys(tableInfoData).length === 0) {
+            return;
+        }
 
         //1.要求出碼
         //2.
@@ -281,13 +285,15 @@ const GameView = (props) => {
 
         tableInfo.current = tableInfoData;
 
-    if (tableInfoData.ShoeResult == null) {
-      setShoeResult("");
-    } else {
-      setShoeResult(tableInfoData.ShoeResult);
-    }
+        betLimit.current = tableInfoData.BetLimit[0];
 
-    setBaccaratType(tableInfoData.BaccaratType);
+        if (tableInfoData.ShoeResult == null) {
+            setShoeResult("");
+        } else {
+            setShoeResult(tableInfoData.ShoeResult);
+        }
+
+        setBaccaratType(tableInfoData.BaccaratType);
 
         //設定視頻串流
         setStreamName(handleStreamArray(tableInfoData.Stream));
@@ -381,7 +387,7 @@ const GameView = (props) => {
         if (gameSetID === 0) {
             setUserPoint(wallet.Balance);
         } else {
-            setUserPoint(Q.GameSetOrder.TotalUserChip + Q.GameSetOrder);
+            setUserPoint(Q.GameSetOrder.TotalUserChip + Q.GameSetOrder.TotalRewardValue);
         }
 
         if (Q.SelfOrder) {
@@ -530,13 +536,13 @@ const GameView = (props) => {
                                                 if (countdownSecond > 0 || countdownInfo.current.tableTimeoutSecond === 0) {
                                                     let minBetValue = 0;
 
-                                                    if (useBetLimit != null) {
+                                                    if (betLimit != null) {
                                                         // 判斷最低檯紅
                                                         minBetValue = Math.min(
-                                                            useBetLimit.Banker.Min,
-                                                            useBetLimit.Player.Min,
-                                                            useBetLimit.Tie.Min,
-                                                            useBetLimit.Pair.Min
+                                                            betLimit.current.Banker.Min,
+                                                            betLimit.current.Player.Min,
+                                                            betLimit.current.Tie.Min,
+                                                            betLimit.current.Pair.Min
                                                         );
                                                     }
 
@@ -719,7 +725,7 @@ const GameView = (props) => {
 
                         break;
                     case "AddTips".toUpperCase():
-                        msgMaskResultControl.current.ShowMask("正在要求提供小費" + value + "元",() => { });
+                        msgMaskResultControl.current.ShowMask("正在要求提供小費" + value + "元", () => { });
 
                         break;
                     case "CancelAddTips".toUpperCase():
@@ -731,7 +737,7 @@ const GameView = (props) => {
 
                         break;
                     case "ChangeTable".toUpperCase():
-                        msgMaskResultControl.current.ShowMask("正在要求更換賭桌至 " + value,() => { });
+                        msgMaskResultControl.current.ShowMask("正在要求更換賭桌至 " + value, () => { });
 
                         break;
                     default:
@@ -1042,7 +1048,7 @@ const GameView = (props) => {
                             if (isConnected) {
                                 //gameClient.
 
-                                if (checkOrderByBetLimit(orderData, useBetLimit)) {
+                                if (checkOrderByBetLimit(orderData, betLimit.current)) {
                                     //playSound("OrderAccept");
                                     if (!sendCheck.current.isSendBetData) {
                                         sendCheck.current.isSendBetData = true;
@@ -1066,7 +1072,7 @@ const GameView = (props) => {
                                                     sendCheck.current.isSendBetData = false;
 
                                                     if (s) {
-                                                        if (o.ResultState === 0) {
+                                                        if (o.ResultCode === 0) {
                                                             //dispatchOrderData({ type: "confirmBet" });
                                                             setEmptyOrderCount(0);
                                                             handleQuery(o);
@@ -1091,7 +1097,7 @@ const GameView = (props) => {
                                                     sendCheck.current.isSendBetData = false;
 
                                                     if (s) {
-                                                        if (o.ResultState === 0) {
+                                                        if (o.ResultCode === 0) {
                                                             dispatchOrderData({ type: "confirmBet" });
                                                             setEmptyOrderCount(0);
                                                             handleQuery(o);
@@ -1116,7 +1122,7 @@ const GameView = (props) => {
                                                     sendCheck.current.isSendBetData = false;
 
                                                     if (s) {
-                                                        if (o.ResultState === 0) {
+                                                        if (o.ResultCode === 0) {
                                                             dispatchOrderData({ type: "confirmBet" });
                                                             setEmptyOrderCount(0);
                                                             handleQuery(o);
@@ -1172,7 +1178,7 @@ const GameView = (props) => {
                                         orderData.orderSequence + 1,
                                         (s, o) => {
                                             if (s) {
-                                                if (o.ResultState === 0) {
+                                                if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
                                                     handleQuery(o);
                                                 } else {
@@ -1197,7 +1203,7 @@ const GameView = (props) => {
                                         orderData.orderSequence + 1,
                                         (s, o) => {
                                             if (s) {
-                                                if (o.ResultState === 0) {
+                                                if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
                                                     handleQuery(o);
                                                 } else {
@@ -1222,7 +1228,7 @@ const GameView = (props) => {
                                         orderData.orderSequence + 1,
                                         (s, o) => {
                                             if (s) {
-                                                if (o.ResultState === 0) {
+                                                if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
                                                     handleQuery(o);
                                                 } else {
@@ -1252,19 +1258,20 @@ const GameView = (props) => {
                     break;
             }
         },
-        [selChipData, orderData]
+        [selChipData, orderData, isCanBet]
     );
 
     const checkOrderByBetLimit = (_orderData, _betLimit) => {
-        let sumPair = new BigNumber(_orderData.PlayerPair.totalBetValue)
-            .plus(_orderData.BankerPair.totalBetValue)
+        let sumPair = new BigNumber(_orderData.PlayerPair.totalValue)
+            .plus(_orderData.BankerPair.totalValue)
             .toNumber();
-        if (_orderData.Banker.totalBetValue > 0) {
-            if (_orderData.Banker.totalBetValue >= _betLimit.Banker.Min) {
-                if (_orderData.Banker.totalBetValue <= _betLimit.Banker.Max) {
+
+        if (_orderData.Banker.totalValue !== 0) {
+            if (_orderData.Banker.totalValue >= _betLimit.Banker.Min) {
+                if (_orderData.Banker.totalValue <= _betLimit.Banker.Max) {
                     if (_betLimit.BetBaseBanker !== 0) {
                         if (
-                            new BigNumber(_orderData.Banker.totalBetValue)
+                            new BigNumber(_orderData.Banker.totalValue)
                                 .modulo(_betLimit.BetBaseBanker)
                                 .toNumber() !== 0
                         ) {
@@ -1280,9 +1287,11 @@ const GameView = (props) => {
                 alertMsg("提醒", "下注失敗, 庄注碼最低投注" + _betLimit.Banker.Min + getDisplayUnit().text);
                 return false;
             }
+        }
 
-            if (_orderData.Player.totalBetValue >= _betLimit.Player.Min) {
-                if (_orderData.Player.totalBetValue <= _betLimit.Player.Max) {
+        if (_orderData.Player.totalValue !== 0) {
+            if (_orderData.Player.totalValue >= _betLimit.Player.Min) {
+                if (_orderData.Player.totalValue <= _betLimit.Player.Max) {
                 } else {
                     alertMsg("提醒", "下注失敗, 閒注碼最高投注" + _betLimit.Player.Max + getDisplayUnit().text);
                     return false;
@@ -1291,9 +1300,11 @@ const GameView = (props) => {
                 alertMsg("提醒", "下注失敗, 閒注碼最低投注" + _betLimit.Player.Min + getDisplayUnit().text);
                 return false;
             }
+        }
 
-            if (_orderData.Tie.totalBetValue >= _betLimit.Tie.Min) {
-                if (_orderData.Tie.totalBetValue <= _betLimit.Tie.Max) {
+        if (_orderData.Tie.totalValue !== 0) {
+            if (_orderData.Tie.totalValue >= _betLimit.Tie.Min) {
+                if (_orderData.Tie.totalValue <= _betLimit.Tie.Max) {
                 } else {
                     alertMsg("提醒", "下注失敗, 和注碼最高投注" + _betLimit.Tie.Max + getDisplayUnit().text);
                     return false;
@@ -1302,7 +1313,9 @@ const GameView = (props) => {
                 alertMsg("提醒", "下注失敗, 和注碼最低投注" + _betLimit.Tie.Min + getDisplayUnit().text);
                 return false;
             }
+        }
 
+        if (sumPair !== 0) {
             if (sumPair >= _betLimit.Pair.Min) {
                 if (sumPair <= _betLimit.Pair.Max) {
                 } else {
@@ -1313,18 +1326,18 @@ const GameView = (props) => {
                 alertMsg("提醒", "下注失敗, 對子注碼最低投注" + _betLimit.Pair.Min + getDisplayUnit().text);
                 return false;
             }
-
-            if (
-                _orderData.Player.totalBetValue !== 0 &&
-                _orderData.Player.totalBetValue !== 0 &&
-                queryInfo.current.AllowBPType === 0
-            ) {
-                alertMsg("提醒", "下注失敗, 對子注碼最低投注" + _betLimit.Pair.Min + getDisplayUnit().text);
-                return false;
-            }
-
-            return true;
         }
+
+        if (
+            _orderData.Banker.totalValue !== 0 &&
+            _orderData.Player.totalValue !== 0 &&
+            queryInfo.current.AllowBPType === 0
+        ) {
+            alertMsg("提醒", "下注失敗, 庄閒不能同時下注");
+            return false;
+        }
+
+        return true;
     };
     //#endregion
 
@@ -1692,57 +1705,57 @@ const GameView = (props) => {
             })
         );
 
-    //#region promise2 設定限紅
-    if (gameSetID !== 0) {
-      //傳統桌台，使用桌台限紅
-      //資訊會從GetTableInfo取得
-    } else {
-      //非傳統，使用個人限紅
-      PromiseArray.push(
-        new Promise((resolve, reject) => {
-          gameClient.UserAccountGetBetLimitListByRoadMap(
-            tableNumber,
-            props.CurrencyType,
-            gameSetID,
-            (success, o) => {
-              if (success) {
-                if (o.ResultCode === 0) {
-                  resolve(o);
-                } else {
-                  reject("GetBetLimitError");
-                }
-              } else {
-                reject("GetBetLimitError");
-              }
-            }
-          );
-        }).then((o) => {
-          return new Promise((resolve, reject) => {
-            //#region 限紅設定          
-            const selBetLimit = JSON.parse(localStorage.getItem("SelBetLimit"));
-            let distance = -1;
-            let directSetBetLimit = null;
+        //#region promise2 設定限紅
+        if (gameSetID !== 0) {
+            //傳統桌台，使用桌台限紅
+            //資訊會從GetTableInfo取得
+        } else {
+            //非傳統，使用個人限紅
+            PromiseArray.push(
+                new Promise((resolve, reject) => {
+                    gameClient.UserAccountGetBetLimitListByRoadMap(
+                        tableNumber,
+                        props.CurrencyType,
+                        gameSetID,
+                        (success, o) => {
+                            if (success) {
+                                if (o.ResultCode === 0) {
+                                    resolve(o);
+                                } else {
+                                    reject("GetBetLimitError");
+                                }
+                            } else {
+                                reject("GetBetLimitError");
+                            }
+                        }
+                    );
+                }).then((o) => {
+                    return new Promise((resolve, reject) => {
+                        //#region 限紅設定          
+                        const selBetLimit = JSON.parse(localStorage.getItem("SelBetLimit"));
+                        let distance = -1;
+                        let directSetBetLimit = null;
 
                         if (o.BetLimitList && o.BetLimitList.length > 0) {
                             const betLimitList = o.BetLimitList;
 
-              if (betLimitList.length === 1 || selBetLimit == null) {
-                //只有一組限紅，直接設定
-                if (betLimitList[0].CurrencyType === props.CurrencyType) {
-                  //幣別必須要相等
-                  directSetBetLimit = betLimitList[0];
-                }
-              } else if (betLimitList.length > 1) {
-                //多組限紅，尋找跟上次選取差距最接近之限紅
-                for (const betLimit of betLimitList) {
-                  if (selBetLimit.BetLimitID === betLimit.BetLimitID) {
-                    directSetBetLimit = betLimit;
-                    break;
-                  } else if (betLimit.CurrencyType === props.CurrencyType) {
-                    const tempDistance =
-                      Math.abs(
-                        betLimit.MinBetPlayer - selBetLimit.MinBetPlayer
-                      ) + Math.abs(selBetLimit.MaxBet - betLimit.MaxBet);
+                            if (betLimitList.length === 1 || selBetLimit == null) {
+                                //只有一組限紅，直接設定
+                                if (betLimitList[0].CurrencyType === props.CurrencyType) {
+                                    //幣別必須要相等
+                                    directSetBetLimit = betLimitList[0];
+                                }
+                            } else if (betLimitList.length > 1) {
+                                //多組限紅，尋找跟上次選取差距最接近之限紅
+                                for (const betLimit of betLimitList) {
+                                    if (selBetLimit.BetLimitID === betLimit.BetLimitID) {
+                                        directSetBetLimit = betLimit;
+                                        break;
+                                    } else if (betLimit.CurrencyType === props.CurrencyType) {
+                                        const tempDistance =
+                                            Math.abs(
+                                                betLimit.MinBetPlayer - selBetLimit.MinBetPlayer
+                                            ) + Math.abs(selBetLimit.MaxBet - betLimit.MaxBet);
 
                                         if (distance !== -1) {
                                             if (tempDistance < distance) {
@@ -1892,7 +1905,8 @@ const GameView = (props) => {
                                 //傳統桌台，使用桌台限紅
                                 //資訊會從GetTableInfo取得
                             } else {
-                                setUseBetLimit(result.value);
+                                //setUseBetLimit(result.value);
+                                //refreshUserInfo();
                             }
                             //#endregion
                             break;
@@ -1924,7 +1938,9 @@ const GameView = (props) => {
                 intervalIDByQueryGame = setInterval(() => {
                     refreshQueryGame();
                 }, 30000);
-            }).catch((result)=>{console.log(result)});
+            }).catch((result) => {
+                console.log(result)
+            });
 
         setSelChipData({ ...chipsItems[0], index: 0 });
 
@@ -1932,14 +1948,14 @@ const GameView = (props) => {
         window.addEventListener("resize", resize);
         tableNotify.current = new Notify();
 
-    return () => {
-      //取消訂閱桌台
-      clearInterval(intervalIDByRefreshSubscribe);
-      clearInterval(intervalIDByTableInfo);
-      clearInterval(intervalIDByQueryGame);
-      RemoveSubscribe("", tableNumber);
-    };
-  }, [tableNumber, gameSetID]);
+        return () => {
+            //取消訂閱桌台
+            clearInterval(intervalIDByRefreshSubscribe);
+            clearInterval(intervalIDByTableInfo);
+            clearInterval(intervalIDByQueryGame);
+            RemoveSubscribe("", tableNumber);
+        };
+    }, [tableNumber, gameSetID]);
 
     useEffect(() => {
         cbRef.current.handleBet = handleBet;
@@ -1994,10 +2010,10 @@ const GameView = (props) => {
                                     //window.location.reload();
 
 
-                }}
-              >
-                測試
-              </button>
+                                }}
+                            >
+                                測試
+                            </button>
 
                             <button
                                 style={{
