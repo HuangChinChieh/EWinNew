@@ -25,6 +25,7 @@ import GameChipsButton from "games_component/game_buttons/game_chips_btn";
 import GameBettingArea from "games_component/game_betting_area_new";
 import GameRoadMap from "games_component/game_road_map";
 import GameVideo from "games_component/game_video";
+import GameHeader from "games_component/game_header";
 import CardResult from "games_component/game_card_result";
 import { orderReducer, initialOrderData } from "./orderData";
 import { AlertContext } from "component/alert";
@@ -1964,7 +1965,9 @@ const GameView = (props) => {
     // });
 
     return (
+      
         <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
+    
             <div className="game-view-wrap">
                 {
                     /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
@@ -1987,7 +1990,7 @@ const GameView = (props) => {
                                 onClick={() => {
                                     //setIsCanBet(true);
                                     //handleBet("addBet", { areaType: "Banker" }, null)
-                                    history.replace("/games/TEST_02?gameSetID=1339&gameSetNumber=Demo001339");
+                                alertMsg("tt","tt",()=>{});
                                     //window.location.reload();
 
 
@@ -2020,6 +2023,7 @@ const GameView = (props) => {
                             >
                                 測試2
                             </button>
+                            <GameHeader></GameHeader>
                             <CountdownCircle
                                 isCanBet={isCanBet}
                                 getCountdownInfo={getCountdownInfo}

@@ -6,7 +6,6 @@
   useRef,
 } from "react";
 import "./index.scss";
-import { setDefaultClick, setIsAct1 } from "store/actions";
 
 const AlertContext = createContext();
 export { AlertContext };

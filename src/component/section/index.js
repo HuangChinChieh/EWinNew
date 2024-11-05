@@ -86,7 +86,7 @@ const SectionLi = (props) => {
         <div className={`hover-box ${hoveredItem === props.tableInfo.TableNumber ? 'visible' : ''} ${moreScale}`}>
             <span className='close-hover-box' onClick={() => { setHoveredItem(null) }}></span>
             <div className={`games`}>
-                {props.tableInfo.Image && (<img src={props.tableInfo.Image.ImageUrl} alt="Table" />)}
+                {props.tableInfo.Image ? (<img src={props.tableInfo.Image.ImageUrl} alt="Table" />) :(<img src="http://bm.dev.mts.idv.tw/images/JINBEI1.png" alt="Default Table Image" />)}
             </div>
             <div className='info-box'>
                 <p className='game-title'>
