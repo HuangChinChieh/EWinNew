@@ -24,7 +24,8 @@ export {
   LobbyPersonalContext,
   CashUnitContext,
   UserInfoContext,
-  GameSetListContext
+  GameSetListContext,
+  RefreshUserInfoContext
 };
 
 // Create a Context Provider to provide shared values
@@ -272,6 +273,7 @@ const GameLobbyProvider = (props) => {
 
         if (s) {
           if (o.ResultCode === 0) {
+
             const _userInfo = o;
             let _wallet = _userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
   

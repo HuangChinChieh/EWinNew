@@ -53,7 +53,7 @@ const GameBaccaratProvider = (props) => {
               notifyDictionary.current[gameSetData.current.TableNumber](Msg.Type, Msg.Args);
             }          
           } else {
-            if(Msg.Args.TableNumber in tableNumberArray.current){
+            if (tableNumberArray.current.includes(Msg.Args.TableNumber)){
               notifyDictionary.current[Msg.Args.TableNumber](Msg.Type, Msg.Args);
             }            
           }
