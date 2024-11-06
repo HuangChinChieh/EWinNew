@@ -9,7 +9,7 @@ import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
 import GameSetListButton from 'component/buttons/gameSetList_btn';
 import { useHistory } from 'react-router-dom';
-import AlertPop from "component/alertPop";
+import GameIntro from "component/alertPop/popExample/gameIntro";
 
 import './index.scss';
 
@@ -17,10 +17,13 @@ const GameHeader = (props) => {
     const { tableNumber } = props;
     const { wallet } = useContext(WalletContext);
     const { userInfo } = useContext(UserInfoContext);
+    const [isShowGameIntro, setIsShowGameIntro] = useState(false);
+
     const [aniHeader, setAniHeader] = useState('aniHeader');
     const [lastScrollTop, setLastScrollTop] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const { favors, updateFavors } = useContext(FavorsContext);
+   
 
     const toggleHamburger = () => {
         setIsOpen(!isOpen);
@@ -104,13 +107,7 @@ const GameHeader = (props) => {
 
     };
 
-
-    const generateGameIntro = ()=>{
-        return  function GameIntroComponent(props){
-            return  ( <AlertPop {...props}></AlertPop>)
-        }
-    };
-
+  
     return (
         <div className={aniHeader}>
             <div className="header-box">
@@ -122,7 +119,8 @@ const GameHeader = (props) => {
                             <span className='tool-icon'/>{(userInfo.RealName != null && userInfo.RealName !== '') ? userInfo.RealName : userInfo.LoginAccount}
                         </span>
                         <span className='user-instruction can-click'>
-                            <span  className='tool-icon'/>
+                            <GameIntro isShow={isShowGameIntro} handleOK={()=>{setIsShowGameIntro(false);}}></GameIntro>
+                            <span  className='tool-icon'  onClick={()=>{setIsShowGameIntro(true);}}/>
                         </span>
                         <span className={favors.includes(tableNumber) ? "user-favorite liked can-click" : "user-favorite can-click"} onClick={() => handleAddFavor()}>
                             <span className='tool-icon'/>

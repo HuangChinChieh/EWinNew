@@ -63,7 +63,7 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = new BigNumber(newOrderData.unConfirmValue).plus(newOrderData.totalValue).toNumber();
 
             for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number" ) {
+                if (typeof newOrderData[areaType] !== "number") {
                     newOrderData[areaType].unConfirmValue = new BigNumber(newOrderData[areaType].unConfirmValue).plus(newOrderData[areaType].totalValue).toNumber();
                     newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).plus(newOrderData[areaType].totalValue).toNumber();
                     newOrderData[areaType].chips.push(
@@ -79,7 +79,7 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number" ) {
+                if (typeof newOrderData[areaType] !== "number") {
                     newOrderData[areaType].unConfirmValue = 0;
                     newOrderData[areaType].totalValue = 0;
                     newOrderData[areaType].confirmValue = 0;
@@ -94,10 +94,10 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number" ) {
+                if (typeof newOrderData[areaType] !== "number") {
                     newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
                     newOrderData[areaType].unConfirmValue = 0;
-    
+
                     newOrderData[areaType].confirmValue = 0;
                     newOrderData[areaType].chips.length = 0;
                 }
@@ -109,10 +109,10 @@ function orderReducer(state, action) {
             newOrderData.unConfirmValue = 0;
 
             for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number" ) {
+                if (typeof newOrderData[areaType] !== "number") {
                     newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
                     newOrderData[areaType].unConfirmValue = 0;
-    
+
                     newOrderData[areaType].unConfirmValue = 0;
                 }
             }
@@ -123,98 +123,79 @@ function orderReducer(state, action) {
 
 
         case 'resetOrderSequence':
-            if(newOrderData.orderSequence === 0){
+            if (newOrderData.orderSequence === 0) {
                 return state;
-            }else{
+            } else {
                 newOrderData.orderSequence = 0;
                 return newOrderData;
-            }                        
-        case 'processOrderData':            
+            }
+        case 'processOrderData':
             let isChanged = false;
             let totalValue = 0;
             let totalConfirmValue = 0;
-            let totalunConfirmValue = 0;
-            let OrderTie = new BigNumber(action.payload.SelfOrder.OrderTie);
-            let OrderBanker = new BigNumber(action.payload.SelfOrder.OrderBanker);
-            let OrderPlayer = new BigNumber(action.payload.SelfOrder.OrderPlayer);
-            let OrderBankerPair = new BigNumber(action.payload.SelfOrder.OrderBankerPair);
-            let OrderPlayerPair = new BigNumber(action.payload.SelfOrder.OrderPlayerPair);
-            let OrderSequence =new BigNumber(action.payload.SelfOrder.OrderSequence);
+            let totalUnConfirmValue = 0;            
+          
+            for(let areaStr in ['Tie', 'Banker', 'Player', 'BankerPair', 'PlayerPair'] ){
+                let selfOrderAreaStr = 'Order' + areaStr;
 
-            if (state.unConfirmValue !== 0) {
-                if (new BigNumber(newOrderData['Tie'].confirmValue).plus(newOrderData['Tie'].unConfirmValue) == OrderTie) {
-                    newOrderData['Tie'].unConfirmValue = 0;               
-                    isChanged = true;
-                }
+                if (!(new BigNumber(newOrderData[areaStr].confirmValue).eq(action.payload.SelfOrder[selfOrderAreaStr]))) {
 
-                if (new BigNumber(newOrderData['Banker'].confirmValue).plus(newOrderData['Banker'].unConfirmValue) == OrderBanker) {
-                    newOrderData['Banker'].unConfirmValue = 0;
-                    isChanged = true;
-                }
-
-                if (new BigNumber(newOrderData['Player'].confirmValue).plus(newOrderData['Player'].unConfirmValue) == OrderPlayer) {
-                    newOrderData['Player'].unConfirmValue = 0;
-                    isChanged = true;
-                }
-
-                if (new BigNumber(newOrderData['BankerPair'].confirmValue).plus(newOrderData['BankerPair'].unConfirmValue) == OrderBankerPair) {
-                    newOrderData['BankerPair'].unConfirmValue = 0;
-                    isChanged = true;
-                }
-
-                if (new BigNumber(newOrderData['PlayerPair'].confirmValue).plus(newOrderData['PlayerPair'].unConfirmValue) == OrderPlayerPair) {
-                    newOrderData['PlayerPair'].unConfirmValue = 0;
+                    //有尚未投注之數字，檢查是否已經轉換成投注
+                    if(state.unConfirmValue !== 0){
+                        if (new BigNumber(newOrderData[areaStr].confirmValue).plus(newOrderData[areaStr].unConfirmValue).eq(action.payload.SelfOrder[selfOrderAreaStr])) {
+                            newOrderData[areaStr].unConfirmValue = 0;
+                        }    
+                    }
+                                  
+                    newOrderData['Tie'].confirmValue = action.payload.SelfOrder[selfOrderAreaStr];
                     isChanged = true;
                 }
             }
-
-            if (newOrderData['Tie'].confirmValue !== OrderTie.toNumber()) {
-                newOrderData['Tie'].confirmValue = OrderTie.toNumber();
+         
+            if (newOrderData.orderSequence !== action.payload.SelfOrder.OrderSequence) {
+                newOrderData.orderSequence = action.payload.SelfOrder.OrderSequence;
                 isChanged = true;
             }
 
-            if (newOrderData['Banker'].confirmValue !== OrderBanker.toNumber()) {
-                newOrderData['Banker'].confirmValue = OrderBanker.toNumber();
-                isChanged = true;
-            }
-
-            if (newOrderData['Player'].confirmValue !== OrderPlayer.toNumber()) {
-                newOrderData['Player'].confirmValue = OrderPlayer.toNumber();
-                isChanged = true;
-            }
-
-            if (newOrderData['BankerPair'].confirmValue !== OrderBankerPair.toNumber()) {
-                newOrderData['BankerPair'].confirmValue = OrderBankerPair.toNumber();
-                isChanged = true;
-            }
-
-            if (newOrderData['PlayerPair'].confirmValue !== OrderPlayerPair.toNumber()) {
-                newOrderData['PlayerPair'].confirmValue = OrderPlayerPair.toNumber();
-                isChanged = true;
-            }
-            
-            if (newOrderData.orderSequence !== OrderSequence.toNumber()){
-                newOrderData.orderSequence = OrderSequence.toNumber();
-                isChanged = true;
-            }
-            
             if (isChanged) {
                 for (let type in newOrderData) {
-                    if (typeof newOrderData[type] !== "number" ) {
+                    if (typeof newOrderData[type] !== "number") {
                         newOrderData[type].totalValue = newOrderData[type].confirmValue + newOrderData[type].unConfirmValue;
-                        totalValue = new BigNumber(totalValue).toNumber() + new BigNumber(newOrderData[type].totalValue).toNumber();
-                        totalConfirmValue = new BigNumber(totalConfirmValue).toNumber() + new BigNumber(newOrderData[type].confirmValue).toNumber();
-                        totalunConfirmValue = new BigNumber(totalunConfirmValue).toNumber() + new BigNumber(newOrderData[type].unConfirmValue).toNumber();
-    
-                        if (newOrderData[type].totalValue == 0) {
+                        totalValue = new BigNumber(totalValue).plus(newOrderData[type].totalValue).toNumber();
+                        totalConfirmValue = new BigNumber(totalConfirmValue).plus(newOrderData[type].confirmValue).toNumber();
+                        totalUnConfirmValue = new BigNumber(totalUnConfirmValue).plus(newOrderData[type].unConfirmValue).toNumber();
+
+                        if (newOrderData[type].totalValue === 0) {
                             newOrderData[type].chips.length = 0;
+                        }else{
+                            //如果有投注數字，但是沒籌碼，隨意加上籌碼
+
+                            if(newOrderData[type].chips.length === 0){
+                                if(action.payload.SelChipData){
+                                    newOrderData[type].chips.push({
+                                        index: action.payload.SelChipData.index,
+                                        styleIndex: action.payload.SelChipData.styleIndex,
+                                        chipValue: action.payload.SelChipData.chipValue,
+                                        isConfirm: true,
+                                        orderUnix: Date.now().toString()
+                                    });
+                                }else{
+                                    newOrderData[type].chips.push({
+                                        index: 0,
+                                        styleIndex: 1,
+                                        chipValue: 25,
+                                        isConfirm: true,
+                                        orderUnix: Date.now().toString()
+                                    });
+                                }
+                            }                                                      
                         }
                     }
                 }
 
-                newOrderData.totalValue = new BigNumber(totalValue).toNumber();
-                newOrderData.confirmValue = new BigNumber(totalConfirmValue).toNumber();
-                newOrderData.unConfirmValue = new BigNumber(totalunConfirmValue).toNumber();
+                newOrderData.totalValue = totalValue;
+                newOrderData.confirmValue = totalConfirmValue;
+                newOrderData.unConfirmValue = totalUnConfirmValue;
 
                 return newOrderData
             } else {
