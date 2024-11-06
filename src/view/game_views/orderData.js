@@ -120,8 +120,6 @@ function orderReducer(state, action) {
             newOrderData.orderSequence += 1;
 
             return newOrderData;
-
-
         case 'resetOrderSequence':
             if(newOrderData.orderSequence === 0){
                 return state;

@@ -95,6 +95,7 @@ const GameView = (props) => {
     const { gameSetList } = useContext(GameSetListContext);
     const { useBetLimit } = useContext(BetLimitContext);
     const betLimit = useRef(null);
+    const orderDataInfo = useRef(null);
 
     //投注相關
     const [isCanBet, setIsCanBet] = useState(false);
@@ -255,7 +256,7 @@ const GameView = (props) => {
 
                 if (success) {
                     if (o.ResultCode === 0) {
-                        handleQuery(o);
+                        cbRef.current.handleQuery(o);
                     }
                 }
             });
@@ -468,6 +469,13 @@ const GameView = (props) => {
             countdownInfo.current.remainingSecond * 1000 -
             (new Date() - countdownInfo.current.lastQueryDate)
         );
+
+        let totalOrderValue = 0;
+
+        if(Q.SelfOrder){
+            totalOrderValue = Q.SelfOrder.OrderBanker + Q.SelfOrder.OrderBankerPair + Q.SelfOrder.OrderPlayer + Q.SelfOrder.OrderPlayerPair + Q.SelfOrder.OrderTie;
+        }
+
         // if(Q.AllowOrder && queryInfo.current.AllowBet){}
 
         //table資訊檢查
@@ -488,7 +496,7 @@ const GameView = (props) => {
                 let pi = getPointInfo(props.CurrencyType);
 
                 if (pi !== null) {
-                    if ((pi.PointValue + orderData.totalValue) > 0) {
+                    if ((pi.PointValue + totalOrderValue) > 0) {
                         //checkGameAvail = true;
                     } else {
                         if (Q.UserInfo.IsGuestAccount === false) {
@@ -528,20 +536,20 @@ const GameView = (props) => {
                                             //電投，檢查是否有已經存在的指令
                                             if (Q.SelfOrder.OrderCmd) {
                                                 switchCanBet(false, 2, false);
-                                            } else if (orderData.confirmValue !== 0) {
+                                            } else if (totalOrderValue !== 0) {
                                                 switchCanBet(false, 3, false);
                                             } else {
                                                 //允許下注
                                                 if (countdownSecond > 0 || countdownInfo.current.tableTimeoutSecond === 0) {
                                                     let minBetValue = 0;
 
-                                                    if (betLimit != null) {
+                                                    if (T.BetLimit != null) {
                                                         // 判斷最低檯紅
                                                         minBetValue = Math.min(
-                                                            betLimit.current.Banker.Min,
-                                                            betLimit.current.Player.Min,
-                                                            betLimit.current.Tie.Min,
-                                                            betLimit.current.Pair.Min
+                                                            T.BetLimit[0].Banker.Min,
+                                                            T.BetLimit[0].Player.Min,
+                                                            T.BetLimit[0].Tie.Min,
+                                                            T.BetLimit[0].Pair.Min
                                                         );
                                                     }
 
@@ -953,6 +961,7 @@ const GameView = (props) => {
             if (type === "TableChange") {
                 //如果是桌台狀態改變，重新撈取桌台資訊確認最新的桌台狀態
                 if (args.Action !== "") {
+                    dispatchOrderData({ type: "clearBet" });
                     refreshTableInfo();
                 }
             } else if (type === "GameSetChange") {
@@ -989,7 +998,7 @@ const GameView = (props) => {
                 case "addBet":
                     // args => beforeSetChipCb, finishCb
                     if (isCanBet) {
-                        if (orderData.unConfirmValue + selChipData.chipValue <= userPoint) {
+                        if (orderDataInfo.current.unConfirmValue + selChipData.chipValue <= userPoint) {
                             if ("areaType" in args) {
                                 moveChipAnimation(args.areaType, () => {
                                     dispatchOrderData({
@@ -1014,9 +1023,9 @@ const GameView = (props) => {
                 case "doubleBet":
                     const promiseArray = [];
                     if (isCanBet) {
-                        if (orderData.unConfirmValue + orderData.totalValue <= userPoint) {
+                        if (orderDataInfo.current.unConfirmValue + orderDataInfo.current.totalValue <= userPoint) {
                             for (let areaType in orderData) {
-                                if (orderData[areaType].totalValue > 0) {
+                                if (orderDataInfo.current[areaType].totalValue > 0) {
                                     promiseArray.push(
                                         new Promise((resolve, reject) => {
                                             moveChipAnimation(areaType, () => {
@@ -1041,13 +1050,13 @@ const GameView = (props) => {
                     break;
                 case "confirmBet":
                     if (isCanBet) {
-                        if (orderData.unConfirmValue <= userPoint) {
+                        if (orderDataInfo.current.unConfirmValue <= userPoint) {
                             //checkBetLimit
 
                             if (isConnected) {
                                 //gameClient.
 
-                                if (checkOrderByBetLimit(orderData, betLimit.current)) {
+                                if (checkOrderByBetLimit(orderDataInfo.current, betLimit.current)) {
                                     //playSound("OrderAccept");
                                     if (!sendCheck.current.isSendBetData) {
                                         sendCheck.current.isSendBetData = true;
@@ -1061,20 +1070,20 @@ const GameView = (props) => {
                                                 tableNumber,
                                                 tableInfo.current.shoeNumber,
                                                 tableInfo.current.roundNumber,
-                                                orderData.orderSequence + 1,
-                                                orderData.Banker.unConfirmValue,
-                                                orderData.Player.unConfirmValue,
-                                                orderData.Tie.unConfirmValue,
-                                                orderData.BankerPair.unConfirmValue,
-                                                orderData.PlayerPair.unConfirmValue,
+                                                orderDataInfo.current.orderSequence + 1,
+                                                orderDataInfo.current.Banker.unConfirmValue,
+                                                orderDataInfo.current.Player.unConfirmValue,
+                                                orderDataInfo.current.Tie.unConfirmValue,
+                                                orderDataInfo.current.BankerPair.unConfirmValue,
+                                                orderDataInfo.current.PlayerPair.unConfirmValue,
                                                 (s, o) => {
                                                     sendCheck.current.isSendBetData = false;
 
                                                     if (s) {
                                                         if (o.ResultCode === 0) {
-                                                            //dispatchOrderData({ type: "confirmBet" });
+                                                            dispatchOrderData({ type: "confirmBet" });
                                                             setEmptyOrderCount(0);
-                                                            handleQuery(o);
+                                                            cbRef.current.handleQuery(o);
                                                         } else {
                                                             alertMsg(o.Message);
                                                             setTimeout(() => {
@@ -1090,8 +1099,8 @@ const GameView = (props) => {
                                                     }
                                                 });
                                         } else if (tableInfo.current.BaccaratType === 2) {
-                                            gameClient.AddBetType1(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderData.orderSequence + 1
-                                                , orderData.Banker.unConfirmValue, orderData.Player.unConfirmValue, orderData.Tie.unConfirmValue, orderData.BankerPair.unConfirmValue, orderData.PlayerPair.unConfirmValue
+                                            gameClient.AddBetType1(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfo.current.orderSequence + 1
+                                                , orderDataInfo.current.Banker.unConfirmValue, orderDataInfo.current.Player.unConfirmValue, orderDataInfo.current.Tie.unConfirmValue, orderDataInfo.current.BankerPair.unConfirmValue, orderDataInfo.current.PlayerPair.unConfirmValue
                                                 , (s, o) => {
                                                     sendCheck.current.isSendBetData = false;
 
@@ -1099,7 +1108,7 @@ const GameView = (props) => {
                                                         if (o.ResultCode === 0) {
                                                             dispatchOrderData({ type: "confirmBet" });
                                                             setEmptyOrderCount(0);
-                                                            handleQuery(o);
+                                                            cbRef.current.handleQuery(o);
                                                         } else {
                                                             alertMsg(o.Message);
                                                             setTimeout(() => {
@@ -1115,8 +1124,8 @@ const GameView = (props) => {
                                                     }
                                                 });
                                         } else if (tableInfo.current.BaccaratType === 3) {
-                                            gameClient.AddBetType2(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderData.orderSequence + 1
-                                                , orderData.Banker.unConfirmValue, orderData.Player.unConfirmValue, orderData.Tie.unConfirmValue, orderData.BankerPair.unConfirmValue, orderData.PlayerPair.unConfirmValue
+                                            gameClient.AddBetType2(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfo.current.orderSequence + 1
+                                                , orderDataInfo.current.Banker.unConfirmValue, orderDataInfo.current.Player.unConfirmValue, orderDataInfo.current.Tie.unConfirmValue, orderDataInfo.current.BankerPair.unConfirmValue, orderDataInfo.current.PlayerPair.unConfirmValue
                                                 , (s, o) => {
                                                     sendCheck.current.isSendBetData = false;
 
@@ -1124,7 +1133,7 @@ const GameView = (props) => {
                                                         if (o.ResultCode === 0) {
                                                             dispatchOrderData({ type: "confirmBet" });
                                                             setEmptyOrderCount(0);
-                                                            handleQuery(o);
+                                                            cbRef.current.handleQuery(o);
                                                         } else {
                                                             alertMsg(o.Message);
                                                             setTimeout(() => {
@@ -1154,8 +1163,6 @@ const GameView = (props) => {
                             alertMsg("錯誤", "餘額不足", null);
                         }
                     }
-
-                    dispatchOrderData({ type: "confirmBet" });
                     break;
                 case "cancelBet":
                     if (queryInfo.current.AllowCancelOrder) {
@@ -1174,12 +1181,12 @@ const GameView = (props) => {
                                         tableNumber,
                                         tableInfo.current.shoeNumber,
                                         tableInfo.current.roundNumber,
-                                        orderData.orderSequence + 1,
+                                        orderDataInfo.current.orderSequence + 1,
                                         (s, o) => {
                                             if (s) {
                                                 if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
-                                                    handleQuery(o);
+                                                    cbRef.current.handleQuery(o);
                                                 } else {
                                                     alertMsg("取消下注失敗" + o.Message);
                                                     setTimeout(() => {
@@ -1199,12 +1206,12 @@ const GameView = (props) => {
                                         tableNumber,
                                         tableInfo.current.shoeNumber,
                                         tableInfo.current.roundNumber,
-                                        orderData.orderSequence + 1,
+                                        orderDataInfo.current.orderSequence + 1,
                                         (s, o) => {
                                             if (s) {
                                                 if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
-                                                    handleQuery(o);
+                                                    cbRef.current.handleQuery(o);
                                                 } else {
                                                     alertMsg("取消下注失敗" + o.Message);
                                                     setTimeout(() => {
@@ -1224,12 +1231,12 @@ const GameView = (props) => {
                                         tableNumber,
                                         tableInfo.current.shoeNumber,
                                         tableInfo.current.roundNumber,
-                                        orderData.orderSequence + 1,
+                                        orderDataInfo.current.orderSequence + 1,
                                         (s, o) => {
                                             if (s) {
                                                 if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
-                                                    handleQuery(o);
+                                                    cbRef.current.handleQuery(o);
                                                 } else {
                                                     alertMsg("取消下注失敗" + o.Message);
                                                     setTimeout(() => {
@@ -1257,7 +1264,7 @@ const GameView = (props) => {
                     break;
             }
         },
-        [selChipData, orderData, isCanBet]
+        [selChipData, orderDataInfo, isCanBet]
     );
 
     const checkOrderByBetLimit = (_orderData, _betLimit) => {
@@ -1406,7 +1413,7 @@ const GameView = (props) => {
 
     const showResult = () => {
         //playSound("GetResult");
-        if (orderData.orderSequence !== 0) {
+        if (orderDataInfo.current.orderSequence !== 0) {
             refreshQueryGame(); //有投注，確認是否贏錢，與更新贏錢相關資訊
         }
 
@@ -1484,7 +1491,7 @@ const GameView = (props) => {
                                     if (s) {
                                         if (o.ResultCode === 0) {
                                             msgMaskResultControl.current.HideMask();
-                                            handleQuery(o);
+                                            cbRef.current.handleQuery(o);
                                         } else {
                                             setTimeout(() => {
                                                 refreshQueryGame();
@@ -1519,7 +1526,7 @@ const GameView = (props) => {
                                 if (s) {
                                     if (o.ResultState === 0) {
                                         msgMaskResultControl.current.HideMask();
-                                        handleQuery(o);
+                                        cbRef.current.handleQuery(o);
                                     } else {
                                         setTimeout(() => {
                                             refreshQueryGame();
@@ -1566,13 +1573,13 @@ const GameView = (props) => {
                                 tableNumber,
                                 tableInfo.current.shoeNumber,
                                 tableInfo.current.roundNumber,
-                                orderData.orderSequence + 1,
+                                orderDataInfo.current.orderSequence + 1,
                                 v,
                                 (s, o) => {
                                     if (s) {
                                         if (o.ResultState === 0) {
                                             msgMaskResultControl.current.HideMask();
-                                            handleQuery(o);
+                                            cbRef.current.handleQuery(o);
                                         } else {
                                             cbRef.current.handleGameSetCmd("setGameSetCmd", {
                                                 gameCmd: "CancelAddTips:" + args.tipsValue,
@@ -1922,7 +1929,7 @@ const GameView = (props) => {
                             //#endregion
                             break;
                         case "Query":
-                            handleQuery(result.value);
+                            cbRef.current.handleQuery(result.value);
                             break;
                         default:
                             break;
@@ -1959,7 +1966,12 @@ const GameView = (props) => {
     useEffect(() => {
         cbRef.current.handleBet = handleBet;
         cbRef.current.handleGameSetCmd = handleGameSetCmd;
-    }, [handleBet, handleGameSetCmd]);
+        cbRef.current.handleQuery = handleQuery;
+    }, [handleBet, handleGameSetCmd, handleQuery]);
+
+    useEffect(() => {
+        orderDataInfo.current = orderData;
+    }, [orderData]);
 
 
     // useEffect(() => {
@@ -2050,20 +2062,20 @@ const GameView = (props) => {
                             <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
                             <GameBettingArea
                                 isCanBet={isCanBet}
-                                orderData={orderData}
+                                orderData={orderDataInfo.current}
                                 handleBet={handleBet}
                                 ref={betAreaControl}
                             ></GameBettingArea>
                             <GameFooterArea
                                 chipItems={chipsItems}
-                                totalBetValue={orderData.totalValue}
+                                totalBetValue={orderDataInfo.current.totalValue}
                                 roadMapNumber={tableNumber}
                                 gameSetID={gameSetID}
                                 gameClient={gameClient}
-                                orderData={orderData}
+                                orderData={orderDataInfo.current}
                                 getTableInfo={getTableInfo}
                                 baccaratType={baccaratType}
-                                handleQuery={handleQuery}
+                                handleQuery={cbRef.current.handleQuery}
                                 entryRoadMap={entryRoadMap}
                             >
                                 <GameChipsButton
@@ -2071,7 +2083,7 @@ const GameView = (props) => {
                                     isCanBet={isCanBet}
                                     selChipData={selChipData}
                                     setSelChipData={setSelChipData}
-                                    orderData={orderData}
+                                    orderData={orderDataInfo.current}
                                     handleBet={handleBet}
                                 ></GameChipsButton>
                             </GameFooterArea>
