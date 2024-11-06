@@ -40,7 +40,7 @@ const initialOrderData = {
 
 function orderReducer(state, action) {
     const newOrderData = { ...state };
-
+    const areaStrList = ['Tie', 'Banker', 'Player', 'BankerPair', 'PlayerPair'];
     switch (action.type) {
         case 'addBet':
             //待補上動畫
@@ -62,14 +62,14 @@ function orderReducer(state, action) {
             newOrderData.totalValue = new BigNumber(newOrderData.totalValue).plus(newOrderData.totalValue).toNumber();
             newOrderData.unConfirmValue = new BigNumber(newOrderData.unConfirmValue).plus(newOrderData.totalValue).toNumber();
 
-            for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number") {
-                    newOrderData[areaType].unConfirmValue = new BigNumber(newOrderData[areaType].unConfirmValue).plus(newOrderData[areaType].totalValue).toNumber();
-                    newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).plus(newOrderData[areaType].totalValue).toNumber();
-                    newOrderData[areaType].chips.push(
-                        ...[...newOrderData[areaType].chips]
-                    );
-                }
+            for (let areaType of areaStrList) {
+
+                newOrderData[areaType].unConfirmValue = new BigNumber(newOrderData[areaType].unConfirmValue).plus(newOrderData[areaType].totalValue).toNumber();
+                newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).plus(newOrderData[areaType].totalValue).toNumber();
+                newOrderData[areaType].chips.push(
+                    ...[...newOrderData[areaType].chips]
+                );
+
             }
 
             return newOrderData;
@@ -78,13 +78,13 @@ function orderReducer(state, action) {
             newOrderData.confirmValue = 0;
             newOrderData.unConfirmValue = 0;
 
-            for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number") {
-                    newOrderData[areaType].unConfirmValue = 0;
-                    newOrderData[areaType].totalValue = 0;
-                    newOrderData[areaType].confirmValue = 0;
-                    newOrderData[areaType].chips.length = 0;
-                }
+            for (let areaType of areaStrList) {
+
+                newOrderData[areaType].unConfirmValue = 0;
+                newOrderData[areaType].totalValue = 0;
+                newOrderData[areaType].confirmValue = 0;
+                newOrderData[areaType].chips.length = 0;
+
             }
 
             return newOrderData;
@@ -93,14 +93,20 @@ function orderReducer(state, action) {
             newOrderData.totalValue = new BigNumber(newOrderData.totalValue).minus(newOrderData.unConfirmValue).toNumber();
             newOrderData.unConfirmValue = 0;
 
-            for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number") {
-                    newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
-                    newOrderData[areaType].unConfirmValue = 0;
 
-                    newOrderData[areaType].confirmValue = 0;
+            for (let areaType of areaStrList) {
+
+                newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
+                newOrderData[areaType].unConfirmValue = 0;
+                newOrderData[areaType].confirmValue = 0;
+
+                if (newOrderData[areaType].totalValue === 0) {
                     newOrderData[areaType].chips.length = 0;
+                } else {
+                    //如果有投注數字，但是沒籌碼，隨意加上籌碼
+                    newOrderData[areaType].chips = newOrderData[areaType].chips.filter(chip => chip.isConfirm === true);
                 }
+
             }
 
             return newOrderData;
@@ -108,13 +114,15 @@ function orderReducer(state, action) {
             newOrderData.confirmValue = new BigNumber(newOrderData.confirmValue).plus(newOrderData.unConfirmValue).toNumber();
             newOrderData.unConfirmValue = 0;
 
-            for (let areaType in newOrderData) {
-                if (typeof newOrderData[areaType] !== "number") {
-                    newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
-                    newOrderData[areaType].unConfirmValue = 0;
+            for (let areaType of areaStrList) {
+                newOrderData[areaType].confirmValue = new BigNumber(newOrderData[areaType].confirmValue).plus(newOrderData[areaType].unConfirmValue).toNumber();
+                newOrderData[areaType].unConfirmValue = 0;
+                newOrderData[areaType].chips = newOrderData[areaType].chips.map(chip => {
+                    let ret = { ...chip };
+                    ret.isConfirm = true;
+                    return ret;
+                });
 
-                    newOrderData[areaType].unConfirmValue = 0;
-                }
             }
 
             newOrderData.orderSequence += 1;
@@ -131,62 +139,60 @@ function orderReducer(state, action) {
             let isChanged = false;
             let totalValue = 0;
             let totalConfirmValue = 0;
-            let totalUnConfirmValue = 0;            
-          
-            for(let areaStr in ['Tie', 'Banker', 'Player', 'BankerPair', 'PlayerPair'] ){
+            let totalUnConfirmValue = 0;
+
+            for (let areaStr of areaStrList) {
                 let selfOrderAreaStr = 'Order' + areaStr;
 
                 if (!(new BigNumber(newOrderData[areaStr].confirmValue).eq(action.payload.SelfOrder[selfOrderAreaStr]))) {
 
                     //有尚未投注之數字，檢查是否已經轉換成投注
-                    if(state.unConfirmValue !== 0){
+                    if (state.unConfirmValue !== 0) {
                         if (new BigNumber(newOrderData[areaStr].confirmValue).plus(newOrderData[areaStr].unConfirmValue).eq(action.payload.SelfOrder[selfOrderAreaStr])) {
                             newOrderData[areaStr].unConfirmValue = 0;
-                        }    
+                        }
                     }
-                                  
-                    newOrderData['Tie'].confirmValue = action.payload.SelfOrder[selfOrderAreaStr];
+
+                    newOrderData[areaStr].confirmValue = action.payload.SelfOrder[selfOrderAreaStr];
                     isChanged = true;
                 }
             }
-         
+
             if (newOrderData.orderSequence !== action.payload.SelfOrder.OrderSequence) {
                 newOrderData.orderSequence = action.payload.SelfOrder.OrderSequence;
                 isChanged = true;
             }
 
             if (isChanged) {
-                for (let type in newOrderData) {
-                    if (typeof newOrderData[type] !== "number") {
-                        newOrderData[type].totalValue = newOrderData[type].confirmValue + newOrderData[type].unConfirmValue;
-                        totalValue = new BigNumber(totalValue).plus(newOrderData[type].totalValue).toNumber();
-                        totalConfirmValue = new BigNumber(totalConfirmValue).plus(newOrderData[type].confirmValue).toNumber();
-                        totalUnConfirmValue = new BigNumber(totalUnConfirmValue).plus(newOrderData[type].unConfirmValue).toNumber();
+                for (let type of areaStrList) {
+                    newOrderData[type].totalValue = newOrderData[type].confirmValue + newOrderData[type].unConfirmValue;
+                    totalValue = new BigNumber(totalValue).plus(newOrderData[type].totalValue).toNumber();
+                    totalConfirmValue = new BigNumber(totalConfirmValue).plus(newOrderData[type].confirmValue).toNumber();
+                    totalUnConfirmValue = new BigNumber(totalUnConfirmValue).plus(newOrderData[type].unConfirmValue).toNumber();
 
-                        if (newOrderData[type].totalValue === 0) {
-                            newOrderData[type].chips.length = 0;
-                        }else{
-                            //如果有投注數字，但是沒籌碼，隨意加上籌碼
+                    if (newOrderData[type].totalValue === 0) {
+                        newOrderData[type].chips.length = 0;
+                    } else {
+                        //如果有投注數字，但是沒籌碼，隨意加上籌碼
 
-                            if(newOrderData[type].chips.length === 0){
-                                if(action.payload.SelChipData){
-                                    newOrderData[type].chips.push({
-                                        index: action.payload.SelChipData.index,
-                                        styleIndex: action.payload.SelChipData.styleIndex,
-                                        chipValue: action.payload.SelChipData.chipValue,
-                                        isConfirm: true,
-                                        orderUnix: Date.now().toString()
-                                    });
-                                }else{
-                                    newOrderData[type].chips.push({
-                                        index: 0,
-                                        styleIndex: 1,
-                                        chipValue: 25,
-                                        isConfirm: true,
-                                        orderUnix: Date.now().toString()
-                                    });
-                                }
-                            }                                                      
+                        if (newOrderData[type].chips.length === 0) {
+                            if (action.payload.SelChipData) {
+                                newOrderData[type].chips.push({
+                                    index: action.payload.SelChipData.index,
+                                    styleIndex: action.payload.SelChipData.styleIndex,
+                                    chipValue: action.payload.SelChipData.chipValue,
+                                    isConfirm: true,
+                                    orderUnix: Date.now().toString()
+                                });
+                            } else {
+                                newOrderData[type].chips.push({
+                                    index: 0,
+                                    styleIndex: 1,
+                                    chipValue: 25,
+                                    isConfirm: true,
+                                    orderUnix: Date.now().toString()
+                                });
+                            }
                         }
                     }
                 }
