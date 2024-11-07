@@ -1,66 +1,522 @@
-.game-header-wrap {
-    height: 4.375rem;
-    width: 100%;
-    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.35));
+.aniHeader,
+.aniHeaderAction {
+    height: 80px;
     position: fixed;
-    top: 0;
     left: 0;
-    animation-name: anigameheaderin;
-    animation-duration: 1s;
-    animation-timing-function: ease;
-    display: grid;
-    grid-template-columns: 38% 24% 38%;
-    align-items: center;
-    z-index: 9999;
+    top: 0;
+    width: 100%;
+    box-shadow:
+        inset 0px 0px 0px 0 rgba(0, 0, 0, 1),
+        0 0 0 0 rgba(255, 255, 255, 0);
+    transition: all 1s ease;
+    z-index: 99999;
 
-    .game-left-box {
+    .header-box {
         display: flex;
         align-items: center;
-        margin-left: 1rem;
+        padding: 8px 5vw 0;
+        color: #fff;
+        position: relative;
 
-        .game-flex-box {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
+        .nav-box {
+            margin-left: 7vw;
 
-            span {
-                color: #fff;
-                font-size: 1.3rem;
-                margin-left: 0.875rem;
-                margin-top: -0.25rem;
+            .tool-box-left {
+                display: flex;
+                cursor: pointer;
+
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 20px;
+                    color: #DBC165;
+
+                    .tool-icon{
+                        display: inline-block;
+                        margin-right: 4px !important;
+                        width: 26px;
+                        height: 26px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    }
+
+                    &.user-icon {
+                        .tool-icon {
+                            background: url("../../img/header/user.png") no-repeat center center/contain;
+                        }
+                    }
+
+                    &.user-favorite {
+                        .tool-icon {
+                            background: url('../../img/header/unlike.png') no-repeat center center/contain;
+
+                            &.liked {
+                                background: url('../../img/header/like.png') no-repeat center center/contain;
+                            }
+
+                        }
+                    }
+
+
+                    &.user-instruction {
+                        .tool-icon{
+                            background: url('../../img/header/instruction.png') no-repeat center center/contain;
+                        }                        
+                    }
+
+                    &.without-mr {
+                        margin-right: 0;
+                    }
+
+
+                    &.can-click {
+                        span:hover {
+                            filter: brightness(1.5);
+                        }
+                    }
+                }
+            }
+
+            .tool-box-right {
+                display: flex;
             }
         }
 
-        .user-icon {
-            display: inline-block;
-            margin-right: 0.25rem !important;
-            width: 1.375rem;
-            height: 1.375rem;
+        .toolbar {
+            position: absolute;
+            right: 2vw;
+            top: 19px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .fullscreen,
+            .exitfullscreen {
+                margin-right: 4px !important;
+                width: 33px;
+                height: 33px;
+                cursor: pointer;
+
+                transition: filter 0.3s;
+                /* 添加過渡效果 */
+
+                &:hover {
+                    /* 滑鼠懸停時的樣式 */
+                    filter: brightness(1.5);
+                    /* 使按鈕亮一點 */
+                }
+            }
+
+            .fullscreen {
+                background: url("../../img/header/fullscreen.png") no-repeat center center/contain;
+
+                &+span {
+                    color: #fff;
+                    font-size: 1.4rem;
+                    margin-left: 3px;
+                }
+            }
+
+            .exitfullscreen {
+                background: url("../../img/header/exitfullscreen.png") no-repeat center center/contain;
+
+                &+span {
+                    color: #fff;
+                    font-size: 1.4rem;
+                    margin-left: 3px;
+                }
+            }
+
+            span {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-right: 20px;
+            }
+        }
+    }
+}
+
+.aniHeaderAction {
+    box-shadow:
+        inset 0 0 100px 0 rgba(0, 0, 0, 1),
+        0 0 5px 0 rgba(255, 255, 255, 0.7);
+}
+
+.lightbox-box {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+
+    .form-box {
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 7px;
+        padding: 20px;
+        box-shadow: 0 0 13px rgba(255, 255, 255, 0.6);
+        position: relative;
+
+        span.close {
+            width: 20px;
+            height: 20px;
+            color: #fff;
+            position: absolute;
+            right: -2px;
+            top: -35px;
+            font-size: 1.5rem;
+            background: rgba(0, 0, 0, 1);
+            padding: 7px;
+            text-align: center;
+            border-radius: 50px;
             cursor: pointer;
-            margin-left: 2rem;
-            background: url("../../img/header/user.png") no-repeat center center/contain;
+        }
+
+        input {
+            border: none;
+            outline: none;
+            color: #dcdcdd;
+            background-color: rgba(0, 0, 0, 0.9);
+            margin-bottom: 21px;
+            padding: 11px 6px;
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0);
+
+            &:focus,
+            &:focus-visible {
+                border-bottom: 0.5px solid rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 21px;
+        }
+    }
+}
+
+
+@media screen and (max-width: 1082px) {
+
+    .aniHeader,
+    .aniHeaderAction {
+        height: auto;
+        width: 100%;
+        box-shadow: inset 0px 0px 0px 0 rgba(0, 0, 0, 1), 0 0 0 0 rgba(255, 255, 255, 1);
+        transition: all 1.5s ease;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+        padding-bottom: 8px;
+    }
+
+    .aniHeader {
+        top: 0;
+        animation-name: aniheaderin;
+        animation-duration: 1s;
+        animation-timing-function: ease;
+    }
+
+    @keyframes aniheaderout {
+        0% {
+            top: -200px;
+        }
+
+        100% {
+            top: 0;
         }
     }
 
-    .game-middle-box {
-        // display: flex;
+    .aniHeaderAction {
+        top: -200px;
+        animation-name: aniheaderout;
+        animation-duration: 1s;
+        animation-timing-function: ease;
     }
 
-    .game-right-box {
-        display: flex;
-        justify-content: flex-end;
-        margin-right: 1.5rem;
+    @keyframes aniheaderout {
+        0% {
+            top: 0;
+        }
+
+        100% {
+            top: -200px;
+        }
     }
+
+    .header-box {
+        padding: 10px;
+
+        .toolbar {
+            display: none !important;
+        }
+
+        .nav-box {
+            margin-right: auto;
+            position: absolute;
+            top: 13px;
+            right: 37px;
+
+            .forpc {
+                display: none !important;
+            }
+
+            .formb {
+                display: inline-block !important;
+            }
+
+            .tool-box-left {
+
+                span {
+                    .user-icon {
+                        width: 16px !important;
+                        height: 16px !important;
+                    }
+
+                }
+
+                .user-favorite {
+                    display: inline-block;
+                    margin-top: 2px;
+                    width: 16px !important;
+                    height: 16px !important;
+                    background: url('../../img/global/favorite.png') no-repeat center center/contain !important;
+                }
+            }
+
+
+        }
+
+        .hamb {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+
+            span {
+                display: block;
+                width: 15px;
+                height: 2px;
+                background: #fff;
+                margin-bottom: 3px;
+                transition: all 0.7s ease;
+
+                &:nth-child(2) {
+                    margin-left: 3px;
+                }
+            }
+
+            &.open {
+                span {
+                    &:nth-child(1) {
+                        transform: rotate(-45deg);
+                        margin-top: 5px;
+                    }
+
+                    &:nth-child(2) {
+                        opacity: 0;
+                        margin-left: 0;
+                    }
+
+                    &:nth-child(3) {
+                        transform: rotate(45deg);
+                        margin-top: -10px;
+                    }
+                }
+
+            }
+        }
+    }
+
+    .lightbox-box {
+
+        &.open {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: -3px;
+            right: 0;
+            transition: all 1s ease;
+
+            &+.mb-footer-box {
+                position: relative;
+                transition: all 1s ease;
+                width: 40%;
+                background: #292933;
+                position: fixed;
+                right: -3px;
+                bottom: 0;
+                height: 100%;
+                z-index: 9999999;
+                border-top-left-radius: 35px;
+                border-bottom-left-radius: 35px;
+                animation-name: anifooterin1;
+                animation-duration: 1s;
+                animation-timing-function: ease;
+                box-shadow: 0px -4px 15px rgba(0, 0, 0, 0.6);
+
+                h4 {
+                    color: #fff;
+                    font-size: 1.6rem;
+                    text-align: center;
+                    position: relative;
+                    margin-top: 23px;
+
+                    &::before {
+
+                        content: "";
+                        display: block;
+                        width: 38px;
+                        height: 4px;
+                        background: rgba(255, 255, 255, 0.4);
+                        margin: 0 auto 10px;
+                        border-radius: 4px;
+
+
+                    }
+                }
+
+                .formb {
+                    display: block;
+
+                    .screen-box {
+
+
+                        .flex-box {
+                            justify-content: flex-start;
+                        }
+                    }
+                }
+
+                .close {
+                    width: 25px;
+                    height: 25px;
+                    display: block;
+                    background: url('../../img/header/close.png') no-repeat center center/contain;
+                    position: absolute;
+                    right: 19px;
+                    top: 12px;
+                }
+
+                @keyframes anifooterin1 {
+                    0% {
+                        right: -200px;
+                        bottom: 0;
+                    }
+
+                    100% {
+                        right: -3px;
+                        bottom: 0;
+                    }
+                }
+            }
+        }
+
+    }
+
+
+
+
 
 }
 
-@keyframes anigameheaderin {
-    0% {
-        top: -12.5rem;
-    }
+@media screen and (max-width: 500px) {
+    .lightbox-box {
 
-    100% {
-        top: 0;
+        &.open {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: -3px;
+            left: 0;
+            transition: all 1s ease;
+
+            &+.mb-footer-box {
+                position: relative;
+                transition: all 1s ease;
+                width: 100%;
+                background: #292933;
+                position: fixed;
+                bottom: -3px;
+                left: 0;
+                z-index: 9999999;
+                border-top-right-radius: 35px;
+                border-top-left-radius: 35px;
+                border-bottom-left-radius: 0;
+                animation-name: anifooterin2;
+                animation-duration: 1s;
+                animation-timing-function: ease;
+                box-shadow: 0px -4px 15px rgba(0, 0, 0, 0.6);
+                height: auto;
+
+                h4 {
+                    color: #fff;
+                    font-size: 1.6rem;
+                    text-align: center;
+                    position: relative;
+                    margin-top: 23px;
+
+                    &::before {
+
+                        content: "";
+                        display: block;
+                        width: 38px;
+                        height: 4px;
+                        background: rgba(255, 255, 255, 0.4);
+                        margin: 0 auto 10px;
+                        border-radius: 4px;
+
+
+                    }
+                }
+
+                .formb {
+                    display: block;
+
+                    .screen-box {
+
+
+                        .flex-box {
+                            justify-content: flex-start;
+                        }
+                    }
+                }
+
+                .close {
+                    width: 25px;
+                    height: 25px;
+                    display: block;
+                    background: url('../../img/header/close.png') no-repeat center center/contain;
+                    position: absolute;
+                    right: 19px;
+                    top: 12px;
+                }
+
+                @keyframes anifooterin2 {
+                    0% {
+                        bottom: -200px;
+                    }
+
+                    100% {
+                        bottom: -3px;
+                    }
+                }
+            }
+        }
+
     }
 }
- 

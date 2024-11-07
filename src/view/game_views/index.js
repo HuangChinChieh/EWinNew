@@ -27,6 +27,7 @@ import GameChipsButton from "games_component/game_buttons/game_chips_btn";
 import GameBettingArea from "games_component/game_betting_area_new";
 import GameRoadMap from "games_component/game_road_map";
 import GameVideo from "games_component/game_video";
+import GameHeader from "games_component/game_header";
 import CardResult from "games_component/game_card_result";
 import { orderReducer, initialOrderData } from "./orderData";
 import { AlertContext } from "component/alert";
@@ -34,6 +35,7 @@ import { moveChipAnimation } from "games_component/animation/betAnimation/baccar
 import "games_component/animation/betAnimation/orderAnimation.scss";
 import BigNumber from "bignumber.js";
 import MsgMaskResult from "component/messagemask";
+
 
 const BaccaratTableNotifyContext = createContext();
 
@@ -116,7 +118,14 @@ const GameView = (props) => {
     const [vpDomain, setVpDomain] = useState("");
     const [userPoint, setUserPoint] = useState(0);
     //0=std/1=HD
- 
+
+    const [ttState1, setttState1] = useState(0);
+
+    const [ttState2, setttState2] = useState(0);
+
+    const [ttState3, setttState3] = useState(0);
+
+
     const chipsItems = [
         { styleIndex: 1, chipValue: 25 },
         { styleIndex: 2, chipValue: 50 },
@@ -304,44 +313,22 @@ const GameView = (props) => {
 
         if (gameSetID === 0) {
         }
-
-        switch (tableInfoData.Status) {
-            case "Close":
-                break;
-            case "NewRound":
-                break;
-            case "OpenBet":
-                break;
-            case "StopBet":
-                break;
-            case "GameResult":
-                break;
-            case "Cancel":
-                break;
-            case "Delete":
-                break;
-            case "Shuffling":
-                break;
-            case "NoService":
-                break;
-            case "AccidentPending":
-                break;
-            default:
-                //視為Close
-                break;
-        }
-
+      
         checkIsCanBetAndCheckGameSet();
 
         if (prevTableInfo && prevTableInfo.Status !== tableInfo.current.Status) {
             const statusText = tableInfo.current.Status;
             tableNotify.current.notify("TableChange", { tableStatus: statusText });
+
+            if( (prevTableInfo.roundNumber !== tableInfo.current.roundNumber) || statusText === (GameType + ".NewRound")){
+                //新局
+                dispatchOrderData({ type: "clearBet" });
+            }
         }
 
-        if (
-            tableInfo.current.CardInfoRound != null &&
-            tableInfo.current.CardInfoRound !== ""
-        ) {
+        
+
+        if (tableInfo.current.CardInfoRound != null && tableInfo.current.CardInfoRound !== "") {
             if (prevTableInfo != null && prevTableInfo.CardInfoRound != null) {
                 if (prevTableInfo.CardInfoRound !== tableInfo.current.CardInfoRound) {
                     //開牌動畫
@@ -395,6 +382,7 @@ const GameView = (props) => {
                 type: "processOrderData",
                 payload: {
                     SelfOrder: Q.SelfOrder,
+                    SelChipData: selChipData
                 },
             });
 
@@ -1976,7 +1964,6 @@ const GameView = (props) => {
         orderDataInfo.current = orderData;
     }, [orderData]);
 
-
     // useEffect(() => {
     //   console.log("vpDomain" +  "=" + vpDomain);
     //   console.log("userPoint" +  "=" + userPoint);
@@ -1994,8 +1981,22 @@ const GameView = (props) => {
     //   console.log("shoeResult" +  "=" + JSON.stringify(shoeResult));
     // });
 
+    const testTT2  = useCallback(()=>{
+        setttState1(ttState1+ 1);
+        setttState2(ttState2+ 2);
+        setttState3(ttState3+ 3);
+    },[ttState1, ttState2, ttState3])
+
+    const testTT = useCallback(()=>{
+        testTT2();
+    },[testTT2])
+
+
+
     return (
+      
         <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
+    
             <div className="game-view-wrap">
                 {
                     /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
@@ -2018,9 +2019,12 @@ const GameView = (props) => {
                                 onClick={() => {
                                     //setIsCanBet(true);
                                     //handleBet("addBet", { areaType: "Banker" }, null)
-                                    history.replace("/games/TEST_02?gameSetID=1339&gameSetNumber=Demo001339");
+                                alertMsg("tt","tt",()=>{
+                                    debugger;
+                                    testTT();
+                                });
                                     //window.location.reload();
-
+                                    
 
                                 }}
                             >
@@ -2036,21 +2040,12 @@ const GameView = (props) => {
                                     width: "200px",
                                 }}
                                 onClick={() => {
-                                    msgMaskResultControl.current.ShowMask(
-                                        "下注成功, 等待現場開牌, 點選畫面可取消投注...",
-                                        () => {
-                                            msgMaskResultControl.current.ShowMask(
-                                                "是否確認要取消投注?",
-                                                function () {
-                                                    cbRef.current.handleBet("cancelBet", null, null);
-                                                }
-                                            );
-                                        }
-                                    );
+                                    testTT2();
                                 }}
                             >
                                 測試2
-                            </button>
+                            </button>               
+                            <GameHeader></GameHeader>
                             <CountdownCircle
                                 isCanBet={isCanBet}
                                 getCountdownInfo={getCountdownInfo}

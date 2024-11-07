@@ -1,0 +1,21 @@
+.introduction{
+  text-align: left;
+
+  .introduction-title {
+    display: inline-block;
+    width: auto;
+    color: #9c8866;
+    font-size: 18px;
+    font-weight: 900;
+    margin: 20px 0px 15px 20px;
+    border-bottom: 2px solid #9c8866;
+  }
+  
+  .introduction-content {
+    color: white;
+    font-size: 16px;
+    word-break: break-word;
+    padding: 20px;
+  }
+}
+

@@ -6,7 +6,6 @@
   useRef,
 } from "react";
 import "./index.scss";
-import { setDefaultClick, setIsAct1 } from "store/actions";
 
 const AlertContext = createContext();
 export { AlertContext };
@@ -56,10 +55,10 @@ const AlertButton = ({ children }) => {
   return (
     <AlertContext.Provider value={{ alertMsg }}>
       {showAlert && (
-        <div className="alertoverlay">
+        <div className="alert-pop overlay">
           <div className="modal">
             <h2>{title}</h2>
-            <p>{message}</p>
+            <div  className="button-group">{message}</div>
             <div className="button-group">
               <button onClick={handleOK}>確認</button>
               <button onClick={handleClose}>取消</button>
