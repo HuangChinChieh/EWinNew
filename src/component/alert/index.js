@@ -56,7 +56,7 @@ const AlertButton = ({ children }) => {
   return (
     <AlertContext.Provider value={{ alertMsg }}>
       {showAlert && (
-        <div className="overlay">
+        <div className="alertoverlay">
           <div className="modal">
             <h2>{title}</h2>
             <p>{message}</p>
