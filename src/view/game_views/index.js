@@ -848,7 +848,7 @@ const GameView = (props) => {
                         "下注成功, 等待現場開牌, 點選畫面可取消投注...",
                         () => {
                             alertMsg("取消投注?", "是否確認要取消投注?", () => {
-                                handleBet("cancelBet", null, null);
+                                cbRef.current.handleBet("cancelBet", null, null);
                             });
                         }
                     );
@@ -949,7 +949,6 @@ const GameView = (props) => {
             if (type === "TableChange") {
                 //如果是桌台狀態改變，重新撈取桌台資訊確認最新的桌台狀態
                 if (args.Action !== "") {
-                    dispatchOrderData({ type: "clearBet" });
                     refreshTableInfo();
                 }
             } else if (type === "GameSetChange") {
@@ -1162,12 +1161,14 @@ const GameView = (props) => {
                                     tableInfo.current.BaccaratType === 1
                                 ) {
                                     gameClient.ClearBetType0(
-                                        props.gameSetID,
+                                        gameSetID,
                                         tableNumber,
                                         tableInfo.current.shoeNumber,
                                         tableInfo.current.roundNumber,
                                         orderDataInfo.current.orderSequence + 1,
                                         (s, o) => {
+                                            sendCheck.current.isSendBetData = false;
+            
                                             if (s) {
                                                 if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
@@ -1193,6 +1194,7 @@ const GameView = (props) => {
                                         tableInfo.current.roundNumber,
                                         orderDataInfo.current.orderSequence + 1,
                                         (s, o) => {
+                                            sendCheck.current.isSendBetData = false;
                                             if (s) {
                                                 if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
@@ -1218,6 +1220,7 @@ const GameView = (props) => {
                                         tableInfo.current.roundNumber,
                                         orderDataInfo.current.orderSequence + 1,
                                         (s, o) => {
+                                            sendCheck.current.isSendBetData = false;
                                             if (s) {
                                                 if (o.ResultCode === 0) {
                                                     dispatchOrderData({ type: "clearBet" });
@@ -2036,20 +2039,20 @@ const GameView = (props) => {
                             <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
                             <GameBettingArea
                                 isCanBet={isCanBet}
-                                orderData={orderDataInfo.current}
+                                orderData={orderData}
                                 handleBet={handleBet}
                                 ref={betAreaControl}
                             ></GameBettingArea>
                             <GameFooterArea
                                 chipItems={chipsItems}
-                                totalBetValue={orderDataInfo.current.totalValue}
+                                totalBetValue={orderData.totalValue}
                                 roadMapNumber={tableNumber}
                                 gameSetID={gameSetID}
                                 gameClient={gameClient}
-                                orderData={orderDataInfo.current}
+                                orderData={orderData}
                                 getTableInfo={getTableInfo}
                                 baccaratType={baccaratType}
-                                handleQuery={cbRef.current.handleQuery}
+                                handleQuery={handleQuery}
                                 entryRoadMap={entryRoadMap}
                             >
                                 <GameChipsButton
@@ -2057,7 +2060,7 @@ const GameView = (props) => {
                                     isCanBet={isCanBet}
                                     selChipData={selChipData}
                                     setSelChipData={setSelChipData}
-                                    orderData={orderDataInfo.current}
+                                    orderData={orderData}
                                     handleBet={handleBet}
                                 ></GameChipsButton>
                             </GameFooterArea>
