@@ -19,7 +19,7 @@
         position: relative;
 
         .nav-box {
-            margin-left: 7vw;
+            margin-left: 2.5rem;
 
             .tool-box-left {
                 display: flex;
@@ -32,7 +32,7 @@
                     margin-right: 20px;
                     color: #DBC165;
 
-                    .tool-icon{
+                    .tool-icon {
                         display: inline-block;
                         margin-right: 4px !important;
                         width: 26px;
@@ -51,18 +51,21 @@
                         .tool-icon {
                             background: url('../../img/header/unlike.png') no-repeat center center/contain;
 
-                            &.liked {
-                                background: url('../../img/header/like.png') no-repeat center center/contain;
-                            }
 
                         }
+
+                        &.liked .tool-icon {
+
+                            background: url('../../img/header/like.png') no-repeat center center/contain;
+                        }
+
                     }
 
 
                     &.user-instruction {
-                        .tool-icon{
+                        .tool-icon {
                             background: url('../../img/header/instruction.png') no-repeat center center/contain;
-                        }                        
+                        }
                     }
 
                     &.without-mr {
@@ -90,7 +93,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-
+            gap: 15px;
             .fullscreen,
             .exitfullscreen {
                 margin-right: 4px !important;

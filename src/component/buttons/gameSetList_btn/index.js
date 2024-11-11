@@ -3,6 +3,8 @@ import './index.scss';
 import { GameSetListContext } from 'provider/GameLobbyProvider';
 import { AlertContext } from "component/alert";
 import { useHistory } from "react-router-dom";
+import Tooltip from "component/tooltip";
+
 
 
 const GameSetListButton = () => {
@@ -73,7 +75,7 @@ const GameSetListButton = () => {
     //             }
     //         ]);
     //     }, 10000);
-        
+
     // }, [])
 
     // useEffect(() => {
@@ -88,27 +90,32 @@ const GameSetListButton = () => {
 
 
     return (
-        <div className='gameSetList-box'>
-            <div className='gameSetList-box-content' onClick={showGameSetList}>
-                <div className={hasNewGameSet ? "gameSetList-box-icon new" : "gameSetList-box-icon" }></div>
-                <div className='gameSetList-box-title'>無</div>
-                <div className='gameSetList-box-icon-arrow'></div>
-            </div>
-            {active && <>
-                <div className='gameSetList-box-options' ref={popRef}>
-                    <div className='gameSetList-box-options-header'>
-                        工單列表
-                    </div>
-                    {gameSetList.length > 0 && gameSetList.map((item, index) =>
-                        <div className='gameSetList-box-option' key={"gameSetBtn_" + item.GameSetID} onClick={() => { entryTable(item.GameSetID, item.GameSetNumber, item.RoadMapNumber) }}>
-                            <div className='gameSetList-box-no'>{index + 1}.</div>
-                            <div className='gameSetList-box-title'>{item.GameSetNumber}</div>
-                        </div>)}
-                    <div className='gameSetList-box-options-footer'><div className='gameSetList-box-options-close' onClick={hideGameSetList}><i></i>關閉</div></div>
+        <Tooltip text={"工單列表"}>
+            <div className='gameSetList-box'>
+                <div className='gameSetList-box-content' onClick={showGameSetList}>
+                    <div className={hasNewGameSet ? "gameSetList-box-icon new" : "gameSetList-box-icon"}></div>
+                    <div className='gameSetList-box-title'>無</div>
+                    <div className='gameSetList-box-icon-arrow'></div>
                 </div>
-            </>}
-        </div>
+                {active && <>
+                    <div className='gameSetList-box-options' ref={popRef}>
+                        <div className='gameSetList-box-options-header'>
+                            工單列表
+                        </div>
+                        {gameSetList.length > 0 && gameSetList.map((item, index) =>
+                            <div className='gameSetList-box-option' key={"gameSetBtn_" + item.GameSetID} onClick={() => { entryTable(item.GameSetID, item.GameSetNumber, item.RoadMapNumber) }}>
+                                <div className='gameSetList-box-no'>{index + 1}.</div>
+                                <div className='gameSetList-box-title'>{item.GameSetNumber}</div>
+                            </div>)}
+                        <div className='gameSetList-box-options-footer'><div className='gameSetList-box-options-close' onClick={hideGameSetList}><i></i>關閉</div></div>
+                    </div>
+                </>}
+            </div>
+        </Tooltip>
     );
-}
+};
+
+
+
 
 export default GameSetListButton;

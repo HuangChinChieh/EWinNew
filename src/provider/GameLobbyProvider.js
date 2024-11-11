@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { set } from "lodash";
 import React, { createContext, useCallback, useState, useEffect, useRef } from "react";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
-
+import BigNumber from "bignumber.js";
 
 // Create two different contexts
 const WalletContext = createContext();
@@ -48,39 +47,39 @@ const GameLobbyProvider = (props) => {
     UserLevel: 0
   });
   const [favors, setFavors] = useState([]);
-  const [useBetLimit, setUseBetLimit] = useState(null);
+  const [userBetLimit, setUserBetLimit] = useState(null);
   const [musicIsPlaying, setMusicIsPlaying] = useState(false);
   const [lobbyPersonal, setLobbyPersonal] = useState(false);
-  const [cashUnit, setCashUnit] = useState("");
+  const [cashUnit, setCashUnit] = useState(0);
   const [gameSetList, setGameSetList] = useState([]);
   const [hasNewGameSet, setHasNewGameSet] = useState(false);
   const intervalIDRef = useRef(0);
   const isRefreshing = useRef(false);
 
 
-  const deepEqual = (obj1, obj2) =>{
-   
-      if (obj1 === obj2) return true; // 如果是同一物件或值一樣則返回 true
-  
-      if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
-          return false; // 如果其中一個不是物件或是 null，返回 false
+  const deepEqual = (obj1, obj2) => {
+
+    if (obj1 === obj2) return true; // 如果是同一物件或值一樣則返回 true
+
+    if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) {
+      return false; // 如果其中一個不是物件或是 null，返回 false
+    }
+
+    // 獲取兩個物件的屬性列表
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+
+    // 比較屬性數量是否一致
+    if (keys1.length !== keys2.length) return false;
+
+    // 遍歷屬性並進行遞迴比較
+    for (let key of keys1) {
+      if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
+        return false;
       }
-  
-      // 獲取兩個物件的屬性列表
-      const keys1 = Object.keys(obj1);
-      const keys2 = Object.keys(obj2);
-  
-      // 比較屬性數量是否一致
-      if (keys1.length !== keys2.length) return false;
-  
-      // 遍歷屬性並進行遞迴比較
-      for (let key of keys1) {
-          if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
-              return false;
-          }
-      }
-  
-      return true;  
+    }
+
+    return true;
   };
 
 
@@ -231,13 +230,13 @@ const GameLobbyProvider = (props) => {
   }, [CT, CurrencyType, updateInfo]);
 
 
-  const updateUseBetLimit = (obj) => {
+  const updateUserBetLimit = (obj) => {
     const setFun = (setObj) => {
-      setUseBetLimit((prevObj) => {
+      setUserBetLimit((prevObj) => {
         let isEqual = false;
         let newObj = setObj;
         isEqual = deepEqual(prevObj, newObj);
-        
+
         if (isEqual) {
           return prevObj;
         } else {
@@ -262,10 +261,91 @@ const GameLobbyProvider = (props) => {
     setMusicIsPlaying(!musicIsPlaying)
   }, [CT, musicIsPlaying]);
 
+  const numberTranslate = useCallback((v) => {    
+    let CashUnitBase = 1;
+    let CashUnitDiv;
+    //let SrcUnit = 0;
+    let DstUnit = -1;
+
+    switch (cashUnit) {
+      case 0:
+        CashUnitBase = 10000;
+        break;
+      case 1:
+        CashUnitBase = 1000;
+        break;
+      case 2:
+        CashUnitBase = 1;
+        break;
+      default:
+        break;
+    }
+
+    if (DstUnit !== -1) {
+      switch (DstUnit) {
+        case 0:
+          CashUnitDiv = new BigNumber(CashUnitBase).dividedBy(10000);
+          break;
+        case 1:
+          CashUnitDiv = new BigNumber(CashUnitBase).dividedBy(1000);
+          break;
+        case 2:
+          CashUnitDiv = new BigNumber(CashUnitBase).dividedBy(1);
+          break;
+        default:
+          break;
+      }
+
+      return (new BigNumber(v).multipliedBy(CashUnitDiv).toFormat());
+    } else {
+      return (new BigNumber(v).toFormat());
+    }
+
+  }, [cashUnit]);
+
+  const getDisplayUnit = useCallback(() => {
+    let Ret = {
+      text: "元",
+      value: 1,
+    };
+
+    switch (cashUnit) {
+      case 0:
+        Ret.text = "萬";
+        Ret.value = 10000;
+        break;
+      case 1:
+        Ret.text = "千";
+        Ret.value = 1000;
+        break;
+      case 2:
+        Ret.text = "元";
+        Ret.value = 1;
+        break;
+      default:
+        break;
+    }
+
+    return Ret;
+
+  }, [cashUnit]);
+
+  const getBetLimitMaxMin = useCallback((betLimitObj)=>{        
+    let ret = {
+      MinValue:0,
+      MaxValue:0
+    };            
+    if(betLimitObj){
+      ret.MinValue = Math.min(betLimitObj.Pair.Min, betLimitObj.Banker.Min, betLimitObj.Tie.Min, betLimitObj.Player.Min);
+      ret.MaxValue = Math.max(betLimitObj.Pair.Max, betLimitObj.Banker.Max, betLimitObj.Tie.Max, betLimitObj.Player.Max);
+    }
+    
+    return ret;
+  }, [])
 
 
   const refreshUserInfo = useCallback(() => {
-    if(isRefreshing.current){
+    if (isRefreshing.current) {
       isRefreshing.current = true;
 
       lobbyClient.GetUserInfo((s, o) => {
@@ -276,7 +356,7 @@ const GameLobbyProvider = (props) => {
 
             const _userInfo = o;
             let _wallet = _userInfo.Wallet.find((x) => x.CurrencyType === CurrencyType);
-  
+
             if (_wallet) {
               updateWallet({
                 CurrencyType: _wallet.CurrencyType,
@@ -284,16 +364,16 @@ const GameLobbyProvider = (props) => {
                 Balance: _wallet.Balance,
               });
             }
-  
+
             if (_userInfo.GameSetList != null) {
               updateGameSetList(_userInfo.GameSetList);
             } else {
               updateGameSetList([]);
             }
-  
+
 
             if (_userInfo.BetLimit != null) {
-              updateUseBetLimit(_userInfo.BetLimit);
+              updateUserBetLimit(_userInfo.BetLimit);
             } else {
               updateGameSetList(null);
             }
@@ -307,16 +387,16 @@ const GameLobbyProvider = (props) => {
               UserCountry: _userInfo.UserCountry,
               UserLevel: _userInfo.UserLevel
             });
-  
+
             if (_userInfo.GameSetList != null) {
               setGameSetList(_userInfo.GameSetList);
             }
-  
+
             setCashUnit(_userInfo.Company.CashUnit);
           }
         }
       });
-    }   
+    }
   }, [lobbyClient]);
 
 
@@ -373,15 +453,15 @@ const GameLobbyProvider = (props) => {
           Balance: wallet.Balance,
         });
       }
-      
+
       if (_userInfo.GameSetList != null) {
         setGameSetList(_userInfo.GameSetList);
       }
 
       if (_userInfo.BetLimit != null) {
-        updateUseBetLimit(_userInfo.BetLimit);
+        updateUserBetLimit(_userInfo.BetLimit);
       } else {
-        updateUseBetLimit(null);
+        updateUserBetLimit(null);
       }
 
 
@@ -395,19 +475,19 @@ const GameLobbyProvider = (props) => {
         UserLevel: _userInfo.UserLevel
       });
 
-      if(favorsObj === null){
+      if (favorsObj === null) {
         setFavors([]);
       } else {
         setFavors(favorsObj);
       }
-      setCashUnit(_userInfo.Company.CashUnit);      
+      setCashUnit(_userInfo.Company.CashUnit);
     }).then(() => {
       intervalIDRef.current = setInterval(() => {
         refreshUserInfo();
       }, 5000);
     });
 
-    return ()=>{
+    return () => {
       clearInterval(intervalIDRef.current);
     };
   }, []);
@@ -418,8 +498,8 @@ const GameLobbyProvider = (props) => {
         <FavorsContext.Provider value={{ favors, updateFavors }}>
           <WalletContext.Provider value={{ wallet, updateWallet, setWallet }}>
             <UserInfoContext.Provider value={{ userInfo, updateUserInfo, setUserInfoProperty }}>
-              <CashUnitContext.Provider value={{ cashUnit, setCashUnit }}>
-                <BetLimitContext.Provider value={{ useBetLimit }}>
+              <CashUnitContext.Provider value={{ getDisplayUnit, numberTranslate, setCashUnit}}>
+                <BetLimitContext.Provider value={{ userBetLimit, getBetLimitMaxMin}}>
                   <GameSetListContext.Provider value={{ gameSetList, updateGameSetList, hasNewGameSet, setHasNewGameSet }}>
                     <RefreshUserInfoContext.Provider value={{ refreshUserInfo }}>
                       {props.children}

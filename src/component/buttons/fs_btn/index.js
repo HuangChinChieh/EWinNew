@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './index.scss';
+import Tooltip from "component/tooltip";
 
 const FullscreenButton = () => {
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -33,6 +34,7 @@ const FullscreenButton = () => {
     };
 
     return (
+        <Tooltip text={"全屏縮放"}>
         <div>
             <div className='forpc'>
                 {isFullscreen ? <span onClick={toggleFullscreen} className='exitfullscreen'></span> : <span onClick={toggleFullscreen} className='fullscreen'></span>}
@@ -52,6 +54,7 @@ const FullscreenButton = () => {
                 </div>
             </div>
         </div>
+        </Tooltip>
     );
 };
 

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import './index.scss';
+import Tooltip from "component/tooltip";
 
 const GoodTrendNotice = () => {
     const notifyRef = useRef(null);
@@ -32,18 +33,20 @@ const GoodTrendNotice = () => {
     }, []);
 
     return (
-        <div className='notify-box forpc'>
-            <div
-                className={`notify ${isButtonClicked ? 'active' : ''}`}
-                onClick={handleButtonClick}
-                ref={notifyRef}
-            >
+        <Tooltip text={"好路通知"}>
+            <div className='notify-box forpc'>
+                <div
+                    className={`notify ${isButtonClicked ? 'active' : ''}`}
+                    onClick={handleButtonClick}
+                    ref={notifyRef}
+                >
 
-                <div className={`hover-box ${hoverItem === 1 ? 'visible' : ''}`}>
-                    <div className='title'>好路通知</div>
+                    <div className={`hover-box ${hoverItem === 1 ? 'visible' : ''}`}>
+                        <div className='title'>好路通知</div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Tooltip>
     )
 }
 

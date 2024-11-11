@@ -92,10 +92,10 @@ const GameView = (props) => {
     //電投相關資訊
     // const [PADAvailable, setPADAvailable] = useState(false);
     // const [onlineUserCount, setOnlineUserCount] = useState(false);
-    const { cashUnit, setCashUnit } = useContext(CashUnitContext);
+    const { getDisplayUnit, numberTranslate, setCashUnit } = useContext(CashUnitContext);
     const { userInfo, setUserInfoProperty, updateUserInfo } = useContext(UserInfoContext);
     const { gameSetList } = useContext(GameSetListContext);
-    const { useBetLimit } = useContext(BetLimitContext);
+    const { getBetLimitMaxMin } = useContext(BetLimitContext);
     const betLimit = useRef(null);
     const orderDataInfo = useRef(null);
 
@@ -1049,10 +1049,7 @@ const GameView = (props) => {
                                     if (!sendCheck.current.isSendBetData) {
                                         sendCheck.current.isSendBetData = true;
 
-                                        if (
-                                            tableInfo.current.BaccaratType === 0 ||
-                                            tableInfo.current.BaccaratType === 1
-                                        ) {
+                                        if (tableInfo.current.BaccaratType === 0 || tableInfo.current.BaccaratType === 1) {
                                             gameClient.AddBetType0(
                                                 gameSetID,
                                                 tableNumber,
@@ -1605,31 +1602,7 @@ const GameView = (props) => {
         return tableInfo.current;
     }, []);
 
-    const getDisplayUnit = () => {
-        let Ret = {
-            text: "元",
-            value: 1,
-        };
 
-        switch (cashUnit) {
-            case 0:
-                Ret.text = "萬";
-                Ret.value = 10000;
-                break;
-            case 1:
-                Ret.text = "千";
-                Ret.value = 1000;
-                break;
-            case 2:
-                Ret.text = "元";
-                Ret.value = 1;
-                break;
-            default:
-                break;
-        }
-
-        return Ret;
-    };
 
     const resize = () => {
         // 设计稿的宽度和高度
@@ -2042,7 +2015,13 @@ const GameView = (props) => {
                             >
                                 測試2
                             </button>               
-                            <GameHeader></GameHeader>
+                            <GameHeader 
+                            tableNumber={tableNumber} 
+                            gameSetID={gameSetID}
+                            currencyType={props.CurrencyType}
+                            getTableInfo={getTableInfo}
+                            useBetLimit={{}}                            
+                            ></GameHeader>
                             <CountdownCircle
                                 isCanBet={isCanBet}
                                 getCountdownInfo={getCountdownInfo}

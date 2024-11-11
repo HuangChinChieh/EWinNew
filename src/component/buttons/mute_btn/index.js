@@ -4,7 +4,7 @@ import { MusicIsPlayingContext } from 'provider/GameLobbyProvider';
 import musicMP3 from 'music/lobby_music/Lobby.mp3';
 import musicOGG from 'music/lobby_music/Lobby.ogg';
 import musicAAC from 'music/lobby_music/Lobby.aac';
-
+import Tooltip from "component/tooltip";
 
 const MuteButton = () => {
     const { musicIsPlaying, muteSwitch } = useContext(MusicIsPlayingContext);
@@ -43,6 +43,7 @@ const MuteButton = () => {
     };
 
     return (
+        <Tooltip text={musicIsPlaying ? "靜音" : "取消靜音"}> 
         <div className='mute-box forpc'>
             {musicIsPlaying ?
                 <div onClick={toggleMute} className='unmute' />
@@ -55,6 +56,7 @@ const MuteButton = () => {
                 <source src={musicAAC} type="audio/aac" />
             </audio>
         </div>
+        </Tooltip>
     );
 }
 
