@@ -20,16 +20,16 @@ const BetLimitInfo = (props) => {
         setTimeout(() => {
             if (isHoverRef.current === false) {
                 setIsShow(true);
-            } 
-        }, 50);  
+            }
+        }, 50);
     };
     const hide = () => {
         isHoverRef.current = false;
         setTimeout(() => {
             if (isHoverRef.current === false) {
                 setIsShow(false);
-            } 
-        }, 50);  
+            }
+        }, 50);
     };
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const BetLimitInfo = (props) => {
         //         setIsShow(true);
         //     }
 
-           
+
         // }else{
         //     setTimeout(() => {
         //         if (isHoverRef.current === false) {
@@ -48,13 +48,13 @@ const BetLimitInfo = (props) => {
         //     }, 50);            
         // }
 
-      
+
 
         setTimeout(() => {
             if (isHoverRef.current === false) {
                 setIsShow(needShowInfo);
-            } 
-        }, 50);  
+            }
+        }, 50);
     }, [needShowInfo])
 
 
@@ -102,7 +102,7 @@ const BetLimitInfo = (props) => {
 };
 
 const GameBetLimitOption = (props) => {
-    const { index, betLimit, setBetLimit } = props;
+    const { index, betLimit, selectBetLimit, isSelected } = props;
     const [isNeedShowInfo, setIsNeedShowInfo] = useState(false);
     const { numberTranslate } = useContext(CashUnitContext);
     const { getBetLimitMaxMin } = useContext(BetLimitContext);
@@ -116,7 +116,7 @@ const GameBetLimitOption = (props) => {
     return (
         <>
             <BetLimitInfo betLimitData={betLimit} moveDirection={0} needShowInfo={isNeedShowInfo} ></BetLimitInfo>
-            <div className='gameBetLimit-box-option' onClick={() => { setBetLimit(betLimit) }} onMouseEnter={showInfo} onMouseLeave={hideInfo}>
+            <div className={isSelected ? 'gameBetLimit-box-option  selected' : 'gameBetLimit-box-option'} onClick={() => { selectBetLimit(betLimit) }} onMouseEnter={showInfo} onMouseLeave={hideInfo}>
                 <div className="gameBetLimit-box-icon"></div>
                 <div className='gameBetLimit-box-no'>{index + 1}.</div>
                 <div className='gameBetLimit-box-title'>
@@ -129,15 +129,15 @@ const GameBetLimitOption = (props) => {
     );
 };
 
-
 const GameBetLimitsButton = (props) => {
-    const { useBetLimit, getTableInfo, tableNumber, currencyType, gameSetID } = props;
-    const baccaratType = getTableInfo().BaccaratType;
+    const { useBetLimit, tableNumber, currencyType, gameSetID, baccaratType, setBetLimitBySel } = props;
+
     const { alertMsg } = useContext(AlertContext);
+    const { getBetLimitMaxMin } = useContext(BetLimitContext);
     const [listActive, setListActive] = useState(false);
     const [tipActive, setTipActive] = useState(false);
     const [betLimitList, setBetLimitList] = useState([]);
-    const [selBetLimit, setSelBetLimit]    
+    const minMaxObj = getBetLimitMaxMin(useBetLimit.BetLimitData);
     const listPopRef = useRef(null);
     const tipPopRef = useRef(null);
     const { GetGameClient } = useContext(BaccaratSubscribeContext);
@@ -163,34 +163,7 @@ const GameBetLimitsButton = (props) => {
     //         setActive(false);
     //     }, 400);
     // }
-    const getBetlimitByStorage = () => {
 
-    };
-
-    const setBetLimit = (selBetLimit, cb) => {
-        if (selBetLimit && selBetLimit.BetLimitID !== "") {
-            gameClient.UserAccountSetBetLimit(
-                tableNumber,
-                currencyType,
-                gameSetID,
-                selBetLimit.BetLimitID,
-                (s, o) => {
-                    if (s) {
-                        if (o.ResultCode === 0) {
-                            localStorage.setItem("SelBetLimit", JSON.stringify(selBetLimit));
-                            cb(true);
-                        } else {
-                            cb(false);
-                        }
-                    } else {
-                        cb(false);
-                    }
-                }
-            );
-        } else {
-            cb(false);
-        }
-    };
 
 
     const showBetLimitList = () => {
@@ -214,9 +187,15 @@ const GameBetLimitsButton = (props) => {
                 }
             });
         }
-    }
+    };
 
-    // 判斷是否繼續播放
+    const selectBetLimit = useCallback((betLimit) => {
+        alertMsg("提醒", "是否提換新的限紅", () => {
+            setBetLimitBySel(tableNumber, gameSetID, betLimit);
+        });
+    }, [alertMsg, setBetLimitBySel, tableNumber, gameSetID]);
+
+
     useEffect(() => {
 
 
@@ -230,7 +209,7 @@ const GameBetLimitsButton = (props) => {
             <div className='gameBetLimit-box-content' >
                 <div className='gameBetLimit-box-main' onClick={() => { showBetLimitList() }}>
                     <div className="gameBetLimit-box-icon"></div>
-                    <div className={(baccaratType === 2 || baccaratType === 3) ? "gameBetLimit-box-title show-list" : "gameBetLimit-box-title"}>5 - 200</div>
+                    <div className={(baccaratType === 2 || baccaratType === 3) ? "gameBetLimit-box-title show-list" : "gameBetLimit-box-title"}>{minMaxObj.MinValue + " - " + minMaxObj.MaxValue}</div>
                     <Tooltip text={'目前限紅'} />
                 </div>
                 <div className='gameBetLimit-box-icon-arrow'>
@@ -238,20 +217,37 @@ const GameBetLimitsButton = (props) => {
                 </div>
             </div>
 
-            {listActive && <>
+            {listActive &&
                 <div className='gameBetLimit-box-options' ref={listPopRef}>
 
                     <div className='gameBetLimit-box-options-header'>
                         可選限紅列表
                     </div>
 
-                    {betLimitList.length > 0 && betLimitList.filter(x => x.CurrencyType === props.currencyType).map((item, index) => (<GameBetLimitOption key={item.BetLimitID} selBetLimit index={index} betLimit={item} setBetLimit={setBetLimit}></GameBetLimitOption>))}
+                    {betLimitList.length > 0 &&
+                        betLimitList.filter(x => x.CurrencyType === props.currencyType).map(
+                            (item, index) => (<GameBetLimitOption key={item.BetLimitID}
+                                isSelected={item.BetLimitID === useBetLimit.BetLimitID}
+                                index={index}
+                                betLimit={item}
+                                selectBetLimit={selectBetLimit}></GameBetLimitOption>))}
 
 
 
-                    <div className='gameBetLimit-box-options-footer'><div className='gameBetLimit-box-options-close' onClick={() => { }}><i></i>關閉</div></div>
+                    <div className='gameBetLimit-box-options-footer'><div className='gameBetLimit-box-options-close' onClick={() => {
+                        listPopRef.current.classList.add('hide');
+                        setTimeout(() => {
+                            setListActive(false);
+                        }, 400)
+
+                    }}><i></i>關閉</div></div>
                 </div>
-            </>}
+            }
+
+            {
+                (listActive === false && tipActive === true) && 
+                <BetLimitInfo betLimitData={useBetLimit.BetLimitData} moveDirection={1} needShowInfo={tipActive} ></BetLimitInfo>
+            }
         </div>
     );
 };

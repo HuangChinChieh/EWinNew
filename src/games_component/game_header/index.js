@@ -15,7 +15,7 @@ import Tooltip from "component/tooltip";
 import './index.scss';
 
 const GameHeader = (props) => {
-    const { tableNumber, getTableInfo, useBetLimit, currencyType, gameSetID } = props;
+    const { tableNumber, useBetLimit, currencyType, gameSetID, baccaratType, setBetLimitBySel } = props;
     const { userInfo } = useContext(UserInfoContext);
     const [isShowGameIntro, setIsShowGameIntro] = useState(false);
     const [aniHeader, setAniHeader] = useState('aniHeader');
@@ -83,7 +83,7 @@ const GameHeader = (props) => {
                             </span>
                         </span>
                         <GameSetListButton></GameSetListButton>
-                        <GameBetLimitsButton tableNumber={tableNumber} currencyType={currencyType} gameSetID={gameSetID} useBetLimit={useBetLimit} getTableInfo={getTableInfo}></GameBetLimitsButton>
+                        <GameBetLimitsButton baccaratType={baccaratType} tableNumber={tableNumber} currencyType={currencyType} gameSetID={gameSetID} useBetLimit={useBetLimit} setBetLimitBySel={setBetLimitBySel}></GameBetLimitsButton>
                     </div>
                 </div>
                 <div className={`hamb ${isOpen ? 'open' : ''}`} onClick={toggleHamburger}>
