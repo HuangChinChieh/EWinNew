@@ -460,21 +460,11 @@ const GameView = (props) => {
                     SelChipData: selChipData
                 },
             });
-
-            checkSelfOrderCmd();
-            checkSelfOrderCmd();
         }
 
         checkIsCanBetAndCheckGameSet();
-    const btnLeaveGame = () => {
-        gameClient.LeaveRoadMap(gameSetID, tableNumber, (s, o) => {
-            // 無論成功失敗
 
-            window.location.href = window.location.host;
-        });
-    };
-
-    };
+    });
 
     const checkIsCanBetAndCheckGameSet = () => {
         if (queryInfo.current == null || tableInfo.current == null) {
@@ -1636,8 +1626,6 @@ const GameView = (props) => {
         }
 
         return retValue;
-        return Ret;
-    };
     };
 
     const resize = () => {
