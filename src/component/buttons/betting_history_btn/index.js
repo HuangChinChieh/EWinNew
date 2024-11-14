@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import './index.scss';
 import SummaryTable from './summary_table';
 import BettingHistoryDetail from './betting_history_detail';
-
+import Tooltip from "component/tooltip";
 
 const BettingHistory = () => {
 
@@ -13,8 +13,8 @@ const BettingHistory = () => {
     const settingsRef = useRef(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
     const [parameterData, setParameterData] = useState({
-        gamecode:'',
-        querydate:''
+        gamecode: '',
+        querydate: ''
     });
 
 
@@ -24,7 +24,7 @@ const BettingHistory = () => {
     const passGamecodeAndQuerydate = (e, gamecode, querydate) => {
         e.stopPropagation()
         setDisplayArea(0);
-        setParameterData({ gamecode:'', querydate:'' });
+        setParameterData({ gamecode: '', querydate: '' });
     };
 
     // 點擊區域外則關閉
@@ -75,14 +75,14 @@ const BettingHistory = () => {
     };
 
     return (
+        <Tooltip text={"投注紀錄"}>
+            <div className='betting-history-box forpc'>
+                <div
+                    className={`betting-history ${isButtonClicked ? 'active' : ''}`}
+                    onClick={topBtnClick}
+                    ref={settingsRef}
+                >
 
-        <div className='betting-history-box forpc'>
-            <div
-                className={`betting-history ${isButtonClicked ? 'active' : ''}`}
-                onClick={topBtnClick}
-                ref={settingsRef}
-            >
-          
                     <div>
                         <div className={`hover-box ${displayArea === 1 ? 'visible' : ''}`}>
                             <SummaryTable
@@ -105,9 +105,10 @@ const BettingHistory = () => {
 
                         </div>
                     </div>
-                
+
+                </div>
             </div>
-        </div>
+        </Tooltip>
     )
 }
 

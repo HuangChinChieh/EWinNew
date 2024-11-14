@@ -8,76 +8,28 @@ import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
 import GameSetListButton from 'component/buttons/gameSetList_btn';
+import GameBetLimitsButton from 'games_component/game_buttons/game_betLimits_btn';
 import { useHistory } from 'react-router-dom';
 import GameIntro from "component/alertPop/popExample/gameIntro";
-
+import Tooltip from "component/tooltip";
 import './index.scss';
 
 const GameHeader = (props) => {
-    const { tableNumber } = props;
-    const { wallet } = useContext(WalletContext);
+    const { tableNumber, useBetLimit, currencyType, gameSetID, baccaratType, setBetLimitBySel } = props;
     const { userInfo } = useContext(UserInfoContext);
     const [isShowGameIntro, setIsShowGameIntro] = useState(false);
-
     const [aniHeader, setAniHeader] = useState('aniHeader');
-    const [lastScrollTop, setLastScrollTop] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
     const { favors, updateFavors } = useContext(FavorsContext);
-   
+
 
     const toggleHamburger = () => {
         setIsOpen(!isOpen);
     };
-
-    useEffect(() => {
-        const handleScroll = () => {
-
-            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.scrollY;
-
-            // 判斷滾動的方向，並更新 aniHeader 的狀態
-            if (scrollTop > lastScrollTop && scrollTop > 50) {
-                setAniHeader('aniHeaderAction');
-            } else if (scrollTop < lastScrollTop) {
-                setAniHeader('aniHeader');
-            }
-            // 更新 lastScrollTop
-            setLastScrollTop(scrollTop);
-
-        };
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [lastScrollTop]);
-
-    const [isLightboxOpen, setLightboxOpen] = useState(false);
-    const [userName, setUserName] = useState('Jisdom');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const history = useHistory();
 
-    const handleLogin = () => {
-        setLightboxOpen(true);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // 在這裡添加檢查用戶名和密碼的邏輯
-        if (userName === 'jisdom' && password === '777') {
-            // 登入成功      
-            setUserName('Jisdom');
-            localStorage.setItem('isLogin', true)
-            setLightboxOpen(false);
-
-        } else {
-            // 登入失敗，顯示錯誤提示
-            setError('Invalid username or password');
-        }
-    };
-
     const handleAddFavor = () => {
+        debugger;
         const lobbyClient = EWinGameLobbyClient.getInstance();
         const index = favors.indexOf(tableNumber);
         const tempFavors = [...favors];
@@ -86,7 +38,7 @@ const GameHeader = (props) => {
         if (index === -1) {
             //沒找到，新增收藏
             tempFavors.push(tableNumber);
-            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors), (success, o) => {
+            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(tempFavors), (success, o) => {
                 if (success) {
                     if (o.ResultCode === 0) {
                         updateFavors();
@@ -96,7 +48,7 @@ const GameHeader = (props) => {
         } else {
             //有找到，移除收藏
             tempFavors.splice(index, 1);
-            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(favors), (success, o) => {
+            lobbyClient.SetUserAccountProperty("EWinGame.Favor", JSON.stringify(tempFavors), (success, o) => {
                 if (success) {
                     if (o.ResultCode === 0) {
                         updateFavors();
@@ -107,25 +59,31 @@ const GameHeader = (props) => {
 
     };
 
-  
+
     return (
-        <div className={aniHeader}>
+        <div className={'aniHeader'}>
             <div className="header-box">
                 <Logo />
                 <div className='nav-box'>
                     {/* 之後傳接api再處理判斷, 有可能不再這邊做登入處理 在父層登入 */}
                     <div className='tool-box-left'>
                         <span className='user-icon'>
-                            <span className='tool-icon'/>{(userInfo.RealName != null && userInfo.RealName !== '') ? userInfo.RealName : userInfo.LoginAccount}
+                            <span className='tool-icon' />{(userInfo.RealName != null && userInfo.RealName !== '') ? userInfo.RealName : userInfo.LoginAccount}
+                            <Tooltip text={"用戶名稱"}></Tooltip>
                         </span>
                         <span className='user-instruction can-click'>
-                            <GameIntro isShow={isShowGameIntro} handleOK={()=>{setIsShowGameIntro(false);}}></GameIntro>
-                            <span  className='tool-icon'  onClick={()=>{setIsShowGameIntro(true);}}/>
+                            <GameIntro isShow={isShowGameIntro} handleOK={() => { setIsShowGameIntro(false); }}></GameIntro>
+                            <span className='tool-icon' onClick={() => { setIsShowGameIntro(true); }}>
+                                <Tooltip text={"玩法說明"}></Tooltip>
+                            </span>
                         </span>
-                        <span className={favors.includes(tableNumber) ? "user-favorite liked can-click" : "user-favorite can-click"} onClick={() => handleAddFavor()}>
-                            <span className='tool-icon'/>
+                        <span className={favors.includes(tableNumber) ? "user-favorite liked can-click" : "user-favorite can-click"} >
+                            <span className='tool-icon' onClick={() => { handleAddFavor(); }}>
+                                <Tooltip text={favors.includes(tableNumber) ? "取消收藏" : "收藏"}></Tooltip>
+                            </span>
                         </span>
                         <GameSetListButton></GameSetListButton>
+                        <GameBetLimitsButton baccaratType={baccaratType} tableNumber={tableNumber} currencyType={currencyType} gameSetID={gameSetID} useBetLimit={useBetLimit} setBetLimitBySel={setBetLimitBySel}></GameBetLimitsButton>
                     </div>
                 </div>
                 <div className={`hamb ${isOpen ? 'open' : ''}`} onClick={toggleHamburger}>
@@ -136,42 +94,11 @@ const GameHeader = (props) => {
                 <div className="toolbar">
                     <FullscreenButton />
                     <MuteButton />
-                    <BettingHistory />
+                   <BettingHistory />
                     <GoodTrendNotice />
                     <SettingButton />
                 </div>
             </div>
-            {isLightboxOpen &&
-                <div className="lightbox-box">
-                    <div className='form-box'>
-                        <span className='close' onClick={() => setLightboxOpen(false)} >X</span>
-                        <form onSubmit={handleSubmit}>
-                            <label>
-                                <input
-                                    type="text"
-                                    placeholder='Username'
-                                    id="username"
-                                    value={userName}
-                                    onChange={(e) => setUserName(e.target.value)}
-                                />
-                            </label>
-                            <br />
-                            <label>
-                                <input
-                                    type="password"
-                                    placeholder='Password'
-                                    id="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
-                            </label>
-                            <br />
-                            {error && <span className="error">{error}</span>}
-                            <button type="submit">登入</button>
-                        </form>
-                    </div>
-                </div>
-            }
             {isOpen &&
                 <div>
                     <div className={`lightbox-box ${isOpen ? 'open' : ''}`} onClick={toggleHamburger} />

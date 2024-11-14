@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect,useContext } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { LobbyPersonalContext } from 'provider/GameLobbyProvider';
+import Tooltip from "component/tooltip";
 
 import './index.scss';
 const SettingButton = () => {
-    const { lobbyPersonal,setLobbyPersonal } = useContext(LobbyPersonalContext);
+    const { lobbyPersonal, setLobbyPersonal } = useContext(LobbyPersonalContext);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const settingsRef = useRef(null);
@@ -38,45 +39,21 @@ const SettingButton = () => {
 
 
     return (
-        <div className='settings-box'>
-            <div
-                className={`settings ${isButtonClicked ? 'active' : ''}`}
-                onClick={handleButtonClick}
-                ref={settingsRef}
-            >
+        <Tooltip text={"其他設定"}>
+            <div className='settings-box'>
+                <div
+                    className={`settings ${isButtonClicked ? 'active' : ''}`}
+                    onClick={handleButtonClick}
+                    ref={settingsRef}>
 
-                <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
-                    <div className='flex-box'>
-                        <div>
-                            遊戲大廳個性化
-                        </div>
-                        <div className={`custom-slider ${lobbyPersonal ? 'set' : ''}`}>
-                            <input type="checkbox" id="sliderCheckbox" />
-                            <label htmlFor="sliderCheckbox" onClick={handleSliderClick}></label>
-                        </div>
-                    </div>
-                    <div className='dis'>
-                            如果您想查看遊戲大廳的個人化遊戲桌列表，請保持該選項處於啟用狀態。 否則，請將其停用，我們將停止為此目的處理個人資料。
-                    </div>
-                </div>
-            </div>
-            <div className='formb'>
-                <div className='setting-wrap'>
-                    <span className='flex-box'
-                        onClick={() => setMbHoveredItem(1)}
-                    >
-                        <span className='icons'></span>
-                        <span> 設置</span>
-                    </span>
-                    <div className={`hover-box ${mbhoveredItem === 1 ? 'visible' : ''}`}>
+                    <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                         <div className='flex-box'>
-                            <div className='backicon' onClick={() => setMbHoveredItem(null)} />
                             <div>
                                 遊戲大廳個性化
                             </div>
-                            <div className={`mbcustom-slider ${lobbyPersonal ? 'set' : ''}`}>
-                                <input type="checkbox" id="mbsliderCheckbox" />
-                                <label htmlFor="mbsliderCheckbox" onClick={handleSliderClick}></label>
+                            <div className={`custom-slider ${lobbyPersonal ? 'set' : ''}`}>
+                                <input type="checkbox" id="sliderCheckbox" />
+                                <label htmlFor="sliderCheckbox" onClick={handleSliderClick}></label>
                             </div>
                         </div>
                         <div className='dis'>
@@ -84,9 +61,34 @@ const SettingButton = () => {
                         </div>
                     </div>
                 </div>
+                <div className='formb'>
+                    <div className='setting-wrap'>
+                        <span className='flex-box'
+                            onClick={() => setMbHoveredItem(1)}
+                        >
+                            <span className='icons'></span>
+                            <span> 設置</span>
+                        </span>
+                        <div className={`hover-box ${mbhoveredItem === 1 ? 'visible' : ''}`}>
+                            <div className='flex-box'>
+                                <div className='backicon' onClick={() => setMbHoveredItem(null)} />
+                                <div>
+                                    遊戲大廳個性化
+                                </div>
+                                <div className={`mbcustom-slider ${lobbyPersonal ? 'set' : ''}`}>
+                                    <input type="checkbox" id="mbsliderCheckbox" />
+                                    <label htmlFor="mbsliderCheckbox" onClick={handleSliderClick}></label>
+                                </div>
+                            </div>
+                            <div className='dis'>
+                                如果您想查看遊戲大廳的個人化遊戲桌列表，請保持該選項處於啟用狀態。 否則，請將其停用，我們將停止為此目的處理個人資料。
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
             </div>
-        </div>
+        </Tooltip>
     )
 }
 
