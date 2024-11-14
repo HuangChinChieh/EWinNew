@@ -36,7 +36,6 @@ import "games_component/animation/betAnimation/orderAnimation.scss";
 import BigNumber from "bignumber.js";
 import MsgMaskResult from "component/messagemask";
 
-
 const BaccaratTableNotifyContext = createContext();
 
 
@@ -211,7 +210,7 @@ const GameView = (props) => {
 
     const getVideoSourceList = (cb) => {
         fetch(
-            "https://ewin.dev.mts.idv.tw/GetVideoSource.aspx?CT=" +
+            "http://ewin.dev.mts.idv.tw/GetVideoSource.aspx?CT=" +
             window.encodeURIComponent(props.CT),
             {
                 method: "GET", // 请求方法// 将 JavaScript 对象转换为 JSON 字符串
@@ -368,7 +367,7 @@ const GameView = (props) => {
             CurrencyName: walletByQ.CurrencyName,
             Balance: walletByQ.Balance,
         });
-
+        
         setCashUnit(Q.cashUnit);
 
         if (gameSetID === 0) {
@@ -386,56 +385,10 @@ const GameView = (props) => {
                 },
             });
 
-            checkSelfOrderCmd();
         }
 
         checkIsCanBetAndCheckGameSet();
     }, []);
-
-    const checkSelfOrderCmd = () => {
-        if (queryInfo.current == null || tableInfo.current == null) {
-            return;
-        }
-
-        const Q = queryInfo.current;
-        const T = tableInfo.current;
-
-        switch (T.BaccaratType) {
-            case 0:
-            case 1:
-                //電投，檢查是否有已經存在的指令
-                if (Q.SelfOrder.OrderCmd) {
-                    let cmdText = "";
-
-                    switch (Q.SelfOrder.OrderCmd.toUpperCase()) {
-                        case "Pass".toUpperCase():
-                            cmdText = "飛牌";
-                            break;
-                        case "NextShoe".toUpperCase():
-                            cmdText = "換靴";
-                            break;
-                        case "ChangeDealer".toUpperCase():
-                            cmdText = "更換荷官";
-                            break;
-                        case "ContactMe".toUpperCase():
-                            cmdText = "請聯繫我";
-                            break;
-                        default:
-                            break;
-                    }
-
-                    if (cmdText !== "") {
-                        msgMaskResultControl.current.ShowMask(cmdText, () => { });
-                    } else {
-                        msgMaskResultControl.current.HideMask();
-                    }
-                }
-                break;
-            default:
-                msgMaskResultControl.current.HideMask();
-                break;
-        }
-    };
 
     const btnLeaveGame = () => {
         gameClient.LeaveRoadMap(gameSetID, tableNumber, (s, o) => {
@@ -1633,7 +1586,6 @@ const GameView = (props) => {
 
         return Ret;
     };
-
     const resize = () => {
         // 设计稿的宽度和高度
         const designWidth = 1920;
@@ -2075,6 +2027,7 @@ const GameView = (props) => {
                                 baccaratType={baccaratType}
                                 handleQuery={handleQuery}
                                 entryRoadMap={entryRoadMap}
+                                cashUnit={queryInfo.current.CashUnit}
                             >
                                 <GameChipsButton
                                     chipsItems={chipsItems}

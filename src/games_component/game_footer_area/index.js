@@ -15,7 +15,7 @@ const GameFooterArea = (props) => {
 
     const updateMiddleBtnType = useCallback((v) => {
         setMiddleBtnType(v);
-    },[]);
+    }, []);
 
     const showComponent = () => {
         if (middleBtnType === "Chip") {
@@ -49,7 +49,7 @@ const GameFooterArea = (props) => {
                     <GameBalance />
                 </div>
                 <div className='box-area'>
-                   <GameTotalBet totalBetValue={props.totalBetValue} />
+                    <GameTotalBet totalBetValue={props.totalBetValue} />
                 </div>
             </div>
             <div className='middle-box'>
@@ -60,7 +60,15 @@ const GameFooterArea = (props) => {
                     {BaccaratType === 0 || BaccaratType === 1 ? <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType} /> : <></>}
                 </div>
                 <div className='box-area'>
-                    <GameTips />
+                    <GameTips
+                        gameClient={props.gameClient}
+                        roadMapNumber={props.roadMapNumber}
+                        gameSetID={props.gameSetID}
+                        handleQuery={props.handleQuery}
+                        getTableInfo={props.getTableInfo}
+                        orderData={props.orderData}
+                        cashUnit={props.cashUnit}
+                    />
                 </div>
                 <div className='box-area'>
                     <GameAddTable />

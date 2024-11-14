@@ -24,7 +24,7 @@ import "./index.scss";
 import { toNumber } from "lodash";
 
 const Main = () => {
-    const EWinUrl = "https://ewin.dev.mts.idv.tw";
+    const EWinUrl = "http://ewin.dev.mts.idv.tw";
     const intervalIDRef = useRef(0);
    
     const currencyTypeRef = useRef("CNY");
@@ -53,7 +53,7 @@ const Main = () => {
                 const postData = {
                     Token: "1_0UE5XQQ_ca95cc8bfb4e442118d60c5b92a7af2e",
                     //LoginAccount: 'ddt1',
-                    LoginAccount: "ddt1",
+                    LoginAccount: "kevin0517",
                     LoginPassword: "1234",
                     CompanyCode: "demo",
                     UserIP: "",
@@ -67,7 +67,7 @@ const Main = () => {
                 };
 
                 const response = await fetch(
-                    "https://ewin.dev.mts.idv.tw/API/LoginAPI.asmx/UserLoginByCustomValidate",
+                    "http://ewin.dev.mts.idv.tw/API/LoginAPI.asmx/UserLoginByCustomValidate",
                     requestOptions
                 );
                 const jsonReturn = await response.json();

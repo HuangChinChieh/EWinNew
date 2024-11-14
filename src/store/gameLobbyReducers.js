@@ -1,7 +1,7 @@
 import { generateUUIDv4 } from 'utils/guid';
 
 const initGameLobbyState = {
-    ewinurl: 'https://ewin.dev.mts.idv.tw',
+    ewinurl: 'http://ewin.dev.mts.idv.tw',
     ct: '',
     guid: generateUUIDv4(),
     echo: 'test_echo',
