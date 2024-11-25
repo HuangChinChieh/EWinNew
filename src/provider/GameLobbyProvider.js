@@ -303,6 +303,26 @@ const GameLobbyProvider = (props) => {
 
   }, [cashUnit]);
 
+  const getNumberByUnitSetting = useCallback((v) => {  
+    let CashUnitBase = 1;    
+    switch (cashUnit) {
+      case 0:
+        CashUnitBase = 10000;
+        break;
+      case 1:
+        CashUnitBase = 1000;
+        break;
+      case 2:
+        CashUnitBase = 1;
+        break;
+      default:
+        break;
+    }
+
+    return new BigNumber(v).dividedBy(CashUnitBase).toNumber();
+
+  }, [cashUnit]);
+
   const getDisplayUnit = useCallback(() => {
     let Ret = {
       text: "元",
@@ -498,7 +518,7 @@ const GameLobbyProvider = (props) => {
         <FavorsContext.Provider value={{ favors, updateFavors }}>
           <WalletContext.Provider value={{ wallet, updateWallet, setWallet }}>
             <UserInfoContext.Provider value={{ userInfo, updateUserInfo, setUserInfoProperty }}>
-              <CashUnitContext.Provider value={{ getDisplayUnit, numberTranslate, setCashUnit}}>
+              <CashUnitContext.Provider value={{ getDisplayUnit, numberTranslate, setCashUnit, getNumberByUnitSetting}}>
                 <BetLimitContext.Provider value={{ userBetLimit, getBetLimitMaxMin}}>
                   <GameSetListContext.Provider value={{ gameSetList, updateGameSetList, hasNewGameSet, setHasNewGameSet }}>
                     <RefreshUserInfoContext.Provider value={{ refreshUserInfo }}>
