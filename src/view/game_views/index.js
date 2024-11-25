@@ -123,16 +123,21 @@ const GameView = (props) => {
     //0=std/1=HD
 
 
+    const getUnitVal = (val) => {
+        let unitData = getDisplayUnit();
+
+        return new BigNumber(val).dividedBy(unitData.value).toNumber();
+    }
 
     const chipsItems = [
-        { styleIndex: 1, chipValue: 25 },
-        { styleIndex: 2, chipValue: 50 },
-        { styleIndex: 3, chipValue: 100 },
-        { styleIndex: 4, chipValue: 500 },
-        { styleIndex: 5, chipValue: 1000 },
-        { styleIndex: 6, chipValue: 1250 },
-        { styleIndex: 7, chipValue: 5000 },
-        { styleIndex: 8, chipValue: 10000 },
+        { styleIndex: 1, chipValue: getUnitVal(25), showText:25 },
+        { styleIndex: 2, chipValue: getUnitVal(50), showText:50 },
+        { styleIndex: 3, chipValue: getUnitVal(100), showText:100 },
+        { styleIndex: 4, chipValue: getUnitVal(500), showText:500 },
+        { styleIndex: 5, chipValue: getUnitVal(1000), showText:1000 },
+        { styleIndex: 6, chipValue: getUnitVal(1250), showText:1250 },
+        { styleIndex: 7, chipValue: getUnitVal(5000), showText:5000 },
+        { styleIndex: 8, chipValue: getUnitVal(10000), showText:10000 }
     ];
 
     const gameClient = GetGameClient();
@@ -443,8 +448,8 @@ const GameView = (props) => {
             CurrencyName: walletByQ.CurrencyName,
             Balance: walletByQ.Balance,
         });
-        
-        setCashUnit(Q.cashUnit);
+
+        setCashUnit(Q.CashUnit);
 
         if (gameSetID === 0) {
             setUserPoint(wallet.Balance);
@@ -1115,6 +1120,8 @@ const GameView = (props) => {
                     // args => beforeSetChipCb, finishCb
                     if (isCanBet) {
                         if (orderDataInfo.current.unConfirmValue + selChipData.chipValue <= userPoint) {
+                            console.log("selChipData",selChipData)
+                            console.log("chipsItems", chipsItems);
                             if ("areaType" in args) {
                                 moveChipAnimation(args.areaType, () => {
                                     dispatchOrderData({

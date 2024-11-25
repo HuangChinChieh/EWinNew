@@ -258,7 +258,7 @@ const GameControlButton = (props) => {
                                         }`}
                                     onClick={() => onSetChipVal(item.chipValue)}
                                 >
-                                    <div>{item.chipValue}</div>
+                                    <div>{item.showText}</div>
                                 </div>
                             ))}
                         </div>

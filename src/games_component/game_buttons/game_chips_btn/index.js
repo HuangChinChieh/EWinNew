@@ -12,7 +12,7 @@ const GameChipsButton = ((props) => {
                             <div key={item.styleIndex}
                                 className={`chips-${item.styleIndex} ${props.selChipData.index === index ? 'act' : ''}`}
                                 onClick={() => (props.setSelChipData({...item, index:index}))}>
-                                <div>{item.chipValue}</div>
+                                <div>{item.showText}</div>
                             </div>
                         ))
                     }
