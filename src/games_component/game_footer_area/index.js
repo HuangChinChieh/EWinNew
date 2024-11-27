@@ -10,8 +10,7 @@ import GameControlButton from 'games_component/game_buttons/game_gameset_btn';
 
 const GameFooterArea = (props) => {
     const [middleBtnType, setMiddleBtnType] = useState("Chip")
-    //const BaccaratType = props.baccaratType;
-    const BaccaratType = 1;
+    const BaccaratType = props.baccaratType;
 
     const updateMiddleBtnType = useCallback((v) => {
         setMiddleBtnType(v);
@@ -21,7 +20,7 @@ const GameFooterArea = (props) => {
         if (middleBtnType === "Chip") {
             return props.children;
         } else if (middleBtnType === "GameSet") {
-            if (BaccaratType === 0 || BaccaratType === 1) {
+            if (BaccaratType === 1) {
                 return <GameControlButton chipItems={props.chipItems}
                     roadMapNumber={props.roadMapNumber}
                     gameSetID={props.gameSetID}
@@ -57,7 +56,7 @@ const GameFooterArea = (props) => {
             </div>
             <div className='right-box'>
                 <div className='box-area'>
-                    {BaccaratType === 0 || BaccaratType === 1 ? <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType} /> : <></>}
+                    {BaccaratType === 1 ? <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType} /> : <></>}
                 </div>
                 <div className='box-area'>
                     <GameTips

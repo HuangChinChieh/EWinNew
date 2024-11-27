@@ -45,9 +45,7 @@ const GameControlButton = (props) => {
     let areaCode = useRef();
 
     useEffect(() => {
-        let tableInfo = getTableInfo();
-
-        console.log('tableInfo', tableInfo);
+       
     }, []);
 
     const handleSelControl = (event, index) => {
