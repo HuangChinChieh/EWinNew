@@ -1166,7 +1166,6 @@ const GameView = (props) => {
                     if (isCanBet) {
                         if (orderDataInfo.current.unConfirmValue <= userPoint) {
                             //checkBetLimit
-
                             if (isConnected) {
                                 //gameClient.
 
@@ -1263,14 +1262,14 @@ const GameView = (props) => {
                                         }
                                     }
                                 } else {
-                                    dispatchOrderData({ type: "cancelConfirmBet" });
+                                    dispatchOrderData({ type: "cancelunConfirmBet" });
                                 }
                             } else {
-                                dispatchOrderData({ type: "cancelConfirmBet" });
+                                dispatchOrderData({ type: "cancelunConfirmBet" });
                                 alertMsg("錯誤", "伺服器斷線", null);
                             }
                         } else {
-                            dispatchOrderData({ type: "cancelConfirmBet" });
+                            dispatchOrderData({ type: "cancelunConfirmBet" });
                             alertMsg("錯誤", "餘額不足", null);
                         }
                     }
@@ -2043,6 +2042,7 @@ const GameView = (props) => {
                                     bottom: "20px",
                                     zIndex: "99999",
                                     width: "200px",
+                                    display: "none"
                                 }}
                                 onClick={() => {
                                     //setIsCanBet(true);
@@ -2063,6 +2063,7 @@ const GameView = (props) => {
                                     bottom: "20px",
                                     zIndex: "99999",
                                     width: "200px",
+                                    display: "none"
                                 }}
                                 onClick={() => {
 
