@@ -17,8 +17,7 @@ import './index.scss';
 const GameHeader = (props) => {
     const { tableNumber, useBetLimit, currencyType, gameSetID, baccaratType, setBetLimitBySel } = props;
     const { userInfo } = useContext(UserInfoContext);
-    const [isShowGameIntro, setIsShowGameIntro] = useState(false);
-    const [aniHeader, setAniHeader] = useState('aniHeader');
+    const [isShowGameIntro, setIsShowGameIntro] = useState(false);    
     const [isOpen, setIsOpen] = useState(false);
     const { favors, updateFavors } = useContext(FavorsContext);
 
@@ -61,9 +60,9 @@ const GameHeader = (props) => {
 
 
     return (
-        <div className={'aniHeader'}>
+        <div className='game-aniHeader'>
             <div className="header-box">
-                <Logo />
+               
                 <div className='nav-box'>
                     {/* 之後傳接api再處理判斷, 有可能不再這邊做登入處理 在父層登入 */}
                     <div className='tool-box-left'>
@@ -86,11 +85,7 @@ const GameHeader = (props) => {
                         <GameBetLimitsButton baccaratType={baccaratType} tableNumber={tableNumber} currencyType={currencyType} gameSetID={gameSetID} useBetLimit={useBetLimit} setBetLimitBySel={setBetLimitBySel}></GameBetLimitsButton>
                     </div>
                 </div>
-                <div className={`hamb ${isOpen ? 'open' : ''}`} onClick={toggleHamburger}>
-                    <span />
-                    <span />
-                    <span />
-                </div>
+               
                 <div className="toolbar">
                     <FullscreenButton />
                     <MuteButton />

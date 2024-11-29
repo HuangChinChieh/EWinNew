@@ -1,23 +1,26 @@
-.aniHeader,
+.game-aniHeader,
 .aniHeaderAction {
     height: 80px;
-    position: fixed;
+    position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
-    box-shadow:
-        inset 0px 0px 0px 0 rgba(0, 0, 0, 1),
-        0 0 0 0 rgba(255, 255, 255, 0);
-    transition: all 1s ease;
+    width: 100%;  
+    transition: all 0.5s ease;
     z-index: 99999;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, rgba(0, 0, 0, 0.55) 60%,transparent 100%);
+    &:hover{
+  
+
+        // background: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, rgba(0, 0, 0, 0.55) 60%, rgba(0, 0, 0, 0.2) 100%);
+    }
 
     .header-box {
         display: flex;
         align-items: center;
-        padding: 8px 5vw 0;
+        padding-left:3vw;
         color: #fff;
         position: relative;
-
+        height: 100%;
         .nav-box {
             margin-left: 2.5rem;
 
@@ -39,9 +42,11 @@
                         height: 26px;
                         cursor: pointer;
                         transition: all 0.3s ease;
+                        position: relative;
                     }
 
                     &.user-icon {
+                        position: relative;
                         .tool-icon {
                             background: url("../../img/header/user.png") no-repeat center center/contain;
                         }
@@ -205,321 +210,3 @@
     }
 }
 
-
-@media screen and (max-width: 1082px) {
-
-    .aniHeader,
-    .aniHeaderAction {
-        height: auto;
-        width: 100%;
-        box-shadow: inset 0px 0px 0px 0 rgba(0, 0, 0, 1), 0 0 0 0 rgba(255, 255, 255, 1);
-        transition: all 1.5s ease;
-        background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
-        padding-bottom: 8px;
-    }
-
-    .aniHeader {
-        top: 0;
-        animation-name: aniheaderin;
-        animation-duration: 1s;
-        animation-timing-function: ease;
-    }
-
-    @keyframes aniheaderout {
-        0% {
-            top: -200px;
-        }
-
-        100% {
-            top: 0;
-        }
-    }
-
-    .aniHeaderAction {
-        top: -200px;
-        animation-name: aniheaderout;
-        animation-duration: 1s;
-        animation-timing-function: ease;
-    }
-
-    @keyframes aniheaderout {
-        0% {
-            top: 0;
-        }
-
-        100% {
-            top: -200px;
-        }
-    }
-
-    .header-box {
-        padding: 10px;
-
-        .toolbar {
-            display: none !important;
-        }
-
-        .nav-box {
-            margin-right: auto;
-            position: absolute;
-            top: 13px;
-            right: 37px;
-
-            .forpc {
-                display: none !important;
-            }
-
-            .formb {
-                display: inline-block !important;
-            }
-
-            .tool-box-left {
-
-                span {
-                    .user-icon {
-                        width: 16px !important;
-                        height: 16px !important;
-                    }
-
-                }
-
-                .user-favorite {
-                    display: inline-block;
-                    margin-top: 2px;
-                    width: 16px !important;
-                    height: 16px !important;
-                    background: url('../../img/global/favorite.png') no-repeat center center/contain !important;
-                }
-            }
-
-
-        }
-
-        .hamb {
-            position: absolute;
-            top: 18px;
-            right: 22px;
-
-            span {
-                display: block;
-                width: 15px;
-                height: 2px;
-                background: #fff;
-                margin-bottom: 3px;
-                transition: all 0.7s ease;
-
-                &:nth-child(2) {
-                    margin-left: 3px;
-                }
-            }
-
-            &.open {
-                span {
-                    &:nth-child(1) {
-                        transform: rotate(-45deg);
-                        margin-top: 5px;
-                    }
-
-                    &:nth-child(2) {
-                        opacity: 0;
-                        margin-left: 0;
-                    }
-
-                    &:nth-child(3) {
-                        transform: rotate(45deg);
-                        margin-top: -10px;
-                    }
-                }
-
-            }
-        }
-    }
-
-    .lightbox-box {
-
-        &.open {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            top: -3px;
-            right: 0;
-            transition: all 1s ease;
-
-            &+.mb-footer-box {
-                position: relative;
-                transition: all 1s ease;
-                width: 40%;
-                background: #292933;
-                position: fixed;
-                right: -3px;
-                bottom: 0;
-                height: 100%;
-                z-index: 9999999;
-                border-top-left-radius: 35px;
-                border-bottom-left-radius: 35px;
-                animation-name: anifooterin1;
-                animation-duration: 1s;
-                animation-timing-function: ease;
-                box-shadow: 0px -4px 15px rgba(0, 0, 0, 0.6);
-
-                h4 {
-                    color: #fff;
-                    font-size: 1.6rem;
-                    text-align: center;
-                    position: relative;
-                    margin-top: 23px;
-
-                    &::before {
-
-                        content: "";
-                        display: block;
-                        width: 38px;
-                        height: 4px;
-                        background: rgba(255, 255, 255, 0.4);
-                        margin: 0 auto 10px;
-                        border-radius: 4px;
-
-
-                    }
-                }
-
-                .formb {
-                    display: block;
-
-                    .screen-box {
-
-
-                        .flex-box {
-                            justify-content: flex-start;
-                        }
-                    }
-                }
-
-                .close {
-                    width: 25px;
-                    height: 25px;
-                    display: block;
-                    background: url('../../img/header/close.png') no-repeat center center/contain;
-                    position: absolute;
-                    right: 19px;
-                    top: 12px;
-                }
-
-                @keyframes anifooterin1 {
-                    0% {
-                        right: -200px;
-                        bottom: 0;
-                    }
-
-                    100% {
-                        right: -3px;
-                        bottom: 0;
-                    }
-                }
-            }
-        }
-
-    }
-
-
-
-
-
-}
-
-@media screen and (max-width: 500px) {
-    .lightbox-box {
-
-        &.open {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            top: -3px;
-            left: 0;
-            transition: all 1s ease;
-
-            &+.mb-footer-box {
-                position: relative;
-                transition: all 1s ease;
-                width: 100%;
-                background: #292933;
-                position: fixed;
-                bottom: -3px;
-                left: 0;
-                z-index: 9999999;
-                border-top-right-radius: 35px;
-                border-top-left-radius: 35px;
-                border-bottom-left-radius: 0;
-                animation-name: anifooterin2;
-                animation-duration: 1s;
-                animation-timing-function: ease;
-                box-shadow: 0px -4px 15px rgba(0, 0, 0, 0.6);
-                height: auto;
-
-                h4 {
-                    color: #fff;
-                    font-size: 1.6rem;
-                    text-align: center;
-                    position: relative;
-                    margin-top: 23px;
-
-                    &::before {
-
-                        content: "";
-                        display: block;
-                        width: 38px;
-                        height: 4px;
-                        background: rgba(255, 255, 255, 0.4);
-                        margin: 0 auto 10px;
-                        border-radius: 4px;
-
-
-                    }
-                }
-
-                .formb {
-                    display: block;
-
-                    .screen-box {
-
-
-                        .flex-box {
-                            justify-content: flex-start;
-                        }
-                    }
-                }
-
-                .close {
-                    width: 25px;
-                    height: 25px;
-                    display: block;
-                    background: url('../../img/header/close.png') no-repeat center center/contain;
-                    position: absolute;
-                    right: 19px;
-                    top: 12px;
-                }
-
-                @keyframes anifooterin2 {
-                    0% {
-                        bottom: -200px;
-                    }
-
-                    100% {
-                        bottom: -3px;
-                    }
-                }
-            }
-        }
-
-    }
-}

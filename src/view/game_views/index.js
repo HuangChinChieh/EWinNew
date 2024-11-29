@@ -134,6 +134,10 @@ const GameView = (props) => {
         { styleIndex: 6, chipValue: 1250 },
         { styleIndex: 7, chipValue: 5000 },
         { styleIndex: 8, chipValue: 10000 },
+        { styleIndex: 9, chipValue: 10000 },
+        { styleIndex: 10, chipValue: 10000 },
+        { styleIndex: 11, chipValue: 10000 },
+        { styleIndex: 12, chipValue: 10000 },
     ];
 
     const gameClient = GetGameClient();
@@ -2058,20 +2062,7 @@ const GameView = (props) => {
                                 測試
                             </button>
 
-                            <button
-                                style={{
-                                    position: "absolute",
-                                    left: "400px",
-                                    bottom: "20px",
-                                    zIndex: "99999",
-                                    width: "200px",
-                                }}
-                                onClick={() => {
-
-                                }}
-                            >
-                                測試2
-                            </button>
+     
                             <GameHeader
                                 tableNumber={tableNumber}
                                 gameSetID={gameSetID}

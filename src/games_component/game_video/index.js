@@ -172,7 +172,7 @@ const GameVideo = (props) => {
             RoadMapNumber: tableNumber
         };
 
-        fetch('https://ewin.dev.mts.idv.tw/GetVideoURL.aspx', {
+        fetch('http://ewin.dev.mts.idv.tw/GetVideoURL.aspx', {
             method: 'POST', // 请求方法
             headers: {
                 'Content-Type': 'application/json' // 指定请求内容类型为 JSON

@@ -58,7 +58,7 @@ const AlertButton = ({ children }) => {
         <div className="alert-pop overlay">
           <div className="modal">
             <h2>{title}</h2>
-            <div  className="button-group">{message}</div>
+            <div  className="button-group alert-pop-content">{message}</div>
             <div className="button-group">
               <button onClick={handleOK}>確認</button>
               <button onClick={handleClose}>取消</button>

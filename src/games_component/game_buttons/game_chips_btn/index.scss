@@ -1,12 +1,28 @@
 @keyframes initShow {
 
     0% {
-        opacity: 0;;
-        
+        opacity: 0;
+        ;
+
     }
 
     100% {
         opacity: 1.0;
+    }
+}
+
+@keyframes chipMoveAni {
+
+    0% {
+        transform: translateY(-20%) rotate(0);
+    }
+
+    50% {
+        transform: translateY(-20%) rotate(180deg);
+    }
+
+    100% {
+        transform: translateY(-20%) rotate(360deg);
     }
 }
 
@@ -20,103 +36,277 @@
     animation: initShow 0.3s ease-out;
 
     .game-chips-box {
-        /* Auto layout */
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 0px;
-        gap: 0.75rem;      
-        width: 32.5875rem;
-        height: 3.416875rem;
-        flex: 1 0 auto;
-        margin-bottom: 1.875rem;
+        width: 35.5rem;
+        height: 7.5rem;
 
-        >div {
-            /* icon/chip */
-
-            width: 3.416875rem;
-            height: 3.416875rem;
-            /* Inside auto layout */
-            flex: none;
-            order: 0;
-            flex-grow: 0;
+        .game-chips-expand-box {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            /* 允許滾動 */
+            scrollbar-width: none;
+            /* 隱藏 Firefox 的滾動條 */
             position: relative;
-            background-size: cover;
-            background-position: center;
-            border-radius: 1.7084375rem;
-            cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s ease-in;
+            background-color: #000000;
+            z-index: 1;
+            box-sizing: border-box;
 
-            &.chips-1 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FB8F02 0%, #BE7000 100%);
-            }
-
-            &.chips-2 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #F950A2 0%, #EA275D 100%);
-            }
-
-            &.chips-3 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #17AAFF 0%, #625FFF 100%);
-            }
-
-            &.chips-4 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #26FF7A 0%, #0B7453 100%);
-            }
-
-            &.chips-5 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #7128EA 0%, #702449 100%);
-            }
-
-            &.chips-6 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #44C8C0 0%, #339F6A 100%);
-            }
-
-            &.chips-7 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #72FB0C 0%, #87BA2F 100%);
-            }
-
-            &.chips-8 {
-                background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FF5B53 0%, #EA311D 100%);
-            }
-
-            &.act {
-
-                &::before {
-                    content: '';
-                    background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
-                    display: block;
-                    width: 4.125rem;
-                    height: 4.125rem;
-                    border-radius: 4.125rem;
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    transform: translate(-9%, -9%);
-                }
+            &::-webkit-scrollbar {
+                display: none;
+                /* 隱藏 Chrome 和 Safari 的滾動條 */
             }
 
             &:hover {
-              transform: translateY(-20%);
+                transform: translateX(-8.1rem);
+                width: 48rem;
+                padding-left: 3rem;
+                padding-right: 3rem;
+                box-sizing: border-box;
+
+
+                .game-chips-expand-box-left.show,
+                .game-chips-expand-box-right.show {
+                    display: flex;
+                    width: 3.25rem;
+                    opacity: 1.0;
+
+                }
+
+                /* 隱藏 Chrome 和 Safari 的滾動條 */
             }
 
-            >div {
+            .game-chips-expand-box-left,
+            .game-chips-expand-box-right {
+                opacity: 0;
                 position: absolute;
-                top: 0.88875rem;
-                left: 50%;
-                transform: translateX(-50%);
-                /* 字体大小，可以根据需要调整 */
-                text-align: center;
-                /* 文字居中，可选 */
-                font-size: 1.09375rem;
-                font-weight: 500;
-                line-height: 1.28125rem;
-                text-align: center;
-                color: #FFFFFF;
-                height: auto;
-                cursor: pointer;
+                height: 100%;
+                top: 0rem;
+                width: 3rem;
+                transition: all 0.3s ease-in;
+                display: flex;
+                background-color: #000000;
+                justify-content: center;
+                align-items: center;
+
+
+                button {
+                    height: 5rem;
+                    width: 1.2rem;
+                    border-radius: 16rem;
+                    border: none;
+                    display: -webkit-box;
+                    display: -webkit-flex;
+                    display: -ms-flexbox;
+                    display: flex;
+                    -webkit-align-items: center;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    padding: 0;
+                    margin: 0;
+                    -webkit-transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+                    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+                    color: rgb(255, 255, 255);
+                    background-color: rgba(128, 128, 128, 0.4);
+
+                    &:hover {
+                        background-color: rgba(128, 128, 128, 0.2);
+                        color: rgb(255, 255, 255);
+                        cursor: pointer;
+                    }
+                }
             }
+
+            .game-chips-expand-box-left {
+                left: 0;
+                justify-content: flex-end;
+            }
+
+            .game-chips-expand-box-right {
+                right: 0;
+                justify-content: flex-start;
+            }
+
+            .game-chips-box-middle {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                height: 100%;
+                mask: linear-gradient(to right, transparent, black 5%),
+                    linear-gradient(to left, transparent, black 5%);
+
+                padding-left:1rem;
+                padding-right:6.5rem;
+                mask-composite: intersect;
+                overflow-x: auto;
+                /* 保留滾動功能 */
+                scrollbar-width: none;
+                /* Firefox 隱藏滾動條 */
+                -ms-overflow-style: none;
+                /* IE 和 Edge 隱藏滾動條 */
+
+                &::-webkit-scrollbar {
+                    display: none;
+                    /* WebKit 瀏覽器隱藏滾動條 */
+                }
+
+                .game-chip {
+                    height: 100%;
+                    width: 3.5rem;
+                    flex: none;
+                    margin-right: 0.75rem;
+                    display: flex;
+                    align-items: center;
+
+                    &.chip-move {
+                        .game-chip-box {
+                            animation: chipMoveAni 0.3s linear;
+                            animation-iteration-count: 1;
+                        }
+                    }
+
+                    &.act {
+
+                        .game-chip-box::after {
+                            content: '';
+                            background: url('../../../img/games/chips/border.png') no-repeat center center / cover;
+                            display: block;
+                            width: 4.25rem;
+                            height: 4.25rem;
+                            border-radius: 2.125rem;
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                        }
+                    }
+
+                    &:hover {
+                        cursor: pointer;
+
+                        .game-chip-box {
+                            transform: translateY(-20%);
+                        }
+                    }
+
+                    .game-chip-box {
+                        /* icon/chip */
+
+                        width: 3.5rem;
+                        height: 3.5rem;
+                        /* Inside auto layout */
+                        flex: none;
+                        position: relative;
+                        background-size: cover;
+                        background-position: center;
+                        border-radius: 1.725rem;
+                        transition: transform 0.2s ease-in;
+
+                        >div {
+                            position: absolute;
+                            top: 1rem;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            /* 字体大小，可以根据需要调整 */
+                            text-align: center;
+                            /* 文字居中，可选 */
+                            font-size: 1.125rem;
+                            font-weight: 500;
+                            line-height: 1.125rem;
+                            color: #FFFFFF;
+                            height: auto;
+                            cursor: pointer;
+                        }
+                    }
+
+                    @for $i from 1 through 40 {
+                        $index: $i%8;
+
+                        @if ($index)==1 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FB8F02 0%, #BE7000 100%);
+                                }
+
+                            }
+                        }
+
+                        @else if $index ==2 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #F950A2 0%, #EA275D 100%);
+                                }
+
+                            }
+                        }
+
+                        @else if $index ==3 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #17AAFF 0%, #625FFF 100%);
+                                }
+
+                            }
+                        }
+
+                        @else if $index ==4 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #26FF7A 0%, #0B7453 100%);
+                                }
+
+                            }
+                        }
+
+                        @else if $index ==5 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #7128EA 0%, #702449 100%);
+                                }
+
+                            }
+                        }
+
+                        @else if $index ==6 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #44C8C0 0%, #339F6A 100%);
+                                }
+
+                            }
+                        }
+
+                        @else if $index ==7 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #72FB0C 0%, #87BA2F 100%);
+                                }
+
+                            }
+                        }
+
+                        @else if $index ==0 {
+                            &.chips-#{$i} {
+                                .game-chip-box {
+                                    background-image: url('../../../img/games/chips/chip-basic.png'), linear-gradient(180deg, #FF5B53 0%, #EA311D 100%);
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+
+
+
+            }
+
+
         }
+
     }
 
     .cancel,
@@ -126,20 +316,20 @@
         font-size: 1.4rem;
         cursor: not-allowed;
         display: inline-flex;
-        padding: 0.28125rem 0px;
+        padding: 0.28125rem 0;
         justify-content: center;
         align-items: center;
         margin-bottom: 1.0625rem;
         position: relative;
         opacity: 0.4;
-        transition: opacity 0.5s ease-out;        
-                
+        transition: opacity 0.5s ease-out;
+
         &::after {
             content: '';
             display: block;
             width: 2.5rem;
             height: 2.5rem;
-            position: absolute;            
+            position: absolute;
             /* top: -0.5rem;
            right: -3.2rem;*/
             top: -2.5rem;
@@ -153,60 +343,66 @@
             background-repeat: no-repeat;
         }
 
-        &:hover::after{
-            background-color: rgba(141, 141, 159, 0.5);         
+        &:hover::after {
+            background-color: rgba(141, 141, 159, 0.5);
         }
 
-        &:hover{
-            color:rgba(255, 255, 255, 1);
+        &:hover {
+            color: rgba(255, 255, 255, 1);
         }
     }
 
     .cancel {
         margin-left: 1.375rem;
+
         &::after {
             background-image: url('/img/games/cancel.png');
         }
+
         &:hover::after {
             background-image: url('/img/games/cancel_light.png');
         }
     }
-    
+
     .confirm {
-    
+
         &::after {
-    
+
             background-image: url('/img/games/confirm.png');
         }
+
         &:hover::after {
             background-image: url('/img/games/confirm_light.png');
         }
     }
-    
+
     .double {
-    
+
         margin-left: auto;
+
         &::after {
-            content: 'X2';    
-            font-size: 1.5rem;       
+            content: 'X2';
+            font-size: 1.5rem;
             text-align: center;
             line-height: 2.5rem;
             font-weight: 600;
             color: rgba(141, 141, 159, 0.70);
-            
+
         }
+
         &:hover::after {
-            color:rgba(255, 255, 255, 1);
+            color: rgba(255, 255, 255, 1);
         }
     }
 
-    &.can-bet{
+    &.can-bet {
+
         .cancel,
         .double,
         .confirm {
-           opacity: 1.0;
-           pointer-events: initial;
-           cursor: pointer;
+            opacity: 1.0;
+            pointer-events: initial;
+            cursor: pointer;
         }
     }
 }

@@ -155,7 +155,7 @@
             cursor: pointer;
             transition: filter 0.3s;
             /* 添加過渡效果 */
-
+            position: relative;
             &:hover {
                 filter: brightness(1.5);
             }
@@ -272,38 +272,75 @@
                 text-overflow: ellipsis;
                 line-height: 24px;
                 flex: 1 0 0;
-                padding-left: 5px;
                 box-sizing: border-box;
                 margin: 5px 0px;
-                font-weight: bold;
-                margin-right: 20px;
+                font-weight: bold;              
                 display: inline-flex;
                 justify-content: center;
                 gap: 10px;
                 color: #DBC165;
             }
 
+            .gameBetLimit-box-checked {
+                width: 20px;
+                height: 100%;                    
+                margin-right: 10px;
+                svg{
+                    display: none;
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+
             &:hover {
                 font-size: 16px;
                 box-shadow: inset 0px 0px 10px 5px rgb(41 41 41);
                 filter: brightness(1.5);
 
+                
                 .gameBetLimit-box-icon{
-                    width: 22px;
-                    height: 22px;
+                    width: 20px;
+                    height: 20px;
+                }
+
+                .gameBetLimit-box-checked{
+                    svg{
+                        transform: scale(1.15);   
+                    }
+                }
+            }
+
+            &.selected{
+                filter: brightness(1.5);
+
+                .gameBetLimit-box-checked{
+                    svg{
+                        display: initial;       
+                    }
                 }
             }
         }
     }
 }
 
-
-.betLimitInfo-box {
+.options-tip{
     position: absolute;
     right: -10px;
     top: 0;
     transform: translateX(100%);
     width: 100%;
+}
+
+.sel-opt-tip{
+    position: absolute;    
+    bottom: -10px;    
+    width: 100%;   
+    transform: translateY(100%);
+}
+
+.betLimitInfo-box {
+    position: relative;
     background: rgba(0, 0, 0, 0.6);    
     padding: 10px 0px;
     border-radius: 20px;
@@ -312,7 +349,18 @@
     color: #8d8d9f;    
     cursor: initial;
 
-    
+    &.can-close{
+        animation: slideIn 0.4s ease forwards;
+
+        .betLimitInfo-footer{
+            display: block;
+        }
+    }
+
+    &.hide {
+        animation: slideOut 0.4s ease forwards;
+    }
+
     .betLimitInfo-header {
         text-align: center;
         margin-bottom: 10px;
@@ -323,7 +371,7 @@
         box-shadow: 0px 1px 0px rgba(88, 88, 88, 0.4)
     }
 
-    .betLimitInfo-content {        
+    .betLimitInfo-content {                
         width: 100%;       
 
         .betLimitInfo-option {
@@ -391,6 +439,36 @@
                 color: #DBC165;
             }
 
+        }
+    }
+
+    .betLimitInfo-footer{
+        display: none;
+        text-align: center;
+
+        .betLimitInfo-close {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px 15px;
+            margin: 6px 0px 3px 0px;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0px 0px 1px 1px rgb(72 72 72 / 80%);
+            transition: all 0.1s ease-out;
+
+            i {
+                margin-right: 5px;
+                width: 10px;
+                height: 10px;
+                background: url('../../../img/header/Vector.png') no-repeat center center/contain;
+            }
+
+            &:hover {
+                filter: brightness(1.5);
+                box-shadow: 0px 0px 2px 2px rgb(126 126 126 / 80%);
+                background: rgb(47 47 47 / 50%);
+            }
         }
     }
 }

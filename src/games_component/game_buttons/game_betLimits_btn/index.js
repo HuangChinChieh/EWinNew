@@ -4,63 +4,45 @@ import { AlertContext } from "component/alert";
 import { BaccaratSubscribeContext } from "provider/GameBaccaratProvider";
 import Tooltip from "component/tooltip";
 import { CashUnitContext, BetLimitContext } from "provider/GameLobbyProvider";
-import { constant } from 'lodash';
 
 const BetLimitInfo = (props) => {
-    const [isShow, setIsShow] = useState(false);
+    const { isShowInfo, setIsShowInfo } = props;
+    const [isHover, setIsHover] = useState(false); //
     const betLimitData = props.betLimitData;
     const moveDirection = props.moveDirection; //初始化動畫方向，0=上到下，1=左到右
-    const needShowInfo = props.needShowInfo
+    //const needShowInfo = props.needShowInfo
+    const canClose = props.canClose;
     const { numberTranslate } = useContext(CashUnitContext);
-    const isHoverRef = useRef(false);
-
+    const infoRef = useRef(null);
 
     const show = () => {
-        isHoverRef.current = true;
-        setTimeout(() => {
-            if (isHoverRef.current === false) {
-                setIsShow(true);
-            }
-        }, 50);
+        setIsHover(true);
     };
+
     const hide = () => {
-        isHoverRef.current = false;
-        setTimeout(() => {
-            if (isHoverRef.current === false) {
-                setIsShow(false);
-            }
-        }, 50);
+        setIsHover(false);
     };
 
-    useEffect(() => {
+    const getShowValue = () => {
+        let retValue = false;
 
-        // if(needShowInfo === true){
-        //     if (isHoverRef.current === false) {
-        //         setIsShow(true);
-        //     }
-
-
-        // }else{
-        //     setTimeout(() => {
-        //         if (isHoverRef.current === false) {
-        //             setIsShow(false);
-        //         } 
-        //     }, 50);            
-        // }
-
-
-
-        setTimeout(() => {
-            if (isHoverRef.current === false) {
-                setIsShow(needShowInfo);
+        if (canClose) {
+            retValue = isShowInfo;
+        } else {
+            if (isHover) {
+                retValue = true;
+            } else {
+                retValue = isShowInfo;
             }
-        }, 50);
-    }, [needShowInfo])
+        }
+
+        return retValue;
+    };
 
 
     return (
-        isShow ?
-            <div className={`betLimitInfo-box ${moveDirection === 0 ? "left-to-right" : "top-to-bottom"}`} onMouseEnter={show} onMouseLeave={hide}>
+        getShowValue() ?
+            <div ref={infoRef} className={`betLimitInfo-box ${moveDirection === 0 ? "left-to-right" : "top-to-bottom"} ${canClose ? "can-close" : ""}`} onMouseEnter={show} onMouseLeave={hide}>
                 <div className='betLimitInfo-header'>限紅詳情</div>
                 <div className='betLimitInfo-content'>
                     <div className='betLimitInfo-option'>
@@ -94,7 +76,20 @@ const BetLimitInfo = (props) => {
                             <div>-</div>
                             <div>{numberTranslate(betLimitData.Tie.Max)}</div>
                         </div>
-                    </div></div>
+                    </div>
+                </div>
+                <div className='betLimitInfo-footer'>
+                    <div className='betLimitInfo-close' onClick={() => {
+                        infoRef.current.classList.add('hide');
+                        setTimeout(() => {
+                            setIsShowInfo(false);
+                        }, 400)
+
+                    }}><i></i>關閉
+
+                    </div>
+                </div>
+
             </div>
             :
             <></>
@@ -103,19 +98,25 @@ const BetLimitInfo = (props) => {
 
 const GameBetLimitOption = (props) => {
     const { index, betLimit, selectBetLimit, isSelected } = props;
-    const [isNeedShowInfo, setIsNeedShowInfo] = useState(false);
+    const [isShowInfo, setIsShowInfo] = useState(false);
     const { numberTranslate } = useContext(CashUnitContext);
     const { getBetLimitMaxMin } = useContext(BetLimitContext);
     const minMaxObj = getBetLimitMaxMin(betLimit);
 
     const showInfo = () => {
-        setIsNeedShowInfo(true)
+        setTimeout(() => {
+            setIsShowInfo(true);
+        }, 50);       
     };
-    const hideInfo = () => { setIsNeedShowInfo(false) };
+    const hideInfo = () => {
+        setTimeout(() => {
+            setIsShowInfo(false);
+        }, 50);
+    };
 
     return (
         <>
-            <BetLimitInfo betLimitData={betLimit} moveDirection={0} needShowInfo={isNeedShowInfo} ></BetLimitInfo>
+            <div className='options-tip'><BetLimitInfo betLimitData={betLimit} moveDirection={0} isShowInfo={isShowInfo} setIsShowInfo={setIsShowInfo} canClose={false}></BetLimitInfo></div>
             <div className={isSelected ? 'gameBetLimit-box-option  selected' : 'gameBetLimit-box-option'} onClick={() => { selectBetLimit(betLimit) }} onMouseEnter={showInfo} onMouseLeave={hideInfo}>
                 <div className="gameBetLimit-box-icon"></div>
                 <div className='gameBetLimit-box-no'>{index + 1}.</div>
@@ -123,6 +124,11 @@ const GameBetLimitOption = (props) => {
                     <div>{numberTranslate(minMaxObj.MinValue)}</div>
                     <div>-</div>
                     <div>{numberTranslate(minMaxObj.MaxValue)}</div>
+                </div>
+                <div className='gameBetLimit-box-checked'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" fill="#8d8d9f">
+                        <path d="M23.8976 5.35229C24.5323 5.98706 24.5323 7.01792 23.8976 7.65269L10.8976 20.6527C10.2628 21.2875 9.23193 21.2875 8.59717 20.6527L2.09717 14.1527C1.4624 13.5179 1.4624 12.4871 2.09717 11.8523C2.73193 11.2175 3.76279 11.2175 4.39756 11.8523L9.7499 17.1996L21.6022 5.35229C22.237 4.71753 23.2679 4.71753 23.9026 5.35229H23.8976Z" />
+                    </svg>
                 </div>
             </div>
         </>
@@ -167,7 +173,6 @@ const GameBetLimitsButton = (props) => {
 
 
     const showBetLimitList = () => {
-
         if (baccaratType === 2 || baccaratType === 3) {
             gameClient.UserAccountGetBetLimitListByRoadMap(tableNumber, currencyType, gameSetID, (success, o) => {
                 if (success) {
@@ -212,7 +217,7 @@ const GameBetLimitsButton = (props) => {
                     <div className={(baccaratType === 2 || baccaratType === 3) ? "gameBetLimit-box-title show-list" : "gameBetLimit-box-title"}>{minMaxObj.MinValue + " - " + minMaxObj.MaxValue}</div>
                     <Tooltip text={'目前限紅'} />
                 </div>
-                <div className='gameBetLimit-box-icon-arrow'>
+                <div className='gameBetLimit-box-icon-arrow' onClick={() => { setTipActive(true); }}>
                     <Tooltip text={'限紅詳情'} />
                 </div>
             </div>
@@ -234,19 +239,23 @@ const GameBetLimitsButton = (props) => {
 
 
 
-                    <div className='gameBetLimit-box-options-footer'><div className='gameBetLimit-box-options-close' onClick={() => {
-                        listPopRef.current.classList.add('hide');
-                        setTimeout(() => {
-                            setListActive(false);
-                        }, 400)
+                    <div className='gameBetLimit-box-options-footer'>
+                        <div className='gameBetLimit-box-options-close' onClick={() => {
+                            listPopRef.current.classList.add('hide');
+                            setTimeout(() => {
+                                setListActive(false);
+                            }, 400)
 
-                    }}><i></i>關閉</div></div>
+                        }}><i></i>關閉
+
+                        </div>
+                    </div>
                 </div>
             }
 
             {
-                (listActive === false && tipActive === true) && 
-                <BetLimitInfo betLimitData={useBetLimit.BetLimitData} moveDirection={1} needShowInfo={tipActive} ></BetLimitInfo>
+                (listActive === false && tipActive === true) &&
+                <div className='sel-opt-tip'><BetLimitInfo betLimitData={useBetLimit.BetLimitData} moveDirection={1} isShowInfo={tipActive} setIsShowInfo={setTipActive} canClose={true}></BetLimitInfo></div>
             }
         </div>
     );
