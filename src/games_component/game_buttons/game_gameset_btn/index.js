@@ -45,9 +45,7 @@ const GameControlButton = (props) => {
     let areaCode = useRef();
 
     useEffect(() => {
-        let tableInfo = getTableInfo();
-
-        console.log('tableInfo', tableInfo);
+       
     }, []);
 
     const handleSelControl = (event, index) => {
@@ -258,7 +256,7 @@ const GameControlButton = (props) => {
                                         }`}
                                     onClick={() => onSetChipVal(item.chipValue)}
                                 >
-                                    <div>{item.chipValue}</div>
+                                    <div>{item.showText}</div>
                                 </div>
                             ))}
                         </div>

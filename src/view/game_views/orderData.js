@@ -45,7 +45,7 @@ function orderReducer(state, action) {
         case 'addBet':
             //待補上動畫
             newOrderData.totalValue = new BigNumber(newOrderData.totalValue).plus(action.payload.selChipData.chipValue).toNumber();
-            newOrderData.unConfirmValue = action.payload.selChipData.chipValue;
+            newOrderData.unConfirmValue = new BigNumber(newOrderData.unConfirmValue).plus(action.payload.selChipData.chipValue).toNumber();
             newOrderData[action.payload.areaType].totalValue = new BigNumber(newOrderData[action.payload.areaType].totalValue).plus(action.payload.selChipData.chipValue).toNumber();
             newOrderData[action.payload.areaType].unConfirmValue = new BigNumber(newOrderData[action.payload.areaType].unConfirmValue).plus(action.payload.selChipData.chipValue).toNumber();
             newOrderData[action.payload.areaType].chips.push({
@@ -55,7 +55,7 @@ function orderReducer(state, action) {
                 isConfirm: false,
                 orderUnix: Date.now().toString()
             });
-
+            
             return newOrderData
         case 'doubleBet':
             //待補上動畫                  
@@ -88,7 +88,7 @@ function orderReducer(state, action) {
             }
 
             return newOrderData;
-        case 'cancelConfirmBet':
+        case 'cancelunConfirmBet':
             //待補上動畫          
             newOrderData.totalValue = new BigNumber(newOrderData.totalValue).minus(newOrderData.unConfirmValue).toNumber();
             newOrderData.unConfirmValue = 0;
@@ -98,7 +98,7 @@ function orderReducer(state, action) {
 
                 newOrderData[areaType].totalValue = new BigNumber(newOrderData[areaType].totalValue).minus(newOrderData[areaType].unConfirmValue).toNumber();
                 newOrderData[areaType].unConfirmValue = 0;
-                newOrderData[areaType].confirmValue = 0;
+                //newOrderData[areaType].confirmValue = 0;
 
                 if (newOrderData[areaType].totalValue === 0) {
                     newOrderData[areaType].chips.length = 0;
@@ -108,7 +108,7 @@ function orderReducer(state, action) {
                 }
 
             }
-
+            
             return newOrderData;
         case 'confirmBet':
             newOrderData.confirmValue = new BigNumber(newOrderData.confirmValue).plus(newOrderData.unConfirmValue).toNumber();

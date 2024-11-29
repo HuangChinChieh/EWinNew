@@ -36,7 +36,6 @@ import "games_component/animation/betAnimation/orderAnimation.scss";
 import BigNumber from "bignumber.js";
 import MsgMaskResult from "component/messagemask";
 
-
 const BaccaratTableNotifyContext = createContext();
 
 
@@ -96,7 +95,7 @@ const GameView = (props) => {
     //電投相關資訊
     // const [PADAvailable, setPADAvailable] = useState(false);
     // const [onlineUserCount, setOnlineUserCount] = useState(false);
-    const { getDisplayUnit, numberTranslate, setCashUnit } = useContext(CashUnitContext);
+    const { getDisplayUnit, numberTranslate, setCashUnit, getNumberByUnitSetting } = useContext(CashUnitContext);
     const { userInfo, setUserInfoProperty, updateUserInfo } = useContext(UserInfoContext);
     const { gameSetList } = useContext(GameSetListContext);
     //const { getBetLimitMaxMin } = useContext(BetLimitContext);
@@ -122,22 +121,16 @@ const GameView = (props) => {
     const [vpDomain, setVpDomain] = useState("");
     const [userPoint, setUserPoint] = useState(0);
     //0=std/1=HD
-
-
-
+    
     const chipsItems = [
-        { styleIndex: 1, chipValue: 25 },
-        { styleIndex: 2, chipValue: 50 },
-        { styleIndex: 3, chipValue: 100 },
-        { styleIndex: 4, chipValue: 500 },
-        { styleIndex: 5, chipValue: 1000 },
-        { styleIndex: 6, chipValue: 1250 },
-        { styleIndex: 7, chipValue: 5000 },
-        { styleIndex: 8, chipValue: 10000 },
-        { styleIndex: 9, chipValue: 10000 },
-        { styleIndex: 10, chipValue: 10000 },
-        { styleIndex: 11, chipValue: 10000 },
-        { styleIndex: 12, chipValue: 10000 },
+        { styleIndex: 1, chipValue: getNumberByUnitSetting(25), showText:25 },
+        { styleIndex: 2, chipValue: getNumberByUnitSetting(50), showText:50 },
+        { styleIndex: 3, chipValue: getNumberByUnitSetting(100), showText:100 },
+        { styleIndex: 4, chipValue: getNumberByUnitSetting(500), showText:500 },
+        { styleIndex: 5, chipValue: getNumberByUnitSetting(1000), showText:1000 },
+        { styleIndex: 6, chipValue: getNumberByUnitSetting(1250), showText:1250 },
+        { styleIndex: 7, chipValue: getNumberByUnitSetting(5000), showText:5000 },
+        { styleIndex: 8, chipValue: getNumberByUnitSetting(10000), showText:10000 }
     ];
 
     const gameClient = GetGameClient();
@@ -286,7 +279,7 @@ const GameView = (props) => {
 
     const getVideoSourceList = (cb) => {
         fetch(
-            "https://ewin.dev.mts.idv.tw/GetVideoSource.aspx?CT=" +
+            "http://ewin.dev.mts.idv.tw/GetVideoSource.aspx?CT=" +
             window.encodeURIComponent(props.CT),
             {
                 method: "GET", // 请求方法// 将 JavaScript 对象转换为 JSON 字符串
@@ -449,7 +442,7 @@ const GameView = (props) => {
             Balance: walletByQ.Balance,
         });
 
-        setCashUnit(Q.cashUnit);
+        setCashUnit(Q.CashUnit);
 
         if (gameSetID === 0) {
             setUserPoint(wallet.Balance);
@@ -468,7 +461,8 @@ const GameView = (props) => {
         }
 
         checkIsCanBetAndCheckGameSet();
-    }, []);
+
+    });
 
     const checkIsCanBetAndCheckGameSet = () => {
         if (queryInfo.current == null || tableInfo.current == null) {
@@ -1172,7 +1166,6 @@ const GameView = (props) => {
                     if (isCanBet) {
                         if (orderDataInfo.current.unConfirmValue <= userPoint) {
                             //checkBetLimit
-
                             if (isConnected) {
                                 //gameClient.
 
@@ -1269,14 +1262,14 @@ const GameView = (props) => {
                                         }
                                     }
                                 } else {
-                                    dispatchOrderData({ type: "cancelConfirmBet" });
+                                    dispatchOrderData({ type: "cancelunConfirmBet" });
                                 }
                             } else {
-                                dispatchOrderData({ type: "cancelConfirmBet" });
+                                dispatchOrderData({ type: "cancelunConfirmBet" });
                                 alertMsg("錯誤", "伺服器斷線", null);
                             }
                         } else {
-                            dispatchOrderData({ type: "cancelConfirmBet" });
+                            dispatchOrderData({ type: "cancelunConfirmBet" });
                             alertMsg("錯誤", "餘額不足", null);
                         }
                     }
@@ -1630,7 +1623,7 @@ const GameView = (props) => {
         }
 
         return retValue;
-    }
+    };
 
     const resize = () => {
         // 设计稿的宽度和高度
@@ -2049,6 +2042,7 @@ const GameView = (props) => {
                                     bottom: "20px",
                                     zIndex: "99999",
                                     width: "200px",
+                                    display: "none"
                                 }}
                                 onClick={() => {
                                     //setIsCanBet(true);
@@ -2062,7 +2056,21 @@ const GameView = (props) => {
                                 測試
                             </button>
 
-     
+                            <button
+                                style={{
+                                    position: "absolute",
+                                    left: "400px",
+                                    bottom: "20px",
+                                    zIndex: "99999",
+                                    width: "200px",
+                                    display: "none"
+                                }}
+                                onClick={() => {
+
+                                }}
+                            >
+                                測試2
+                            </button>
                             <GameHeader
                                 tableNumber={tableNumber}
                                 gameSetID={gameSetID}
@@ -2100,6 +2108,7 @@ const GameView = (props) => {
                                 baccaratType={baccaratType}
                                 handleQuery={handleQuery}
                                 entryRoadMap={entryRoadMap}
+                                cashUnit={queryInfo.current.CashUnit}
                             >
                                 <GameChipsButton
                                     chipsItems={chipsItems}
