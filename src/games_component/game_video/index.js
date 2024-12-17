@@ -211,6 +211,11 @@ const GameVideo = (props) => {
         let ctx;
         let sourceRect;
         let videoTag;
+
+        if(player.current == null){
+            return;
+        }
+
         videoTag = player.current.getVideoElement();
         switch (magnifierType.current) {
             case 0:
@@ -235,15 +240,17 @@ const GameVideo = (props) => {
                 break;
         }
 
-
-
         if (magnifierWorker.current != null) {
     
            if (window || "createImageBitmap" in window) {
               if(videoTag != 0){
-                window.createImageBitmap(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height).then(bitmap => {
-                 magnifierWorker.current.postMessage({ imageBitmap: bitmap, cmd: "process" }, [bitmap]);
-                 })
+                //判斷視頻正在撥放
+                //video.readyState > 2：確認視頻有足夠的資料可供播放。
+                if(videoTag.readyState > 2 && sourceRect.width > 0 && sourceRect.height > 0){
+                    window.createImageBitmap(videoTag, sourceRect.x, sourceRect.y, sourceRect.width, sourceRect.height).then(bitmap => {
+                     magnifierWorker.current.postMessage({ imageBitmap: bitmap, cmd: "process" }, [bitmap]);
+                     })
+                }
               }
             }
         } else {
