@@ -1261,6 +1261,11 @@ const GameView = (props) => {
                     if (queryInfo.current.AllowCancelOrder) {
                             //playSound("OrderCancel");
 
+                            if(orderDataInfo.current.confirmValue == 0){
+                                dispatchOrderData({ type: "clearBet" });
+                                return;
+                            }
+
                             if (!sendCheck.current.isSendBetData) {
                                 sendCheck.current.isSendBetData = true;
 
