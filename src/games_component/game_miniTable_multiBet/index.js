@@ -29,6 +29,7 @@ const MiniTableMultiBet = ({ tableName,
         orderReducer,
         initialOrderData()
     );
+    
 
     const orderDataInfoRef = useRef(orderData);
 

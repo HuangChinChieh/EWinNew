@@ -107,7 +107,7 @@ const GameView = (props) => {
     const [isCanBet, setIsCanBet] = useState(false);
     const [orderData, dispatchOrderData] = useReducer(
         orderReducer,
-        initialOrderData
+        initialOrderData()
     );
 
     const [selChipData, setSelChipData] = useState(null);
