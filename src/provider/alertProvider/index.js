@@ -10,7 +10,7 @@ import "./index.scss";
 const AlertContext = createContext();
 export { AlertContext };
 
-const AlertButton = ({ children }) => {
+const AlertProvider = ({ children }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
@@ -71,4 +71,4 @@ const AlertButton = ({ children }) => {
   );
 };
 
-export default AlertButton;
+export default AlertProvider;

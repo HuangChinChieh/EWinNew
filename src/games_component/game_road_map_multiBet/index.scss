@@ -1,0 +1,27 @@
+.roadMap-baccarat_goodRoad {
+    width: 31.875rem;
+    height: 7.5rem;
+    pointer-events: none;
+    position: relative;
+
+    .roadMap-road1 {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0px;
+        top: 0px;
+        
+        
+        box-sizing: border-box;
+    }
+
+
+    .backImg{
+        background-image: url('../../img/roadmap/roadMap_30_6_30.png');
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100%;
+        background-size: 56.25rem 11.25rem;                
+    }
+
+}

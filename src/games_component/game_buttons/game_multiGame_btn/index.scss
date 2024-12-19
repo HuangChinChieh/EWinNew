@@ -1,0 +1,30 @@
+.game-multiGame-box {
+    >div {
+        margin-left: 1.5625rem;
+        width: 2.0625rem;
+        height: 2.0625rem;
+        cursor: pointer;
+        border: 1px solid #2d2d32;
+        border-radius: 1.0375rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #1a1a21;
+        transition: filter 0.3s ease-out;
+        cursor: pointer;
+
+        &:hover{
+            filter: brightness(1.5);
+        }
+
+        >svg{
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+   
+
+    
+    }
+}
+

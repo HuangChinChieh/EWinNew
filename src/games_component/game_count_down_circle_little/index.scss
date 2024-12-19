@@ -1,0 +1,66 @@
+.countdown-little-box {
+    width: 4rem;
+    height: 2.625rem;
+    pointer-events: none;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+
+    .countdown-little-circle {
+        width: 2rem;
+        height: 2rem;
+        // border: 10px solid rgba(255, 255, 255, 0.1);        
+        margin: auto 0;
+        position: relative;
+
+
+        &:before {
+            content: "";
+            position: absolute;
+            box-sizing: border-box;
+            inset: -0.625rem;
+            border-radius: 50%;
+            clip-path: var(--PathContent);
+            z-index: 2;
+        }
+
+        &.white {
+
+            .countdown-little-circle-back {
+                fill: white;
+            }
+        }
+
+        &.yellow {
+            .countdown-little-circle-back {
+                fill: rgba(255, 232, 148, 1);                
+            }
+        }
+
+        
+    &.red {
+        .countdown-little-circle-back {
+            fill: rgba(255, 68, 68, 1);            
+        }
+    }
+    }
+
+
+
+    &.show {
+        transition: all 1s ease;
+        opacity: 1.0;
+    }
+
+}
+
+.countdown-little-text {
+    margin-left: 0.25rem;
+    color: white;
+    font-size: 1.5rem;
+    letter-spacing: 0.0625rem;
+    line-height: 2.625rem;
+    padding-bottom: 0.25rem;
+    width: 1.875rem;
+}

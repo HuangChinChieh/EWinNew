@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import "./index.scss";
 import RoadMap from "component/road_map";
-import { TipContext } from "component/tips";
+import { TipContext } from "provider/tips";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { FavorsContext } from "provider/GameLobbyProvider";
 

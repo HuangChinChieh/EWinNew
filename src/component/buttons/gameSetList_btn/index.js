@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
 import './index.scss';
 import { GameSetListContext } from 'provider/GameLobbyProvider';
-import { AlertContext } from "component/alert";
+import { AlertContext } from "provider/alertProvider";
 import { useHistory } from "react-router-dom";
 import Tooltip from "component/tooltip";
 
@@ -90,7 +90,7 @@ const GameSetListButton = () => {
 
 
     return (
-        <Tooltip text={"工單列表"}>
+        <Tooltip text={"工單列表"} active={active}>
             <div className='gameSetList-box'>
                 <div className='gameSetList-box-content' onClick={showGameSetList}>
                     <div className={hasNewGameSet ? "gameSetList-box-icon new" : "gameSetList-box-icon"}></div>

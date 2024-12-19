@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef, useEffect, useCallback } from 'react';
 import './index.scss';
-import { AlertContext } from "component/alert";
+import { AlertContext } from "provider/alertProvider";
 import { BaccaratSubscribeContext } from "provider/GameBaccaratProvider";
 import Tooltip from "component/tooltip";
 import { CashUnitContext, BetLimitContext } from "provider/GameLobbyProvider";
@@ -215,10 +215,10 @@ const GameBetLimitsButton = (props) => {
                 <div className='gameBetLimit-box-main' onClick={() => { showBetLimitList() }}>
                     <div className="gameBetLimit-box-icon"></div>
                     <div className={(baccaratType === 2 || baccaratType === 3) ? "gameBetLimit-box-title show-list" : "gameBetLimit-box-title"}>{minMaxObj.MinValue + " - " + minMaxObj.MaxValue}</div>
-                    <Tooltip text={'目前限紅'} />
+                    <Tooltip text={'目前限紅'} active={listActive}/>
                 </div>
                 <div className='gameBetLimit-box-icon-arrow' onClick={() => { setTipActive(true); }}>
-                    <Tooltip text={'限紅詳情'} />
+                    <Tooltip text={'限紅詳情'} active={tipActive}/>
                 </div>
             </div>
 

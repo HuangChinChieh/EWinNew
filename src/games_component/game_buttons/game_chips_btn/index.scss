@@ -58,7 +58,7 @@
                 /* 隱藏 Chrome 和 Safari 的滾動條 */
             }
 
-            &:hover {
+            &.chip-expand {
                 transform: translateX(-8.1rem);
                 width: 48rem;
                 padding-left: 3rem;
@@ -71,7 +71,7 @@
                     display: flex;
                     width: 3.25rem;
                     opacity: 1.0;
-
+                    pointer-events: initial;
                 }
 
                 /* 隱藏 Chrome 和 Safari 的滾動條 */
@@ -89,7 +89,7 @@
                 background-color: #000000;
                 justify-content: center;
                 align-items: center;
-
+                pointer-events: none;
 
                 button {
                     height: 5rem;
@@ -138,7 +138,7 @@
                 mask: linear-gradient(to right, transparent, black 5%),
                     linear-gradient(to left, transparent, black 5%);
 
-                padding-left:1rem;
+                padding-left:1.5rem;
                 padding-right:6.5rem;
                 mask-composite: intersect;
                 overflow-x: auto;
@@ -207,7 +207,7 @@
 
                         >div {
                             position: absolute;
-                            top: 1rem;
+                            top: 0.9rem;
                             left: 50%;
                             transform: translateX(-50%);
                             /* 字体大小，可以根据需要调整 */

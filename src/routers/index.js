@@ -13,12 +13,12 @@ import Gamelobby from "view/game_lobby";
 import Gamefavorite from "view/game_favorite";
 import GameView from "view/game_views";
 import Footer from "component/footer";
-import TipProvider from "component/tips";
-import VideoBox from "component/video";
+import TipProvider from "provider/tips";
+import ToolTipProvider from "provider/tooltipProvider"
 import GameLobbyProvider from "provider/GameLobbyProvider";
 import GameBaccaratProvider from "provider/GameBaccaratProvider";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
-import AlertButton from "component/alert";
+import AlertProvider from "provider/alertProvider";
 
 import "./index.scss";
 import { toNumber } from "lodash";
@@ -53,7 +53,7 @@ const Main = () => {
                 const postData = {
                     Token: "1_0UE5XQQ_ca95cc8bfb4e442118d60c5b92a7af2e",
                     //LoginAccount: 'ddt1',
-                    LoginAccount: "kevin0517",
+                    LoginAccount: "ddt1",
                     LoginPassword: "1234",
                     CompanyCode: "demo",
                     UserIP: "",
@@ -191,11 +191,13 @@ const Main = () => {
 export default function Routers() {
     return (
         <Router>
-            <AlertButton>
+            <AlertProvider>
                 <TipProvider>
-                    <Main></Main>
+                    <ToolTipProvider>
+                        <Main></Main>
+                    </ToolTipProvider>                    
                 </TipProvider>
-            </AlertButton>
+            </AlertProvider>
         </Router>
     );
 }

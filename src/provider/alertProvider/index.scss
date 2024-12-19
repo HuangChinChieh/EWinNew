@@ -26,12 +26,12 @@
 }
 
 .modal {
-  background: rgb(21 21 23 / 90%);
+  background: rgba(21, 21, 23, 1.0);
   width: 25rem;
   padding: 1.25rem;
   border-radius: 0.3125rem;
-  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.3);
-  border: 1px solid rgb(122 122 122 / 40%);
+  box-shadow: 0 0 0.625rem rgb(87 87 87 / 30%);
+  border: 2px solid rgba(122, 122, 122, 0.4);
   text-align: center;
   color: #FFFFFF;
   animation: initShow 0.3s ease-out;

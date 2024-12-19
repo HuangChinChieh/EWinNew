@@ -2,16 +2,11 @@ import { useState, useRef, useEffect, useContext } from "react";
 import ReactDOM from 'react-dom';
 import "./index.scss";
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
-import { AlertContext } from "component/alert";
-import alertMsg from "component/alert";
+import { AlertContext } from "provider/alertProvider";
+import alertMsg from "provider/alertProvider";
 import ChangeTable from "component/changeTable";
-import {
-    FavorsContext,
-    LobbyPersonalContext,
-} from "provider/GameLobbyProvider";
-import RoadMap from "component/road_map";
-import { Link } from "react-router-dom";
-import { on } from "stream";
+
+
 
 const GameControlButton = (props) => {
     const lobbyClient = EWinGameLobbyClient.getInstance();

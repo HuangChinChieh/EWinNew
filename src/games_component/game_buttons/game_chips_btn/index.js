@@ -3,8 +3,6 @@ import './index.scss';
 import { click } from '@testing-library/user-event/dist/click';
 
 const GameChipsButton = (props) => {
-
-
     return (
         <div className={'game-chips-area ' + (props.isCanBet && 'can-bet')}>
             {/* {(!props.onGameSetAction && props.isCanBet) && <span onClick={handleConfirm} className='confirm'>確認</span>} */}
@@ -15,8 +13,6 @@ const GameChipsButton = (props) => {
         </div>
     )
 };
-
-
 
 const GameChipItems = ({ chipsItems, selIndex, onChipSelect }) => {
     //const [isMouseOnChipBox, setIsMouseOnChipBox] = useState(false);
@@ -74,12 +70,31 @@ const GameChipItems = ({ chipsItems, selIndex, onChipSelect }) => {
         }
     };
 
-    const resetScroll = ()=>{
-        return;
-        setTimeout(() => {
-            if (movingIndex.current > 3) {
+    const chipExpandEnter = (event)=>{
+        if(chipsItems.length > 8){
+            const targetDom = event.currentTarget;
+            targetDom.classList.add("chip-expand");
+        }
+       
+    };
+
+    const chipExpandLeave = (event)=>{
+        const targetDom = event.currentTarget;
+        targetDom.classList.remove("chip-expand");
+    };
+
+
+    const chipClick = useCallback((selData) => {
+        //判斷要往右還是往左移動多少籌碼
+        //選擇到的籌碼要移至中間(第五顆)
+
+        let index = selData.index;
+        movingIndex.current = index;
+
+        if(chipsItems.length > 8){
+            if (index > 4) {
                 chipsItemDivRef.current.scrollTo({
-                    left: (movingIndex.current - 3) * getEachChipRealWidth(), // 滾動的目標位置
+                    left: (index - 4) * getEachChipRealWidth(), // 滾動的目標位置
                     behavior: 'smooth' // 平滑滾動
                 });
             } else {
@@ -88,40 +103,21 @@ const GameChipItems = ({ chipsItems, selIndex, onChipSelect }) => {
                     behavior: 'smooth' // 平滑滾動
                 });
             }
-        }, 300);
-    }
-
-    const chipClick = useCallback((selData) => {
-        //判斷要往右還是往左移動多少籌碼
-        //選擇到的籌碼要移至中間(第五顆)
-
-        let index = selData.index;
-        movingIndex.current = index;
-        if (index > 4) {
-            chipsItemDivRef.current.scrollTo({
-                left: (index - 4) * getEachChipRealWidth(), // 滾動的目標位置
-                behavior: 'smooth' // 平滑滾動
-            });
-        } else {
-            chipsItemDivRef.current.scrollTo({
-                left: 0, // 滾動的目標位置
-                behavior: 'smooth' // 平滑滾動
-            });
         }
-
+       
         onChipSelect(selData);
     }, [onChipSelect])
 
     return (
         <div className="game-chips-box">
-            <div className='game-chips-expand-box'>
+            <div className='game-chips-expand-box' onMouseEnter={(event)=>{chipExpandEnter(event);}} onMouseLeave={(event)=>{chipExpandLeave(event);}}>
                 <div className={`game-chips-expand-box-left ${isShowLeftArrow ? 'show' : ''}`} onClick={() => { chipsDivMove(1, 3); }}>
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" role="img" viewBox="0 0 24 24" width="24" height="24" data-icon="ChevronLeftStandard" aria-hidden="true"><path d="M8.41409 12L15.707 19.2928L14.2928 20.7071L6.29277 12.7071C6.10523 12.5195 5.99988 12.2652 5.99988 12C5.99988 11.7347 6.10523 11.4804 6.29277 11.2928L14.2928 3.29285L15.707 4.70706L8.41409 12Z" fill="currentColor"></path>
                         </svg>
                     </button>
                 </div>
-                <div ref={chipsItemDivRef} className='game-chips-box-middle' onScroll={() => { checkShowArrow(); }} onMouseOver={() => { setTimeout(() => { checkShowArrow(); }, 300); }} onMouseLeave={()=>{resetScroll();}}>
+                <div ref={chipsItemDivRef} className='game-chips-box-middle' onScroll={() => { checkShowArrow(); }} onMouseOver={() => { setTimeout(() => { checkShowArrow(); }, 300); }}>
                     {
                         chipsItems.map((item, index) => (
                             <GameChipItem key={item.styleIndex} item={item} index={index} chipClick={chipClick} isAct={(selIndex === index)}></GameChipItem>
@@ -164,14 +160,10 @@ const GameChipItem = ({ item, index, chipClick, isAct }) => {
         <div className={`game-chip chips-${item.styleIndex} ${isAct ? 'act' : ''}  ${isMoving ? 'chip-move' : ''} `}
             onClick={(event) => (onChipClick(event, item, index))}>
             <div className='game-chip-box'>
-                <div>{item.chipValue}</div>
+                <div>{item.showText}</div>
             </div>
         </div>
     );
 };
-
-
-
-
 
 export default (GameChipsButton);

@@ -6,7 +6,7 @@
 } from "react";
 import ReactDOM from 'react-dom';
 import "./index.scss";
-import { AlertContext } from "component/alert";
+import { AlertContext } from "provider/alertProvider";
 import BigNumber from "bignumber.js";
 
 const AddTip = (props) => {

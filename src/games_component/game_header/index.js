@@ -9,6 +9,7 @@ import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
 import GameSetListButton from 'component/buttons/gameSetList_btn';
 import GameBetLimitsButton from 'games_component/game_buttons/game_betLimits_btn';
+import GameMultiButton from 'games_component/game_buttons/game_multiGame_btn';
 import { useHistory } from 'react-router-dom';
 import GameIntro from "component/alertPop/popExample/gameIntro";
 import Tooltip from "component/tooltip";
@@ -27,8 +28,7 @@ const GameHeader = (props) => {
     };
     const history = useHistory();
 
-    const handleAddFavor = () => {
-        debugger;
+    const handleAddFavor = () => {        
         const lobbyClient = EWinGameLobbyClient.getInstance();
         const index = favors.indexOf(tableNumber);
         const tempFavors = [...favors];
@@ -87,6 +87,7 @@ const GameHeader = (props) => {
                 </div>
                
                 <div className="toolbar">
+                 <GameMultiButton />
                     <FullscreenButton />
                     <MuteButton />
                    <BettingHistory />

@@ -44,7 +44,7 @@ class GameRoadMap extends Component {
       height: 20
     }, {
       el: this.roadMap3.current,
-      colMax: 54,
+      colMax: 18,
       rowMax: 6,
       x: 0.5,
       y: 0,
@@ -52,7 +52,7 @@ class GameRoadMap extends Component {
       height: 10 //主路單不做顯示
     }, {
       el: this.roadMap4.current,
-      colMax: 54,
+      colMax: 18,
       rowMax: 6,
       x: 0.5,
       y: 0,
@@ -60,8 +60,8 @@ class GameRoadMap extends Component {
       height: 10 //主路單不做顯示
     }, {
       el: this.roadMap5.current,
-      colMax: 27,
-      rowMax: 3,
+      colMax: 18,
+      rowMax: 6,
       x: 0.5,
       y: 0,
       width: 10,

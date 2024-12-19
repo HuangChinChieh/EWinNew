@@ -15,7 +15,6 @@ import {
     CashUnitContext,
     UserInfoContext,
     GameSetListContext,
-    BetLimitContext,
     RefreshUserInfoContext
 } from "../../provider/GameLobbyProvider";
 import { BaccaratSubscribeContext } from "../../provider/GameBaccaratProvider";
@@ -28,16 +27,17 @@ import GameBettingArea from "games_component/game_betting_area_new";
 import GameRoadMap from "games_component/game_road_map";
 import GameVideo from "games_component/game_video";
 import GameHeader from "games_component/game_header";
+
 import CardResult from "games_component/game_card_result";
 import { orderReducer, initialOrderData } from "./orderData";
-import { AlertContext } from "component/alert";
+import { AlertContext } from "provider/alertProvider";
 import { moveChipAnimation } from "games_component/animation/betAnimation/baccaratBasicAnimation";
 import "games_component/animation/betAnimation/orderAnimation.scss";
 import BigNumber from "bignumber.js";
 import MsgMaskResult from "component/messagemask";
 
 const BaccaratTableNotifyContext = createContext();
-
+const BaccaratGameContext = createContext();
 
 const GameView = (props) => {
 
@@ -88,8 +88,8 @@ const GameView = (props) => {
     });
     const [baccaratType, setBaccaratType] = useState(0); //0=臨時路單/1=電投桌/2=快速電投桌/3=純網投桌
     const [useBetLimit, setUseBetLimit] = useState({
-        BetLimitID:-1,
-        BetLimitData:-1,
+        BetLimitID: -1,
+        BetLimitData: -1,
     });
 
     //電投相關資訊
@@ -100,7 +100,8 @@ const GameView = (props) => {
     const { gameSetList } = useContext(GameSetListContext);
     //const { getBetLimitMaxMin } = useContext(BetLimitContext);
 
-    const orderDataInfo = useRef(null);
+    const orderDataInfoRef = useRef(null);
+    const selChipRef = useRef(null);
 
     //投注相關
     const [isCanBet, setIsCanBet] = useState(false);
@@ -121,16 +122,16 @@ const GameView = (props) => {
     const [vpDomain, setVpDomain] = useState("");
     const [userPoint, setUserPoint] = useState(0);
     //0=std/1=HD
-    
+
     const chipsItems = [
-        { styleIndex: 1, chipValue: getNumberByUnitSetting(25), showText:25 },
-        { styleIndex: 2, chipValue: getNumberByUnitSetting(50), showText:50 },
-        { styleIndex: 3, chipValue: getNumberByUnitSetting(100), showText:100 },
-        { styleIndex: 4, chipValue: getNumberByUnitSetting(500), showText:500 },
-        { styleIndex: 5, chipValue: getNumberByUnitSetting(1000), showText:1000 },
-        { styleIndex: 6, chipValue: getNumberByUnitSetting(1250), showText:1250 },
-        { styleIndex: 7, chipValue: getNumberByUnitSetting(5000), showText:5000 },
-        { styleIndex: 8, chipValue: getNumberByUnitSetting(10000), showText:10000 }
+        { styleIndex: 1, chipValue: getNumberByUnitSetting(25), showText: 25 },
+        { styleIndex: 2, chipValue: getNumberByUnitSetting(50), showText: 50 },
+        { styleIndex: 3, chipValue: getNumberByUnitSetting(100), showText: 100 },
+        { styleIndex: 4, chipValue: getNumberByUnitSetting(500), showText: 500 },
+        { styleIndex: 5, chipValue: getNumberByUnitSetting(1000), showText: 1000 },
+        { styleIndex: 6, chipValue: getNumberByUnitSetting(1250), showText: 1250 },
+        { styleIndex: 7, chipValue: getNumberByUnitSetting(5000), showText: 5000 },
+        { styleIndex: 8, chipValue: getNumberByUnitSetting(10000), showText: 10000 }
     ];
 
     const gameClient = GetGameClient();
@@ -138,12 +139,12 @@ const GameView = (props) => {
     //#region 限紅相關事件
 
     const updateUseBetLimit = (betLimitID, betLimitData) => {
-       
+
         setUseBetLimit((prevObj) => {
             let isEqual = false;
             let newObj = {
-                BetLimitID:betLimitID,
-                BetLimitData:betLimitData
+                BetLimitID: betLimitID,
+                BetLimitData: betLimitData
             };
             isEqual = deepEqual(prevObj, newObj);
 
@@ -156,12 +157,12 @@ const GameView = (props) => {
     };
 
     const updateUseBetLimitData = (betLimitData) => {
-       
+
         setUseBetLimit((prevObj) => {
             let isEqual = false;
             let newObj = {
-                BetLimitID:prevObj.BetLimitID,
-                BetLimitData:betLimitData
+                BetLimitID: prevObj.BetLimitID,
+                BetLimitData: betLimitData
             };
             isEqual = deepEqual(prevObj, newObj);
 
@@ -172,24 +173,6 @@ const GameView = (props) => {
             }
         });
     };
-
-    const updateUseBetLimitID = (betLimitID) => {       
-        setUseBetLimit((prevObj) => {
-            let isEqual = false;
-            let newObj = {
-                BetLimitID:betLimitID,
-                BetLimitData:prevObj.BetLimitData
-            };
-            isEqual = newObj.BetLimitID ===  prevObj.BetLimitID;
-
-            if (isEqual) {
-                return prevObj;
-            } else {
-                return newObj;
-            }
-        });
-    };
-
 
     const setBetLimit = (tableNumber, gameSetID, selBetLimit, cb) => {
         if (selBetLimit && selBetLimit.BetLimitID !== "") {
@@ -235,11 +218,11 @@ const GameView = (props) => {
         setBetLimit(tableNumber, gameSetID, selBetLimit, (success) => {
             if (success) {
                 updateUseBetLimit(selBetLimit.BetLimitID, {
-                    Banker:selBetLimit.Banker,
-                    BetBaseBanker:selBetLimit.BetBaseBanker,
-                    Pair:selBetLimit.Pair,
-                    Player:selBetLimit.Player,
-                    Tie:selBetLimit.Tie,
+                    Banker: selBetLimit.Banker,
+                    BetBaseBanker: selBetLimit.BetBaseBanker,
+                    Pair: selBetLimit.Pair,
+                    Player: selBetLimit.Player,
+                    Tie: selBetLimit.Tie,
                 });
 
                 if (cb) {
@@ -1004,7 +987,7 @@ const GameView = (props) => {
                                 tableNumber,
                                 tableInfo.current.shoeNumber,
                                 tableInfo.current.roundNumber,
-                                orderDataInfo.current.orderSequence + 1,
+                                orderDataInfoRef.current.orderSequence + 1,
                                 v,
                                 (s, o) => {
                                     if (s) {
@@ -1112,7 +1095,7 @@ const GameView = (props) => {
                 case "addBet":
                     // args => beforeSetChipCb, finishCb
                     if (isCanBet) {
-                        if (orderDataInfo.current.unConfirmValue + selChipData.chipValue <= userPoint) {
+                        if (orderDataInfoRef.current.unConfirmValue + selChipData.chipValue <= userPoint) {
                             if ("areaType" in args) {
                                 moveChipAnimation(args.areaType, () => {
                                     dispatchOrderData({
@@ -1137,9 +1120,9 @@ const GameView = (props) => {
                 case "doubleBet":
                     const promiseArray = [];
                     if (isCanBet) {
-                        if (orderDataInfo.current.unConfirmValue + orderDataInfo.current.totalValue <= userPoint) {
+                        if (orderDataInfoRef.current.unConfirmValue + orderDataInfoRef.current.totalValue <= userPoint) {
                             for (let areaType in orderData) {
-                                if (orderDataInfo.current[areaType].totalValue > 0) {
+                                if (orderDataInfoRef.current[areaType].totalValue > 0) {
                                     promiseArray.push(
                                         new Promise((resolve, reject) => {
                                             moveChipAnimation(areaType, () => {
@@ -1164,12 +1147,12 @@ const GameView = (props) => {
                     break;
                 case "confirmBet":
                     if (isCanBet) {
-                        if (orderDataInfo.current.unConfirmValue <= userPoint) {
+                        if (orderDataInfoRef.current.unConfirmValue <= userPoint) {
                             //checkBetLimit
                             if (isConnected) {
                                 //gameClient.
 
-                                if (checkOrderByBetLimit(orderDataInfo.current, tableInfo.current.BetLimit[0])) {
+                                if (checkOrderByBetLimit(orderDataInfoRef.current, tableInfo.current.BetLimit[0])) {
                                     //playSound("OrderAccept");
                                     if (!sendCheck.current.isSendBetData) {
                                         sendCheck.current.isSendBetData = true;
@@ -1180,12 +1163,12 @@ const GameView = (props) => {
                                                 tableNumber,
                                                 tableInfo.current.shoeNumber,
                                                 tableInfo.current.roundNumber,
-                                                orderDataInfo.current.orderSequence + 1,
-                                                orderDataInfo.current.Banker.unConfirmValue,
-                                                orderDataInfo.current.Player.unConfirmValue,
-                                                orderDataInfo.current.Tie.unConfirmValue,
-                                                orderDataInfo.current.BankerPair.unConfirmValue,
-                                                orderDataInfo.current.PlayerPair.unConfirmValue,
+                                                orderDataInfoRef.current.orderSequence + 1,
+                                                orderDataInfoRef.current.Banker.unConfirmValue,
+                                                orderDataInfoRef.current.Player.unConfirmValue,
+                                                orderDataInfoRef.current.Tie.unConfirmValue,
+                                                orderDataInfoRef.current.BankerPair.unConfirmValue,
+                                                orderDataInfoRef.current.PlayerPair.unConfirmValue,
                                                 (s, o) => {
                                                     sendCheck.current.isSendBetData = false;
 
@@ -1209,8 +1192,8 @@ const GameView = (props) => {
                                                     }
                                                 });
                                         } else if (tableInfo.current.BaccaratType === 2) {
-                                            gameClient.AddBetType1(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfo.current.orderSequence + 1
-                                                , orderDataInfo.current.Banker.unConfirmValue, orderDataInfo.current.Player.unConfirmValue, orderDataInfo.current.Tie.unConfirmValue, orderDataInfo.current.BankerPair.unConfirmValue, orderDataInfo.current.PlayerPair.unConfirmValue
+                                            gameClient.AddBetType1(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfoRef.current.orderSequence + 1
+                                                , orderDataInfoRef.current.Banker.unConfirmValue, orderDataInfoRef.current.Player.unConfirmValue, orderDataInfoRef.current.Tie.unConfirmValue, orderDataInfoRef.current.BankerPair.unConfirmValue, orderDataInfoRef.current.PlayerPair.unConfirmValue
                                                 , (s, o) => {
                                                     sendCheck.current.isSendBetData = false;
 
@@ -1234,8 +1217,8 @@ const GameView = (props) => {
                                                     }
                                                 });
                                         } else if (tableInfo.current.BaccaratType === 3) {
-                                            gameClient.AddBetType2(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfo.current.orderSequence + 1
-                                                , orderDataInfo.current.Banker.unConfirmValue, orderDataInfo.current.Player.unConfirmValue, orderDataInfo.current.Tie.unConfirmValue, orderDataInfo.current.BankerPair.unConfirmValue, orderDataInfo.current.PlayerPair.unConfirmValue
+                                            gameClient.AddBetType2(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfoRef.current.orderSequence + 1
+                                                , orderDataInfoRef.current.Banker.unConfirmValue, orderDataInfoRef.current.Player.unConfirmValue, orderDataInfoRef.current.Tie.unConfirmValue, orderDataInfoRef.current.BankerPair.unConfirmValue, orderDataInfoRef.current.PlayerPair.unConfirmValue
                                                 , (s, o) => {
                                                     sendCheck.current.isSendBetData = false;
 
@@ -1282,16 +1265,13 @@ const GameView = (props) => {
                             if (!sendCheck.current.isSendBetData) {
                                 sendCheck.current.isSendBetData = true;
 
-                                if (
-                                    tableInfo.current.BaccaratType === 0 ||
-                                    tableInfo.current.BaccaratType === 1
-                                ) {
+                                if (tableInfo.current.BaccaratType === 0 || tableInfo.current.BaccaratType === 1) {
                                     gameClient.ClearBetType0(
                                         gameSetID,
                                         tableNumber,
                                         tableInfo.current.shoeNumber,
                                         tableInfo.current.roundNumber,
-                                        orderDataInfo.current.orderSequence + 1,
+                                        orderDataInfoRef.current.orderSequence + 1,
                                         (s, o) => {
                                             sendCheck.current.isSendBetData = false;
 
@@ -1318,7 +1298,7 @@ const GameView = (props) => {
                                         tableNumber,
                                         tableInfo.current.shoeNumber,
                                         tableInfo.current.roundNumber,
-                                        orderDataInfo.current.orderSequence + 1,
+                                        orderDataInfoRef.current.orderSequence + 1,
                                         (s, o) => {
                                             sendCheck.current.isSendBetData = false;
                                             if (s) {
@@ -1344,7 +1324,7 @@ const GameView = (props) => {
                                         tableNumber,
                                         tableInfo.current.shoeNumber,
                                         tableInfo.current.roundNumber,
-                                        orderDataInfo.current.orderSequence + 1,
+                                        orderDataInfoRef.current.orderSequence + 1,
                                         (s, o) => {
                                             sendCheck.current.isSendBetData = false;
                                             if (s) {
@@ -1378,7 +1358,7 @@ const GameView = (props) => {
                     break;
             }
         },
-        [selChipData, orderDataInfo, isCanBet]
+        [selChipData, orderDataInfoRef, isCanBet]
     );
 
     const checkOrderByBetLimit = (_orderData, _betLimit) => {
@@ -1527,7 +1507,7 @@ const GameView = (props) => {
 
     const showResult = () => {
         //playSound("GetResult");
-        if (orderDataInfo.current.orderSequence !== 0) {
+        if (orderDataInfoRef.current.orderSequence !== 0) {
             refreshQueryGame(); //有投注，確認是否贏錢，與更新贏錢相關資訊
         }
 
@@ -1601,7 +1581,7 @@ const GameView = (props) => {
         gameClient.LeaveRoadMap(gameSetID, tableNumber, (s, o) => {
             // 無論成功失敗
 
-            window.location.href = window.location.host;
+            history.replace("");
         });
     };
 
@@ -1679,10 +1659,16 @@ const GameView = (props) => {
         return countdownInfo.current;
     }, []);
 
+    const getSelChipData = useCallback(() => {
+        return selChipRef.current;
+    }, []);
+
     const getTableInfo = useCallback(() => {
         return tableInfo.current;
     }, []);
 
+
+    
 
     useEffect(() => {
         //初次載入，撈取桌台資料
@@ -1778,7 +1764,7 @@ const GameView = (props) => {
                             }
                         }
 
-                        if (directSetBetLimit !== null) {                                                        
+                        if (directSetBetLimit !== null) {
                             setBetLimit(
                                 tableNumber,
                                 gameSetID,
@@ -1786,11 +1772,11 @@ const GameView = (props) => {
                                 (success) => {
                                     if (success) {
                                         updateUseBetLimit(directSetBetLimit.BetLimitID, {
-                                            Banker:directSetBetLimit.Banker,
-                                            BetBaseBanker:directSetBetLimit.BetBaseBanker,
-                                            Pair:directSetBetLimit.Pair,
-                                            Player:directSetBetLimit.Player,
-                                            Tie:directSetBetLimit.Tie,
+                                            Banker: directSetBetLimit.Banker,
+                                            BetBaseBanker: directSetBetLimit.BetBaseBanker,
+                                            Pair: directSetBetLimit.Pair,
+                                            Player: directSetBetLimit.Player,
+                                            Tie: directSetBetLimit.Tie,
                                         });
                                         resolve({ name: "SetBetLimit", value: directSetBetLimit });
                                     } else {
@@ -1991,6 +1977,13 @@ const GameView = (props) => {
         };
     }, [tableNumber, gameSetID]);
 
+    useEffect(()=>{
+        if (gameSetID === 0) {
+            setUserPoint(wallet.Balance);
+        } 
+    },[wallet, gameSetID])
+
+
     useEffect(() => {
         cbRef.current.handleBet = handleBet;
         cbRef.current.handleGameSetCmd = handleGameSetCmd;
@@ -1998,8 +1991,13 @@ const GameView = (props) => {
     }, [handleBet, handleGameSetCmd, handleQuery]);
 
     useEffect(() => {
-        orderDataInfo.current = orderData;
+        orderDataInfoRef.current = orderData;       
     }, [orderData]);
+
+    useEffect(() => {
+        selChipRef.current = selChipData;       
+    }, [selChipData]);
+
 
     // useEffect(() => {
     //   console.log("vpDomain" +  "=" + vpDomain);
@@ -2024,110 +2022,112 @@ const GameView = (props) => {
 
     return (
         <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
-            <div className="game-view-wrap">
-                {
-                    /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
-              <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
-              <GameChat />
-              <GameFooterArea />
-              <GameBettingArea isCanBet={isCanBet} /> 
-              */
-                    tableInfo.current === null ? (
-                        <div></div>
-                    ) : (
-                        <div className="game-view-box">
-                            <button
-                                style={{
-                                    position: "absolute",
-                                    bottom: "20px",
-                                    zIndex: "99999",
-                                    width: "200px",
-                                    display: "none"
-                                }}
-                                onClick={() => {
-                                    //setIsCanBet(true);
-                                    //handleBet("addBet", { areaType: "Banker" }, null)
+            <BaccaratGameContext.Provider value={{ getSelChipData, gameClient }}>
+                <div className="game-view-wrap">
+                    {
+                        /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
+                  <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
+                  <GameChat />
+                  <GameFooterArea />
+                  <GameBettingArea isCanBet={isCanBet} /> 
+                  */
+                        tableInfo.current === null ? (
+                            <div></div>
+                        ) : (
+                            <div className="game-view-box">
+                                <button
+                                    style={{
+                                        position: "absolute",
+                                        bottom: "20px",
+                                        zIndex: "99999",
+                                        width: "200px",
+                                        display: "none"
+                                    }}
+                                    onClick={() => {
+                                        //setIsCanBet(true);
+                                        //handleBet("addBet", { areaType: "Banker" }, null)
 
-                                    //window.location.reload();
+                                        //window.location.reload();
 
 
-                                }}
-                            >
-                                測試
-                            </button>
+                                    }}
+                                >
+                                    測試
+                                </button>
 
-                            <button
-                                style={{
-                                    position: "absolute",
-                                    left: "400px",
-                                    bottom: "20px",
-                                    zIndex: "99999",
-                                    width: "200px",
-                                    display: "none"
-                                }}
-                                onClick={() => {
+                                <button
+                                    style={{
+                                        position: "absolute",
+                                        left: "400px",
+                                        bottom: "20px",
+                                        zIndex: "99999",
+                                        width: "200px",
+                                        display: "none"
+                                    }}
+                                    onClick={() => {
 
-                                }}
-                            >
-                                測試2
-                            </button>
-                            <GameHeader
-                                tableNumber={tableNumber}
-                                gameSetID={gameSetID}
-                                currencyType={props.CurrencyType}
-                                useBetLimit={useBetLimit}
-                                baccaratType={baccaratType}
-                                setBetLimitBySel={setBetLimitBySel}
-                            ></GameHeader>
-                            <CountdownCircle
-                                isCanBet={isCanBet}
-                                getCountdownInfo={getCountdownInfo}
-                                setIsCanBet={setIsCanBet}
-                            ></CountdownCircle>
-                            <GameVideo
-                                CT={props.CT}
-                                vpDomain={vpDomain}
-                                tableNumber={tableNumber}
-                                streamName={streamName}
-                            ></GameVideo>
-                            <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
-                            <GameBettingArea
-                                isCanBet={isCanBet}
-                                orderData={orderData}
-                                handleBet={handleBet}
-                                ref={betAreaControl}
-                            ></GameBettingArea>
-                            <GameFooterArea
-                                chipItems={chipsItems}
-                                totalBetValue={orderData.totalValue}
-                                roadMapNumber={tableNumber}
-                                gameSetID={gameSetID}
-                                gameClient={gameClient}
-                                orderData={orderData}
-                                getTableInfo={getTableInfo}
-                                baccaratType={baccaratType}
-                                handleQuery={handleQuery}
-                                entryRoadMap={entryRoadMap}
-                                cashUnit={queryInfo.current.CashUnit}
-                            >
-                                <GameChipsButton
-                                    chipsItems={chipsItems}
+                                    }}
+                                >
+                                    測試2
+                                </button>
+                                <GameHeader
+                                    tableNumber={tableNumber}
+                                    gameSetID={gameSetID}
+                                    currencyType={props.CurrencyType}
+                                    useBetLimit={useBetLimit}
+                                    baccaratType={baccaratType}
+                                    setBetLimitBySel={setBetLimitBySel}
+                                ></GameHeader>
+                                <CountdownCircle
                                     isCanBet={isCanBet}
-                                    selChipData={selChipData}
-                                    setSelChipData={setSelChipData}
+                                    getCountdownInfo={getCountdownInfo}
+                                    setIsCanBet={setIsCanBet}
+                                ></CountdownCircle>
+                                <GameVideo
+                                    CT={props.CT}
+                                    vpDomain={vpDomain}
+                                    tableNumber={tableNumber}
+                                    streamName={streamName}
+                                ></GameVideo>
+                                <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
+                                <GameBettingArea
+                                    isCanBet={isCanBet}
                                     orderData={orderData}
                                     handleBet={handleBet}
-                                ></GameChipsButton>
-                            </GameFooterArea>
-                        </div>
-                    )
-                }
-                <CardResult ref={cardResultControl}></CardResult>
-                <MsgMaskResult ref={msgMaskResultControl}></MsgMaskResult>
-            </div>
+                                    ref={betAreaControl}
+                                ></GameBettingArea>
+                                <GameFooterArea
+                                    chipItems={chipsItems}
+                                    totalBetValue={orderData.totalValue}
+                                    roadMapNumber={tableNumber}
+                                    gameSetID={gameSetID}
+                                    gameClient={gameClient}
+                                    orderData={orderData}
+                                    getTableInfo={getTableInfo}
+                                    baccaratType={baccaratType}
+                                    handleQuery={handleQuery}
+                                    entryRoadMap={entryRoadMap}
+                                    cashUnit={queryInfo.current.CashUnit}
+                                >
+                                    <GameChipsButton
+                                        chipsItems={chipsItems}
+                                        isCanBet={isCanBet}
+                                        selChipData={selChipData}
+                                        setSelChipData={setSelChipData}
+                                        orderData={orderData}
+                                        handleBet={handleBet}
+                                    ></GameChipsButton>
+                                </GameFooterArea>
+                            </div>
+                        )
+                    }
+                    <CardResult ref={cardResultControl}></CardResult>
+                    <MsgMaskResult ref={msgMaskResultControl}></MsgMaskResult>
+                </div>
+            </BaccaratGameContext.Provider>
         </BaccaratTableNotifyContext.Provider>
     );
 };
 
 export default GameView;
-export { BaccaratTableNotifyContext };
+export { BaccaratTableNotifyContext, BaccaratGameContext };
