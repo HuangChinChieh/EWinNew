@@ -8,6 +8,7 @@ import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
 import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
 import GameSetListButton from 'component/buttons/gameSetList_btn';
+import ChannelLineButton from 'component/buttons/channelLine_btn';
 import GameBetLimitsButton from 'games_component/game_buttons/game_betLimits_btn';
 import GameMultiButton from 'games_component/game_buttons/game_multiGame_btn';
 import { useHistory } from 'react-router-dom';
@@ -82,6 +83,7 @@ const GameHeader = (props) => {
                             </span>
                         </span>
                         <GameSetListButton></GameSetListButton>
+                        <ChannelLineButton></ChannelLineButton>
                         <GameBetLimitsButton baccaratType={baccaratType} tableNumber={tableNumber} currencyType={currencyType} gameSetID={gameSetID} useBetLimit={useBetLimit} setBetLimitBySel={setBetLimitBySel}></GameBetLimitsButton>
                     </div>
                 </div>

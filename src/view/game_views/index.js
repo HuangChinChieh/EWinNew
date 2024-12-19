@@ -54,7 +54,7 @@ const GameView = (props) => {
     });
 
     const history = useHistory();
-    const { AddSubscribe, RemoveSubscribe, GetGameClient, isConnected } =
+    const { AddSubscribe, RemoveSubscribe, GetGameClient } =
         useContext(BaccaratSubscribeContext);
     const { wallet, updateWallet } = useContext(WalletContext);
     const tableNotify = useRef(null);
@@ -893,7 +893,6 @@ const GameView = (props) => {
         if (roundInfoArray.length > 0) {
             switch (action) {
                 case "setGameSetCmd":
-                    if (isConnected) {
                         if ("gameCmd" in args) {
                             gameClient.SetGameSetCmd(
                                 gameSetID,
@@ -925,12 +924,8 @@ const GameView = (props) => {
                                 }
                             );
                         }
-                    } else {
-                        alertMsg("錯誤", "伺服器斷線", null);
-                    }
                     break;
                 case "clearGameSetCmd":
-                    if (isConnected) {
                         gameClient.ClearGameSetCmd(
                             gameSetID,
                             tableNumber,
@@ -959,9 +954,6 @@ const GameView = (props) => {
                                 }
                             }
                         );
-                    } else {
-                        alertMsg("錯誤", "伺服器斷線", null);
-                    }
                     break;
                 default:
                     break;
@@ -972,7 +964,6 @@ const GameView = (props) => {
     const handleAddTips = useCallback((action, args, cb) => {
         switch (action) {
             case "addTips":
-                if (isConnected) {
                     if ("tipsValue" in args) {
                         let unitData = getDisplayUnit();
                         let v;
@@ -1014,9 +1005,6 @@ const GameView = (props) => {
                             );
                         });
                     }
-                } else {
-                    alertMsg("錯誤", "伺服器斷線", null);
-                }
                 break;
             default:
                 break;
@@ -1149,7 +1137,6 @@ const GameView = (props) => {
                     if (isCanBet) {
                         if (orderDataInfoRef.current.unConfirmValue <= userPoint) {
                             //checkBetLimit
-                            if (isConnected) {
                                 //gameClient.
 
                                 if (checkOrderByBetLimit(orderDataInfoRef.current, tableInfo.current.BetLimit[0])) {
@@ -1247,10 +1234,6 @@ const GameView = (props) => {
                                 } else {
                                     dispatchOrderData({ type: "cancelunConfirmBet" });
                                 }
-                            } else {
-                                dispatchOrderData({ type: "cancelunConfirmBet" });
-                                alertMsg("錯誤", "伺服器斷線", null);
-                            }
                         } else {
                             dispatchOrderData({ type: "cancelunConfirmBet" });
                             alertMsg("錯誤", "餘額不足", null);
@@ -1259,8 +1242,12 @@ const GameView = (props) => {
                     break;
                 case "cancelBet":
                     if (queryInfo.current.AllowCancelOrder) {
-                        if (isConnected) {
                             //playSound("OrderCancel");
+
+                            if(orderDataInfo.current.confirmValue == 0){
+                                dispatchOrderData({ type: "clearBet" });
+                                return;
+                            }
 
                             if (!sendCheck.current.isSendBetData) {
                                 sendCheck.current.isSendBetData = true;
@@ -1347,9 +1334,6 @@ const GameView = (props) => {
                                     );
                                 }
                             }
-                        } else {
-                            alertMsg("錯誤", "伺服器斷線", null);
-                        }
                     } else {
                         alertMsg("錯誤", "不允許投注後取消", null);
                     }
