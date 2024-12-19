@@ -164,7 +164,7 @@ const GameChipItem = ({ item, index, chipClick, isAct }) => {
         <div className={`game-chip chips-${item.styleIndex} ${isAct ? 'act' : ''}  ${isMoving ? 'chip-move' : ''} `}
             onClick={(event) => (onChipClick(event, item, index))}>
             <div className='game-chip-box'>
-                <div>{item.chipValue}</div>
+                <div>{item.showText}</div>
             </div>
         </div>
     );
