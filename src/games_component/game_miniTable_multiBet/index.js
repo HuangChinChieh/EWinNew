@@ -88,7 +88,11 @@ const MiniTableMultiBet = ({ tableName,
                 setIsCanBet(false);
                 setTipText("洗牌中");
             } else {         
-                if (["NewRound", "StopBet"].includes(status)) {
+                if (["NewRound"].includes(status)) {
+                    setIsCanBet(false);
+                    setTipText("停止下注");
+                    dispatchOrderData({ type: "clearBet" });
+                } else if (["StopBet"].includes(status) ) {
                     setIsCanBet(false);
                     setTipText("停止下注");
                 } else if (["GameResult"].includes(status) ) {
@@ -107,6 +111,11 @@ const MiniTableMultiBet = ({ tableName,
             }
         }
     }, [status]);
+
+    useEffect(() => {
+       //roundInfo有異動
+       dispatchOrderData({ type: "clearBet" });
+    }, [roundInfo]);
 
 
 
