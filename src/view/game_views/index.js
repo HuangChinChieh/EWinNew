@@ -1651,6 +1651,10 @@ const GameView = (props) => {
         return sendCheck.current.isSendBetData;
     },[]);
 
+    const setIsSendCheck = useCallback((isSendCheck)=>{
+        sendCheck.current.isSendBetData = isSendCheck;
+    },[]);
+
     const getTableInfo = useCallback(() => {
         return tableInfo.current;
     }, []);
@@ -2010,7 +2014,7 @@ const GameView = (props) => {
 
     return (
         <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
-            <BaccaratGameContext.Provider value={{ getSelChipData, gameClient, getIsSendCheck }}>
+            <BaccaratGameContext.Provider value={{ getSelChipData, gameClient, getIsSendCheck, setIsSendCheck }}>
                 <div className="game-view-wrap">
                     {
                         /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />

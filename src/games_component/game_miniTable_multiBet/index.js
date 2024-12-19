@@ -35,7 +35,7 @@ const MiniTableMultiBet = ({ tableName,
     const minMaxObj = getBetLimitMaxMin(betLimit);
     const [isCanBet, setIsCanBet] = useState(false);
     const [tipText, setTipText] = useState("");
-    const { getSelChipData, gameClient, getIsSendCheck} = useContext(BaccaratGameContext);
+    const { getSelChipData, gameClient, getIsSendCheck, setIsSendCheck} = useContext(BaccaratGameContext);
     const { wallet, updateWallet } = useContext(WalletContext);
     const {showTooltip, hideTooltip} = useContext(ToolTipContext);
 
