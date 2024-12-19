@@ -1244,7 +1244,7 @@ const GameView = (props) => {
                     if (queryInfo.current.AllowCancelOrder) {
                             //playSound("OrderCancel");
 
-                            if(orderDataInfo.current.confirmValue == 0){
+                            if(orderDataInfoRef.current.confirmValue === 0){
                                 dispatchOrderData({ type: "clearBet" });
                                 return;
                             }
@@ -1647,6 +1647,10 @@ const GameView = (props) => {
         return selChipRef.current;
     }, []);
 
+    const getIsSendCheck = useCallback(()=>{
+        return sendCheck.current.isSendBetData;
+    },[]);
+
     const getTableInfo = useCallback(() => {
         return tableInfo.current;
     }, []);
@@ -2006,7 +2010,7 @@ const GameView = (props) => {
 
     return (
         <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
-            <BaccaratGameContext.Provider value={{ getSelChipData, gameClient }}>
+            <BaccaratGameContext.Provider value={{ getSelChipData, gameClient, getIsSendCheck }}>
                 <div className="game-view-wrap">
                     {
                         /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />

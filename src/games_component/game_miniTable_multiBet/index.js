@@ -11,9 +11,6 @@ import {
 import {
     WalletContext
 } from "provider/GameLobbyProvider";
-import Tooltip2 from "component/tooltip";
-
-
 
 const MiniTableMultiBet = ({ tableName,
     roundInfo,
@@ -38,7 +35,7 @@ const MiniTableMultiBet = ({ tableName,
     const minMaxObj = getBetLimitMaxMin(betLimit);
     const [isCanBet, setIsCanBet] = useState(false);
     const [tipText, setTipText] = useState("");
-    const { getSelChipData, gameClient} = useContext(BaccaratGameContext);
+    const { getSelChipData, gameClient, getIsSendCheck} = useContext(BaccaratGameContext);
     const { wallet, updateWallet } = useContext(WalletContext);
     const {showTooltip, hideTooltip} = useContext(ToolTipContext);
 
