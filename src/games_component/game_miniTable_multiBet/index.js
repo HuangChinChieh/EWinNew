@@ -11,6 +11,8 @@ import {
 import {
     WalletContext
 } from "provider/GameLobbyProvider";
+import { AlertContext } from "provider/alertProvider";
+import BigNumber from "bignumber.js";
 
 const MiniTableMultiBet = ({ tableName,
     roundInfo,
@@ -19,9 +21,9 @@ const MiniTableMultiBet = ({ tableName,
     tableTimeoutSecond,
     status,
     betLimit,
-    shoeResult
+    shoeResult,
+    tableType
 }) => {
-
 
     const [orderData, dispatchOrderData] = useReducer(
         orderReducer,
@@ -30,19 +32,18 @@ const MiniTableMultiBet = ({ tableName,
 
     const orderDataInfoRef = useRef(orderData);
 
-    const { numberTranslate } = useContext(CashUnitContext);
+    const { getDisplayUnit, numberTranslate } = useContext(CashUnitContext);
     const { getBetLimitMaxMin } = useContext(BetLimitContext);
-    const minMaxObj = getBetLimitMaxMin(betLimit);
+    const { getSelChipData, gameClient, getIsSendCheck, setIsSendCheck, getQueryInfo } = useContext(BaccaratGameContext);
+    const { wallet, updateWallet } = useContext(WalletContext);
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
+    const { alertMsg } = useContext(AlertContext);
     const [isCanBet, setIsCanBet] = useState(false);
     const [tipText, setTipText] = useState("");
-    const { getSelChipData, gameClient, getIsSendCheck, setIsSendCheck} = useContext(BaccaratGameContext);
-    const { wallet, updateWallet } = useContext(WalletContext);
-    const {showTooltip, hideTooltip} = useContext(ToolTipContext);
+    const minMaxObj = getBetLimitMaxMin(betLimit);
 
-
-    const addChip = (betArea)=>{
-        debugger;
-        if(isCanBet){
+    const addChip = (betArea) => {
+        if (isCanBet) {
             let selChipData = getSelChipData();
 
             if (orderDataInfoRef.current.unConfirmValue + selChipData.chipValue <= wallet.Balance || true) {
@@ -53,55 +54,260 @@ const MiniTableMultiBet = ({ tableName,
                         selChipData: selChipData,
                     },
                 });
-            }            
+            }
         }
     };
 
-    const cancelChip = ()=>{
-        if(isCanBet){
-            let selChipData = getSelChipData();
+    const cancelBet = () => {
+        if (orderDataInfoRef.current.confirmValue === 0) {
+            dispatchOrderData({ type: "clearBet" });
+            return;
+        }
+        if (isCanBet) {
+            if (!getIsSendCheck()) {
+                setIsSendCheck(true);
 
-            // if (orderDataInfoRef.current.unConfirmValue + selChipData.chipValue <= wallet.Balance) {
-            //     dispatchOrderData({
-            //         type: "addBet",
-            //         payload: {
-            //             areaType: ,
-            //             selChipData: selChipData,
-            //         },
-            //     });
-            // }            
+                if (getBaccaratType(tableType) === "2") {
+                    gameClient.ClearBetType1(
+                        tableName,
+                        roundInfo.split('-')[0],
+                        roundInfo.split('-')[1],
+                        orderDataInfoRef.current.orderSequence + 1,
+                        (s, o) => {
+                            setIsSendCheck(false);
+                            if (s) {
+                                if (o.ResultCode === 0) {
+                                    dispatchOrderData({ type: "clearBet" });
+                                } else {
+                                    alertMsg("取消下注失敗" + o.Message);
+                                }
+                            } else {
+                                if (o === "Timeout") {
+                                    alertMsg("網路異常, 請重新操作");
+                                } else if (o != null && o !== "") {
+                                    alertMsg(o);
+                                }
+                            }
+                        }
+                    );
+                } else if (getBaccaratType(tableType) === "3") {
+                    gameClient.ClearBetType2(
+                        tableName,
+                        roundInfo.split('-')[0],
+                        roundInfo.split('-')[1],
+                        orderDataInfoRef.current.orderSequence + 1,
+                        (s, o) => {
+                            setIsSendCheck(false);
+                            if (s) {
+                                if (o.ResultCode === 0) {
+                                    dispatchOrderData({ type: "clearBet" });
+                                } else {
+                                    alertMsg("取消下注失敗" + o.Message);
+                                }
+                            } else {
+                                if (o === "Timeout") {
+                                    alertMsg("網路異常, 請重新操作");
+                                } else if (o != null && o !== "") {
+                                    alertMsg(o);
+                                }
+                            }
+                        }
+                    );
+                }
+            }
         }
     };
 
+    const addBet = () => {debugger
+        if (isCanBet) {
+            if (orderDataInfoRef.current.unConfirmValue <= wallet.Balance) {
+                if (checkOrderByBetLimit(orderDataInfoRef.current, betLimit)) {
+                    if (!getIsSendCheck()) {
+                        setIsSendCheck(true);
 
-    useEffect(()=>{
-        orderDataInfoRef.current = orderData;
-    },[orderData]);
+                        if (getBaccaratType(tableType) === "2") {
+                            gameClient.AddBetType1(
+                                wallet.CurrencyType,
+                                tableName,
+                                roundInfo.split('-')[0],
+                                roundInfo.split('-')[1],
+                                orderDataInfoRef.current.orderSequence + 1,
+                                orderDataInfoRef.current.Banker.unConfirmValue,
+                                orderDataInfoRef.current.Player.unConfirmValue,
+                                orderDataInfoRef.current.Tie.unConfirmValue,
+                                orderDataInfoRef.current.BankerPair.unConfirmValue,
+                                orderDataInfoRef.current.PlayerPair.unConfirmValue,
+                                (s, o) => {
+                                    setIsSendCheck(false);
 
+                                    if (s) {
+                                        if (o.ResultCode === 0) {
+                                            dispatchOrderData({ type: "confirmBet" });
+                                        } else {
+                                            alertMsg(o.Message);
+                                        }
+                                    } else {
+                                        if (o === "Timeout") {
+                                            alertMsg("網路異常, 請重新操作");
+                                        } else if (o != null && o !== "") {
+                                            alertMsg(o);
+                                        }
+                                    }
+                                });
+                        } else if (getBaccaratType(tableType) === "3") {
+                            gameClient.AddBetType2(
+                                wallet.CurrencyType,
+                                tableName,
+                                roundInfo.split('-')[0],
+                                roundInfo.split('-')[1],
+                                orderDataInfoRef.current.orderSequence + 1,
+                                orderDataInfoRef.current.Banker.unConfirmValue,
+                                orderDataInfoRef.current.Player.unConfirmValue,
+                                orderDataInfoRef.current.Tie.unConfirmValue,
+                                orderDataInfoRef.current.BankerPair.unConfirmValue,
+                                orderDataInfoRef.current.PlayerPair.unConfirmValue,
+                                (s, o) => {
+                                    setIsSendCheck(false);
+
+                                    if (s) {
+                                        if (o.ResultCode === 0) {
+                                            dispatchOrderData({ type: "confirmBet" });
+                                        } else {
+                                            alertMsg(o.Message);
+                                        }
+                                    } else {
+                                        if (o === "Timeout") {
+                                            alertMsg("網路異常, 請重新操作");
+                                        } else if (o != null && o !== "") {
+                                            alertMsg(o);
+                                        }
+                                    }
+                                }
+                            );
+                        }
+                    }
+                } else {
+                    dispatchOrderData({ type: "cancelunConfirmBet" });
+                }
+            } else {
+                dispatchOrderData({ type: "cancelunConfirmBet" });
+                alertMsg("錯誤", "餘額不足", null);
+            }
+        }
+    };
+
+    const getBaccaratType = (type) => {
+        return type.split('.')[1];
+    }
+
+    const checkOrderByBetLimit = (_orderData, _betLimit) => {
+        let sumPair = new BigNumber(_orderData.PlayerPair.totalValue)
+            .plus(_orderData.BankerPair.totalValue)
+            .toNumber();
+        
+        let queryInfo = getQueryInfo();
+
+        if (_orderData.Banker.totalValue !== 0) {
+            if (_orderData.Banker.totalValue >= _betLimit.Banker.Min) {
+                if (_orderData.Banker.totalValue <= _betLimit.Banker.Max) {
+                    if (_betLimit.BetBaseBanker !== 0) {
+                        if (
+                            new BigNumber(_orderData.Banker.totalValue)
+                                .modulo(_betLimit.BetBaseBanker)
+                                .toNumber() !== 0
+                        ) {
+                            alertMsg("提醒", "下注失敗, 庄注碼必須是 " + _betLimit.BetBaseBanker + " 的倍數");
+                            return false;
+                        }
+                    }
+                } else {
+                    alertMsg("提醒", "下注失敗, 庄注碼最高投注" + _betLimit.Banker.Max + getDisplayUnit().text);
+                    return false;
+                }
+            } else {
+                alertMsg("提醒", "下注失敗, 庄注碼最低投注" + _betLimit.Banker.Min + getDisplayUnit().text);
+                return false;
+            }
+        }
+
+        if (_orderData.Player.totalValue !== 0) {
+            if (_orderData.Player.totalValue >= _betLimit.Player.Min) {
+                if (_orderData.Player.totalValue <= _betLimit.Player.Max) {
+                } else {
+                    alertMsg("提醒", "下注失敗, 閒注碼最高投注" + _betLimit.Player.Max + getDisplayUnit().text);
+                    return false;
+                }
+            } else {
+                alertMsg("提醒", "下注失敗, 閒注碼最低投注" + _betLimit.Player.Min + getDisplayUnit().text);
+                return false;
+            }
+        }
+
+        if (_orderData.Tie.totalValue !== 0) {
+            if (_orderData.Tie.totalValue >= _betLimit.Tie.Min) {
+                if (_orderData.Tie.totalValue <= _betLimit.Tie.Max) {
+                } else {
+                    alertMsg("提醒", "下注失敗, 和注碼最高投注" + _betLimit.Tie.Max + getDisplayUnit().text);
+                    return false;
+                }
+            } else {
+                alertMsg("提醒", "下注失敗, 和注碼最低投注" + _betLimit.Tie.Min + getDisplayUnit().text);
+                return false;
+            }
+        }
+
+        if (sumPair !== 0) {
+            if (sumPair >= _betLimit.Pair.Min) {
+                if (sumPair <= _betLimit.Pair.Max) {
+                } else {
+                    alertMsg("提醒", "下注失敗, 對子注碼最高投注" + _betLimit.Pair.Max + getDisplayUnit().text);
+                    return false;
+                }
+            } else {
+                alertMsg("提醒", "下注失敗, 對子注碼最低投注" + _betLimit.Pair.Min + getDisplayUnit().text);
+                return false;
+            }
+        }
+
+        if (
+            _orderData.Banker.totalValue !== 0 &&
+            _orderData.Player.totalValue !== 0 &&
+            queryInfo.current.AllowBPType === 0
+        ) {
+            alertMsg("提醒", "下注失敗, 庄閒不能同時下注");
+            return false;
+        }
+
+        return true;
+    };
 
     useEffect(() => {
-        if ( ["NoService", "AccidentPending"].includes(status)) {
+        orderDataInfoRef.current = orderData;
+    }, [orderData]);
+
+    useEffect(() => {
+        if (["NoService", "AccidentPending"].includes(status)) {
             setIsCanBet(false);
             setTipText("暫停服務");
         } else {
             if (status === "Shuffling") {
                 setIsCanBet(false);
                 setTipText("洗牌中");
-            } else {         
+            } else {
                 if (["NewRound"].includes(status)) {
                     setIsCanBet(false);
                     setTipText("停止下注");
                     dispatchOrderData({ type: "clearBet" });
-                } else if (["StopBet"].includes(status) ) {
+                } else if (["StopBet"].includes(status)) {
                     setIsCanBet(false);
                     setTipText("停止下注");
-                } else if (["GameResult"].includes(status) ) {
+                } else if (["GameResult"].includes(status)) {
                     setIsCanBet(false);
                     setTipText("開牌中");
-                } else if (["Cancel", "Delete"].includes(status)  ) {
+                } else if (["Cancel", "Delete"].includes(status)) {
                     setIsCanBet(false);
                     setTipText("本局取消");
-                } else if (["OpenBet"].includes(status)  ) {
+                } else if (["OpenBet"].includes(status)) {
                     setIsCanBet(true);
                     setTipText("");
                 } else {
@@ -113,17 +319,15 @@ const MiniTableMultiBet = ({ tableName,
     }, [status]);
 
     useEffect(() => {
-       //roundInfo有異動
-       dispatchOrderData({ type: "clearBet" });
+        //roundInfo有異動
+        dispatchOrderData({ type: "clearBet" });
     }, [roundInfo]);
-
-
 
     return (
         <div className={`miniTableMultiBet`}>
             <div className={`rowCount-1`}>
                 <div className='miniTableMultiBet-tableData'>
-                    <div className='miniTableMultiBet-tableInfo' onMouseEnter={(event)=>{showTooltip(event.currentTarget, "進入桌台", "black")}} onMouseLeave={()=>hideTooltip()}>
+                    <div className='miniTableMultiBet-tableInfo' onMouseEnter={(event) => { showTooltip(event.currentTarget, "進入桌台", "black") }} onMouseLeave={() => hideTooltip()}>
                         <div className='miniTableMultiBet-tableName'>{tableName}</div>
                         <div className='miniTableMultiBet-roundInfo'>{roundInfo}</div>
                     </div>
@@ -142,33 +346,33 @@ const MiniTableMultiBet = ({ tableName,
                     <GameRoadMapMultiBet shoeResult={shoeResult}></GameRoadMapMultiBet>
                 </div>
                 <div className={`miniTableMultiBet-betArea ${isCanBet ? "can-bet" : " stop-bet"}`}>
-                    <div className="miniTableMultiBet-betArea-playerPair  miniTableMultiBet-betArea-bet" onClick={()=>{addChip("PlayerPair")}}>
+                    <div className="miniTableMultiBet-betArea-playerPair  miniTableMultiBet-betArea-bet" onClick={() => { addChip("PlayerPair") }}>
                         <div className='miniTableMultiBet-betArea-bet-text'>閒對</div>
                         <div className='miniTableMultiBet-betArea-bet-value'>{orderData.PlayerPair.totalValue}</div>
                     </div>
-                    <div className="miniTableMultiBet-betArea-player miniTableMultiBet-betArea-bet" onClick={()=>{addChip("Player")}}>
+                    <div className="miniTableMultiBet-betArea-player miniTableMultiBet-betArea-bet" onClick={() => { addChip("Player") }}>
                         <div className='miniTableMultiBet-betArea-bet-text'>閒</div>
                         <div className='miniTableMultiBet-betArea-bet-value'>{orderData.Player.totalValue}</div>
                     </div>
-                    <div className="miniTableMultiBet-betArea-tie miniTableMultiBet-betArea-bet" onClick={()=>{addChip("Tie")}}>
+                    <div className="miniTableMultiBet-betArea-tie miniTableMultiBet-betArea-bet" onClick={() => { addChip("Tie") }}>
                         <div className='miniTableMultiBet-betArea-bet-text'>和</div>
                         <div className='miniTableMultiBet-betArea-bet-value'>{orderData.Tie.totalValue}</div>
                     </div>
-                    <div className="miniTableMultiBet-betArea-banker miniTableMultiBet-betArea-bet" onClick={()=>{addChip("Banker")}}>
+                    <div className="miniTableMultiBet-betArea-banker miniTableMultiBet-betArea-bet" onClick={() => { addChip("Banker") }}>
                         <div className='miniTableMultiBet-betArea-bet-text'>庄</div>
                         <div className='miniTableMultiBet-betArea-bet-value'>{orderData.Banker.totalValue}</div>
                     </div>
-                    <div className="miniTableMultiBet-betArea-bankerPair miniTableMultiBet-betArea-bet" onClick={()=>{addChip("BankerPair")}}>
+                    <div className="miniTableMultiBet-betArea-bankerPair miniTableMultiBet-betArea-bet" onClick={() => { addChip("BankerPair") }}>
                         <div className='miniTableMultiBet-betArea-bet-text'>庄對</div>
                         <div className='miniTableMultiBet-betArea-bet-value'>{orderData.BankerPair.totalValue}</div>
                     </div>
                     <div className="miniTableMultiBet-betArea-checkArea">
-                        <div className="miniTableMultiBet-betArea-checkArea-cancel">
+                        <div className="miniTableMultiBet-betArea-checkArea-cancel" onClick={() => { cancelBet() }}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
                                 <path d="M15.7765 2.77646C16.4112 2.1417 16.4112 1.11084 15.7765 0.476074C15.1417 -0.158691 14.1108 -0.158691 13.4761 0.476074L8.12881 5.82842L2.77646 0.481152C2.1417 -0.153613 1.11084 -0.153613 0.476074 0.481152C-0.158691 1.11592 -0.158691 2.14678 0.476074 2.78154L5.82842 8.12881L0.481152 13.4812C-0.153613 14.1159 -0.153613 15.1468 0.481152 15.7815C1.11592 16.4163 2.14678 16.4163 2.78154 15.7815L8.12881 10.4292L13.4812 15.7765C14.1159 16.4112 15.1468 16.4112 15.7815 15.7765C16.4163 15.1417 16.4163 14.1108 15.7815 13.4761L10.4292 8.12881L15.7765 2.77646Z" />
                             </svg>
                         </div>
-                        <div className="miniTableMultiBet-betArea-checkArea-confirm">
+                        <div className="miniTableMultiBet-betArea-checkArea-confirm" onClick={() => { addBet() }}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 18" fill="none">
                                 <path d="M22.8976 1.35229C23.5323 1.98706 23.5323 3.01792 22.8976 3.65269L9.89756 16.6527C9.26279 17.2875 8.23193 17.2875 7.59717 16.6527L1.09717 10.1527C0.462402 9.51792 0.462402 8.48706 1.09717 7.85229C1.73193 7.21753 2.76279 7.21753 3.39756 7.85229L8.7499 13.1996L20.6022 1.35229C21.237 0.717529 22.2679 0.717529 22.9026 1.35229H22.8976Z" />
                             </svg>
