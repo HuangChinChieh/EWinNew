@@ -1,40 +1,42 @@
 import BigNumber from 'bignumber.js';
-const initialOrderData = {
-    totalValue: 0,
-    confirmValue: 0,
-    unConfirmValue: 0,
-    orderSequence: 0,
+const initialOrderData = () => {
+    return {
+        totalValue: 0,
+        confirmValue: 0,
+        unConfirmValue: 0,
+        orderSequence: 0,
 
 
-    Tie: {
-        totalValue: 0,
-        confirmValue: 0,
-        unConfirmValue: 0,
-        chips: []
-    },
-    Banker: {
-        totalValue: 0,
-        confirmValue: 0,
-        unConfirmValue: 0,
-        chips: []
-    },
-    Player: {
-        totalValue: 0,
-        confirmValue: 0,
-        unConfirmValue: 0,
-        chips: []
-    },
-    PlayerPair: {
-        totalValue: 0,
-        confirmValue: 0,
-        unConfirmValue: 0,
-        chips: []
-    },
-    BankerPair: {
-        totalValue: 0,
-        confirmValue: 0,
-        unConfirmValue: 0,
-        chips: []
+        Tie: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        },
+        Banker: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        },
+        Player: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        },
+        PlayerPair: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        },
+        BankerPair: {
+            totalValue: 0,
+            confirmValue: 0,
+            unConfirmValue: 0,
+            chips: []
+        }
     }
 };
 
@@ -55,7 +57,7 @@ function orderReducer(state, action) {
                 isConfirm: false,
                 orderUnix: Date.now().toString()
             });
-            
+
             return newOrderData
         case 'doubleBet':
             //待補上動畫                  
@@ -108,7 +110,7 @@ function orderReducer(state, action) {
                 }
 
             }
-            
+
             return newOrderData;
         case 'confirmBet':
             newOrderData.confirmValue = new BigNumber(newOrderData.confirmValue).plus(newOrderData.unConfirmValue).toNumber();
