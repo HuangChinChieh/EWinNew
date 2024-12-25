@@ -13,6 +13,7 @@ import {
 } from "provider/GameLobbyProvider";
 import { AlertContext } from "provider/alertProvider";
 import BigNumber from "bignumber.js";
+import { useHistory, useParams } from "react-router-dom";
 
 const MiniTableMultiBet = ({ tableName,
     roundInfo,
@@ -29,7 +30,7 @@ const MiniTableMultiBet = ({ tableName,
         orderReducer,
         initialOrderData()
     );
-    
+
 
     const orderDataInfoRef = useRef(orderData);
 
@@ -42,6 +43,7 @@ const MiniTableMultiBet = ({ tableName,
     const [isCanBet, setIsCanBet] = useState(false);
     const [tipText, setTipText] = useState("");
     const minMaxObj = getBetLimitMaxMin(betLimit);
+    const history = useHistory();
 
     const addChip = (betArea) => {
         if (isCanBet) {
@@ -119,7 +121,7 @@ const MiniTableMultiBet = ({ tableName,
         }
     };
 
-    const addBet = () => {debugger
+    const addBet = () => {
         if (isCanBet) {
             if (orderDataInfoRef.current.unConfirmValue <= wallet.Balance) {
                 if (checkOrderByBetLimit(orderDataInfoRef.current, betLimit)) {
@@ -205,7 +207,7 @@ const MiniTableMultiBet = ({ tableName,
         let sumPair = new BigNumber(_orderData.PlayerPair.totalValue)
             .plus(_orderData.BankerPair.totalValue)
             .toNumber();
-        
+
         let queryInfo = getQueryInfo();
 
         if (_orderData.Banker.totalValue !== 0) {
@@ -328,7 +330,7 @@ const MiniTableMultiBet = ({ tableName,
         <div className={`miniTableMultiBet`}>
             <div className={`rowCount-1`}>
                 <div className='miniTableMultiBet-tableData'>
-                    <div className='miniTableMultiBet-tableInfo' onMouseEnter={(event) => { showTooltip(event.currentTarget, "進入桌台", "black") }} onMouseLeave={() => hideTooltip()}>
+                    <div className='miniTableMultiBet-tableInfo' onMouseEnter={(event) => { showTooltip(event.currentTarget, "進入桌台", "black") }} onMouseLeave={() => hideTooltip()} onClick={() => { hideTooltip(); history.replace("/games/" + tableName) }}>
                         <div className='miniTableMultiBet-tableName'>{tableName}</div>
                         <div className='miniTableMultiBet-roundInfo'>{roundInfo}</div>
                     </div>
