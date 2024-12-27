@@ -27,6 +27,7 @@ import GameBettingArea from "games_component/game_betting_area_new";
 import GameRoadMap from "games_component/game_road_map";
 import GameVideo from "games_component/game_video";
 import GameHeader from "games_component/game_header";
+import GameVideoChannelsButton from "games_component/game_buttons/game_channels_btn";
 
 import CardResult from "games_component/game_card_result";
 import { orderReducer, initialOrderData } from "./orderData";
@@ -43,6 +44,7 @@ const GameView = (props) => {
 
     //常數，props，plugin  
     const GameType = "BA";
+    const serverUrl = "http://ewin.dev.mts.idv.tw";
     //const tableNumber = useParams().gameId;
     const tableNumber = props.TableNumber;
     const gameSetID = props.GameSetID;
@@ -79,7 +81,8 @@ const GameView = (props) => {
     const tableInfo = useRef(null);
     const queryInfo = useRef(null);
     //const [useBetLimit, setUseBetLimit] = useState(null); //目前使用的限紅
-    const [refreshStreamType, setRefreshStreamType] = useState(0); //串流種類，0=HD，1=SD
+    //串流種類，0=HD，1=SD
+    const [roundInfo, setRoundInfo] = useState("");
     const [shoeResult, setShoeResult] = useState("");
     const countdownInfo = useRef({
         lastQueryDate: null,
@@ -107,22 +110,24 @@ const GameView = (props) => {
     const [isCanBet, setIsCanBet] = useState(false);
     const [orderData, dispatchOrderData] = useReducer(
         orderReducer,
-        initialOrderData
+        initialOrderData()
     );
 
     const [selChipData, setSelChipData] = useState(null);
     const [emptyOrderCount, setEmptyOrderCount] = useState(0);
     const cardResultControl = useRef();
     const betAreaControl = useRef();
-
+    const videoControl = useRef();
     //視頻相關
-    const [videoResolutionType, setVideoResolutionType] = useState(0);
-    const [streamName, setStreamName] = useState("");
-    const [videoSourceList, setVideoSourceList] = useState([]);
-    const [vpDomain, setVpDomain] = useState("");
-    const [userPoint, setUserPoint] = useState(0);
-    //0=std/1=HD
+    //vpDomain，串流的相關位址，來自server設定 => 用戶無法異動
+    //stream 串流的名稱，來自於桌台設定 => 透過選擇桌台做改變
+    //相關設定皆由選單部分設定
+    const [videoResolutionType, setVideoResolutionType] = useState(1);
+    const [streamArray, setStreamArray] = useState([]);
+    const [vpDomain, setVpDomain] = useState(null);
 
+
+    const [userPoint, setUserPoint] = useState(0);
     const chipsItems = [
         { styleIndex: 1, chipValue: getNumberByUnitSetting(25), showText: 25 },
         { styleIndex: 2, chipValue: getNumberByUnitSetting(50), showText: 50 },
@@ -235,60 +240,37 @@ const GameView = (props) => {
     //#endregion
 
     //#region 視頻相關
-    const handleStreamArray = (streamArray) => {
+
+    const handleStreamArray = (_streamArray, _videoResolutionType) => {
         let ret;
         //streamArray最多為兩個
 
-        if (streamArray.length === 0) {
+        if (_streamArray.length === 0) {
             ret = "";
-        } else if (streamArray.length === 1) {
-            ret = streamArray[0].StreamName.toUpperCase();
+        } else if (_streamArray.length === 1) {
+            ret = _streamArray[0].StreamName.toUpperCase();
         } else {
-            if (videoResolutionType != null) {
-                if (videoResolutionType === 0) {
+            if (_videoResolutionType != null) {
+                if (_videoResolutionType === 0) {
                     // std
-                    ret = streamArray[1].StreamName.toUpperCase();
+                    ret = _streamArray[1].StreamName.toUpperCase();
                 } else {
                     // HD
-                    ret = streamArray[0].StreamName.toUpperCase();
+                    ret = _streamArray[0].StreamName.toUpperCase();
                 }
             } else {
-                ret = streamArray[0].StreamName.toUpperCase();
+                ret = _streamArray[0].StreamName.toUpperCase();
             }
         }
 
         return ret;
     };
 
-    const getVideoSourceList = (cb) => {
-        fetch(
-            "http://ewin.dev.mts.idv.tw/GetVideoSource.aspx?CT=" +
-            window.encodeURIComponent(props.CT),
-            {
-                method: "GET", // 请求方法// 将 JavaScript 对象转换为 JSON 字符串
-            }
-        )
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json(); // 解析响应中的 JSON 数据
-            })
-            .then((o) => {
-                cb(true, o);
-            })
-            .catch(() => {
-                cb(false, null);
-            });
-    };
 
-    const selectVideoSource = (s, r) => {
-        window.localStorage.setItem("VideoSourceDomain", s);
-        window.localStorage.setItem("VideoResolutionType", r);
-
-        setVpDomain(s);
-        setVideoResolutionType(r);
-    };
+    // const selectVideoSource = (s, r) => {
+    //     setVpDomain(s);
+    //     setVideoResolutionType(r);
+    // };
 
     //#endregion
 
@@ -326,6 +308,25 @@ const GameView = (props) => {
     };
 
     const handleTableInfo = (tableInfoData) => {
+
+        const isStreamChange = (newStream, prevStream) => {
+            let ret = false;
+
+            if (newStream.length === prevStream.length) {
+                if (newStream.length !== 0) {
+                    if (newStream.length === 1) {
+                        ret = newStream[0].StreamName.toUpperCase() !== prevStream[0].StreamName.toUpperCase();
+                    } else {
+                        ret = (newStream[0].StreamName.toUpperCase() !== prevStream[0].StreamName.toUpperCase()) && (newStream[1].StreamName.toUpperCase() !== prevStream[1].StreamName.toUpperCase());
+                    }
+                }
+            } else {
+                ret = true;
+            }
+
+            return ret;
+        };
+
         //check
         if (!tableInfo || Object.keys(tableInfoData).length === 0) {
             return;
@@ -345,6 +346,9 @@ const GameView = (props) => {
 
         tableInfo.current = tableInfoData;
 
+
+        setRoundInfo(tableInfoData.RoundInfo);
+
         if (tableInfoData.BetLimit != null && tableInfoData.BetLimit.length > 0) {
             updateUseBetLimitData(tableInfoData.BetLimit[0]);
         } else {
@@ -361,7 +365,7 @@ const GameView = (props) => {
         setBaccaratType(tableInfoData.BaccaratType);
 
         //設定視頻串流
-        setStreamName(handleStreamArray(tableInfoData.Stream));
+        //setStreamName(handleStreamArray(tableInfoData.Stream));
         //處理倒數計時相關資料
         countdownInfo.current.lastQueryDate = new Date();
         countdownInfo.current.remainingSecond = tableInfoData.RemainingSecond;
@@ -392,6 +396,18 @@ const GameView = (props) => {
                 }
             }
         }
+
+        if (prevTableInfo != null  && prevTableInfo.Stream != null){
+            if (isStreamChange(tableInfo.current.Stream, prevTableInfo.Stream)) {
+                setStreamArray(tableInfo.current.Stream)
+            }
+        }else{
+            // tableNotify.current.notify("StreamChange", {
+            //     stream: tableInfo.current.Stream,
+            // });
+
+            setStreamArray(tableInfo.current.Stream)
+        }       
     };
 
     const handleQuery = useCallback((Q) => {
@@ -893,47 +909,16 @@ const GameView = (props) => {
         if (roundInfoArray.length > 0) {
             switch (action) {
                 case "setGameSetCmd":
-                        if ("gameCmd" in args) {
-                            gameClient.SetGameSetCmd(
-                                gameSetID,
-                                tableNumber,
-                                roundInfoArray[0],
-                                roundInfoArray[1],
-                                args.gameCmd,
-                                (s, o) => {
-                                    if (s) {
-                                        if (o.ResultCode === 0) {
-                                            msgMaskResultControl.current.HideMask();
-                                            cbRef.current.handleQuery(o);
-                                        } else {
-                                            setTimeout(() => {
-                                                refreshQueryGame();
-                                            }, 3000);
-                                        }
-                                    } else {
-                                        if (o === "Timeout") {
-                                            alertMsg("網路異常, 請重新操作");
-                                        } else {
-                                            if (o != null && o !== "") {
-                                                alertMsg(o.message);
-                                            }
-                                        }
-
-                                        refreshQueryGame();
-                                    }
-                                }
-                            );
-                        }
-                    break;
-                case "clearGameSetCmd":
-                        gameClient.ClearGameSetCmd(
+                    if ("gameCmd" in args) {
+                        gameClient.SetGameSetCmd(
                             gameSetID,
                             tableNumber,
                             roundInfoArray[0],
                             roundInfoArray[1],
+                            args.gameCmd,
                             (s, o) => {
                                 if (s) {
-                                    if (o.ResultState === 0) {
+                                    if (o.ResultCode === 0) {
                                         msgMaskResultControl.current.HideMask();
                                         cbRef.current.handleQuery(o);
                                     } else {
@@ -954,6 +939,37 @@ const GameView = (props) => {
                                 }
                             }
                         );
+                    }
+                    break;
+                case "clearGameSetCmd":
+                    gameClient.ClearGameSetCmd(
+                        gameSetID,
+                        tableNumber,
+                        roundInfoArray[0],
+                        roundInfoArray[1],
+                        (s, o) => {
+                            if (s) {
+                                if (o.ResultState === 0) {
+                                    msgMaskResultControl.current.HideMask();
+                                    cbRef.current.handleQuery(o);
+                                } else {
+                                    setTimeout(() => {
+                                        refreshQueryGame();
+                                    }, 3000);
+                                }
+                            } else {
+                                if (o === "Timeout") {
+                                    alertMsg("網路異常, 請重新操作");
+                                } else {
+                                    if (o != null && o !== "") {
+                                        alertMsg(o.message);
+                                    }
+                                }
+
+                                refreshQueryGame();
+                            }
+                        }
+                    );
                     break;
                 default:
                     break;
@@ -964,47 +980,47 @@ const GameView = (props) => {
     const handleAddTips = useCallback((action, args, cb) => {
         switch (action) {
             case "addTips":
-                    if ("tipsValue" in args) {
-                        let unitData = getDisplayUnit();
-                        let v;
+                if ("tipsValue" in args) {
+                    let unitData = getDisplayUnit();
+                    let v;
 
-                        alertMsg("小費", "確定打賞小費 " + args.tipsValue + " 元", () => {
-                            v = new BigNumber(args.tipsValue)
-                                .dividedBy(unitData.value)
-                                .toNumber();
+                    alertMsg("小費", "確定打賞小費 " + args.tipsValue + " 元", () => {
+                        v = new BigNumber(args.tipsValue)
+                            .dividedBy(unitData.value)
+                            .toNumber();
 
-                            gameClient.AddTipsType0(
-                                gameSetID,
-                                tableNumber,
-                                tableInfo.current.shoeNumber,
-                                tableInfo.current.roundNumber,
-                                orderDataInfoRef.current.orderSequence + 1,
-                                v,
-                                (s, o) => {
-                                    if (s) {
-                                        if (o.ResultState === 0) {
-                                            msgMaskResultControl.current.HideMask();
-                                            cbRef.current.handleQuery(o);
-                                        } else {
-                                            cbRef.current.handleGameSetCmd("setGameSetCmd", {
-                                                gameCmd: "CancelAddTips:" + args.tipsValue,
-                                            });
-                                        }
+                        gameClient.AddTipsType0(
+                            gameSetID,
+                            tableNumber,
+                            tableInfo.current.shoeNumber,
+                            tableInfo.current.roundNumber,
+                            orderDataInfoRef.current.orderSequence + 1,
+                            v,
+                            (s, o) => {
+                                if (s) {
+                                    if (o.ResultState === 0) {
+                                        msgMaskResultControl.current.HideMask();
+                                        cbRef.current.handleQuery(o);
                                     } else {
-                                        if (o === "Timeout") {
-                                            alertMsg("網路異常, 請重新操作");
-                                        } else {
-                                            if (o != null && o !== "") {
-                                                alertMsg(o.message);
-                                            }
-                                        }
-
-                                        refreshQueryGame();
+                                        cbRef.current.handleGameSetCmd("setGameSetCmd", {
+                                            gameCmd: "CancelAddTips:" + args.tipsValue,
+                                        });
                                     }
+                                } else {
+                                    if (o === "Timeout") {
+                                        alertMsg("網路異常, 請重新操作");
+                                    } else {
+                                        if (o != null && o !== "") {
+                                            alertMsg(o.message);
+                                        }
+                                    }
+
+                                    refreshQueryGame();
                                 }
-                            );
-                        });
-                    }
+                            }
+                        );
+                    });
+                }
                 break;
             default:
                 break;
@@ -1137,103 +1153,103 @@ const GameView = (props) => {
                     if (isCanBet) {
                         if (orderDataInfoRef.current.unConfirmValue <= userPoint) {
                             //checkBetLimit
-                                //gameClient.
+                            //gameClient.
 
-                                if (checkOrderByBetLimit(orderDataInfoRef.current, tableInfo.current.BetLimit[0])) {
-                                    //playSound("OrderAccept");
-                                    if (!sendCheck.current.isSendBetData) {
-                                        sendCheck.current.isSendBetData = true;
+                            if (checkOrderByBetLimit(orderDataInfoRef.current, tableInfo.current.BetLimit[0])) {
+                                //playSound("OrderAccept");
+                                if (!sendCheck.current.isSendBetData) {
+                                    sendCheck.current.isSendBetData = true;
 
-                                        if (tableInfo.current.BaccaratType === 0 || tableInfo.current.BaccaratType === 1) {
-                                            gameClient.AddBetType0(
-                                                gameSetID,
-                                                tableNumber,
-                                                tableInfo.current.shoeNumber,
-                                                tableInfo.current.roundNumber,
-                                                orderDataInfoRef.current.orderSequence + 1,
-                                                orderDataInfoRef.current.Banker.unConfirmValue,
-                                                orderDataInfoRef.current.Player.unConfirmValue,
-                                                orderDataInfoRef.current.Tie.unConfirmValue,
-                                                orderDataInfoRef.current.BankerPair.unConfirmValue,
-                                                orderDataInfoRef.current.PlayerPair.unConfirmValue,
-                                                (s, o) => {
-                                                    sendCheck.current.isSendBetData = false;
+                                    if (tableInfo.current.BaccaratType === 0 || tableInfo.current.BaccaratType === 1) {
+                                        gameClient.AddBetType0(
+                                            gameSetID,
+                                            tableNumber,
+                                            tableInfo.current.shoeNumber,
+                                            tableInfo.current.roundNumber,
+                                            orderDataInfoRef.current.orderSequence + 1,
+                                            orderDataInfoRef.current.Banker.unConfirmValue,
+                                            orderDataInfoRef.current.Player.unConfirmValue,
+                                            orderDataInfoRef.current.Tie.unConfirmValue,
+                                            orderDataInfoRef.current.BankerPair.unConfirmValue,
+                                            orderDataInfoRef.current.PlayerPair.unConfirmValue,
+                                            (s, o) => {
+                                                sendCheck.current.isSendBetData = false;
 
-                                                    if (s) {
-                                                        if (o.ResultCode === 0) {
-                                                            dispatchOrderData({ type: "confirmBet" });
-                                                            setEmptyOrderCount(0);
-                                                            cbRef.current.handleQuery(o);
-                                                        } else {
-                                                            alertMsg(o.Message);
-                                                            setTimeout(() => {
-                                                                refreshQueryGame();
-                                                            }, 3000);
-                                                        }
+                                                if (s) {
+                                                    if (o.ResultCode === 0) {
+                                                        dispatchOrderData({ type: "confirmBet" });
+                                                        setEmptyOrderCount(0);
+                                                        cbRef.current.handleQuery(o);
                                                     } else {
-                                                        if (o === "Timeout")
-                                                            alertMsg("網路異常, 請重新操作");
-                                                        else if (o != null && o !== "") alertMsg(o);
-
-                                                        refreshQueryGame();
+                                                        alertMsg(o.Message);
+                                                        setTimeout(() => {
+                                                            refreshQueryGame();
+                                                        }, 3000);
                                                     }
-                                                });
-                                        } else if (tableInfo.current.BaccaratType === 2) {
-                                            gameClient.AddBetType1(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfoRef.current.orderSequence + 1
-                                                , orderDataInfoRef.current.Banker.unConfirmValue, orderDataInfoRef.current.Player.unConfirmValue, orderDataInfoRef.current.Tie.unConfirmValue, orderDataInfoRef.current.BankerPair.unConfirmValue, orderDataInfoRef.current.PlayerPair.unConfirmValue
-                                                , (s, o) => {
-                                                    sendCheck.current.isSendBetData = false;
+                                                } else {
+                                                    if (o === "Timeout")
+                                                        alertMsg("網路異常, 請重新操作");
+                                                    else if (o != null && o !== "") alertMsg(o);
 
-                                                    if (s) {
-                                                        if (o.ResultCode === 0) {
-                                                            dispatchOrderData({ type: "confirmBet" });
-                                                            setEmptyOrderCount(0);
-                                                            cbRef.current.handleQuery(o);
-                                                        } else {
-                                                            alertMsg(o.Message);
-                                                            setTimeout(() => {
-                                                                refreshQueryGame();
-                                                            }, 3000);
-                                                        }
-                                                    } else {
-                                                        if (o === "Timeout")
-                                                            alertMsg("網路異常, 請重新操作");
-                                                        else if (o != null && o !== "") alertMsg(o);
-
-                                                        refreshQueryGame();
-                                                    }
-                                                });
-                                        } else if (tableInfo.current.BaccaratType === 3) {
-                                            gameClient.AddBetType2(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfoRef.current.orderSequence + 1
-                                                , orderDataInfoRef.current.Banker.unConfirmValue, orderDataInfoRef.current.Player.unConfirmValue, orderDataInfoRef.current.Tie.unConfirmValue, orderDataInfoRef.current.BankerPair.unConfirmValue, orderDataInfoRef.current.PlayerPair.unConfirmValue
-                                                , (s, o) => {
-                                                    sendCheck.current.isSendBetData = false;
-
-                                                    if (s) {
-                                                        if (o.ResultCode === 0) {
-                                                            dispatchOrderData({ type: "confirmBet" });
-                                                            setEmptyOrderCount(0);
-                                                            cbRef.current.handleQuery(o);
-                                                        } else {
-                                                            alertMsg(o.Message);
-                                                            setTimeout(() => {
-                                                                refreshQueryGame();
-                                                            }, 3000);
-                                                        }
-                                                    } else {
-                                                        if (o === "Timeout")
-                                                            alertMsg("網路異常, 請重新操作");
-                                                        else if (o != null && o !== "") alertMsg(o);
-
-                                                        refreshQueryGame();
-                                                    }
+                                                    refreshQueryGame();
                                                 }
-                                            );
-                                        }
+                                            });
+                                    } else if (tableInfo.current.BaccaratType === 2) {
+                                        gameClient.AddBetType1(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfoRef.current.orderSequence + 1
+                                            , orderDataInfoRef.current.Banker.unConfirmValue, orderDataInfoRef.current.Player.unConfirmValue, orderDataInfoRef.current.Tie.unConfirmValue, orderDataInfoRef.current.BankerPair.unConfirmValue, orderDataInfoRef.current.PlayerPair.unConfirmValue
+                                            , (s, o) => {
+                                                sendCheck.current.isSendBetData = false;
+
+                                                if (s) {
+                                                    if (o.ResultCode === 0) {
+                                                        dispatchOrderData({ type: "confirmBet" });
+                                                        setEmptyOrderCount(0);
+                                                        cbRef.current.handleQuery(o);
+                                                    } else {
+                                                        alertMsg(o.Message);
+                                                        setTimeout(() => {
+                                                            refreshQueryGame();
+                                                        }, 3000);
+                                                    }
+                                                } else {
+                                                    if (o === "Timeout")
+                                                        alertMsg("網路異常, 請重新操作");
+                                                    else if (o != null && o !== "") alertMsg(o);
+
+                                                    refreshQueryGame();
+                                                }
+                                            });
+                                    } else if (tableInfo.current.BaccaratType === 3) {
+                                        gameClient.AddBetType2(props.CurrencyType, tableNumber, tableInfo.current.shoeNumber, tableInfo.current.roundNumber, orderDataInfoRef.current.orderSequence + 1
+                                            , orderDataInfoRef.current.Banker.unConfirmValue, orderDataInfoRef.current.Player.unConfirmValue, orderDataInfoRef.current.Tie.unConfirmValue, orderDataInfoRef.current.BankerPair.unConfirmValue, orderDataInfoRef.current.PlayerPair.unConfirmValue
+                                            , (s, o) => {
+                                                sendCheck.current.isSendBetData = false;
+
+                                                if (s) {
+                                                    if (o.ResultCode === 0) {
+                                                        dispatchOrderData({ type: "confirmBet" });
+                                                        setEmptyOrderCount(0);
+                                                        cbRef.current.handleQuery(o);
+                                                    } else {
+                                                        alertMsg(o.Message);
+                                                        setTimeout(() => {
+                                                            refreshQueryGame();
+                                                        }, 3000);
+                                                    }
+                                                } else {
+                                                    if (o === "Timeout")
+                                                        alertMsg("網路異常, 請重新操作");
+                                                    else if (o != null && o !== "") alertMsg(o);
+
+                                                    refreshQueryGame();
+                                                }
+                                            }
+                                        );
                                     }
-                                } else {
-                                    dispatchOrderData({ type: "cancelunConfirmBet" });
                                 }
+                            } else {
+                                dispatchOrderData({ type: "cancelunConfirmBet" });
+                            }
                         } else {
                             dispatchOrderData({ type: "cancelunConfirmBet" });
                             alertMsg("錯誤", "餘額不足", null);
@@ -1242,98 +1258,98 @@ const GameView = (props) => {
                     break;
                 case "cancelBet":
                     if (queryInfo.current.AllowCancelOrder) {
-                            //playSound("OrderCancel");
+                        //playSound("OrderCancel");
 
-                            if(orderDataInfoRef.current.confirmValue === 0){
-                                dispatchOrderData({ type: "clearBet" });
-                                return;
+                        if (orderDataInfoRef.current.confirmValue === 0) {
+                            dispatchOrderData({ type: "clearBet" });
+                            return;
+                        }
+
+                        if (!sendCheck.current.isSendBetData) {
+                            sendCheck.current.isSendBetData = true;
+
+                            if (tableInfo.current.BaccaratType === 0 || tableInfo.current.BaccaratType === 1) {
+                                gameClient.ClearBetType0(
+                                    gameSetID,
+                                    tableNumber,
+                                    tableInfo.current.shoeNumber,
+                                    tableInfo.current.roundNumber,
+                                    orderDataInfoRef.current.orderSequence + 1,
+                                    (s, o) => {
+                                        sendCheck.current.isSendBetData = false;
+
+                                        if (s) {
+                                            if (o.ResultCode === 0) {
+                                                dispatchOrderData({ type: "clearBet" });
+                                                cbRef.current.handleQuery(o);
+                                            } else {
+                                                alertMsg("取消下注失敗" + o.Message);
+                                                setTimeout(() => {
+                                                    refreshQueryGame();
+                                                }, 3000);
+                                            }
+                                        } else {
+                                            if (o === "Timeout") alertMsg("網路異常, 請重新操作");
+                                            else if (o != null && o !== "") alertMsg(o);
+
+                                            refreshQueryGame();
+                                        }
+                                    }
+                                );
+                            } else if (tableInfo.current.BaccaratType === 2) {
+                                gameClient.ClearBetType1(
+                                    tableNumber,
+                                    tableInfo.current.shoeNumber,
+                                    tableInfo.current.roundNumber,
+                                    orderDataInfoRef.current.orderSequence + 1,
+                                    (s, o) => {
+                                        sendCheck.current.isSendBetData = false;
+                                        if (s) {
+                                            if (o.ResultCode === 0) {
+                                                dispatchOrderData({ type: "clearBet" });
+                                                cbRef.current.handleQuery(o);
+                                            } else {
+                                                alertMsg("取消下注失敗" + o.Message);
+                                                setTimeout(() => {
+                                                    refreshQueryGame();
+                                                }, 3000);
+                                            }
+                                        } else {
+                                            if (o === "Timeout") alertMsg("網路異常, 請重新操作");
+                                            else if (o != null && o !== "") alertMsg(o);
+
+                                            refreshQueryGame();
+                                        }
+                                    }
+                                );
+                            } else if (tableInfo.current.BaccaratType === 3) {
+                                gameClient.ClearBetType2(
+                                    tableNumber,
+                                    tableInfo.current.shoeNumber,
+                                    tableInfo.current.roundNumber,
+                                    orderDataInfoRef.current.orderSequence + 1,
+                                    (s, o) => {
+                                        sendCheck.current.isSendBetData = false;
+                                        if (s) {
+                                            if (o.ResultCode === 0) {
+                                                dispatchOrderData({ type: "clearBet" });
+                                                cbRef.current.handleQuery(o);
+                                            } else {
+                                                alertMsg("取消下注失敗" + o.Message);
+                                                setTimeout(() => {
+                                                    refreshQueryGame();
+                                                }, 3000);
+                                            }
+                                        } else {
+                                            if (o === "Timeout") alertMsg("網路異常, 請重新操作");
+                                            else if (o != null && o !== "") alertMsg(o);
+
+                                            refreshQueryGame();
+                                        }
+                                    }
+                                );
                             }
-
-                            if (!sendCheck.current.isSendBetData) {
-                                sendCheck.current.isSendBetData = true;
-
-                                if (tableInfo.current.BaccaratType === 0 || tableInfo.current.BaccaratType === 1) {
-                                    gameClient.ClearBetType0(
-                                        gameSetID,
-                                        tableNumber,
-                                        tableInfo.current.shoeNumber,
-                                        tableInfo.current.roundNumber,
-                                        orderDataInfoRef.current.orderSequence + 1,
-                                        (s, o) => {
-                                            sendCheck.current.isSendBetData = false;
-
-                                            if (s) {
-                                                if (o.ResultCode === 0) {
-                                                    dispatchOrderData({ type: "clearBet" });
-                                                    cbRef.current.handleQuery(o);
-                                                } else {
-                                                    alertMsg("取消下注失敗" + o.Message);
-                                                    setTimeout(() => {
-                                                        refreshQueryGame();
-                                                    }, 3000);
-                                                }
-                                            } else {
-                                                if (o === "Timeout") alertMsg("網路異常, 請重新操作");
-                                                else if (o != null && o !== "") alertMsg(o);
-
-                                                refreshQueryGame();
-                                            }
-                                        }
-                                    );
-                                } else if (tableInfo.current.BaccaratType === 2) {
-                                    gameClient.ClearBetType1(
-                                        tableNumber,
-                                        tableInfo.current.shoeNumber,
-                                        tableInfo.current.roundNumber,
-                                        orderDataInfoRef.current.orderSequence + 1,
-                                        (s, o) => {
-                                            sendCheck.current.isSendBetData = false;
-                                            if (s) {
-                                                if (o.ResultCode === 0) {
-                                                    dispatchOrderData({ type: "clearBet" });
-                                                    cbRef.current.handleQuery(o);
-                                                } else {
-                                                    alertMsg("取消下注失敗" + o.Message);
-                                                    setTimeout(() => {
-                                                        refreshQueryGame();
-                                                    }, 3000);
-                                                }
-                                            } else {
-                                                if (o === "Timeout") alertMsg("網路異常, 請重新操作");
-                                                else if (o != null && o !== "") alertMsg(o);
-
-                                                refreshQueryGame();
-                                            }
-                                        }
-                                    );
-                                } else if (tableInfo.current.BaccaratType === 3) {
-                                    gameClient.ClearBetType2(
-                                        tableNumber,
-                                        tableInfo.current.shoeNumber,
-                                        tableInfo.current.roundNumber,
-                                        orderDataInfoRef.current.orderSequence + 1,
-                                        (s, o) => {
-                                            sendCheck.current.isSendBetData = false;
-                                            if (s) {
-                                                if (o.ResultCode === 0) {
-                                                    dispatchOrderData({ type: "clearBet" });
-                                                    cbRef.current.handleQuery(o);
-                                                } else {
-                                                    alertMsg("取消下注失敗" + o.Message);
-                                                    setTimeout(() => {
-                                                        refreshQueryGame();
-                                                    }, 3000);
-                                                }
-                                            } else {
-                                                if (o === "Timeout") alertMsg("網路異常, 請重新操作");
-                                                else if (o != null && o !== "") alertMsg(o);
-
-                                                refreshQueryGame();
-                                            }
-                                        }
-                                    );
-                                }
-                            }
+                        }
                     } else {
                         alertMsg("錯誤", "不允許投注後取消", null);
                     }
@@ -1559,7 +1575,7 @@ const GameView = (props) => {
         } else {
             history.replace("/games/" + roadMapNumber + "?gameSetID=" + gameSetID + "&gameSetNumber=" + gameSetNumber);
         }
-    }, []);
+    }, [gameSetID, gameSetNumber]);
 
     const btnLeaveGame = () => {
         gameClient.LeaveRoadMap(gameSetID, tableNumber, (s, o) => {
@@ -1647,20 +1663,20 @@ const GameView = (props) => {
         return selChipRef.current;
     }, []);
 
-    const getIsSendCheck = useCallback(()=>{
+    const getIsSendCheck = useCallback(() => {
         return sendCheck.current.isSendBetData;
-    },[]);
+    }, []);
 
-    const setIsSendCheck = useCallback((isSendCheck)=>{
+    const setIsSendCheck = useCallback((isSendCheck) => {
         sendCheck.current.isSendBetData = isSendCheck;
-    },[]);
+    }, []);
 
     const getTableInfo = useCallback(() => {
         return tableInfo.current;
     }, []);
 
 
-    
+
 
     useEffect(() => {
         //初次載入，撈取桌台資料
@@ -1829,7 +1845,7 @@ const GameView = (props) => {
                         gameClient.RefreshSubscribe(
                             gameSetID,
                             tableNumber,
-                            refreshStreamType,
+                            videoResolutionType,
                             (s, o) => {
                                 if (s) {
                                     if (o.ResultCode === 0) {
@@ -1853,7 +1869,7 @@ const GameView = (props) => {
                 gameClient.RefreshSubscribe(
                     gameSetID,
                     tableNumber,
-                    refreshStreamType,
+                    videoResolutionType,
                     (s, o) => {
                         if (s) {
                             if (o.ResultCode === 0) {
@@ -1870,17 +1886,17 @@ const GameView = (props) => {
         //#endregion
 
         //#region4 取得視頻列表清單
-        PromiseArray.push(
-            new Promise((resolve, reject) => {
-                getVideoSourceList((success, o) => {
-                    if (success) {
-                        resolve({ name: "GetVideoSourceList", value: o });
-                    } else {
-                        reject(o);
-                    }
-                });
-            })
-        );
+        // PromiseArray.push(
+        //     new Promise((resolve, reject) => {
+        //         getVideoSourceList((success, o) => {
+        //             if (success) {
+        //                 resolve({ name: "GetVideoSourceList", value: o });
+        //             } else {
+        //                 reject(o);
+        //             }
+        //         });
+        //     })
+        // );
         //#endregion
 
         //#region5 取得查詢資料
@@ -1924,13 +1940,14 @@ const GameView = (props) => {
                             break;
                         case "GetVideoSourceList":
                             //#region 視頻清單資料
-                            setVideoSourceList(result.value.Source);
+                            // setVideoSourceList(result.value.Source);
 
-                            if (vpDomain === "") {
-                                if (result.value.Source.length > 0) {
-                                    setVpDomain(result.value.Source[0].Server);
-                                }
-                            }
+                            // //設定視頻預設值
+                            // if (vpDomain === "") {
+                            //     if (result.value.Source.length > 0) {
+                            //         setVpDomain(result.value.Source[0].Server);
+                            //     }
+                            // }
 
                             //#endregion
                             break;
@@ -1969,11 +1986,11 @@ const GameView = (props) => {
         };
     }, [tableNumber, gameSetID]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (gameSetID === 0) {
             setUserPoint(wallet.Balance);
-        } 
-    },[wallet, gameSetID])
+        }
+    }, [wallet, gameSetID])
 
 
     useEffect(() => {
@@ -1983,11 +2000,11 @@ const GameView = (props) => {
     }, [handleBet, handleGameSetCmd, handleQuery]);
 
     useEffect(() => {
-        orderDataInfoRef.current = orderData;       
+        orderDataInfoRef.current = orderData;
     }, [orderData]);
 
     useEffect(() => {
-        selChipRef.current = selChipData;       
+        selChipRef.current = selChipData;
     }, [selChipData]);
 
 
@@ -2064,22 +2081,37 @@ const GameView = (props) => {
                                 </button>
                                 <GameHeader
                                     tableNumber={tableNumber}
+                                    roundInfo={roundInfo}
                                     gameSetID={gameSetID}
                                     currencyType={props.CurrencyType}
                                     useBetLimit={useBetLimit}
                                     baccaratType={baccaratType}
                                     setBetLimitBySel={setBetLimitBySel}
-                                ></GameHeader>
+                                >
+                                    <GameVideoChannelsButton 
+                                     videoControlRef={videoControl}
+                                     serverUrl={serverUrl}
+                                     setVideoResolutionType={setVideoResolutionType}
+                                     setVpDomain={setVpDomain}
+                                     CT={props.CT}
+                                     videoResolutionType={videoResolutionType}
+                                     stream={handleStreamArray(streamArray, videoResolutionType)}  
+                                     vpDomain={vpDomain}
+                                     >
+
+                                      </GameVideoChannelsButton>
+                                </GameHeader>
                                 <CountdownCircle
                                     isCanBet={isCanBet}
                                     getCountdownInfo={getCountdownInfo}
                                     setIsCanBet={setIsCanBet}
                                 ></CountdownCircle>
                                 <GameVideo
+                                    ref={videoControl}
                                     CT={props.CT}
-                                    vpDomain={vpDomain}
                                     tableNumber={tableNumber}
-                                    streamName={streamName}
+                                    stream={handleStreamArray(streamArray, videoResolutionType)}  
+                                    vpDomain={vpDomain}                                  
                                 ></GameVideo>
                                 <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
                                 <GameBettingArea
@@ -2099,7 +2131,6 @@ const GameView = (props) => {
                                     baccaratType={baccaratType}
                                     handleQuery={handleQuery}
                                     entryRoadMap={entryRoadMap}
-                                    cashUnit={queryInfo.current.CashUnit}
                                 >
                                     <GameChipsButton
                                         chipsItems={chipsItems}

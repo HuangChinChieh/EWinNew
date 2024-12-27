@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './index.scss';
-import Tooltip from "component/tooltip";
+//import Tooltip from "component/tooltip";
+import { ToolTipContext } from "provider/tooltipProvider";
 
 const FullscreenButton = () => {
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
     const toggleFullscreen = () => {
         const element = document.documentElement;
@@ -34,8 +36,7 @@ const FullscreenButton = () => {
     };
 
     return (
-        <Tooltip text={"全屏縮放"}>
-        <div>
+        <div onMouseEnter={(event) => { showTooltip(event.currentTarget, "全屏縮放") }} onMouseLeave={() => { hideTooltip() }}>
             <div className='forpc'>
                 {isFullscreen ? <span onClick={toggleFullscreen} className='exitfullscreen'></span> : <span onClick={toggleFullscreen} className='fullscreen'></span>}
             </div>
@@ -54,7 +55,6 @@ const FullscreenButton = () => {
                 </div>
             </div>
         </div>
-        </Tooltip>
     );
 };
 

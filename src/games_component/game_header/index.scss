@@ -7,7 +7,7 @@
     width: 100%;  
     transition: all 0.5s ease;
     z-index: 10;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, rgba(0, 0, 0, 0.55) 60%,transparent 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 0%, rgba(0, 0, 0, 0.75) 50%,transparent 100%);
     &:hover{
   
 
@@ -22,13 +22,67 @@
         position: relative;
         height: 100%;
         .nav-box {
-            margin-left: 2.5rem;
+            display: flex;
+            align-items: center;
+            .tool-back{
+                margin:auto 0;                
+                width: 2.875rem;
+                height: 2.875rem;
+                cursor: pointer;
+                // border: 1px solid #2d2d32;
+                border-radius: 1.5rem;
+                display: flex;
+                box-sizing: border-box;
+                justify-content: center;
+                align-items: center;
+                background: rgba(70, 70, 91, 1);
+
+                transition: all 0.1s ease-in-out;
+                cursor: pointer;
+
+                >svg{
+                    width: 0.9375rem;
+                    height: 1.625rem;
+                    //fill: rgb(141, 141, 159);
+
+                    path{
+                        fill: #ffffff;
+                    }                    
+                }
+
+                &:hover{
+                    border: 0.25rem solid #9c8866;
+
+                    >svg{
+                        path{
+                            fill: #9c8866;
+                        }                    
+                    }
+                }
+            }
+
+
+            .tool-tableInfo{
+                margin: 0 1rem;
+                font-family: Noto Sans TC;
+                font-size: 1.5rem;
+                font-weight: 700;
+                line-height: 2rem;              
+                text-align: left;
+                text-underline-position: from-font;
+                text-decoration-skip-ink: none;
+
+                >.user-roundInfo{
+                    font-size: 1.375rem;
+                }
+            }
 
             .tool-box-left {
                 display: flex;
                 cursor: pointer;
+                align-items: center;
 
-                span {
+                >span {
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -44,6 +98,8 @@
                         transition: all 0.3s ease;
                         position: relative;
                     }
+
+                    
 
                     &.user-icon {
                         position: relative;

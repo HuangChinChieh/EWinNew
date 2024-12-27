@@ -1,12 +1,12 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import './index.scss';
-import Tooltip from "component/tooltip";
+import { ToolTipContext } from "provider/tooltipProvider";
 
 const GoodTrendNotice = () => {
     const notifyRef = useRef(null);
     const [hoverItem, setHoverItem] = useState(0);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
-
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
 
     const handleDocumentClick = (e) => {
@@ -33,12 +33,12 @@ const GoodTrendNotice = () => {
     }, []);
 
     return (
-        <Tooltip text={"好路通知"}>
             <div className='notify-box forpc'>
                 <div
                     className={`notify ${isButtonClicked ? 'active' : ''}`}
                     onClick={handleButtonClick}
                     ref={notifyRef}
+                    onMouseEnter={(event) => { showTooltip(event.currentTarget, "好路通知") }} onMouseLeave={() => { hideTooltip() }}
                 >
 
                     <div className={`hover-box ${hoverItem === 1 ? 'visible' : ''}`}>
@@ -46,7 +46,6 @@ const GoodTrendNotice = () => {
                     </div>
                 </div>
             </div>
-        </Tooltip>
     )
 }
 

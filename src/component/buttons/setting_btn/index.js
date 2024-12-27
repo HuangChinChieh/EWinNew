@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { LobbyPersonalContext } from 'provider/GameLobbyProvider';
-import Tooltip from "component/tooltip";
-
+//import Tooltip from "component/tooltip";
 import './index.scss';
+import { ToolTipContext } from "provider/tooltipProvider";
+
 const SettingButton = () => {
     const { lobbyPersonal, setLobbyPersonal } = useContext(LobbyPersonalContext);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [mbhoveredItem, setMbHoveredItem] = useState(null);
     const settingsRef = useRef(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
+
 
     const handleButtonClick = () => {
         setIsButtonClicked(true);
@@ -39,12 +42,13 @@ const SettingButton = () => {
 
 
     return (
-        <Tooltip text={"其他設定"}>
-            <div className='settings-box'>
+            <div className='settings-box' >
                 <div
                     className={`settings ${isButtonClicked ? 'active' : ''}`}
                     onClick={handleButtonClick}
-                    ref={settingsRef}>
+                    ref={settingsRef}
+                    onMouseEnter={(event) => { showTooltip(event.currentTarget, "其他設定") }} onMouseLeave={() => { hideTooltip() }}
+                    >
 
                     <div className={`hover-box ${hoveredItem === 1 ? 'visible' : ''}`}>
                         <div className='flex-box'>
@@ -88,7 +92,6 @@ const SettingButton = () => {
 
                 </div>
             </div>
-        </Tooltip>
     )
 }
 

@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import './index.scss';
 import SummaryTable from './summary_table';
 import BettingHistoryDetail from './betting_history_detail';
-import Tooltip from "component/tooltip";
+//import Tooltip from "component/tooltip";
+import { ToolTipContext } from "provider/tooltipProvider";
 
 const BettingHistory = () => {
 
@@ -18,7 +19,7 @@ const BettingHistory = () => {
     });
 
 
-
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
 
     const passGamecodeAndQuerydate = (e, gamecode, querydate) => {
@@ -74,9 +75,8 @@ const BettingHistory = () => {
         }
     };
 
-    return (
-        <Tooltip text={"投注紀錄"}>
-            <div className='betting-history-box forpc'>
+    return (      
+            <div className='betting-history-box forpc' onMouseEnter={(event) => { showTooltip(event.currentTarget, "投注紀錄") }} onMouseLeave={() => { hideTooltip() }}>
                 <div
                     className={`betting-history ${isButtonClicked ? 'active' : ''}`}
                     onClick={topBtnClick}
@@ -107,8 +107,7 @@ const BettingHistory = () => {
                     </div>
 
                 </div>
-            </div>
-        </Tooltip>
+            </div>      
     )
 }
 

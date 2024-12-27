@@ -3,8 +3,8 @@ import './index.scss';
 import { GameSetListContext } from 'provider/GameLobbyProvider';
 import { AlertContext } from "provider/alertProvider";
 import { useHistory } from "react-router-dom";
-import Tooltip from "component/tooltip";
-
+//import Tooltip from "component/tooltip";
+import { ToolTipContext } from "provider/tooltipProvider";
 
 
 const GameSetListButton = () => {
@@ -13,6 +13,7 @@ const GameSetListButton = () => {
     const [active, setActive] = useState(false);
     const popRef = useRef(null);
     const history = useHistory();
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
     const entryTable = (gameSetID, gameSetNumber, tableNumber) => {
         history.replace("/games/" + tableNumber + "?gameSetID=" + gameSetID + "&gameSetNumber=" + gameSetNumber);
@@ -90,9 +91,8 @@ const GameSetListButton = () => {
 
 
     return (
-        <Tooltip text={"工單列表"} active={active}>
             <div className='gameSetList-box'>
-                <div className='gameSetList-box-content' onClick={showGameSetList}>
+                <div className='gameSetList-box-content' onClick={showGameSetList}  onMouseEnter={(event) => { showTooltip(event.currentTarget, "工單列表") }} onMouseLeave={() => { hideTooltip() }}>
                     <div className={hasNewGameSet ? "gameSetList-box-icon new" : "gameSetList-box-icon"}></div>
                     <div className='gameSetList-box-title'>無</div>
                     <div className='gameSetList-box-icon-arrow'></div>
@@ -111,7 +111,6 @@ const GameSetListButton = () => {
                     </div>
                 </>}
             </div>
-        </Tooltip>
     );
 };
 

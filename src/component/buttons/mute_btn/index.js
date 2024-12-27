@@ -4,13 +4,15 @@ import { MusicIsPlayingContext } from 'provider/GameLobbyProvider';
 import musicMP3 from 'music/lobby_music/Lobby.mp3';
 import musicOGG from 'music/lobby_music/Lobby.ogg';
 import musicAAC from 'music/lobby_music/Lobby.aac';
-import Tooltip from "component/tooltip";
+//import Tooltip from "component/tooltip";
+import { ToolTipContext } from "provider/tooltipProvider";
 
 const MuteButton = () => {
     const { musicIsPlaying, muteSwitch } = useContext(MusicIsPlayingContext);
     const audioRef = useRef(null);
     const lastTimeRef = useRef(0); 
-
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
+    
     // 切換圖示跟變更全域音樂的播放狀態
     const toggleMute = () => {
         muteSwitch(!musicIsPlaying); // 將靜音狀態保存到 Context 中
@@ -42,9 +44,8 @@ const MuteButton = () => {
         }
     };
 
-    return (
-        <Tooltip text={musicIsPlaying ? "靜音" : "取消靜音"}> 
-        <div className='mute-box forpc'>
+    return (    
+        <div className='mute-box forpc' onMouseEnter={(event) => { showTooltip(event.currentTarget, musicIsPlaying ? "靜音" : "取消靜音") }} onMouseLeave={() => { hideTooltip() }} >
             {musicIsPlaying ?
                 <div onClick={toggleMute} className='unmute' />
                 :
@@ -56,7 +57,6 @@ const MuteButton = () => {
                 <source src={musicAAC} type="audio/aac" />
             </audio>
         </div>
-        </Tooltip>
     );
 }
 

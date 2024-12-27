@@ -12,22 +12,22 @@ const TooltipProvider = (props) => {
     const [top, setTop] = useState("0");
     const [left, setLeft] = useState("0");
     const [fontStyle, setFontStyle] = useState("white");
-    const targetDomRef = useRef();
+    const [targetDom, setTargetDom] = useState(null);
     const tipDomRef = useRef();
-
 
     useEffect(() => { //rem
         const gap = 0.75;
         let timer;
         let topValue = 0;
         let leftValue = 0;
-        if (targetDomRef.current) {
+        if (targetDom != null) {
             if (hovered) {
-                const rect = targetDomRef.current.getBoundingClientRect();
+
+                const rect = targetDom.getBoundingClientRect();
                 const htmlFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
                 const tooltipWidth = tipDomRef.current.offsetWidth;
                 const tooltipHeight = tipDomRef.current.offsetHeight;
-                topValue = rect.top + rect.height + gap;
+                topValue = rect.top + rect.height + (gap * htmlFontSize);
                 leftValue = rect.left + (rect.width / 2) - (tooltipWidth / 2);
 
                 if (leftValue + tooltipWidth > window.innerWidth) {
@@ -56,19 +56,21 @@ const TooltipProvider = (props) => {
 
 
         return () => clearTimeout(timer);
-    }, [hovered]);
+    }, [hovered, targetDom]);
 
 
     const showTooltip = useCallback((_targetDom, _text, _style = "white") => {
-        targetDomRef.current = _targetDom;
-        setText(_text);
-        setHovered(true);
-        setFontStyle(_style);
+        if (_targetDom) {
+            setTargetDom(_targetDom);
+            setText(_text);
+            setHovered(true);
+            setFontStyle(_style);
+        }
     }, []);
 
 
     const hideTooltip = useCallback(() => {
-        targetDomRef.current = null;
+        setTargetDom(null);
         setHovered(false);
     }, []);
 
@@ -81,7 +83,7 @@ const TooltipProvider = (props) => {
 
 
             {hovered ? ReactDOM.createPortal(
-                <div ref={tipDomRef} style={{ top: top, left: left }} className={`tooltip ${visible ? 'show' : ''} ${fontStyle}`}>
+                <div  ref={tipDomRef} style={{ top: top, left: left }} className={`tooltip2 ${visible ? 'show' : ''} ${fontStyle}`}>
                     {text}
                 </div>,
                 document.body

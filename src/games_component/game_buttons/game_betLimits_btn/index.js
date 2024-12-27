@@ -2,8 +2,10 @@ import React, { useState, useContext, useRef, useEffect, useCallback } from 'rea
 import './index.scss';
 import { AlertContext } from "provider/alertProvider";
 import { BaccaratSubscribeContext } from "provider/GameBaccaratProvider";
-import Tooltip from "component/tooltip";
+//import Tooltip from "component/tooltip";
 import { CashUnitContext, BetLimitContext } from "provider/GameLobbyProvider";
+import { ToolTipContext } from "provider/tooltipProvider";
+
 
 const BetLimitInfo = (props) => {
     const { isShowInfo, setIsShowInfo } = props;
@@ -14,6 +16,7 @@ const BetLimitInfo = (props) => {
     const canClose = props.canClose;
     const { numberTranslate } = useContext(CashUnitContext);
     const infoRef = useRef(null);
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
     const show = () => {
         setIsHover(true);
@@ -106,7 +109,7 @@ const GameBetLimitOption = (props) => {
     const showInfo = () => {
         setTimeout(() => {
             setIsShowInfo(true);
-        }, 50);       
+        }, 50);
     };
     const hideInfo = () => {
         setTimeout(() => {
@@ -148,7 +151,7 @@ const GameBetLimitsButton = (props) => {
     const tipPopRef = useRef(null);
     const { GetGameClient } = useContext(BaccaratSubscribeContext);
     const gameClient = GetGameClient();
-
+    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
 
     // const showGameSetList = useCallback(() => {
@@ -202,9 +205,30 @@ const GameBetLimitsButton = (props) => {
 
 
     useEffect(() => {
+        const handleDocumentClick = (e) => {
+            if (listPopRef.current && !listPopRef.current.contains(e.target)) {
+                // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
+                listPopRef.current.classList.add('hide');
+                setTimeout(() => {
+                    setListActive(false);
+                }, 400);
+            }
 
+            if (tipPopRef.current && !tipPopRef.current.contains(e.target)) {
+                // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
+                tipPopRef.current.classList.add('hide');
+                setTimeout(() => {
+                    setTipActive(false);
+                }, 400);
+            }
+        };
 
-    }, []);
+        document.addEventListener("click", handleDocumentClick)
+
+        return (() => { document.removeEventListener("click", handleDocumentClick); });
+
+    }, [])
+
 
 
     return (
@@ -212,13 +236,11 @@ const GameBetLimitsButton = (props) => {
             {/* <div className='gameBetLimit-box-content' onClick={showGameSetList}>             */}
 
             <div className='gameBetLimit-box-content' >
-                <div className='gameBetLimit-box-main' onClick={() => { showBetLimitList() }}>
+                <div className='gameBetLimit-box-main' onClick={() => { showBetLimitList() }} onMouseEnter={(event) => { showTooltip(event.currentTarget, "目前限紅") }} onMouseLeave={() => { hideTooltip() }}>
                     <div className="gameBetLimit-box-icon"></div>
                     <div className={(baccaratType === 2 || baccaratType === 3) ? "gameBetLimit-box-title show-list" : "gameBetLimit-box-title"}>{minMaxObj.MinValue + " - " + minMaxObj.MaxValue}</div>
-                    <Tooltip text={'目前限紅'} active={listActive}/>
                 </div>
-                <div className='gameBetLimit-box-icon-arrow' onClick={() => { setTipActive(true); }}>
-                    <Tooltip text={'限紅詳情'} active={tipActive}/>
+                <div className='gameBetLimit-box-icon-arrow' onClick={() => { debugger; setTipActive(true); }} onMouseEnter={(event) => { showTooltip(event.currentTarget, "限紅詳情") }} onMouseLeave={() => { hideTooltip() }}>
                 </div>
             </div>
 
