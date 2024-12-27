@@ -7,6 +7,9 @@
 import ReactDOM from 'react-dom';
 import "./index.scss";
 import { AlertContext } from "provider/alertProvider";
+import {
+    CashUnitContext
+} from "../../provider/GameLobbyProvider";
 import BigNumber from "bignumber.js";
 
 const AddTip = (props) => {
@@ -14,6 +17,7 @@ const AddTip = (props) => {
     const gameClient = props.gameClient;
     const getTableInfo = props.getTableInfo;
     const orderSequence = useRef();
+    const { getDisplayUnit } = useContext(CashUnitContext);
     orderSequence.current = props.orderData.orderSequence;
     const { alertMsg } = useContext(AlertContext);
 
@@ -27,51 +31,40 @@ const AddTip = (props) => {
 
     const handleOK = () => {
         //加彩動作
-        let addChipValue = parseInt(document.querySelector(".v11").textContent);
         let addVal = 0;
+        let unitData = getDisplayUnit();
 
-        if (addChipValue > 0) {
-
-            switch (props.cashUnit) {
-                case 0:
-                    addVal = new BigNumber(addChipValue).dividedBy(10000).toNumber();
-                    break;
-                case 1:
-                    addVal = new BigNumber(addChipValue).dividedBy(1000).toNumber();
-                    break;
-                case 2:
-                    addVal = new BigNumber(addChipValue).toNumber();
-                    break;
-            }
+        if (onChangeChipVal > 0) {
+            addVal = new BigNumber(onChangeChipVal).dividedBy(unitData.value).toNumber();
 
             alertMsg("打賞小費", "確定打賞小費 " + addVal, () => {
                 //AddChip game
                 handleClose();
                 let tableInfo = getTableShoeInfo();
                 gameClient.AddTipsType0(
-                  props.gameSetID,
-                  props.roadMapNumber,
-                  tableInfo.shoeNumber,
-                  tableInfo.roundNumber,
-                  orderSequence.current + 1,
-                  addVal,
-                  function (success, o) {
-                      if (success) {
-                          if (o.ResultState == 0) {
-                              props.handleQuery(o);
-                          } else {
-                          }
-                      } else {
-                          if (o == "Timeout") {
-                              alertMsg("錯誤", "網路異常, 請重新操作");
-                          } else {
-                              if (o != null && o != "") {
-                                  alertMsg(o.message);
-                              }
-                          }
-                      }
-                  }
-              )
+                    props.gameSetID,
+                    props.roadMapNumber,
+                    tableInfo.shoeNumber,
+                    tableInfo.roundNumber,
+                    orderSequence.current + 1,
+                    addVal,
+                    function (success, o) {
+                        if (success) {
+                            if (o.ResultState == 0) {
+                                props.handleQuery(o);
+                            } else {
+                            }
+                        } else {
+                            if (o == "Timeout") {
+                                alertMsg("錯誤", "網路異常, 請重新操作");
+                            } else {
+                                if (o != null && o != "") {
+                                    alertMsg(o.message);
+                                }
+                            }
+                        }
+                    }
+                )
             });
         }
     };
@@ -89,15 +82,11 @@ const AddTip = (props) => {
     };
 
     const addTipVal = (tipVal) => {
-        let addChipValue = parseInt(document.querySelector(".v11").textContent);
-
-        setChipVal(addChipValue + tipVal);
+        setChipVal(onChangeChipVal + tipVal);
     }
 
     const doubleTipVal = () => {
-        let addChipValue = parseInt(document.querySelector(".v11").textContent);
-
-        setChipVal(addChipValue * 2);
+        setChipVal(onChangeChipVal * 2);
     }
 
     return (

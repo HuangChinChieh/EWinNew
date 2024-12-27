@@ -46,7 +46,7 @@ const GameSideBar = (props) => {
                 
                     ret = multiTableList.filter((data)=> (data.TableType === "BA.2" || data.TableType === "BA.3")).map((data) => {
                         return (<MiniTableMultiBet
-                            key={data.TableNumber}
+                            
                             tableName={data.TableNumber}
                             roundInfo={data.RoundInfo}
                             remainingSecond={data.RemainingSecond}
@@ -55,6 +55,7 @@ const GameSideBar = (props) => {
                             status={data.Status}
                             betLimit={(data.BetLimit.length > 0 ? data.BetLimit[0] : null)}
                             shoeResult={data.ShoeResult}
+                            tableType={data.TableType}
                         ></MiniTableMultiBet>);
                     });
                 }

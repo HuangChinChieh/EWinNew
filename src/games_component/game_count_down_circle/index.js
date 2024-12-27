@@ -68,7 +68,6 @@ const CountdownCircle = (props) => {
         animationDom.current.querySelector('.countdown-text').innerText = Math.ceil(countdownSecond / 1000).toString();
         //由於倒數時間更動頻繁，不適合用state
 
-
         if (parseInt(countdownSecond / 1000) === 0) {
             if (countdownData.tableTimeoutSecond !== 0) {
                 props.setIsCanBet(false);
@@ -91,7 +90,7 @@ const CountdownCircle = (props) => {
     return (
         <div className='countdown-circle-box' >
             <div ref={animationDom} className={"countdown-circle " + ((props.isCanBet && props.getCountdownInfo().tableTimeoutSecond !== 0) ? "show" : "")}>
-                        <div className="countdown-text"></div>
+                <div className="countdown-text"></div>
             </div>
         </div>
     );

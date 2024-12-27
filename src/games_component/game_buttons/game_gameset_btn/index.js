@@ -5,12 +5,15 @@ import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { AlertContext } from "provider/alertProvider";
 import alertMsg from "provider/alertProvider";
 import ChangeTable from "component/changeTable";
-
-
+import {
+    CashUnitContext
+} from "provider/GameLobbyProvider";
+import BigNumber from "bignumber.js";
 
 const GameControlButton = (props) => {
     const lobbyClient = EWinGameLobbyClient.getInstance();
     const gameClient = props.gameClient;
+    const { getDisplayUnit } = useContext(CashUnitContext);
     const btnsItem = [
         { index: 1, btnName: "飛牌" },
         { index: 2, btnName: "加彩" },
@@ -40,7 +43,7 @@ const GameControlButton = (props) => {
     let areaCode = useRef();
 
     useEffect(() => {
-       
+        
     }, []);
 
     const handleSelControl = (event, index) => {
@@ -233,7 +236,7 @@ const GameControlButton = (props) => {
                 ReactDOM.createPortal(<div className="overlay">
                     <AddChip
                         onAddChipClose={onAddChipClose}
-                        onAddChipClear={()=>{setChipVal(0)}}
+                        onAddChipClear={() => { setChipVal(0) }}
                         setrefreshTable={setrefreshTable}
                         setChipVal={onChangeChipVal}
                         gameClient={gameClient}
@@ -241,6 +244,7 @@ const GameControlButton = (props) => {
                         gameSetID={gameSetID}
                         getTableShoeInfo={getTableShoeInfo}
                         alertMsg={alertMsg}
+                        getDisplayUnit={getDisplayUnit}
                     />
                     <div className="game-chips-area">
                         <div className="game-chips-box">
@@ -249,7 +253,7 @@ const GameControlButton = (props) => {
                                     key={`chips${item.styleIndex}`}
                                     className={`chips-${item.styleIndex} ${props.selChipIndex === item.styleIndex ? "act" : ""
                                         }`}
-                                    onClick={() => onSetChipVal(item.chipValue)}
+                                    onClick={() => onSetChipVal(item.showText)}
                                 >
                                     <div>{item.showText}</div>
                                 </div>
@@ -257,7 +261,7 @@ const GameControlButton = (props) => {
                         </div>
                     </div>
                 </div>,
-                document.body)
+                    document.body)
             ) : onChangeTable ? (
                 <>
                     <ChangeTable
@@ -312,10 +316,13 @@ const AddChip = (props) => {
 
     const handleOK = () => {
         //加彩動作
-        let addChipValue = parseInt(document.querySelector(".v11").textContent);
+        let addVal = 0;
+        let unitData = props.getDisplayUnit();
 
-        if (addChipValue > 0) {
-            props.alertMsg("加彩", "是否要求加彩 " + addChipValue, () => {
+        if (props.setChipVal > 0) {
+            addVal = new BigNumber(props.setChipVal).dividedBy(unitData.value).toNumber();
+
+            props.alertMsg("加彩", "是否要求加彩 " + props.setChipVal, () => {
                 //AddChip game
                 handleClose();
                 let tableInfo = props.getTableShoeInfo();
@@ -324,7 +331,7 @@ const AddChip = (props) => {
                     props.roadMapNumber,
                     tableInfo.shoeNumber,
                     tableInfo.roundNumber,
-                    addChipValue,
+                    addVal,
                     function (success, o) {
                         if (success) {
                             if (o.ResultState == 0) {

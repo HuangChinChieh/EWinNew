@@ -1675,6 +1675,10 @@ const GameView = (props) => {
         return tableInfo.current;
     }, []);
 
+    const getQueryInfo = useCallback(() => {
+        return queryInfo.current;
+    }, []);
+
 
 
 
@@ -2031,7 +2035,7 @@ const GameView = (props) => {
 
     return (
         <BaccaratTableNotifyContext.Provider value={{ NotifyOn, NotifyOff }}>
-            <BaccaratGameContext.Provider value={{ getSelChipData, gameClient, getIsSendCheck, setIsSendCheck }}>
+            <BaccaratGameContext.Provider value={{ getSelChipData, gameClient, getIsSendCheck, setIsSendCheck, getQueryInfo }}>
                 <div className="game-view-wrap">
                     {
                         /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />

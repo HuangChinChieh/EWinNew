@@ -28,7 +28,6 @@ const GameTips = (props) => {
                     orderData={props.orderData}
                     showTip={true}
                     hideTip={hideTip}
-                    cashUnit={props.cashUnit}
                 />, document.body) : <></>
             }
         </>
