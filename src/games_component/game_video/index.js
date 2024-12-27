@@ -98,7 +98,7 @@ const GameVideo = forwardRef((props, ref) => {
             let sourceRect;
             let videoTag;
 
-            if (player.current == null) {
+            if (player.current == null || magnifierCanvas.current == null) {
                 return;
             }
 

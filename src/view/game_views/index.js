@@ -397,17 +397,17 @@ const GameView = (props) => {
             }
         }
 
-        if (prevTableInfo != null  && prevTableInfo.Stream != null){
+        if (prevTableInfo != null && prevTableInfo.Stream != null) {
             if (isStreamChange(tableInfo.current.Stream, prevTableInfo.Stream)) {
                 setStreamArray(tableInfo.current.Stream)
             }
-        }else{
+        } else {
             // tableNotify.current.notify("StreamChange", {
             //     stream: tableInfo.current.Stream,
             // });
 
             setStreamArray(tableInfo.current.Stream)
-        }       
+        }
     };
 
     const handleQuery = useCallback((Q) => {
@@ -2092,18 +2092,18 @@ const GameView = (props) => {
                                     baccaratType={baccaratType}
                                     setBetLimitBySel={setBetLimitBySel}
                                 >
-                                    <GameVideoChannelsButton 
-                                     videoControlRef={videoControl}
-                                     serverUrl={serverUrl}
-                                     setVideoResolutionType={setVideoResolutionType}
-                                     setVpDomain={setVpDomain}
-                                     CT={props.CT}
-                                     videoResolutionType={videoResolutionType}
-                                     stream={handleStreamArray(streamArray, videoResolutionType)}  
-                                     vpDomain={vpDomain}
-                                     >
+                                    <GameVideoChannelsButton
+                                        videoControlRef={videoControl}
+                                        serverUrl={serverUrl}
+                                        setVideoResolutionType={setVideoResolutionType}
+                                        setVpDomain={setVpDomain}
+                                        CT={props.CT}
+                                        videoResolutionType={videoResolutionType}
+                                        stream={handleStreamArray(streamArray, videoResolutionType)}
+                                        vpDomain={vpDomain}
+                                    >
 
-                                      </GameVideoChannelsButton>
+                                    </GameVideoChannelsButton>
                                 </GameHeader>
                                 <CountdownCircle
                                     isCanBet={isCanBet}
@@ -2114,8 +2114,8 @@ const GameView = (props) => {
                                     ref={videoControl}
                                     CT={props.CT}
                                     tableNumber={tableNumber}
-                                    stream={handleStreamArray(streamArray, videoResolutionType)}  
-                                    vpDomain={vpDomain}                                  
+                                    stream={handleStreamArray(streamArray, videoResolutionType)}
+                                    vpDomain={vpDomain}
                                 ></GameVideo>
                                 <GameRoadMap shoeResult={shoeResult}></GameRoadMap>
                                 <GameBettingArea
