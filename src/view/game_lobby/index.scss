@@ -13,7 +13,7 @@
             linear-gradient(90deg, rgb(29, 29, 38), rgb(29, 29, 38));
         width: 100%;
         height: 90vh;
-        box-shadow: inset 0 -68px 38px #1D1D26;
+        box-shadow: inset 0 -4.25rem 2.375rem #1D1D26;
     }
 
     .demoheight {
@@ -23,17 +23,17 @@
         .list-box {
             .icons {
                 display: inline-block;
-                width: 22px;
-                height: 22px;
-                margin-right: 5px;
+                width: 1.375rem;
+                height: 1.375rem;
+                margin-right: 0.3125rem;
 
                 &.yourgames {
                     background: url('../../img/tabs/yourgames.png') no-repeat center center/cover;
                 }
 
                 &.baccarat {
-                    width: 22px;
-                    height: 22px;
+                    width: 1.375rem;
+                    height: 1.375rem;
                     background: url('../../img/tabs/baccarat.png') no-repeat center center/contain;
                 }
             }
@@ -46,19 +46,19 @@
             align-items: center;
 
             .tab {
-                border: 1px solid rgba(255, 255, 255, 0.4);
-                padding: 3px 12px;
-                margin-right: 10px;
-                border-radius: 15px;
+                border: 0.0625rem solid rgba(255, 255, 255, 0.4);
+                padding: 0.1875rem 0.75rem;
+                margin-right: 0.625rem;
+                border-radius: 0.9375rem;
                 cursor: pointer;
                 color: rgba(255, 255, 255, 0.4);
                 display: flex;
                 align-items: center;
 
                 &.active {
-                    border: 1px solid rgba(255, 255, 255, 1);
+                    border: 0.0625rem solid rgba(255, 255, 255, 1);
                     color: rgba(255, 255, 255, 1);
-                    box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+                    box-shadow: 0 0 0.3125rem rgba(255, 255, 255, 0.7);
                 }
             }
         }
@@ -72,13 +72,13 @@
 
 
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
     .formb {
         display: block;
 
         .demoheight {
             margin-top: 0;
-            padding-top: 50px;
+            padding-top: 3.125rem;
         }
 
         .hasbg {

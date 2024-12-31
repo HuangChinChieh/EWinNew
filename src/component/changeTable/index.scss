@@ -358,7 +358,7 @@
         }
     }
 
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 75rem) {
         .section_box ul li {
             width: 23%;
             margin: 0.6rem;
@@ -373,7 +373,7 @@
         }
     }
 
-    @media screen and (max-width: 992px) {
+    @media screen and (max-width: 0.625rem) {
         .section_box ul li {
             width: 23%;
             margin: 0.4rem;
@@ -404,7 +404,7 @@
         }
     }
 
-    @media screen and (max-width: 1082px) {
+    @media screen and (max-width: 67.625rem) {
         /* 之後主選項目多再做滾動，目前先取消滾動 */
         /* .section_box {
             flex-wrap: nowrap;
@@ -473,7 +473,6 @@
                             top: 0;
                             transform: scale(1);
                             left: auto;
-                            // min-height: 200px;
                             overflow-y: scroll;
                             height: 85%;
                             background: rgba(41, 41, 51, 1) !important;
@@ -541,7 +540,7 @@
         }
     }
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 31.25rem) {
         .section_box ul li {
             width: 30%;
             margin: 0.625rem 0.3125rem;
@@ -574,7 +573,7 @@
         }
     }
 
-    @media screen and (max-width: 376px) {
+    @media screen and (max-width: 23.5rem) {
         .section_box ul li {
             width: 47%;
         }
@@ -586,7 +585,7 @@
         }
     }
 
-    @media screen and (min-width: 260px) and (max-width: 339px) {
+    @media screen and (min-width: 160.25rem) and (max-width: 21.1875rem) {
         .section_box ul li {
             width: 90%;
         }

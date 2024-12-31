@@ -16,6 +16,10 @@ const CountdownLittleCircle = (props) => {
         const anglePerFrame = totalAngle / totalFrames;
         const nextAngle = nowAngle.current + anglePerFrame;
 
+        if (animationDom1.current == null || animationDom2.current == null) {
+            return;
+        }
+
         if (nextAngle >= 360) {
             nowAngle.current = 0;
             props.setIsCanBet(false);
@@ -56,17 +60,17 @@ const CountdownLittleCircle = (props) => {
                 //設定起始角度
                 let countdownSecond = props.countdownData.remainingSecond * 1000 - (new Date() - props.countdownData.lastQueryDate);
 
-                if(countdownSecond >0){
+                if (countdownSecond > 0) {
                     nowAngle.current = (1 - (countdownSecond / (props.countdownData.tableTimeoutSecond * 1000))) * 360;
                     requestAnimationFrame(refreshCountdown);
-                }else{
+                } else {
                     props.setIsCanBet(false);
                     textDom.current.innerText = "00";
                     animationDom2.current.style.transform = `rotate(0deg)`
                     animationDom1.current.className = `countdown-little-circle white`;
                     plusAngle.current = 0;
                     nowAngle.current = 0;
-                }                
+                }
             } else {
                 props.setIsCanBet(false);
                 textDom.current.innerText = "00";
@@ -94,12 +98,12 @@ const CountdownLittleCircle = (props) => {
                     <defs>
                         <mask id="clockMaskSmall">
 
-                            <rect  x="0" y="0" width="64" height="64" fill="white"></rect>
+                            <rect x="0" y="0" width="64" height="64" fill="white"></rect>
 
 
                             <rect x="29" y="14" width="6" height="20" fill="black"></rect>
 
-                            <rect ref={animationDom2} x="29" y="6" width="6" height="26" fill="black" style={{'transformOrigin': 'center'}}></rect>
+                            <rect ref={animationDom2} x="29" y="6" width="6" height="26" fill="black" style={{ 'transformOrigin': 'center' }}></rect>
                             <circle cx="32" cy="32" r="4" fill="black"></circle>
                         </mask>
                     </defs>

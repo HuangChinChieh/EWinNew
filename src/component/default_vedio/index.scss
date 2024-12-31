@@ -3,7 +3,7 @@
     height: 28vh;
     overflow: hidden;
     margin: 1.1rem auto 0;
-    border-radius: 16px;
+    border-radius: 1rem;
 
     img {
         height: 100%;
@@ -14,8 +14,8 @@
 
 
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
     .default-vedio-box {
-        height: 220px;
+        height: 13.75rem;
     }
 }

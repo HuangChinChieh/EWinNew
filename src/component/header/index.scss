@@ -1,6 +1,6 @@
 .aniHeader,
 .aniHeaderAction {
-    height: 80px;
+    height: 5rem;
     position: fixed;
     left: 0;
     top: 0;
@@ -14,7 +14,7 @@
     .header-box {
         display: flex;
         align-items: center;
-        padding: 8px 5vw 0;
+        padding: 0.5rem 5vw 0;
         color: #fff;
         position: relative;
 
@@ -37,16 +37,16 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    margin-right: 20px;
+                    margin-right: 1.25rem;
                     color: #DBC165;
 
                     .user-icon,
                     .user-wallet,
                     .user-favorite {
                         display: inline-block;
-                        margin-right: 4px !important;
-                        width: 26px;
-                        height: 26px;
+                        margin-right: 0.25rem !important;
+                        width: 1.625rem;
+                        height: 1.625rem;
                         cursor: pointer;
                     }
 
@@ -76,16 +76,16 @@
         .toolbar {
             position: absolute;
             right: 2vw;
-            top: 19px;
+            top: 1.1875rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 0.9375rem;
             .fullscreen,
             .exitfullscreen {
-                margin-right: 4px !important;
-                width: 33px;
-                height: 33px;
+                margin-right: 0.25rem !important;
+                width: 2.0625rem;
+                height: 2.0625rem;
                 cursor: pointer;
 
                 transition: filter 0.3s; /* 添加過渡效果 */
@@ -101,7 +101,7 @@
                 &+span {
                     color: #fff;
                     font-size: 1.4rem;
-                    margin-left: 3px;
+                    margin-left: 0.1875rem;
                 }
             }
 
@@ -111,7 +111,7 @@
                 &+span {
                     color: #fff;
                     font-size: 1.4rem;
-                    margin-left: 3px;
+                    margin-left: 0.1875rem;
                 }
             }
 
@@ -119,7 +119,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-right: 20px;
+                margin-right: 1.25rem;
             }
         }
     }
@@ -127,8 +127,8 @@
 
 .aniHeaderAction {
     box-shadow:
-        inset 0 0 100px 0 rgba(0, 0, 0, 1),
-        0 0 5px 0 rgba(255, 255, 255, 0.7);
+        inset 0 0 6.25rem 0 rgba(0, 0, 0, 1),
+        0 0 0.3125rem 0 rgba(255, 255, 255, 0.7);
 }
 
 .lightbox-box {
@@ -145,23 +145,23 @@
 
     .form-box {
         background: rgba(0, 0, 0, 0.7);
-        border-radius: 7px;
-        padding: 20px;
-        box-shadow: 0 0 13px rgba(255, 255, 255, 0.6);
+        border-radius: 0.4375rem;
+        padding: 1.25rem;
+        box-shadow: 0 0 0.8125rem rgba(255, 255, 255, 0.6);
         position: relative;
 
         span.close {
-            width: 20px;
-            height: 20px;
+            width: 1.25rem;
+            height: 1.25rem;
             color: #fff;
             position: absolute;
-            right: -2px;
-            top: -35px;
+            right: -0.125rem;
+            top: -2.1875rem;
             font-size: 1.5rem;
             background: rgba(0, 0, 0, 1);
-            padding: 7px;
+            padding: 0.4375rem;
             text-align: center;
-            border-radius: 50px;
+            border-radius: 3.125rem;
             cursor: pointer;
         }
 
@@ -170,13 +170,13 @@
             outline: none;
             color: #dcdcdd;
             background-color: rgba(0, 0, 0, 0.9);
-            margin-bottom: 21px;
-            padding: 11px 6px;
-            border-bottom: 0.5px solid rgba(255, 255, 255, 0);
+            margin-bottom: 1.3125rem;
+            padding: 0.6875rem 0.375rem;
+            border-bottom: 0.0.3125rem solid rgba(255, 255, 255, 0);
 
             &:focus,
             &:focus-visible {
-                border-bottom: 0.5px solid rgba(255, 255, 255, 0.3);
+                border-bottom: 0.0.3125rem solid rgba(255, 255, 255, 0.3);
             }
         }
 
@@ -184,13 +184,13 @@
             color: red;
             font-size: 0.9rem;
             display: block;
-            margin-bottom: 21px;
+            margin-bottom: 1.3125rem;
         }
     }
 }
 
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
 
     .aniHeader,
     .aniHeaderAction {
@@ -199,7 +199,7 @@
         box-shadow: inset 0px 0px 0px 0 rgba(0, 0, 0, 1), 0 0 0 0 rgba(255, 255, 255, 1);
         transition: all 1.5s ease;
         background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
-        padding-bottom: 8px;
+        padding-bottom: 0.5rem;
     }
 
     .aniHeader {
@@ -211,7 +211,7 @@
 
     @keyframes aniheaderout {
         0% {
-            top: -200px;
+            top: -12.5rem;
         }
 
         100% {
@@ -220,7 +220,7 @@
     }
 
     .aniHeaderAction {
-        top: -200px;
+        top: -12.5rem;
         animation-name: aniheaderout;
         animation-duration: 1s;
         animation-timing-function: ease;
@@ -232,12 +232,12 @@
         }
 
         100% {
-            top: -200px;
+            top: -12.5rem;
         }
     }
 
     .header-box {
-        padding: 10px;
+        padding: 0.625rem;
 
         .toolbar {
             display: none !important;
@@ -246,8 +246,8 @@
         .nav-box {
             margin-right: auto;
             position: absolute;
-            top: 13px;
-            right: 37px;
+            top: 0.8125rem;
+            right: 2.3125rem;
 
             .forpc {
                 display: none !important;
@@ -261,17 +261,17 @@
 
                 span {
                     .user-icon {
-                        width: 16px !important;
-                        height: 16px !important;
+                        width: 1rem !important;
+                        height: 1rem !important;
                     }
 
                 }
 
                 .user-favorite {
                     display: inline-block;
-                    margin-top: 2px;
-                    width: 16px !important;
-                    height: 16px !important;
+                    margin-top: 0.125rem;
+                    width: 1rem !important;
+                    height: 1rem !important;
                     background: url('../../img/global/favorite.png') no-repeat center center/contain !important;
                 }
             }
@@ -281,19 +281,19 @@
 
         .hamb {
             position: absolute;
-            top: 18px;
-            right: 22px;
+            top: 1.125rem;
+            right: 1.375rem;
 
             span {
                 display: block;
-                width: 15px;
-                height: 2px;
+                width: 0.9375rem;
+                height: 0.125rem;
                 background: #fff;
-                margin-bottom: 3px;
+                margin-bottom: 0.1875rem;
                 transition: all 0.7s ease;
 
                 &:nth-child(2) {
-                    margin-left: 3px;
+                    margin-left: 0.1875rem;
                 }
             }
 
@@ -301,7 +301,7 @@
                 span {
                     &:nth-child(1) {
                         transform: rotate(-45deg);
-                        margin-top: 5px;
+                        margin-top: 0.3125rem;
                     }
 
                     &:nth-child(2) {
@@ -311,7 +311,7 @@
 
                     &:nth-child(3) {
                         transform: rotate(45deg);
-                        margin-top: -10px;
+                        margin-top: -0.625rem;
                     }
                 }
 
@@ -330,7 +330,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            top: -3px;
+            top: -0.1875rem;
             right: 0;
             transition: all 1s ease;
 
@@ -340,33 +340,33 @@
                 width: 40%;
                 background: #292933;
                 position: fixed;
-                right: -3px;
+                right: -0.1875rem;
                 bottom: 0;
                 height: 100%;
                 z-index: 9999999;
-                border-top-left-radius: 35px;
-                border-bottom-left-radius: 35px;
+                border-top-left-radius: 2.1875rem;
+                border-bottom-left-radius: 2.1875rem;
                 animation-name: anifooterin1;
                 animation-duration: 1s;
                 animation-timing-function: ease;
-                box-shadow: 0px -4px 15px rgba(0, 0, 0, 0.6);
+                box-shadow: 0px -0.25rem 0.9375rem rgba(0, 0, 0, 0.6);
 
                 h4 {
                     color: #fff;
                     font-size: 1.6rem;
                     text-align: center;
                     position: relative;
-                    margin-top: 23px;
+                    margin-top: 1.4375rem;
 
                     &::before {
 
                         content: "";
                         display: block;
-                        width: 38px;
-                        height: 4px;
+                        width: 2.375rem;
+                        height: 0.25rem;
                         background: rgba(255, 255, 255, 0.4);
-                        margin: 0 auto 10px;
-                        border-radius: 4px;
+                        margin: 0 auto 0.625rem;
+                        border-radius: 0.25rem;
 
 
                     }
@@ -385,23 +385,23 @@
                 }
 
                 .close {
-                    width: 25px;
-                    height: 25px;
+                    width: 1.5625rem;
+                    height: 1.5625rem;
                     display: block;
                     background: url('../../img/header/close.png') no-repeat center center/contain;
                     position: absolute;
-                    right: 19px;
-                    top: 12px;
+                    right: 1.1875rem;
+                    top: 0.75rem;
                 }
 
                 @keyframes anifooterin1 {
                     0% {
-                        right: -200px;
+                        right: -12.5rem;
                         bottom: 0;
                     }
 
                     100% {
-                        right: -3px;
+                        right: -0.1875rem;
                         bottom: 0;
                     }
                 }
@@ -416,7 +416,7 @@
 
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 31.25rem) {
     .lightbox-box {
 
         &.open {
@@ -428,7 +428,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            top: -3px;
+            top: -0.1875rem;
             left: 0;
             transition: all 1s ease;
 
@@ -438,16 +438,16 @@
                 width: 100%;
                 background: #292933;
                 position: fixed;
-                bottom: -3px;
+                bottom: -0.1875rem;
                 left: 0;
                 z-index: 9999999;
-                border-top-right-radius: 35px;
-                border-top-left-radius: 35px;
+                border-top-right-radius: 2.1875rem;
+                border-top-left-radius: 2.1875rem;
                 border-bottom-left-radius: 0;
                 animation-name: anifooterin2;
                 animation-duration: 1s;
                 animation-timing-function: ease;
-                box-shadow: 0px -4px 15px rgba(0, 0, 0, 0.6);
+                box-shadow: 0px -0.25rem 0.9375rem rgba(0, 0, 0, 0.6);
                 height: auto;
 
                 h4 {
@@ -455,17 +455,17 @@
                     font-size: 1.6rem;
                     text-align: center;
                     position: relative;
-                    margin-top: 23px;
+                    margin-top: 1.4375rem;
 
                     &::before {
 
                         content: "";
                         display: block;
-                        width: 38px;
-                        height: 4px;
+                        width: 2.375rem;
+                        height: 0.25rem;
                         background: rgba(255, 255, 255, 0.4);
-                        margin: 0 auto 10px;
-                        border-radius: 4px;
+                        margin: 0 auto 0.625rem;
+                        border-radius: 0.25rem;
 
 
                     }
@@ -484,22 +484,22 @@
                 }
 
                 .close {
-                    width: 25px;
-                    height: 25px;
+                    width: 1.5625rem;
+                    height: 1.5625rem;
                     display: block;
                     background: url('../../img/header/close.png') no-repeat center center/contain;
                     position: absolute;
-                    right: 19px;
-                    top: 12px;
+                    right: 1.1875rem;
+                    top: 0.75rem;
                 }
 
                 @keyframes anifooterin2 {
                     0% {
-                        bottom: -200px;
+                        bottom: -12.5rem;
                     }
 
                     100% {
-                        bottom: -3px;
+                        bottom: -0.1875rem;
                     }
                 }
             }

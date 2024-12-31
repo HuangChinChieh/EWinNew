@@ -19,6 +19,10 @@ const CountdownCircle = (props) => {
         let percentage;
         let polygonText;
 
+        if(animationDom.current == null){
+            return;
+        }
+
         countdownData.tableTimeoutSecond = 0;
         if (prevCountdownData.current == null) {
             prevCountdownData.current = countdownData;

@@ -16,8 +16,8 @@
 
             .games {
                 cursor: pointer;
-                border-top-left-radius: 11px;
-                border-top-right-radius: 11px;
+                border-top-left-radius: 0.6875rem;
+                border-top-right-radius: 0.6875rem;
                 overflow: hidden;
 
                 img {
@@ -29,7 +29,7 @@
             .game-title {
                 font-size: 1rem;
                 color: #fff;
-                margin-top: 3px;
+                margin-top: 0.1875rem;
                 margin-bottom: 0;
                 font-weight: 500;
             }
@@ -37,8 +37,8 @@
             .game-wallet {
                 font-size: 0.9rem;
                 color: #F4CD44;
-                margin-top: 3px;
-                margin-bottom: 30px;
+                margin-top: 0.1875rem;
+                margin-bottom: 1.875rem;
 
                 span {
                     font-size: 0.8rem;
@@ -47,40 +47,40 @@
 
             &.li-box {
                 position: relative;
-                box-shadow: 1px -2px 10px 0px rgba(0, 0, 0, 0.3);
+                box-shadow: 0.0625rem -0.125rem 0.625rem 0px rgba(0, 0, 0, 0.3);
 
                 .has-tradition {
                     position: absolute;
-                    left: -4px;
-                    top: -10px;
+                    left: -0.25rem;
+                    top: -0.625rem;
                     display: block;
-                    width: 22px;
-                    height: 22px;
+                    width: 1.375rem;
+                    height: 1.375rem;
                     background: url('../../img/global/tradition.png') no-repeat center center/contain;
                 }
 
                 .has-favorites {
                     position: absolute;
-                    left: -4px;
-                    top: -10px;
+                    left: -0.25rem;
+                    top: -0.625rem;
                     display: block;
-                    width: 22px;
-                    height: 22px;
+                    width: 1.375rem;
+                    height: 1.375rem;
                     background: url('../../img/global/tag.png') no-repeat center center/contain;
                 }
 
                 .ishot {
 
                     position: absolute;
-                    left: -4px;
-                    top: -10px;
+                    left: -0.25rem;
+                    top: -0.625rem;
                     display: block;
-                    width: 22px;
-                    height: 22px;
+                    width: 1.375rem;
+                    height: 1.375rem;
                     background: url('../../img/global/hot.png') no-repeat center center/contain;
 
                     &+.has-favorites {
-                        top: 10px;
+                        top: 0.625rem;
                     }
                 }
 
@@ -99,12 +99,12 @@
                 width: 100%;
                 // transform: scale(0);
                 overflow: hidden;
-                border-radius: 11px;
+                border-radius: 0.6875rem;
                 background: linear-gradient(to bottom, rgba(41, 41, 51, 0) 0%, rgba(41, 41, 50, 1) 30%, rgba(41, 41, 51, 1) 100%);
                 opacity: 0;
 
                 &.visible {
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+                    box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.9);
                     top: -7rem;
                     left: -4.4%;
                     z-index: 99;
@@ -125,17 +125,17 @@
 
                 .games {
                     position: relative;
-                    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7);
+                    box-shadow: inset 0 0 0.625rem rgba(0, 0, 0, 0.7);
 
                     &::before {
                         content: "";
                         position: absolute;
                         left: 0;
-                        bottom: -9px;
+                        bottom: -0.5625rem;
                         width: 100%;
-                        height: 20px;
+                        height: 1.25rem;
                         background: linear-gradient(to top, rgba(41, 41, 51, 0) 0%, rgba(41, 41, 50, 1) 6%, rgb(41, 41, 51) 100%);
-                        filter: blur(6px);
+                        filter: blur(0.375rem);
                     }
 
                 }
@@ -143,11 +143,11 @@
                 .info-box {
                     position: relative;
                     width: 80%;
-                    // margin: -20px auto 10px;
-                    margin: 0px auto 10px;
-                    padding-bottom: 20px;
+                    // margin: -1.25rem auto 0.625rem;
+                    margin: 0px auto 0.625rem;
+                    padding-bottom: 1.25rem;
                     // background: linear-gradient(to top, rgba(41, 41, 51, 0) 0%, rgba(41, 41, 51, 1) 100%);
-                    // box-shadow: 0 0 4px rgba(41, 41, 51, 0.7);
+                    // box-shadow: 0 0 0.25rem rgba(41, 41, 51, 0.7);
 
                     .favorites-box {
                         position: absolute;
@@ -155,13 +155,13 @@
                         top: 0.5rem;
 
                         .video-control {
-                            margin-bottom: 7px;
+                            margin-bottom: 0.4375rem;
                         }
 
                         span {
                             display: block;
-                            width: 15px;
-                            height: 15px;
+                            width: 0.9375rem;
+                            height: 0.9375rem;
                             cursor: pointer;
 
                             &.add-to-favorites {
@@ -198,8 +198,8 @@
                     }
 
                     .game-table-wrap {
-                        border-radius: 3px;
-                        margin: 7px 0 0;
+                        border-radius: 0.1875rem;
+                        margin: 0.4375rem 0 0;
                         overflow: hidden;
                     }
 
@@ -208,8 +208,8 @@
 
                 .game-wallet {
                     font-size: 0.8rem;
-                    margin-top: -5px;
-                    margin-bottom: 10px;
+                    margin-top: -0.3125rem;
+                    margin-bottom: 0.625rem;
 
                     span {
                         font-size: 0.8rem;
@@ -218,8 +218,8 @@
 
                 .game-start {
                     background: #8D8D9F;
-                    border-radius: 30px;
-                    padding: 6px 43px;
+                    border-radius: 1.875rem;
+                    padding: 0.375rem 2.6875rem;
                     display: inline-block;
 
                     a {
@@ -233,38 +233,38 @@
                             content: '';
                             display: block;
                             position: absolute;
-                            top: 2px;
-                            left: -16px;
-                            width: 12px;
-                            height: 12px;
+                            top: 0.125rem;
+                            left: -1rem;
+                            width: 0.75rem;
+                            height: 0.75rem;
                             background: url('../../img/global/play.png') no-repeat center center/contain;
                         }
                     }
                 }
 
                 .show-similar-games {
-                    // height: 250px;
+                    // height: 15.625rem;
                     padding-bottom: 1rem;
                     overflow-y: hidden;
 
                     p {
                         color: #fff;
-                        font-size: 12px;
+                        font-size: 0.75rem;
                         padding: 0;
                     }
                 }
 
                 .more {
                     display: block;
-                    height: 30px;
+                    height: 1.875rem;
                     text-align: center;
 
                     &:before {
                         content: '';
                         cursor: pointer;
                         display: inline-block;
-                        width: 12px;
-                        height: 21px;
+                        width: 0.75rem;
+                        height: 1.3125rem;
                         background: url('../../img/global/more.png') no-repeat center center/contain;
                     }
                 }
@@ -274,7 +274,7 @@
     }
 }
 
-// @media screen and (max-width: 1600px) {
+//@media screen and (max-width: 100rem) 
 //     .hover-box {
 //         left: -4.6%;
 
@@ -284,14 +284,14 @@
 //     }
 // }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 75rem) {
     .section_box ul li {
         width: 23%;
         margin: 0.6rem;
     }
 
     .game-start {
-        padding: 6px 23px;
+        padding: 0.375rem 1.4375rem;
 
         span {
             font-size: 0.9rem;
@@ -301,7 +301,7 @@
 
 
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 62rem) {
     .section_box ul li {
         width: 23%;
         margin: 0.4rem;
@@ -312,7 +312,7 @@
     }
 
     .game-start {
-        padding: 5px 30px 7px !important;
+        padding: 0.3125rem 1.875rem 0.4375rem !important;
 
         a {
             font-size: 0.8rem !important;
@@ -323,16 +323,16 @@
                 display: block;
                 position: absolute;
                 top: 0px !important;
-                left: -16px;
-                width: 12px;
-                height: 12px;
+                left: -1rem;
+                width: 0.75rem;
+                height: 0.75rem;
                 background: url('../../img/global/play.png') no-repeat center center/contain;
             }
         }
     }
 }
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
 
     /* 之後主選項目多再做滾動，目前先取消滾動 */
     /* .section_box {
@@ -350,21 +350,21 @@
             display: flex;
             flex-wrap: wrap;
             padding: 0;
-            margin: 7px;
+            margin: 0.4375rem;
             list-style: none;
             justify-content: flex-start;
 
             li {
                 list-style-type: none;
                 margin-bottom: 0;
-                /* margin-left: 11px; */
+                /* margin-left: 0.6875rem; */
                 position: relative;
                 width: 23%;
-                margin: 10px 5px;
+                margin: 0.625rem 0.3125rem;
                 flex: 1;
 
                 .games {
-                    border-radius: 5px;
+                    border-radius: 0.3125rem;
 
                     img {
                         height: auto;
@@ -377,7 +377,7 @@
 
                 .game-wallet {
                     font-size: 0.7rem;
-                    margin-bottom: 10px;
+                    margin-bottom: 0.625rem;
                 }
 
                 .hover-box {
@@ -404,11 +404,11 @@
                         top: 0;
                         transform: scale(1);
                         left: auto;
-                        // min-height: 200px;
+                        // min-height: 12.5rem;
                         overflow-y: scroll;
                         height: 85%;
                         background: rgba(41, 41, 51, 1) !important;
-                        box-shadow: -85vh 0 33px rgba(0, 0, 0, 0.7);
+                        box-shadow: -85vh 0 2.0625rem rgba(0, 0, 0, 0.7);
                         opacity: 1;
                         width: 50%;
 
@@ -421,13 +421,13 @@
 
                         .game-title {
                             font-size: 1.3rem !important;
-                            margin-bottom: 10px;
+                            margin-bottom: 0.625rem;
                             ;
                         }
 
                         .game-wallet {
                             font-size: 0.9rem !important;
-                            margin-bottom: 10px;
+                            margin-bottom: 0.625rem;
                         }
 
 
@@ -439,7 +439,7 @@
 
                         p {
 
-                            font-size: 11px;
+                            font-size: 0.6875rem;
 
                         }
                     }
@@ -455,8 +455,8 @@
                 .close-hover-box {
                     position: absolute;
                     display: block;
-                    width: 16px;
-                    height: 16px;
+                    width: 1rem;
+                    height: 1rem;
                     left: 2.8rem;
                     top: 5rem;
                     z-index: 9;
@@ -466,10 +466,10 @@
                         content: '';
                         display: block;
                         position: absolute;
-                        top: -8px;
-                        left: -8px;
-                        width: 32px;
-                        height: 32px;
+                        top: -0.5rem;
+                        left: -0.5rem;
+                        width: 2rem;
+                        height: 2rem;
                         background: url('../../img/global/close2.png') no-repeat center center/cover;
                     }
                 }
@@ -482,18 +482,18 @@
 }
 
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 31.25rem) {
 
     .section_box ul li {
         width: 30%;
-        margin: 10px 5px;
+        margin: 0.625rem 0.3125rem;
 
         .hover-box {
             // top: auto;
             right: auto;
             left: 0;
             bottom: -100vh;
-            min-height: 200px;
+            min-height: 12.5rem;
             width: 100%;
             opacity: 0;
 
@@ -503,7 +503,7 @@
                 bottom: 0;
                 left: 0;
                 opacity: 1;
-                box-shadow: 0 -30vh 33px rgba(0, 0, 0, 0.7);
+                box-shadow: 0 -30vh 2.0625rem rgba(0, 0, 0, 0.7);
                 width: 100%;
             }
         }
@@ -519,7 +519,7 @@
 
 }
 
-@media screen and (max-width: 376px) {
+@media screen and (max-width: 23.5rem) {
 
     .section_box ul li {
         width: 47%;
@@ -527,7 +527,7 @@
 
 }
 
-@media screen and (max-width: 340px) {
+@media screen and (max-width: 21.25rem) {
 
     .section_box ul li {
         width: 92%;
@@ -535,7 +535,7 @@
 
 }
 
-@media screen and (min-width: 260px) and (max-width: 339px) {
+@media screen and (min-width: 16.25rem) and (max-width: 21.1875rem) {
     .section_box ul li {
         width: 90%;
     }

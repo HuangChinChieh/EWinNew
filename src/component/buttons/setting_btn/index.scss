@@ -1,8 +1,8 @@
 .settings-box {
     .settings {
         position: relative;
-        width: 33px;
-        height: 33px;
+        width: 2.0625rem;
+        height: 2.0625rem;
         cursor: pointer;      
         background: url('../../../img/header/settings.png') no-repeat center center/contain;
 
@@ -16,16 +16,16 @@
             position: fixed;
             right: -30rem;
             background: #292933;
-            padding: 20px 35px;
-            border-top-left-radius: 12px;
-            border-bottom-left-radius: 12px;
+            padding: 1.25rem 2.1875rem;
+            border-top-left-radius: 0.75rem;
+            border-bottom-left-radius: 0.75rem;
             top: 6rem;
-            box-shadow: 0 0 7px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 0.4375rem rgba(0, 0, 0, 0.7);
             animation-name: anisettingout;
             animation-duration: 1s;
             animation-timing-function: ease;
             transition: all 1s ease;
-            min-width: 200px;
+            min-width: 12.5rem;
             visibility: hidden;
 
             .flex-box {
@@ -67,8 +67,8 @@
             .custom-slider {
                 position: relative;
                 display: inline-block;
-                width: 50px;
-                height: 24px;
+                width: 3.125rem;
+                height: 1.5rem;
 
                 input {
                     opacity: 0;
@@ -80,9 +80,9 @@
                             background-color: #2196f3;
 
                             &::before {
-                                -webkit-transform: translateX(26px);
-                                -ms-transform: translateX(26px);
-                                transform: translateX(26px);
+                                -webkit-transform: translateX(1.625rem);
+                                -ms-transform: translateX(1.625rem);
+                                transform: translateX(1.625rem);
                             }
                         }
                     }
@@ -96,17 +96,17 @@
                     right: 0;
                     bottom: 0;
                     background-color: #ccc;
-                    border-radius: 34px;
+                    border-radius: 2.125rem;
                     -webkit-transition: 0.4s;
                     transition: 0.4s;
 
                     &::before {
                         position: absolute;
                         content: '';
-                        height: 15px;
-                        width: 15px;
-                        left: 4px;
-                        bottom: 4px;
+                        height: 0.9375rem;
+                        width: 0.9375rem;
+                        left: 0.25rem;
+                        bottom: 0.25rem;
                         background-color: white;
                         border-radius: 50%;
                         -webkit-transition: 0.4s;
@@ -119,14 +119,14 @@
                     display: inline-block;
                     top: 50%;
                     transform: translateY(-50%);
-                    margin-left: 10px;
+                    margin-left: 0.625rem;
                 }
             }
 
             .dis {
                 font-size: 0.7rem;
-                width: 200px;
-                margin-top: 10px;
+                width: 12.5rem;
+                margin-top: 0.625rem;
             }
 
         }
@@ -134,7 +134,7 @@
 }
 
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
 
     .settings {
         display: none;
@@ -142,7 +142,7 @@
 
     .formb {
         .setting-wrap {
-            margin: 10px 0 10px 25px;
+            margin: 0.625rem 0 0.625rem 1.5625rem;
 
             .flex-box {
                 display: flex;
@@ -152,15 +152,15 @@
                 width: 90%;
 
                 .icons {
-                    margin-right: 4px;
-                    width: 28px;
-                    height: 28px;
+                    margin-right: 0.25rem;
+                    width: 1.75rem;
+                    height: 1.75rem;
                     background: url("../../../img/header/settings.png") no-repeat center center/contain;
 
                     &+span {
                         font-size: 1rem;
                         color: #fff;
-                        margin-left: 3px;
+                        margin-left: 0.1875rem;
                     }
                 }
 
@@ -176,20 +176,20 @@
                 }
 
                 .backicon {
-                    width: 16px;
-                    height: 16px;
+                    width: 1rem;
+                    height: 1rem;
                     background: url('../../../img/global/Vector.png') no-repeat center center/contain;
                     transform: rotate(-180deg);
-                    margin-right: 4px;
+                    margin-right: 0.25rem;
                 }
 
 
                 .mbcustom-slider {
                     position: relative;
                     display: inline-block;
-                    width: 50px;
-                    height: 24px;
-                    margin-left: 12px;
+                    width: 3.125rem;
+                    height: 1.5rem;
+                    margin-left: 0.75rem;
 
                     input {
                         display: none;
@@ -200,9 +200,9 @@
                             background-color: #2196f3;
 
                             &::before {
-                                -webkit-transform: translateX(26px);
-                                -ms-transform: translateX(26px);
-                                transform: translateX(26px);
+                                -webkit-transform: translateX(1.625rem);
+                                -ms-transform: translateX(1.625rem);
+                                transform: translateX(1.625rem);
                             }
                         }
                     }
@@ -215,17 +215,17 @@
                         right: 0;
                         bottom: 0;
                         background-color: #ccc;
-                        border-radius: 34px;
+                        border-radius: 2.125rem;
                         -webkit-transition: 0.4s;
                         transition: 0.4s;
 
                         &::before {
                             position: absolute;
                             content: '';
-                            height: 15px;
-                            width: 15px;
-                            left: 4px;
-                            bottom: 4px;
+                            height: 0.9375rem;
+                            width: 0.9375rem;
+                            left: 0.25rem;
+                            bottom: 0.25rem;
                             background-color: white;
                             border-radius: 50%;
                             -webkit-transition: 0.4s;
@@ -238,7 +238,7 @@
                         display: inline-block;
                         top: 50%;
                         transform: translateY(-50%);
-                        margin-left: 10px;
+                        margin-left: 0.625rem;
                     }
                 }
 
@@ -246,8 +246,8 @@
                 .dis {
                     font-size: 0.7rem;
                     width: auto;
-                    margin-top: 10px;
-                    margin-bottom: 10px;
+                    margin-top: 0.625rem;
+                    margin-bottom: 0.625rem;
                     color: #fff;
                 }
 
