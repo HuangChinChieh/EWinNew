@@ -19,11 +19,11 @@
     }
 
     .flip-container {
-        -webkit-perspective: 1000px;
-        -moz-perspective: 1000px;
-        -ms-perspective: 1000px;
-        -o-perspective: 1000px;
-        perspective: 1000px;
+        -webkit-perspective: 62.5rem;
+        -moz-perspective: 62.5rem;
+        -ms-perspective: 62.5rem;
+        -o-perspective: 62.5rem;
+        perspective: 62.5rem;
         margin: 0px auto;
         float: left;
         margin-left: 0px;
@@ -38,11 +38,11 @@
     }
 
     .flip-container2 {
-        -webkit-perspective: 1000px;
-        -moz-perspective: 1000px;
-        -ms-perspective: 1000px;
-        -o-perspective: 1000px;
-        perspective: 1000px;
+        -webkit-perspective: 62.5rem;
+        -moz-perspective: 62.5rem;
+        -ms-perspective: 62.5rem;
+        -o-perspective: 62.5rem;
+        perspective: 62.5rem;
         margin: 0px auto;
         float: left;
         margin-left: 0px;
@@ -117,11 +117,11 @@
     }
 
     .flip-container_t {
-        -webkit-perspective: 1000px;
-        -moz-perspective: 1000px;
-        -ms-perspective: 1000px;
-        -o-perspective: 1000px;
-        perspective: 1000px;
+        -webkit-perspective: 62.5rem;
+        -moz-perspective: 62.5rem;
+        -ms-perspective: 62.5rem;
+        -o-perspective: 62.5rem;
+        perspective: 62.5rem;
         margin: 0px auto;
         float: left;
         margin-left: 0px;
@@ -136,11 +136,11 @@
     }
 
     .flip-container2_t {
-        -webkit-perspective: 1000px;
-        -moz-perspective: 1000px;
-        -ms-perspective: 1000px;
-        -o-perspective: 1000px;
-        perspective: 1000px;
+        -webkit-perspective: 62.5rem;
+        -moz-perspective: 62.5rem;
+        -ms-perspective: 62.5rem;
+        -o-perspective: 62.5rem;
+        perspective: 62.5rem;
         margin: 0px auto;
         float: left;
         margin-left: 0px;
@@ -268,8 +268,8 @@
         position: absolute;
         top: 0px;
         right: 0px;
-        width: 920px;
-        height: 289px;
+        width: 57.5rem;
+        height: 18.0625rem;
         // background-image: url("../image/CardResultBG_R.png");
         background-repeat: no-repeat;
         -webkit-animation: bgright 0.8s ease-out;
@@ -620,16 +620,16 @@
     #left_card img,
     #right_card img {
         border-radius: 0.75rem;
-        -webkit-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
-        -moz-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
-        -o-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
-        box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 5px 0.625rem 1px rgba(0, 0, 0, 0.5);
+        -webkit-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 0.3125rem 0.625rem 0.0625rem rgba(0, 0, 0, 0.5);
+        -moz-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 0.3125rem 0.625rem 0.0625rem rgba(0, 0, 0, 0.5);
+        -o-box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 0.3125rem 0.625rem 0.0625rem rgba(0, 0, 0, 0.5);
+        box-shadow: inset 0px 0px 0.625rem 0.1875rem #fff, 0px 0.3125rem 0.625rem 0.0625rem rgba(0, 0, 0, 0.5);
     }
 
     @-webkit-keyframes carddown {
         from {
             opacity: 0.5;
-            margin-top: -40px;
+            margin-top: -2.5rem;
         }
 
         to {
@@ -641,7 +641,7 @@
     @-moz-keyframes carddown {
         from {
             opacity: 0.5;
-            margin-top: -40px;
+            margin-top: -2.5rem;
         }
 
         to {
@@ -653,7 +653,7 @@
     @-o-keyframes carddown {
         from {
             opacity: 0.5;
-            margin-top: -40px;
+            margin-top: -2.5rem;
         }
 
         to {
@@ -665,7 +665,7 @@
     @keyframes carddown {
         from {
             opacity: 0.5;
-            margin-top: -40px;
+            margin-top: -2.5rem;
         }
 
         to {
@@ -680,14 +680,14 @@
         top: 0px;
         left: 0px;
         width: 100%;
-        height: 289px;
+        height: 18.0625rem;
         text-align: center;
     }
 
     #idPlayerTitle {
         position: absolute;
-        top: 51px;
-        right: 150px;
+        top: 3.1875rem;
+        right: 9.375rem;
         opacity: 0.0;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
@@ -705,26 +705,26 @@
 
     #idPlayerPoint {
         color: #00a6ea;
-        width: 170px;
-        height: 145px;
-        line-height: 145px;
+        width: 10.625rem;
+        height: 9.0625rem;
+        line-height: 9.0625rem;
         text-align: center;
-        font-size: 120px;
+        font-size: 7.5rem;
         font-weight: bolder;
-        -webkit-text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
-        -moz-text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
-        -o-text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
-        text-shadow: -1px -1px 1px rgba(0, 232, 255, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(0, 232, 255, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        -webkit-text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
+        -o-text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
+        text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(0, 232, 255, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
     }
 
     .PlayerPoint {
         position: relative;
-        width: 170px;
-        height: 50px;
-        line-height: 50px;
+        width: 10.625rem;
+        height: 3.125rem;
+        line-height: 3.125rem;
         text-align: center;
         color: rgba(0, 166, 243, 1.0);
-        font-size: 30px;
+        font-size: 1.875rem;
         font-weight: bold;
         background: rgba(0, 0, 0, 0.8);
         background: -webkit-linear-gradient(90deg, rgba(0, 232, 255, 0.0), rgba(19, 27, 43, 0.5), rgba(19, 27, 43, 0.5), rgba(0, 232, 255, 0.0));
@@ -736,46 +736,46 @@
     /*.PlayerPoint::before{
        content: "";
        position: absolute;
-       top:1px;
-       left: -5px;
-       width: 180px;
-       height: 2px;
+       top:0.0625rem;
+       left: -0.3125rem;
+       width: 11.25rem;
+       height: 0.125rem;
        background: -webkit-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
        background: -moz-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
        background: -o-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
        background: linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
-       box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7);
+       box-shadow:  0px 0px 0.625rem 0.125rem rgba(0,232,255,0.7);
    }
    .PlayerPoint::after{
        content: "";
        position: absolute;
-       bottom:1px;
-       left: -5px;
-       width: 180px;
-       height: 2px;
+       bottom:0.0625rem;
+       left: -0.3125rem;
+       width: 11.25rem;
+       height: 0.125rem;
        background: -webkit-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
        background: -moz-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
        background: -o-linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
        background: linear-gradient(90deg,rgba(0,232,255,0.0),rgba(0,232,255,0.8),rgba(255,255,255,0.9),rgba(0,232,255,0.8),rgba(0,232,255,0.0));
-       -webkit-box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
-       -moz-box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
-       -o-box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
-       box-shadow:  0px 0px 10px 2px rgba(0,232,255,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       -webkit-box-shadow:  0px 0px 0.625rem 0.125rem rgba(0,232,255,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
+       -moz-box-shadow:  0px 0px 0.625rem 0.125rem rgba(0,232,255,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
+       -o-box-shadow:  0px 0px 0.625rem 0.125rem rgba(0,232,255,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
+       box-shadow:  0px 0px 0.625rem 0.125rem rgba(0,232,255,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
    }*/
     .PlayerPointW {
-        width: 170px;
-        height: 50px;
-        /*box-shadow: inset 0px 0px 10px 2px #0082b6;*/
-        -webkit-text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
-        -moz-text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
-        -o-text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
-        text-shadow: 0px 0px 8px rgba(0, 232, 255, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        width: 10.625rem;
+        height: 3.125rem;
+        /*box-shadow: inset 0px 0px 0.625rem 0.125rem #0082b6;*/
+        -webkit-text-shadow: 0px 0px 0.5rem rgba(0, 232, 255, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: 0px 0px 0.5rem rgba(0, 232, 255, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
+        -o-text-shadow: 0px 0px 0.5rem rgba(0, 232, 255, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 0.5rem rgba(0, 232, 255, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
     }
 
     #idBankerTitle {
         position: absolute;
-        top: 51px;
-        left: 150px;
+        top: 3.1875rem;
+        left: 13.125rem;
         opacity: 0.0;
         -webkit-animation: carddown 0.8s ease-out;
         -moz-animation: carddown 0.8s ease-out;
@@ -793,26 +793,26 @@
 
     #idBankerPoint {
         color: #ea0101;
-        width: 170px;
-        height: 145px;
-        line-height: 145px;
+        width: 10.625rem;
+        height: 9.0625rem;
+        line-height: 9.0625rem;
         text-align: center;
-        font-size: 120px;
+        font-size: 7.5rem;
         font-weight: bolder;
-        -webkit-text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
-        -moz-text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
-        -o-text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
-        text-shadow: -1px -1px 1px rgba(241, 32, 0, 0.9), 2px 2px 2px rgba(0, 0, 0, 0.3), 0px 0px 15px rgba(241, 32, 0, 0.9), 2px 2px 20px rgba(0, 0, 0, 0.9);
+        -webkit-text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
+        -o-text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
+        text-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 0.125rem rgba(0, 0, 0, 0.3), 0px 0px 0.9375rem rgba(241, 32, 0, 0.9), 0.125rem 0.125rem 1.25rem rgba(0, 0, 0, 0.9);
     }
 
     .BankerPoint {
         position: relative;
-        width: 170px;
-        height: 50px;
-        line-height: 50px;
+        width: 10.625rem;
+        height: 3.125rem;
+        line-height: 3.125rem;
         text-align: center;
         color: rgba(235, 0, 0, 1.0);
-        font-size: 30px;
+        font-size: 1.875rem;
         font-weight: bold;
         background: rgba(0, 0, 0, 0.8);
         background: -webkit-linear-gradient(90deg, rgba(241, 32, 0, 0.0), rgba(43, 20, 25, 0.5), rgba(43, 20, 25, 0.5), rgba(241, 32, 0, 0.0));
@@ -824,65 +824,65 @@
     /*.BankerPoint::before{
        content: "";
        position: absolute;
-       top:1px;
-       left: -5px;
-       width: 180px;
-       height: 2px;
+       top:0.0625rem;
+       left: -0.3125rem;
+       width: 11.25rem;
+       height: 0.125rem;
        background: -webkit-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
        background: -moz-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
        background: -o-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
        background: linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
-       -webkit-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
-       -moz-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
-       -o-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
-       box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7);
+       -webkit-box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7);
+       -moz-box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7);
+       -o-box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7);
+       box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7);
    }
    .BankerPoint::after{
        content: "";
        position: absolute;
-       bottom:1px;
-       left: -5px;
-       width: 180px;
-       height: 2px;
+       bottom:0.0625rem;
+       left: -0.3125rem;
+       width: 11.25rem;
+       height: 0.125rem;
        background: -webkit-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
        background: -moz-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
        background: -o-linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
        background: linear-gradient(90deg,rgba(241,32,0,0.0),rgba(241,32,0,0.8),rgba(255,255,255,0.9),rgba(241,32,0,0.8),rgba(241,32,0,0.0));
-       -webkit-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
-       -moz-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
-       -o-box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
-       box-shadow:  0px 0px 10px 2px rgba(241,32,0,0.7),0px 2px 5px 2px rgba(0,0,0,0.3);
+       -webkit-box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
+       -moz-box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
+       -o-box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
+       box-shadow:  0px 0px 0.625rem 0.125rem rgba(241,32,0,0.7),0px 0.125rem 0.3125rem 0.125rem rgba(0,0,0,0.3);
    }*/
     .BankerPointW {
-        width: 170px;
-        height: 50px;
-        /*box-shadow: inset 0px 0px 10px 2px #0082b6;*/
-        -webkit-text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
-        -moz-text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
-        -o-text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
-        text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        width: 10.625rem;
+        height: 3.125rem;
+        /*box-shadow: inset 0px 0px 0.625rem 0.125rem #0082b6;*/
+        -webkit-text-shadow: 0px 0px 0.5rem rgba(241, 32, 0, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
+        -moz-text-shadow: 0px 0px 0.5rem rgba(241, 32, 0, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
+        -o-text-shadow: 0px 0px 0.5rem rgba(241, 32, 0, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 0.5rem rgba(241, 32, 0, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
     }
 
     .result_banker .WinnerText {
         color:#fff;
         font-weight: bold;
         text-align: center;
-        width: 180px;
-        height: 180px;
-        line-height: 185px;
+        width: 11.25rem;
+        height: 11.25rem;
+        line-height: 11.5625rem;
         background: #333;
         background: -webkit-linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
         background: -moz-linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
         background: -o-linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
         background: linear-gradient(rgba(59, 1, 16, 0.9), rgba(0, 0, 0, 0.5));
-        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -moz-box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -o-box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        box-shadow: inset 0px 0px 0px 10px rgba(255, 30, 0, 0.9), inset 0px 0px 20px 10px rgba(255, 30, 30, 0.9), 0px 0px 10px 5px rgba(255, 30, 30, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        text-shadow: 0px 0px 8px rgba(241, 32, 0, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        -webkit-box-shadow: inset 0px 0px 0px 0.625rem rgba(255, 30, 0, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(255, 30, 30, 0.9), 0px 0px 0.625rem 0.3125rem rgba(255, 30, 30, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 0.625rem rgba(255, 30, 0, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(255, 30, 30, 0.9), 0px 0px 0.625rem 0.3125rem rgba(255, 30, 30, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 0.625rem rgba(255, 30, 0, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(255, 30, 30, 0.9), 0px 0px 0.625rem 0.3125rem rgba(255, 30, 30, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0px 0px 0px 0.625rem rgba(255, 30, 0, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(255, 30, 30, 0.9), 0px 0px 0.625rem 0.3125rem rgba(255, 30, 30, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 0.5rem rgba(241, 32, 0, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
         margin: 0px auto;
-        margin-top: 60px;
-        border-radius: 200px;
+        margin-top: 3.75rem;
+        border-radius: 12.5rem;
         opacity: 0;
         -webkit-animation: WinnerText 0.3s ease-out;
         -moz-animation: WinnerText 0.3s ease-out;
@@ -898,22 +898,22 @@
         color:#fff;
         font-weight: bold;
         text-align: center;
-        width: 180px;
-        height: 180px;
-        line-height: 185px;
+        width: 11.25rem;
+        height: 11.25rem;
+        line-height: 11.5625rem;
         background: #333;
         background: -webkit-linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
         background: -moz-linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
         background: -o-linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
         background: linear-gradient(rgba(0, 20, 59, 0.9), rgba(0, 0, 0, 0.5));
-        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -moz-box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -o-box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        box-shadow: inset 0px 0px 0px 10px rgba(0, 171, 240, 0.9), inset 0px 0px 20px 10px rgba(0, 171, 240, 0.9), 0px 0px 10px 5px rgba(0, 171, 240, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        text-shadow: 0px 0px 8px rgba(0, 171, 240, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        -webkit-box-shadow: inset 0px 0px 0px 0.625rem rgba(0, 171, 240, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(0, 171, 240, 0.9), 0px 0px 0.625rem 0.3125rem rgba(0, 171, 240, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 0.625rem rgba(0, 171, 240, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(0, 171, 240, 0.9), 0px 0px 0.625rem 0.3125rem rgba(0, 171, 240, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 0.625rem rgba(0, 171, 240, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(0, 171, 240, 0.9), 0px 0px 0.625rem 0.3125rem rgba(0, 171, 240, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0px 0px 0px 0.625rem rgba(0, 171, 240, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(0, 171, 240, 0.9), 0px 0px 0.625rem 0.3125rem rgba(0, 171, 240, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 0.5rem rgba(0, 171, 240, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
         margin: 0px auto;
-        margin-top: 60px;
-        border-radius: 200px;
+        margin-top: 3.75rem;
+        border-radius: 12.5rem;
         opacity: 0;
         -webkit-animation: WinnerText 0.3s ease-out;
         -moz-animation: WinnerText 0.3s ease-out;
@@ -929,25 +929,25 @@
         color:#fff;
         font-weight: bold;
         text-align: center;
-        width: 180px;
-        height: 180px;
-        line-height: 185px;
+        width: 11.25rem;
+        height: 11.25rem;
+        line-height: 11.5625rem;
         background: #333;
         background: -webkit-linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
         background: -moz-linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
         background: -o-linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
         background: linear-gradient(rgba(19, 50, 5, 0.9), rgba(0, 0, 0, 0.5));
-        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -moz-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -o-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -webkit-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -moz-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        -o-box-shadow: inset 0px 0px 0px 10px rgba(108, 240, 2, 0.9), inset 0px 0px 20px 10px rgba(108, 240, 2, 0.9), 0px 0px 10px 5px rgba(108, 240, 2, 1.0), 0px 0px 0px 5px rgba(0, 0, 0, 0.9);
-        text-shadow: 0px 0px 8px rgba(108, 240, 2, 0.5), 2px 2px 8px rgba(0, 0, 0, 0.9);
+        -webkit-box-shadow: inset 0px 0px 0px 0.625rem rgba(108, 240, 2, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(108, 240, 2, 0.9), 0px 0px 0.625rem 0.3125rem rgba(108, 240, 2, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 0.625rem rgba(108, 240, 2, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(108, 240, 2, 0.9), 0px 0px 0.625rem 0.3125rem rgba(108, 240, 2, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 0.625rem rgba(108, 240, 2, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(108, 240, 2, 0.9), 0px 0px 0.625rem 0.3125rem rgba(108, 240, 2, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        box-shadow: inset 0px 0px 0px 0.625rem rgba(108, 240, 2, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(108, 240, 2, 0.9), 0px 0px 0.625rem 0.3125rem rgba(108, 240, 2, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -webkit-box-shadow: inset 0px 0px 0px 0.625rem rgba(108, 240, 2, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(108, 240, 2, 0.9), 0px 0px 0.625rem 0.3125rem rgba(108, 240, 2, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -moz-box-shadow: inset 0px 0px 0px 0.625rem rgba(108, 240, 2, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(108, 240, 2, 0.9), 0px 0px 0.625rem 0.3125rem rgba(108, 240, 2, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        -o-box-shadow: inset 0px 0px 0px 0.625rem rgba(108, 240, 2, 0.9), inset 0px 0px 1.25rem 0.625rem rgba(108, 240, 2, 0.9), 0px 0px 0.625rem 0.3125rem rgba(108, 240, 2, 1.0), 0px 0px 0px 0.3125rem rgba(0, 0, 0, 0.9);
+        text-shadow: 0px 0px 0.5rem rgba(108, 240, 2, 0.5), 0.125rem 0.125rem 0.5rem rgba(0, 0, 0, 0.9);
         margin: 0px auto;
-        margin-top: 60px;
-        border-radius: 200px;
+        margin-top: 3.75rem;
+        border-radius: 12.5rem;
         opacity: 0;
         -webkit-animation: WinnerText 0.3s ease-out; 
         -moz-animation: WinnerText 0.3s ease-out;
@@ -962,68 +962,68 @@
     @-webkit-keyframes WinnerText {
         0% {
             opacity: 0.5;
-            font-size: 10px;
+            font-size: 0.625rem;
         }
 
         98% {
             opacity: 1.0;
-            font-size: 55px;
+            font-size: 3.4375rem;
         }
 
         100% {
             opacity: 1.0;
-            font-size: 50px;
+            font-size: 3.125rem;
         }
     }
 
     @-moz-keyframes WinnerText {
         0% {
             opacity: 0.5;
-            font-size: 10px;
+            font-size: 0.625rem;
         }
 
         98% {
             opacity: 1.0;
-            font-size: 55px;
+            font-size: 3.4375rem;
         }
 
         100% {
             opacity: 1.0;
-            font-size: 50px;
+            font-size: 3.125rem;
         }
     }
 
     @-o-keyframes WinnerText {
         0% {
             opacity: 0.5;
-            font-size: 10px;
+            font-size: 0.625rem;
         }
 
         98% {
             opacity: 1.0;
-            font-size: 55px;
+            font-size: 3.4375rem;
         }
 
         100% {
             opacity: 1.0;
-            font-size: 50px;
+            font-size: 3.125rem;
         }
     }
 
     @keyframes WinnerText {
         0% {
             opacity: 0.5;
-            font-size: 10px;
+            font-size: 0.625rem;
         }
 
         98% {
             opacity: 1.0;
-            font-size: 55px;
+            font-size: 3.4375rem;
         }
 
         100% {
             opacity: 1.0;
-            font-size: 50px;
+            font-size: 3.125rem;
         }
     }
 }

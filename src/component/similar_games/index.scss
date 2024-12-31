@@ -7,7 +7,7 @@
 
     .box {
         width: 47%;
-        margin: 2px;
+        margin: 0.125rem;
 
         .games {
             border-top-left-radius: 0;
@@ -21,12 +21,12 @@
     }
 }
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
     .similar-games-box {
 
         .box {
             width: 48%;
-            margin: 2px;
+            margin: 0.125rem;
 
 
         }

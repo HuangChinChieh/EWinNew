@@ -1,6 +1,6 @@
 .roadMap-container {
-    width: 350px;  
-    height: 60px;  
+    width: 21.875rem;  
+    height: 3.75rem;  
     position: relative;
     background-image: url('../../img/roadmap/RoadMap350By4.png');
 }
@@ -13,15 +13,15 @@
 }
 
 .roadMap-container-outside.type1{
-    border-radius: 5px;
+    border-radius: 0.3125rem;
 }
 
 .roadMap-container-outside.type0{
-    border-bottom-left-radius: 5px; /* 左下角圆角半径 */
-    border-bottom-right-radius: 5px; /* 右下角圆角半径 */
+    border-bottom-left-radius: 0.3125rem; /* 左下角圆角半径 */
+    border-bottom-right-radius: 0.3125rem; /* 右下角圆角半径 */
 }
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
     
     
 }

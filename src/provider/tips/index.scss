@@ -2,46 +2,46 @@
     animation: tipsani all 1s ease;
     background: #fff;
     background: rgba(0, 0, 0, 0.8);
-    border-radius: 7px;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.3125rem rgba(255, 255, 255, 0.7);
     color: #fff;
     display: block;
     left: 50%;
-    padding: 10px;
+    padding: 0.625rem;
     position: fixed;
     text-align: center;
-    top: -300px;
+    top: -18.75rem;
     transform: translate(-50%, -50%);
     transition: all 1s ease;
-    width: 150px;
+    width: 9.375rem;
     z-index: 9999999;
 
     &.showTips {
-        top: 100px;
+        top: 6.25rem;
     }
 
     &.hiddenTips {
-        top: -300px;
+        top: -18.75rem;
     }
 }
 
 @keyframes tipsani {
     0% {
-        top: -300px;
+        top: -18.75rem;
     }
 
     50% {
-        top: 100px;
+        top: 6.25rem;
     }
 
     100% {
-        top: -300px;
+        top: -18.75rem;
     }
 }
 
-@media screen and (max-width: 1082px) {
+@media screen and (max-width: 67.625rem) {
     .tips-box {
-        width: 100px;
+        width: 6.25rem;
         // left: 35vw;
     }
 }

@@ -12,7 +12,7 @@
     .countdown-circle {
         width: 5.8125rem;
         height: 5.8125rem;
-        // border: 10px solid rgba(255, 255, 255, 0.1);
+        // border: 0.625rem solid rgba(255, 255, 255, 0.1);
         border-radius: 50%;
         position: relative;
         background: rgba(51, 51, 51, 0.7);
@@ -50,7 +50,7 @@
 
             &:before {
                 border: 0.625rem solid rgba(76, 175, 80, 1);
-                // box-shadow: inset 0px -10px 5px rgba(76, 175, 80, 0.4);
+                // box-shadow: inset 0px -0.625rem 0.3125rem rgba(76, 175, 80, 0.4);
                 z-index: 2;
             }
 
