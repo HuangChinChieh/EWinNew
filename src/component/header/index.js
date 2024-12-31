@@ -5,7 +5,6 @@ import FullscreenButton from 'component/buttons/fs_btn';
 import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
-import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
 import GameSetListButton from 'component/buttons/gameSetList_btn';
 import { useHistory } from 'react-router-dom';
 
@@ -103,7 +102,6 @@ const Header = (props) => {
           <FullscreenButton />
           <MuteButton />
           <BettingHistory />
-          <GoodTrendNotice />
           <SettingButton />
         </div>
       </div>

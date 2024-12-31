@@ -16,7 +16,7 @@ const BetLimitInfo = (props) => {
     const canClose = props.canClose;
     const { numberTranslate } = useContext(CashUnitContext);
     const infoRef = useRef(null);
-    const { showTooltip, hideTooltip } = useContext(ToolTipContext);
+
 
     const show = () => {
         setIsHover(true);
@@ -120,7 +120,7 @@ const GameBetLimitOption = (props) => {
     return (
         <>
             <div className='options-tip'><BetLimitInfo betLimitData={betLimit} moveDirection={0} isShowInfo={isShowInfo} setIsShowInfo={setIsShowInfo} canClose={false}></BetLimitInfo></div>
-            <div className={isSelected ? 'gameBetLimit-box-option  selected' : 'gameBetLimit-box-option'} onClick={() => { selectBetLimit(betLimit) }} onMouseEnter={showInfo} onMouseLeave={hideInfo}>
+            <div className={isSelected ? 'gameBetLimit-box-option  selected' : 'gameBetLimit-box-option'} onClick={() => { selectBetLimit(betLimit) }} onMouseEnter={showInfo} >
                 <div className="gameBetLimit-box-icon"></div>
                 <div className='gameBetLimit-box-no'>{index + 1}.</div>
                 <div className='gameBetLimit-box-title'>
@@ -175,25 +175,27 @@ const GameBetLimitsButton = (props) => {
 
 
 
-    const showBetLimitList = () => {
-        if (baccaratType === 2 || baccaratType === 3) {
-            gameClient.UserAccountGetBetLimitListByRoadMap(tableNumber, currencyType, gameSetID, (success, o) => {
-                if (success) {
-                    if (o.ResultCode === 0) {
-                        //const selBetLimit = JSON.parse(localStorage.getItem("SelBetLimit"));
-                        if (o.BetLimitList && o.BetLimitList.length > 0) {
-                            setListActive(true);
-                            setBetLimitList(o.BetLimitList);
+    const showBetLimitList = (event) => {
+        if (!listActive) {
+            if (baccaratType === 2 || baccaratType === 3) {
+                gameClient.UserAccountGetBetLimitListByRoadMap(tableNumber, currencyType, gameSetID, (success, o) => {
+                    if (success) {
+                        if (o.ResultCode === 0) {
+                            //const selBetLimit = JSON.parse(localStorage.getItem("SelBetLimit"));
+                            if (o.BetLimitList && o.BetLimitList.length > 0) {
+                                setListActive(true);
+                                setBetLimitList(o.BetLimitList);
+                            } else {
+                                alertMsg("提醒", "無可用限紅，請聯繫客服");
+                            }
                         } else {
-                            alertMsg("提醒", "無可用限紅，請聯繫客服");
+                            //console.log("GetBetLimitError");
                         }
                     } else {
                         //console.log("GetBetLimitError");
                     }
-                } else {
-                    //console.log("GetBetLimitError");
-                }
-            });
+                });
+            }
         }
     };
 
@@ -205,7 +207,7 @@ const GameBetLimitsButton = (props) => {
 
 
     useEffect(() => {
-        const handleDocumentClick = (e) => {
+        const handleDocumentClick_GameLimitsButton_List = (e) => {
             if (listPopRef.current && !listPopRef.current.contains(e.target)) {
                 // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
                 listPopRef.current.classList.add('hide');
@@ -213,7 +215,23 @@ const GameBetLimitsButton = (props) => {
                     setListActive(false);
                 }, 400);
             }
+        };
 
+        if (listActive) {
+            setTimeout(() => {
+                document.addEventListener("click", handleDocumentClick_GameLimitsButton_List)
+            }, 100);
+        }
+
+        return (() => {
+            document.removeEventListener("click", handleDocumentClick_GameLimitsButton_List);
+        });
+
+    }, [listActive])
+
+
+    useEffect(() => {
+        const handleDocumentClick_GameLimitsButton_Tip = (e) => {
             if (tipPopRef.current && !tipPopRef.current.contains(e.target)) {
                 // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
                 tipPopRef.current.classList.add('hide');
@@ -223,12 +241,15 @@ const GameBetLimitsButton = (props) => {
             }
         };
 
-        document.addEventListener("click", handleDocumentClick)
+        if (listActive === false && tipActive === true) {
+            setTimeout(() => {
+                document.addEventListener("click", handleDocumentClick_GameLimitsButton_Tip);
+            }, 100);
+        }
 
-        return (() => { document.removeEventListener("click", handleDocumentClick); });
+        return (() => { document.removeEventListener("click", handleDocumentClick_GameLimitsButton_Tip); });
 
-    }, [])
-
+    }, [listActive, tipActive])
 
 
     return (
@@ -236,11 +257,16 @@ const GameBetLimitsButton = (props) => {
             {/* <div className='gameBetLimit-box-content' onClick={showGameSetList}>             */}
 
             <div className='gameBetLimit-box-content' >
-                <div className='gameBetLimit-box-main' onClick={() => { showBetLimitList() }} onMouseEnter={(event) => { showTooltip(event.currentTarget, "目前限紅") }} onMouseLeave={() => { hideTooltip() }}>
+                <div className='gameBetLimit-box-main' onClick={(e) => { showBetLimitList(e) }} onMouseEnter={(event) => { showTooltip(event.currentTarget, "目前限紅") }} onMouseLeave={() => { hideTooltip() }}>
                     <div className="gameBetLimit-box-icon"></div>
                     <div className={(baccaratType === 2 || baccaratType === 3) ? "gameBetLimit-box-title show-list" : "gameBetLimit-box-title"}>{minMaxObj.MinValue + " - " + minMaxObj.MaxValue}</div>
                 </div>
-                <div className='gameBetLimit-box-icon-arrow' onClick={() => { debugger; setTipActive(true); }} onMouseEnter={(event) => { showTooltip(event.currentTarget, "限紅詳情") }} onMouseLeave={() => { hideTooltip() }}>
+                <div className='gameBetLimit-box-icon-arrow'
+                    onClick={(e) => {
+                        setTipActive(true);
+                    }}
+                    onMouseEnter={(event) => { showTooltip(event.currentTarget, "限紅詳情") }}
+                    onMouseLeave={() => { hideTooltip() }}>
                 </div>
             </div>
 
@@ -277,7 +303,7 @@ const GameBetLimitsButton = (props) => {
 
             {
                 (listActive === false && tipActive === true) &&
-                <div className='sel-opt-tip'><BetLimitInfo betLimitData={useBetLimit.BetLimitData} moveDirection={1} isShowInfo={tipActive} setIsShowInfo={setTipActive} canClose={true}></BetLimitInfo></div>
+                <div className='sel-opt-tip' ref={tipPopRef}><BetLimitInfo betLimitData={useBetLimit.BetLimitData} moveDirection={1} isShowInfo={tipActive} setIsShowInfo={setTipActive} canClose={true}></BetLimitInfo></div>
             }
         </div>
     );

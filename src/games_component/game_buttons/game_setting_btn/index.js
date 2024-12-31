@@ -6,29 +6,37 @@ const GameSettingButton = () => {
     const [hoveredItem, setHoveredItem] = useState(null);
     const settingsRef = useRef(null);
 
-    const handleDocumentClick = (e) => {
-        if (settingsRef.current && !settingsRef.current.contains(e.target)) {
-            // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
-            setHoveredItem(null);
-        }
-    };
-
     useEffect(() => {
-        // 在 component mount 時加入 click 事件監聽器
-        document.addEventListener('click', handleDocumentClick);
+        const handleDocumentClick_GameSettingButton = (e) => {
+            if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+                // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
+                setHoveredItem(null);
+            }
+        };
+
+        if (hoveredItem !== null) {
+            // 在 component mount 時加入 click 事件監聽器
+            setTimeout(() => {
+                document.addEventListener('click', handleDocumentClick_GameSettingButton);    
+            }, 100);            
+        }
 
         // 在 component unmount 時移除 click 事件監聽器
         return () => {
-            document.removeEventListener('click', handleDocumentClick);
+            document.removeEventListener('click', handleDocumentClick_GameSettingButton);
         };
-    }, []);
+    }, [hoveredItem]);
 
 
     return (
         <div className='game-setting-box forpc'>
             <div
                 className='game-setting-box'
-                onClick={() => setHoveredItem(1)}
+                onClick={(event) => {
+                    if (hoveredItem === null) {
+                        setHoveredItem(1);
+                    }
+                }}
                 ref={settingsRef}
             >
 

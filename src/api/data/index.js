@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { EWinGameLobbyClient } from 'signalr/bk/EWinGameLobbyClient';
 import './index.scss';
-import SummaryTable from './summary_table'; 
+import SummaryTable from './summary_table';
 import BettingTable from './betting_table';
 import BettingHistoryDetail from './betting_history_detail';
 
@@ -16,7 +16,7 @@ const BettingHistory = (props) => {
         '轉碼數',
         "詳細內容"
     ];
-    
+
     const detailTableHeaders = [
         "序號",
         "場次",
@@ -31,7 +31,7 @@ const BettingHistory = (props) => {
         '檯面',
         "快照"
     ];
-    
+
     const gameLobbyClient = EWinGameLobbyClient.getInstance();
     const [hoveredItem, setHoveredItem] = useState(0);
     const [hoverdetail, setHoverDetail] = useState(0)
@@ -48,14 +48,7 @@ const BettingHistory = (props) => {
         setActiveTab(tabName);
     };
 
-    // 點擊區域外則關閉
-    const handleDocumentClick = (e) => {
-        if (settingsRef.current && !settingsRef.current.contains(e.target)) {
-            // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
-            setHoveredItem(0);
-            setHoverDetail(0);
-        }
-    };
+
 
     // 變更起始日與終止日
     const handleBeginDateChange = (event) => {
@@ -99,7 +92,7 @@ const BettingHistory = (props) => {
         if (gameLobbyClient !== null) {
             gameLobbyClient.GetHistorySummary(beginDate, endDate, (s, o) => {
                 if (s) {
-                    
+
                     if (o.ResultCode === 0) {
                         console.log(o.SummaryList.GameCode)
                         setTableData(o.SummaryList);
@@ -178,14 +171,29 @@ const BettingHistory = (props) => {
 
 
     useEffect(() => {
-        // 在 component mount 時加入 click 事件監聽器
-        document.addEventListener('click', handleDocumentClick);
-        // 在 component unmount 時移除 click 事件監聽器
-        return () => {
-            document.removeEventListener('click', handleDocumentClick);
+
+        // 點擊區域外則關閉
+        const handleDocumentClick_BettingHistory = (e) => {
+            if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+                // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
+                setHoveredItem(0);
+                setHoverDetail(0);
+            }
         };
 
-    }, []);
+        if (hoveredItem === 1 || hoverdetail === 1) {
+            // 在 component mount 時加入 click 事件監聽器
+            setTimeout(() => {
+                document.addEventListener('click', handleDocumentClick_BettingHistory);    
+            }, 100);            
+        }
+
+        // 在 component unmount 時移除 click 事件監聽器
+        return () => {
+            document.removeEventListener('click', handleDocumentClick_BettingHistory);
+        };
+
+    }, [hoveredItem, hoverdetail]);
 
     // 設置起始日(當日前七天)與終止日(當日)
     useEffect(() => {
@@ -204,12 +212,13 @@ const BettingHistory = (props) => {
             <div
                 className='betting-history'
                 onClick={(e) => {
-                    if (e.currentTarget === e.target) {
-                        setHoveredItem(1);
-                        setHoverDetail(0);
+                    if (hoveredItem !== 1 && hoverdetail !== 1) {
+                        if (e.currentTarget === e.target) {
+                            setHoveredItem(1);
+                            setHoverDetail(0);
+                        }
+                        bettingHistoryClick();
                     }
-                    bettingHistoryClick();
-
                 }}
                 ref={settingsRef}
             >
@@ -317,13 +326,13 @@ const BettingHistory = (props) => {
                         </div>
 
                         <div className='dis'>
-                                <BettingHistoryDetail
-                                    tableHeaders={tableHeaders}
-                                    detailTableHeaders={detailTableHeaders}
-                                    tableData={tableData}
-                                    reacquireHistoryDetail={reacquireHistoryDetail}
-                                    detailList={detailList}
-                                />
+                            <BettingHistoryDetail
+                                tableHeaders={tableHeaders}
+                                detailTableHeaders={detailTableHeaders}
+                                tableData={tableData}
+                                reacquireHistoryDetail={reacquireHistoryDetail}
+                                detailList={detailList}
+                            />
                         </div>
                     </div>
                 </div>

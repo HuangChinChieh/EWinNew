@@ -11,7 +11,7 @@ const GameSetListButton = () => {
     const { alertMsg } = useContext(AlertContext);
     const { gameSetList, updateGameSetList, hasNewGameSet, setHasNewGameSet } = useContext(GameSetListContext);
     const [active, setActive] = useState(false);
-    const popRef = useRef(null);
+    const popRef = useRef(null);  
     const history = useHistory();
     const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
@@ -19,17 +19,20 @@ const GameSetListButton = () => {
         history.replace("/games/" + tableNumber + "?gameSetID=" + gameSetID + "&gameSetNumber=" + gameSetNumber);
     };
 
-    const showGameSetList = useCallback(() => {
-        if (gameSetList.length > 0) {
-            setActive(true);
-        } else {
-            alertMsg("提醒", "目前暫無工單", () => {
-
-            });
-        }
-
-        setHasNewGameSet(false);
-    }, [alertMsg, gameSetList, setHasNewGameSet]);
+    const showGameSetList = useCallback((event) => {
+        if(!active){    
+            if (gameSetList.length > 0) {
+                setActive(true);
+             
+            } else {
+                alertMsg("提醒", "目前暫無工單", () => {
+    
+                });
+            }  
+            
+            setHasNewGameSet(false);
+        } 
+    }, [alertMsg, gameSetList, setHasNewGameSet, active]);
 
     const hideGameSetList = () => {
         popRef.current.classList.add('hide');
@@ -62,55 +65,57 @@ const GameSetListButton = () => {
 
     }, [gameSetList, hasNewGameSet, alertMsg, showGameSetList]);
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         updateGameSetList([
-    //             {
-    //                 GameSetID: 1,
-    //                 GameSetNumber: "工單1",
-    //                 RoadMapNumber: "test01"
-    //             }, {
-    //                 GameSetID: 2,
-    //                 GameSetNumber: "工單2",
-    //                 RoadMapNumber: "test02"
-    //             }
-    //         ]);
-    //     }, 10000);
+    useEffect(() => {
+        const handleDocumentClick_GameSetListButton = (e) => {          
+            if (popRef.current && !popRef.current.contains(e.target)) {
+                
+                // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
+                popRef.current.classList.add('hide');
+                setTimeout(() => {
+                    setActive(false);
+                }, 400);
+            }
+        };
 
-    // }, [])
+        if (active) {
+            //避免因為同一個事件流產生問題;
+            setTimeout(() => {
+                document.addEventListener("click", handleDocumentClick_GameSetListButton)    
+            }, 100);            
+        }
 
-    // useEffect(() => {
-    //     // 在 component mount 時加入 click 事件監聽器
-    //     document.addEventListener('click', handleDocumentClick);
-    //     // 在 component unmount 時移除 click 事件監聽器
-    //     return () => {
-    //         document.removeEventListener('click', handleDocumentClick);
-    //     };
-
-    // }, []);
+        return (() => { document.removeEventListener("click", handleDocumentClick_GameSetListButton); });
+    }, [active])
 
 
     return (
-            <div className='gameSetList-box'>
-                <div className='gameSetList-box-content' onClick={showGameSetList}  onMouseEnter={(event) => { showTooltip(event.currentTarget, "工單列表") }} onMouseLeave={() => { hideTooltip() }}>
-                    <div className={hasNewGameSet ? "gameSetList-box-icon new" : "gameSetList-box-icon"}></div>
-                    <div className='gameSetList-box-title'>無</div>
-                    <div className='gameSetList-box-icon-arrow'></div>
-                </div>
-                {active && <>
-                    <div className='gameSetList-box-options' ref={popRef}>
-                        <div className='gameSetList-box-options-header'>
-                            工單列表
-                        </div>
-                        {gameSetList.length > 0 && gameSetList.map((item, index) =>
-                            <div className='gameSetList-box-option' key={"gameSetBtn_" + item.GameSetID} onClick={() => { entryTable(item.GameSetID, item.GameSetNumber, item.RoadMapNumber) }}>
-                                <div className='gameSetList-box-no'>{index + 1}.</div>
-                                <div className='gameSetList-box-title'>{item.GameSetNumber}</div>
-                            </div>)}
-                        <div className='gameSetList-box-options-footer'><div className='gameSetList-box-options-close' onClick={hideGameSetList}><i></i>關閉</div></div>
-                    </div>
-                </>}
+        <div className='gameSetList-box'>
+            <div className='gameSetList-box-content'
+                onClick={(event) => {                 
+                    showGameSetList(event);                 
+                }}
+                onMouseEnter={(event) => {
+                    showTooltip(event.currentTarget, "工單列表")
+                }}
+                onMouseLeave={() => { hideTooltip() }}>
+                <div className={hasNewGameSet ? "gameSetList-box-icon new" : "gameSetList-box-icon"}></div>
+                <div className='gameSetList-box-title'>無</div>
+                <div className='gameSetList-box-icon-arrow'></div>
             </div>
+            {active && <>
+                <div className='gameSetList-box-options' ref={popRef}>                  
+                    <div className='gameSetList-box-options-header'>
+                        工單列表
+                    </div>
+                    {gameSetList.length > 0 && gameSetList.map((item, index) =>
+                        <div className='gameSetList-box-option' key={"gameSetBtn_" + item.GameSetID} onClick={() => { entryTable(item.GameSetID, item.GameSetNumber, item.RoadMapNumber) }}>
+                            <div className='gameSetList-box-no'>{index + 1}.</div>
+                            <div className='gameSetList-box-title'>{item.GameSetNumber}</div>
+                        </div>)}
+                    <div className='gameSetList-box-options-footer'><div className='gameSetList-box-options-close' onClick={()=>{hideGameSetList();}}><i></i>關閉</div></div>
+                </div>
+            </>}
+        </div>
     );
 };
 

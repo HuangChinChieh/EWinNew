@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Logo from 'component/logo';
 import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { FavorsContext, WalletContext, UserInfoContext } from 'provider/GameLobbyProvider';
 import FullscreenButton from 'component/buttons/fs_btn';
 import MuteButton from 'component/buttons/mute_btn';
 import SettingButton from 'component/buttons/setting_btn';
 import BettingHistory from 'component/buttons/betting_history_btn';
-import GoodTrendNotice from 'component/buttons/good_trend_notice_btn';
 import GameSetListButton from 'component/buttons/gameSetList_btn';
-import ChannelLineButton from 'games_component/game_buttons/game_channels_btn';
 import GameBetLimitsButton from 'games_component/game_buttons/game_betLimits_btn';
 import GameMultiButton from 'games_component/game_buttons/game_multiGame_btn';
 import { useHistory } from 'react-router-dom';
@@ -109,7 +106,6 @@ const GameHeader = (props) => {
                     <FullscreenButton />
                     <MuteButton />
                     <BettingHistory />
-                    <GoodTrendNotice />
                     <SettingButton />
                 </div>
             </div>

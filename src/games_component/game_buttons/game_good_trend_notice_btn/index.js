@@ -7,27 +7,36 @@ const GameGoodTrendNoticeButton = () => {
     const notifyRef = useRef(null);
     const [hoverItem, setHoverItem] = useState(0);
 
-    const handleDocumentClick = (e) => {
-        if (notifyRef.current && !notifyRef.current.contains(e.target)) {
-            setHoverItem(0);
-        }
-    }
 
     useEffect(() => {
-        // 在 component mount 時加入 click 事件監聽器
-        document.addEventListener('click', handleDocumentClick);
+        const handleDocumentClick_GameGoodTrendNoticeButton = (e) => {
+            if (notifyRef.current && !notifyRef.current.contains(e.target)) {
+                setHoverItem(0);
+            }
+        }
+
+        if (hoverItem !== 0) {
+            // 在 component mount 時加入 click 事件監聽器
+            setTimeout(() => {
+                document.addEventListener('click', handleDocumentClick_GameGoodTrendNoticeButton);
+            }, 100);            
+        }
 
         // 在 component unmount 時移除 click 事件監聽器
         return () => {
-            document.removeEventListener('click', handleDocumentClick);
+            document.removeEventListener('click', handleDocumentClick_GameGoodTrendNoticeButton);
         };
-    }, []);
+    }, [hoverItem]);
 
     return (
         <div className='game-notify-box forpc'>
             <div
                 className='game-notify'
-                onClick={() => setHoverItem(1)}
+                onClick={(event) => {
+                    if (hoverItem === 0) {
+                        setHoverItem(1);
+                    }                
+                }}
                 ref={notifyRef}
             >
 

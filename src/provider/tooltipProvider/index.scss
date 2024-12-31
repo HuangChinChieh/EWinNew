@@ -17,13 +17,13 @@
 .tooltip2 {
   position: absolute;
   height: fit-content;   
-  background-color: rgba($color: #fff, $alpha: 0.7);
+  background-color: rgba($color: #fff, $alpha: 1.0);
   color: black;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   white-space: nowrap;
   font-size: 0.875rem;
-  z-index: 1000;  
+  z-index: 1000000;  
   letter-spacing:0.0625rem;
   opacity: 0; /* 初始透明 */
   visibility: hidden; /* 初始不可見 */
@@ -36,7 +36,7 @@
     transform: translate(-50%, -100%);
     border-left: 0.625rem solid transparent;
     border-right: 0.5rem solid transparent;
-    border-bottom: 0.5rem solid rgba($color: #fff, $alpha: 0.7);/* 改變顏色以配合主題 */
+    border-bottom: 0.5rem solid rgba($color: #fff, $alpha:1.0);/* 改變顏色以配合主題 */
   }
 
   &.show{
