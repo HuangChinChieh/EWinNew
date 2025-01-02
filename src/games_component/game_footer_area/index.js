@@ -5,6 +5,7 @@ import GameBalance from 'games_component/game_footer_btn/game_balance';
 import GameTotalBet from 'games_component/game_footer_btn/game_total_bet';
 import GameTips from 'games_component/game_footer_btn/game_tips';
 import GameAddTable from 'games_component/game_footer_btn/game_add_table';
+import GameExitTable from 'games_component/game_footer_btn/game_exit_table';
 import GameOpenGameSetAction from 'games_component/game_footer_btn/game_open_gameSet_action';
 import GameControlButton from 'games_component/game_buttons/game_gameset_btn';
 
@@ -70,7 +71,7 @@ const GameFooterArea = (props) => {
                     />
                 </div>
                 <div className='box-area'>
-                    <GameAddTable />
+                    <GameExitTable />
                 </div>
             </div>
         </div>
