@@ -1,4 +1,5 @@
-import React, { useState, useContext, useRef, useEffect, useCallback, useDebugValue } from 'react';
+import React, { useState, useContext, useRef, useEffect, useCallback,  } from 'react';
+import ReactDOM from "react-dom";
 import './index.scss';
 import { useHistory } from "react-router-dom";
 import { ToolTipContext } from "provider/tooltipProvider";
@@ -32,15 +33,17 @@ const GameVideoChannelsButton = ({ videoControlRef, serverUrl, CT, setVideoResol
     }, []);
 
 
-    const showChannelLine = () => {
-        getVideoSourceList(CT, serverUrl, (success, o) => {
-            if (success) {
-                if (o.Source && o.Source.length > 0) {
-                    setActive(true);
-                    setVideoSourceList(o.Source);
+    const showChannelLine = (event) => {        
+        if(!active){
+            getVideoSourceList(CT, serverUrl, (success, o) => {
+                if (success) {
+                    if (o.Source && o.Source.length > 0) {
+                        setActive(true);
+                        setVideoSourceList(o.Source);
+                    }
                 }
-            }
-        });
+            });
+        }       
     };
 
     const hideChannelLine = () => {
@@ -100,8 +103,8 @@ const GameVideoChannelsButton = ({ videoControlRef, serverUrl, CT, setVideoResol
 
 
     useEffect(() => {
-        const handleDocumentClick = (e) => {
-            if (popRef.current && !popRef.current.contains(e.target)) {
+        const handleDocumentClick_GameVideoChannelsButton = (e) => {            
+            if (popRef.current && !popRef.current.contains(e.target)) {                
                 // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
                 popRef.current.classList.add('hide');
                 setTimeout(() => {
@@ -110,11 +113,15 @@ const GameVideoChannelsButton = ({ videoControlRef, serverUrl, CT, setVideoResol
             }
         };
 
-        document.addEventListener("click", handleDocumentClick)
+        if(active){
+            setTimeout(() => {
+                document.addEventListener("click", handleDocumentClick_GameVideoChannelsButton)    
+            }, 100);            
+        }
 
-        return (()=>{document.removeEventListener("click", handleDocumentClick);});
+        return (()=>{document.removeEventListener("click", handleDocumentClick_GameVideoChannelsButton);});
 
-    }, [])
+    }, [active])
 
 
     return (

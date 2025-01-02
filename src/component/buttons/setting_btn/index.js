@@ -13,32 +13,39 @@ const SettingButton = () => {
     const { showTooltip, hideTooltip } = useContext(ToolTipContext);
 
 
-    const handleButtonClick = () => {
-        setIsButtonClicked(true);
-        setHoveredItem(1)
+    const handleButtonClick = (event) => {
+        if(hoveredItem === null){
+            setIsButtonClicked(true);        
+            setHoveredItem(1)
+        }        
     };
     const handleSliderClick = () => {
         setLobbyPersonal(!lobbyPersonal)
     };
 
-    const handleDocumentClick = (e) => {
-        if (settingsRef.current && !settingsRef.current.contains(e.target)) {
-            // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
-            setHoveredItem(null);
-            setIsButtonClicked(false);
-
-        }
-    };
-
+ 
     useEffect(() => {
+        const handleDocumentClick_SettingButton = (e) => {
+            if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+                // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
+                setHoveredItem(null);
+                setIsButtonClicked(false);
+    
+            }
+        };
+    
         // 在 component mount 時加入 click 事件監聽器
-        document.addEventListener('click', handleDocumentClick);
-
+        if(hoveredItem !== null){
+            setTimeout(() => {
+                document.addEventListener('click', handleDocumentClick_SettingButton);
+            }, 100);            
+        }
+        
         // 在 component unmount 時移除 click 事件監聽器
         return () => {
-            document.removeEventListener('click', handleDocumentClick);
+            document.removeEventListener('click', handleDocumentClick_SettingButton);
         };
-    }, []);
+    }, [hoveredItem]);
 
 
     return (
