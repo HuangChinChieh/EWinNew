@@ -1511,55 +1511,52 @@ const GameView = (props) => {
             refreshQueryGame(); //有投注，確認是否贏錢，與更新贏錢相關資訊
         }
 
-        //區域顯示動畫
-        if (
-            tableInfo.current.ShoeResult != null &&
-            tableInfo.current.ShoeResult !== ""
-        ) {
-            if (betAreaControl.current != null) {
-                //判斷是否尚未初始化，剛進入桌台
-                let winAreas = [];
-                const roundResult = tableInfo.current.ShoeResult.substring(
-                    tableInfo.current.ShoeResult.length - 1,
-                    1
-                );
-                const roundResultObj = getResultObject(roundResult);
-                // 顯示動畫
 
-                switch (roundResultObj.WinnerType) {
-                    case 1:
-                        winAreas.push("Player");
-                        break;
-                    case 2:
-                        winAreas.push("Banker");
-                        break;
-                    case 3:
-                        winAreas.push("Tie");
-                        break;
-                    default:
-                        break;
-                }
-
-                if (roundResultObj.IsBankerPair === true) {
-                    winAreas.push("BankerPair");
-                }
-
-                if (roundResultObj.IsPlayerPair === true) {
-                    winAreas.push("PlayerPair");
-                }
-                betAreaControl.current.ShowWinAreas(winAreas);
-            }
-        }
 
         //撲克牌動畫
-        if (
-            tableInfo.current.CardInfo != null &&
+        if (tableInfo.current.CardInfo != null &&
             tableInfo.current.CardInfo !== "" &&
-            tableInfo.current.CardInfo !== "000000000000"
-        ) {
+            tableInfo.current.CardInfo !== "000000000000") {
             cardResultControl.current.OpenCard(tableInfo.current.CardInfo, () => {
                 setTimeout(() => {
                     cardResultControl.current.CloseCard();
+                    //區域顯示動畫
+                    if (tableInfo.current.ShoeResult != null && tableInfo.current.ShoeResult !== "") {
+                        if (betAreaControl.current != null) {
+                            //判斷是否尚未初始化，剛進入桌台
+                            let winAreas = [];
+                            const roundResult = tableInfo.current.ShoeResult.substring(
+                                tableInfo.current.ShoeResult.length - 1,
+                                tableInfo.current.ShoeResult.length 
+                            );
+                            const roundResultObj = getResultObject(roundResult);
+                            // 顯示動畫
+
+                            switch (roundResultObj.WinnerType) {
+                                case 1:
+                                    winAreas.push("Player");
+                                    break;
+                                case 2:
+                                    winAreas.push("Banker");
+                                    break;
+                                case 3:
+                                    winAreas.push("Tie");
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            if (roundResultObj.IsBankerPair === true) {
+                                winAreas.push("BankerPair");
+                            }
+
+                            if (roundResultObj.IsPlayerPair === true) {
+                                winAreas.push("PlayerPair");
+                            }
+
+                            betAreaControl.current.ShowWinAreas(winAreas);
+                        }
+                    }
                 }, 5000);
             });
         }
@@ -2039,12 +2036,6 @@ const GameView = (props) => {
             <BaccaratGameContext.Provider value={{ getSelChipData, gameClient, getIsSendCheck, setIsSendCheck, getQueryInfo }}>
                 <div className="game-view-wrap">
                     {
-                        /* <GameHeader tableNumber={props.tableNumber} getTableInfo={getTableInfo} />
-                  <CountdownCircle isCanBet={isCanBet} getCountdownInfo={getCountdownInfo} />
-                  <GameChat />
-                  <GameFooterArea />
-                  <GameBettingArea isCanBet={isCanBet} /> 
-                  */
                         tableInfo.current === null ? (
                             <div></div>
                         ) : (
@@ -2055,14 +2046,43 @@ const GameView = (props) => {
                                         bottom: "20px",
                                         zIndex: "99999",
                                         width: "200px",
-                                        display: "none"
+                                        "display":"none"
                                     }}
                                     onClick={() => {
                                         //setIsCanBet(true);
                                         //handleBet("addBet", { areaType: "Banker" }, null)
-
                                         //window.location.reload();
+                                        let winAreas = [];
+                                        const roundResult = "9211122122252222".substring(
+                                            "9211122122252222".length - 1,
+                                            "9211122122252222".length
+                                        );
+                                        const roundResultObj = getResultObject(roundResult);
+                                        // 顯示動畫
 
+                                        switch (roundResultObj.WinnerType) {
+                                            case 1:
+                                                winAreas.push("Player");
+                                                break;
+                                            case 2:
+                                                winAreas.push("Banker");
+                                                break;
+                                            case 3:
+                                                winAreas.push("Tie");
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
+                                        if (roundResultObj.IsBankerPair === true) {
+                                            winAreas.push("BankerPair");
+                                        }
+
+                                        if (roundResultObj.IsPlayerPair === true) {
+                                            winAreas.push("PlayerPair");
+                                        }
+
+                                        betAreaControl.current.ShowWinAreas(winAreas);
 
                                     }}
                                 >
@@ -2146,11 +2166,12 @@ const GameView = (props) => {
                                         handleBet={handleBet}
                                     ></GameChipsButton>
                                 </GameFooterArea>
+                                <CardResult ref={cardResultControl}></CardResult>
+                                <MsgMaskResult ref={msgMaskResultControl}></MsgMaskResult>
                             </div>
                         )
                     }
-                    <CardResult ref={cardResultControl}></CardResult>
-                    <MsgMaskResult ref={msgMaskResultControl}></MsgMaskResult>
+                  
                 </div>
             </BaccaratGameContext.Provider>
         </BaccaratTableNotifyContext.Provider>

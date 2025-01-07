@@ -9,7 +9,7 @@ import { RoadMapAPI } from '../../utils/RoadMap.js';
 class GameRoadMap extends Component {
   constructor(props) {
     super(props);
-    this.shoeResultStr = props.shoeResult;
+    this.shoeResult = props.shoeResult;
     this.roadMap1 = React.createRef();
     this.roadMap2 = React.createRef();
     this.roadMap3 = React.createRef();
@@ -69,18 +69,18 @@ class GameRoadMap extends Component {
       height: 10 //主路單不做顯示
     });
 
-    this.RoadMapAPI.setRoadMapByString(this.shoeResultStr);
+    this.RoadMapAPI.setRoadMapByString(this.shoeResult);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     //檢查是不是因為shoeResult的異動觸發渲染
-    if (nextProps.shoeResultStr == this.shoeResultStr) {
+    if (nextProps.shoeResult == this.shoeResult) {
       //不是，為state的異動觸發
 
     } else {
       //是，重新整理state
-      //this.shoeResultStr = nextProps.shoeResultStr;
-      //this.RoadMapAPI.setRoadMapByString(this.shoeResultStr);
+      this.shoeResult = nextProps.shoeResult;
+      this.RoadMapAPI.setRoadMapByString(this.shoeResult);
     }
 
     return false;
