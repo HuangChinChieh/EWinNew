@@ -14,11 +14,11 @@
     opacity: 0.75;
     margin-bottom: 1.5625rem;
 
-    &:hover{
+    &:hover {
         background-color: #292933;
         border-color: #FFFFFF;
         cursor: pointer;
-    transition: all 0.3s;
+        transition: all 0.3s;
     }
 
     span {
@@ -28,23 +28,14 @@
         font-size: 1.125rem;
         font-style: normal;
         font-weight: 400;
-        line-height: 150%; /* 1.6875rem */
+        line-height: 150%;
+        /* 1.6875rem */
         letter-spacing: 0.045rem;
 
         &.icon-box {
             position: relative;
-            padding-left: 1.8125rem;
+            /*padding-left: 1.8125rem;*/
             display: inline-block;
-
-            &::before {
-                content: '';
-                position: absolute;
-                display: block;
-                width: 1.4375rem;
-                height: 1.77rem;
-                background: url('/img/global/gameExitTable.svg') no-repeat center center/contain;
-                left: 0px;
-            }
         }
     }
 }
