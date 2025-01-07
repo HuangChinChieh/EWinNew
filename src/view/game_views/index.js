@@ -1987,6 +1987,7 @@ const GameView = (props) => {
             clearInterval(intervalIDByTableInfo);
             clearInterval(intervalIDByQueryGame);
             RemoveSubscribe("", tableNumber);
+            window.removeEventListener("resize", resize);
         };
     }, [tableNumber, gameSetID]);
 

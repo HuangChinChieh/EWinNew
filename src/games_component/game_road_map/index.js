@@ -9,18 +9,19 @@ import { RoadMapAPI } from '../../utils/RoadMap.js';
 class GameRoadMap extends Component {
   constructor(props) {
     super(props);
-    this.shoeResultStr = props.shoeResult;    
+    this.shoeResultStr = props.shoeResult;
     this.roadMap1 = React.createRef();
     this.roadMap2 = React.createRef();
     this.roadMap3 = React.createRef();
     this.roadMap4 = React.createRef();
     this.roadMap5 = React.createRef();
+    this.timerQueryRoad = -1;
     //初始化路單處理API;
 
   }
 
   componentDidMount() {
-     this.RoadMapAPI = new RoadMapAPI();
+    this.RoadMapAPI = new RoadMapAPI();
     // //config設定檔先寫在內部
     // //debugger;     
     // this.handleResize();
@@ -94,12 +95,76 @@ class GameRoadMap extends Component {
           <div className='roadMap-road1' ref={this.roadMap1}></div>
           <div className='backImg'></div>
         </div>
+
         <div className='roadMap-right'>
           <div className='roadMap-road2' ref={this.roadMap2}></div>
           <div className='roadMap-road3' ref={this.roadMap3}></div>
           <div className='roadMap-road4' ref={this.roadMap4}></div>
           <div className='roadMap-road5' ref={this.roadMap5}></div>
           <div className='backImg'></div>
+        </div>
+
+        <div className='roadMap-groups'>
+          <div className='roadMap-group-total'>
+            <div className='roadMap-group-title'>#</div>
+            <div className='roadMap-group-value'>9</div>
+          </div>
+          <div className='roadMap-group-banker'>
+            <div className='roadMap-group-title'>B</div>
+            <div className='roadMap-group-value'>9</div>
+          </div>
+          <div className='roadMap-group-player'>
+            <div className='roadMap-group-title'>P</div>
+            <div className='roadMap-group-value'>9</div>
+          </div>
+          <div className='roadMap-group-tie'>
+            <div className='roadMap-group-title'>T</div>
+            <div className='roadMap-group-value'>9</div>
+          </div>
+          <div className='roadMap-group-bankerPair'>
+            <div className='roadMap-group-title'></div>
+            <div className='roadMap-group-value'>9</div>
+          </div>
+          <div className='roadMap-group-playerPair'>
+            <div className='roadMap-group-title'></div>
+            <div className='roadMap-group-value'>9</div>
+          </div>
+          <div className='roadMap-group-askBanker' onClick={() => {
+            this.RoadMapAPI.setQueryRoad(1);
+
+            if (this.timerQueryRoad != -1) {
+              clearTimeout(this.timerQueryRoad);
+              this.timerQueryRoad = -1;
+            }
+
+            this.timerQueryRoad = setTimeout(()=> {
+              this.timerQueryRoad = -1;
+              this.RoadMapAPI.setQueryRoad(0);             
+            }, 5000);
+          }}>
+            <div className='roadMap-group-askBanker-title'>B</div>
+            <div className='roadMap-group-askBanker-icon1'></div>
+            <div className='roadMap-group-askBanker-icon2'></div>
+            <div className='roadMap-group-askBanker-icon3'></div>
+          </div>
+          <div className='roadMap-group-askPlayer' onClick={() => {
+            this.RoadMapAPI.setQueryRoad(2);
+
+            if (this.timerQueryRoad != -1) {
+              clearTimeout(this.timerQueryRoad);
+              this.timerQueryRoad = -1;
+            }
+
+            this.timerQueryRoad = setTimeout(()=> {
+              this.timerQueryRoad = -1;
+              this.RoadMapAPI.setQueryRoad(0);             
+            }, 5000);
+          }}>
+            <div className='roadMap-group-askPlayer-title'>P</div>
+            <div className='roadMap-group-askPlayer-icon1'></div>
+            <div className='roadMap-group-askPlayer-icon2'></div>
+            <div className='roadMap-group-askPlayer-icon3'></div>
+          </div>
         </div>
       </div>
     );

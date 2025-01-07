@@ -94,7 +94,7 @@ const GameSideBar = (props) => {
             }
 
 
-        }, (1000));
+        }, 500);
     };
 
     useEffect(() => {
@@ -102,6 +102,8 @@ const GameSideBar = (props) => {
             intervalIDRef.current = setInterval(() => {
                 refreshMultiTable();
             }, 5000);
+
+            refreshMultiTable();
         }
 
         return () => {

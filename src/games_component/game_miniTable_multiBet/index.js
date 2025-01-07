@@ -330,9 +330,11 @@ const MiniTableMultiBet = ({ tableName,
         <div className={`miniTableMultiBet`}>
             <div className={`rowCount-1`}>
                 <div className='miniTableMultiBet-tableData'>
-                    <div className='miniTableMultiBet-tableInfo' onMouseEnter={(event) => { showTooltip(event.currentTarget, "進入桌台", "black") }} onMouseLeave={() => hideTooltip()} onClick={() => { hideTooltip(); history.replace("/games/" + tableName) }}>
-                        <div className='miniTableMultiBet-tableName'>{tableName}</div>
-                        <div className='miniTableMultiBet-roundInfo'>{roundInfo}</div>
+                    <div className='miniTableMultiBet-tableInfo'>
+                        <div className='miniTableMultiBet-tableInfo-container' onMouseEnter={(event) => { showTooltip(event.currentTarget, "進入桌台", "black") }} onMouseLeave={() => hideTooltip()} onClick={() => { hideTooltip(); history.replace("/games/" + tableName) }}>
+                            <div className='miniTableMultiBet-tableName'>{tableName}</div>
+                            <div className='miniTableMultiBet-roundInfo'>{roundInfo}</div>
+                        </div>
                     </div>
                     <div className="miniTableMultiBet-betLimit">{numberTranslate(minMaxObj.MinValue) + " - " + numberTranslate(minMaxObj.MaxValue)}</div>
                     <div className="miniTableMultiBet-countDown">

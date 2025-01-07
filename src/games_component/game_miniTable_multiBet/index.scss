@@ -12,9 +12,10 @@
         width: 31.875rem;
         height: 17.5rem;
         display: flex;
-        flex-direction: column;     
+        flex-direction: column;
         transform: scale(0.75, 0.75);
         transform-origin: top left;
+
         >.miniTableMultiBet-tableData {
             display: flex;
             height: 2.625rem;
@@ -24,26 +25,32 @@
             margin-bottom: 0.25rem;
 
             >.miniTableMultiBet-tableInfo {
-                display: flex;
-                align-items: center;
                 flex: 1 0 auto;
                 height: 100%;
                 line-height: 100%;
-                cursor: pointer;
-                transition: all 0.3s ease-in;
-                &:hover{                    
-                    transform: scale(1.1) translateX((5%));
-                }
 
-                .miniTableMultiBet-tableName {
-                    font-size: 1.25rem;
-                    color: white;
-                }
+                >.miniTableMultiBet-tableInfo-container {
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    line-height: 100%;
+                    cursor: pointer;
+                    transition: all 0.3s ease-in;
+                    width: fit-content;
+                    &:hover {
+                        transform: scale(1.1) translateX((5%));
+                    }
 
-                .miniTableMultiBet-roundInfo {
-                    font-size: 1.25rem;
-                    color: rgba(203, 203, 203, 1);
-                    margin-left: 0.1875rem;
+                    .miniTableMultiBet-tableName {
+                        font-size: 1.25rem;
+                        color: white;
+                    }
+
+                    .miniTableMultiBet-roundInfo {
+                        font-size: 1.25rem;
+                        color: rgba(203, 203, 203, 1);
+                        margin-left: 0.1875rem;
+                    }
                 }
             }
 
@@ -73,7 +80,7 @@
         }
 
         .miniTableMultiBet-betArea {
-            height: 6.25rem;            
+            height: 6.25rem;
             width: 100%;
             position: relative;
             display: flex;
@@ -83,6 +90,7 @@
             opacity: 0.7;
             padding: 0.3125rem 0;
             box-sizing: border-box;
+
             >div {
                 flex: 1;
                 height: 100%;
@@ -176,7 +184,7 @@
                     width: 100%;
                     height: 100%;
                     background: rgba(0, 0, 0, 0.6);
-                    border-radius:0 0 0.375rem 0.375rem;
+                    border-radius: 0 0 0.375rem 0.375rem;
                 }
             }
 

@@ -263,7 +263,9 @@ const GameBetLimitsButton = (props) => {
                 </div>
                 <div className='gameBetLimit-box-icon-arrow'
                     onClick={(e) => {
-                        setTipActive(true);
+                        if (!tipActive) {
+                            setTipActive(true);
+                        }
                     }}
                     onMouseEnter={(event) => { showTooltip(event.currentTarget, "限紅詳情") }}
                     onMouseLeave={() => { hideTooltip() }}>

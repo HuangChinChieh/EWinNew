@@ -200,6 +200,180 @@
         transition: all 1.5s ease;
         background: linear-gradient(180deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
         padding-bottom: 0.5rem;
+
+        .header-box {
+            padding: 0.625rem;
+    
+            .toolbar {
+                display: none !important;
+            }
+    
+            .nav-box {
+                margin-right: auto;
+                position: absolute;
+                top: 0.8125rem;
+                right: 2.3125rem;
+    
+                .forpc {
+                    display: none !important;
+                }
+    
+                .formb {
+                    display: inline-block !important;
+                }
+    
+                .tool-box-left {
+    
+                    span {
+                        .user-icon {
+                            width: 1rem !important;
+                            height: 1rem !important;
+                        }
+    
+                    }
+    
+                    .user-favorite {
+                        display: inline-block;
+                        margin-top: 0.125rem;
+                        width: 1rem !important;
+                        height: 1rem !important;
+                        background: url('../../img/global/favorite.png') no-repeat center center/contain !important;
+                    }
+                }
+    
+    
+            }
+    
+            .hamb {
+                position: absolute;
+                top: 1.125rem;
+                right: 1.375rem;
+    
+                span {
+                    display: block;
+                    width: 0.9375rem;
+                    height: 0.125rem;
+                    background: #fff;
+                    margin-bottom: 0.1875rem;
+                    transition: all 0.7s ease;
+    
+                    &:nth-child(2) {
+                        margin-left: 0.1875rem;
+                    }
+                }
+    
+                &.open {
+                    span {
+                        &:nth-child(1) {
+                            transform: rotate(-45deg);
+                            margin-top: 0.3125rem;
+                        }
+    
+                        &:nth-child(2) {
+                            opacity: 0;
+                            margin-left: 0;
+                        }
+    
+                        &:nth-child(3) {
+                            transform: rotate(45deg);
+                            margin-top: -0.625rem;
+                        }
+                    }
+    
+                }
+            }
+        }
+    
+        .lightbox-box {
+    
+            &.open {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                top: -0.1875rem;
+                right: 0;
+                transition: all 1s ease;
+    
+                &+.mb-footer-box {
+                    position: relative;
+                    transition: all 1s ease;
+                    width: 40%;
+                    background: #292933;
+                    position: fixed;
+                    right: -0.1875rem;
+                    bottom: 0;
+                    height: 100%;
+                    z-index: 9999999;
+                    border-top-left-radius: 2.1875rem;
+                    border-bottom-left-radius: 2.1875rem;
+                    animation-name: anifooterin1;
+                    animation-duration: 1s;
+                    animation-timing-function: ease;
+                    box-shadow: 0px -0.25rem 0.9375rem rgba(0, 0, 0, 0.6);
+    
+                    h4 {
+                        color: #fff;
+                        font-size: 1.6rem;
+                        text-align: center;
+                        position: relative;
+                        margin-top: 1.4375rem;
+    
+                        &::before {
+    
+                            content: "";
+                            display: block;
+                            width: 2.375rem;
+                            height: 0.25rem;
+                            background: rgba(255, 255, 255, 0.4);
+                            margin: 0 auto 0.625rem;
+                            border-radius: 0.25rem;
+    
+    
+                        }
+                    }
+    
+                    .formb {
+                        display: block;
+    
+                        .screen-box {
+    
+    
+                            .flex-box {
+                                justify-content: flex-start;
+                            }
+                        }
+                    }
+    
+                    .close {
+                        width: 1.5625rem;
+                        height: 1.5625rem;
+                        display: block;
+                        background: url('../../img/header/close.png') no-repeat center center/contain;
+                        position: absolute;
+                        right: 1.1875rem;
+                        top: 0.75rem;
+                    }
+    
+                    @keyframes anifooterin1 {
+                        0% {
+                            right: -12.5rem;
+                            bottom: 0;
+                        }
+    
+                        100% {
+                            right: -0.1875rem;
+                            bottom: 0;
+                        }
+                    }
+                }
+            }
+    
+        }
     }
 
     .aniHeader {
@@ -236,184 +410,7 @@
         }
     }
 
-    .header-box {
-        padding: 0.625rem;
-
-        .toolbar {
-            display: none !important;
-        }
-
-        .nav-box {
-            margin-right: auto;
-            position: absolute;
-            top: 0.8125rem;
-            right: 2.3125rem;
-
-            .forpc {
-                display: none !important;
-            }
-
-            .formb {
-                display: inline-block !important;
-            }
-
-            .tool-box-left {
-
-                span {
-                    .user-icon {
-                        width: 1rem !important;
-                        height: 1rem !important;
-                    }
-
-                }
-
-                .user-favorite {
-                    display: inline-block;
-                    margin-top: 0.125rem;
-                    width: 1rem !important;
-                    height: 1rem !important;
-                    background: url('../../img/global/favorite.png') no-repeat center center/contain !important;
-                }
-            }
-
-
-        }
-
-        .hamb {
-            position: absolute;
-            top: 1.125rem;
-            right: 1.375rem;
-
-            span {
-                display: block;
-                width: 0.9375rem;
-                height: 0.125rem;
-                background: #fff;
-                margin-bottom: 0.1875rem;
-                transition: all 0.7s ease;
-
-                &:nth-child(2) {
-                    margin-left: 0.1875rem;
-                }
-            }
-
-            &.open {
-                span {
-                    &:nth-child(1) {
-                        transform: rotate(-45deg);
-                        margin-top: 0.3125rem;
-                    }
-
-                    &:nth-child(2) {
-                        opacity: 0;
-                        margin-left: 0;
-                    }
-
-                    &:nth-child(3) {
-                        transform: rotate(45deg);
-                        margin-top: -0.625rem;
-                    }
-                }
-
-            }
-        }
-    }
-
-    .lightbox-box {
-
-        &.open {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            top: -0.1875rem;
-            right: 0;
-            transition: all 1s ease;
-
-            &+.mb-footer-box {
-                position: relative;
-                transition: all 1s ease;
-                width: 40%;
-                background: #292933;
-                position: fixed;
-                right: -0.1875rem;
-                bottom: 0;
-                height: 100%;
-                z-index: 9999999;
-                border-top-left-radius: 2.1875rem;
-                border-bottom-left-radius: 2.1875rem;
-                animation-name: anifooterin1;
-                animation-duration: 1s;
-                animation-timing-function: ease;
-                box-shadow: 0px -0.25rem 0.9375rem rgba(0, 0, 0, 0.6);
-
-                h4 {
-                    color: #fff;
-                    font-size: 1.6rem;
-                    text-align: center;
-                    position: relative;
-                    margin-top: 1.4375rem;
-
-                    &::before {
-
-                        content: "";
-                        display: block;
-                        width: 2.375rem;
-                        height: 0.25rem;
-                        background: rgba(255, 255, 255, 0.4);
-                        margin: 0 auto 0.625rem;
-                        border-radius: 0.25rem;
-
-
-                    }
-                }
-
-                .formb {
-                    display: block;
-
-                    .screen-box {
-
-
-                        .flex-box {
-                            justify-content: flex-start;
-                        }
-                    }
-                }
-
-                .close {
-                    width: 1.5625rem;
-                    height: 1.5625rem;
-                    display: block;
-                    background: url('../../img/header/close.png') no-repeat center center/contain;
-                    position: absolute;
-                    right: 1.1875rem;
-                    top: 0.75rem;
-                }
-
-                @keyframes anifooterin1 {
-                    0% {
-                        right: -12.5rem;
-                        bottom: 0;
-                    }
-
-                    100% {
-                        right: -0.1875rem;
-                        bottom: 0;
-                    }
-                }
-            }
-        }
-
-    }
-
-
-
-
-
+   
 }
 
 @media screen and (max-width: 31.25rem) {

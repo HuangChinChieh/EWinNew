@@ -1,5 +1,4 @@
-.game-aniHeader,
-.aniHeaderAction {
+.game-aniHeader {
     height: 5rem;
     position: absolute;
     left: 0;
@@ -63,7 +62,7 @@
 
 
             .tool-tableInfo{
-                margin: 0 1rem;
+                margin-right:1rem;
                 font-family: Noto Sans TC;
                 font-size: 1.5rem;
                 font-weight: 700;

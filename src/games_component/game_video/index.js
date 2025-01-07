@@ -322,7 +322,9 @@ const GameVideo = forwardRef((props, ref) => {
 
     useEffect(() => {
         const resize = (event) => {
-            player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
+            if(player.current){
+                player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
+            }            
         };
 
         window.addEventListener('resize', resize);
