@@ -126,6 +126,9 @@ const GameView = (props) => {
     const [streamArray, setStreamArray] = useState([]);
     const [vpDomain, setVpDomain] = useState(null);
 
+    //按鈕顯示相關
+    const [statusDisabled, setstatusDisabled] = useState(true);//針對工單功能 false = 啟用按鈕, true = 停用按鈕
+    const [statusTipDisabled, setstatusTipDisabled] = useState(true); //針對小費 false = 啟用按鈕, true = 停用按鈕
 
     const [userPoint, setUserPoint] = useState(0);
     const chipsItems = [
@@ -470,6 +473,7 @@ const GameView = (props) => {
 
         const Q = queryInfo.current;
         const T = tableInfo.current;
+        let checkGameAvail = false;
 
         let countdownSecond = Math.ceil(
             countdownInfo.current.remainingSecond * 1000 -
@@ -494,7 +498,7 @@ const GameView = (props) => {
                         msgMaskResultControl.current.HideMask();
                     }
                 } else {
-                    //checkGameAvail = true;
+                    checkGameAvail = true;
                 }
             } else if (T.BaccaratType === 2 || T.BaccaratType === 3) {
                 // 快速電投/網投
@@ -503,7 +507,7 @@ const GameView = (props) => {
 
                 if (pi !== null) {
                     if ((pi.PointValue + totalOrderValue) > 0) {
-                        //checkGameAvail = true;
+                        checkGameAvail = true;
                     } else {
                         if (Q.UserInfo.IsGuestAccount === false) {
                             switchCanBet(false, 13, false);
@@ -610,6 +614,12 @@ const GameView = (props) => {
         } else {
             switchCanBet(false, 6, false);
         }
+
+        if(checkGameAvail){
+            showCommandButtonByStatus(0);
+        }else{
+            showCommandButtonByStatus(1);
+        }
     };
 
     const checkRealStopBet = () => {
@@ -623,6 +633,37 @@ const GameView = (props) => {
             return false;
         });
     };
+
+    const showCommandButtonByStatus = (c) => {
+        const Q = queryInfo.current;
+        const T = tableInfo.current;
+
+        if (c == 0) {
+            if (Q.PADAvailable == true) {
+                if ((T.BaccaratType == 0) || (T.BaccaratType == 1)) {
+                    if ((Q.GameSetOrder.GameSetState == 0) || (Q.GameSetOrder.GameSetState == 1)) {
+                        if (T.Status === GameType + ".OpenBet") {
+                            setstatusDisabled(false);
+                            setstatusTipDisabled(false);
+                        }
+                    }
+                } else if (T.BaccaratType == 2) {
+                    //快速電投，看桌狀態 
+                    if (T.Status === (GameType + ".OpenBet") || T.Status === (GameType + ".StopBet")) {
+                        setstatusTipDisabled(false);
+                    }
+                }
+            }
+        } else if (c == 1) {
+            // force disable
+            setstatusDisabled(true);
+            setstatusTipDisabled(true);
+        } else if (c == 2) {
+            // force enable
+            setstatusDisabled(false);
+            setstatusTipDisabled(false);
+        }
+    }
 
     //#endregion
 
@@ -2135,6 +2176,8 @@ const GameView = (props) => {
                                     baccaratType={baccaratType}
                                     handleQuery={handleQuery}
                                     entryRoadMap={entryRoadMap}
+                                    statusDisabled={statusDisabled}
+                                    statusTipDisabled={statusTipDisabled}
                                 >
                                     <GameChipsButton
                                         chipsItems={chipsItems}

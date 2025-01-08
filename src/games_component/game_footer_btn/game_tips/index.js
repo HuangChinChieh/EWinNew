@@ -5,8 +5,11 @@ import ReactDOM from 'react-dom';
 
 const GameTips = (props) => {
     const [showAddTip, setShowAddTip] = useState(false);
+    const statusTipDisabled = props.statusTipDisabled; //false = 啟用按鈕, true = 停用按鈕
     const showTip = () => {
-        setShowAddTip(true);
+        if (!statusTipDisabled) {
+            setShowAddTip(true);
+        }
     }
 
     const hideTip = () => {
@@ -15,20 +18,23 @@ const GameTips = (props) => {
 
     return (
         <>
-            <div className='game-tips-box' onClick={showTip}>
+            <div className='game-tips-box' onClick={showTip} style={statusTipDisabled ? { backgroundColor: "#DEDEDE" } : {}}>
                 <span className='icon-box'>打賞小費</span>
             </div>
             {
-                showAddTip ? ReactDOM.createPortal(<AddTip
-                    gameClient={props.gameClient}
-                    roadMapNumber={props.roadMapNumber}
-                    gameSetID={props.gameSetID}
-                    handleQuery={props.handleQuery}
-                    getTableInfo={props.getTableInfo}
-                    orderData={props.orderData}
-                    showTip={true}
-                    hideTip={hideTip}
-                />, document.body) : <></>
+                showAddTip ? ReactDOM.createPortal(
+                    <AddTip
+                        gameClient={props.gameClient}
+                        roadMapNumber={props.roadMapNumber}
+                        gameSetID={props.gameSetID}
+                        handleQuery={props.handleQuery}
+                        getTableInfo={props.getTableInfo}
+                        orderData={props.orderData}
+                        showTip={true}
+                        hideTip={hideTip}
+                        chipsItem={props.chipItems}
+                    />
+                    , document.body) : <></>
             }
         </>
     )

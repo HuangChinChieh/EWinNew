@@ -57,7 +57,7 @@ const GameFooterArea = (props) => {
             </div>
             <div className='right-box'>
                 <div className='box-area'>
-                    {BaccaratType === 1 ? <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType} /> : <></>}
+                    {BaccaratType === 1 ? <GameOpenGameSetAction updateMiddleBtnType={updateMiddleBtnType} statusDisabled={props.statusDisabled}/> : <></>}
                 </div>
                 <div className='box-area'>
                     <GameTips
@@ -68,6 +68,8 @@ const GameFooterArea = (props) => {
                         getTableInfo={props.getTableInfo}
                         orderData={props.orderData}
                         cashUnit={props.cashUnit}
+                        chipItems={props.chipItems}
+                        statusTipDisabled={props.statusTipDisabled}
                     />
                 </div>
                 <div className='box-area'>

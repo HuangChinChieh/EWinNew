@@ -11,6 +11,7 @@ import {
     CashUnitContext
 } from "../../provider/GameLobbyProvider";
 import BigNumber from "bignumber.js";
+import GameSetChip from "games_component/game_buttons/game_gameset_chip_btn"
 
 const AddTip = (props) => {
     const [onChangeChipVal, setChipVal] = useState(0);
@@ -20,6 +21,7 @@ const AddTip = (props) => {
     const { getDisplayUnit } = useContext(CashUnitContext);
     orderSequence.current = props.orderData.orderSequence;
     const { alertMsg } = useContext(AlertContext);
+    const chipsItem = props.chipsItem;
 
     const handleClose = () => {
         props.hideTip();
@@ -101,22 +103,6 @@ const AddTip = (props) => {
                     </div>
                 </div>
                 <div className="divBtn">
-                    <div className="tipArea">
-                        <div className="tipBox">
-                            <div key={1}
-                                className={`chips-${1}`}
-                                onClick={() => addTipVal(25)}>
-                                <div>{25}</div>
-                            </div>
-                            <div className='tipDouble'
-                                onClick={() => doubleTipVal()}>
-                                <div>X2</div>
-                            </div>
-                            {/* <span onClick={() => doubleTipVal()} className='tipDouble'>X2</span>  */}
-                        </div>
-                    </div>
-                </div>
-                <div className="divBtn">
                     <div className="btn" onClick={handleOK}>
                         確認
                     </div>
@@ -128,6 +114,8 @@ const AddTip = (props) => {
                     </div>
                 </div>
             </div>
+
+            <GameSetChip chipsItem={chipsItem} fn_click={addTipVal}></GameSetChip>
         </div>
     );
 

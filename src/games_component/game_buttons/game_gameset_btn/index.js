@@ -5,6 +5,7 @@ import { EWinGameLobbyClient } from "signalr/bk/EWinGameLobbyClient";
 import { AlertContext } from "provider/alertProvider";
 import alertMsg from "provider/alertProvider";
 import ChangeTable from "component/changeTable";
+import GameSetChip from "games_component/game_buttons/game_gameset_chip_btn"
 import {
     CashUnitContext
 } from "provider/GameLobbyProvider";
@@ -246,20 +247,8 @@ const GameControlButton = (props) => {
                         alertMsg={alertMsg}
                         getDisplayUnit={getDisplayUnit}
                     />
-                    <div className="game-chips-area">
-                        <div className="game-chips-box">
-                            {chipsItem.map((item) => (
-                                <div
-                                    key={`chips${item.styleIndex}`}
-                                    className={`chips-${item.styleIndex} ${props.selChipIndex === item.styleIndex ? "act" : ""
-                                        }`}
-                                    onClick={() => onSetChipVal(item.showText)}
-                                >
-                                    <div>{item.showText}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                
+                    <GameSetChip chipsItem={chipsItem} fn_click={onSetChipVal}></GameSetChip>
                 </div>,
                     document.body)
             ) : onChangeTable ? (
