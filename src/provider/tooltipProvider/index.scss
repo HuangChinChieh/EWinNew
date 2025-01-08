@@ -46,10 +46,10 @@
 
   &.black{
     color:white;
-    background-color: rgba($color: black, $alpha: 0.7);
+    background-color: rgba($color: black, $alpha: 1.0);
 
     &::after{
-      border-bottom: 0.5rem solid rgba($color: black, $alpha: 0.7);/* 改變顏色以配合主題 */
+      border-bottom: 0.5rem solid rgba($color: black, $alpha: 1.0);/* 改變顏色以配合主題 */
     }
   }
 

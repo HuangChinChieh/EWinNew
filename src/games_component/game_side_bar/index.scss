@@ -79,12 +79,12 @@
     height: 54.125rem;
     z-index: 12;   
     display: flex;    
-    animation: openSideBar 1s linear;  
+    animation: openSideBar 0.5s linear;  
     animation-fill-mode: forwards;
     right: 0;
 
     &.closing{
-        animation: closeSideBar 1s linear;
+        animation: closeSideBar 0.5s linear;
         animation-fill-mode: forwards;
     }
     

@@ -4,8 +4,9 @@ import SummaryTable from './summary_table';
 import BettingHistoryDetail from './betting_history_detail';
 //import Tooltip from "component/tooltip";
 import { ToolTipContext } from "provider/tooltipProvider";
+import ReactDOM from 'react-dom';
 
-const BettingHistory = () => {
+const BettingHistory = (props) => {
 
 
     const [displayArea, setDisplayArea] = useState(2);
@@ -23,10 +24,10 @@ const BettingHistory = () => {
 
 
     const passGamecodeAndQuerydate = (e, gamecode, querydate) => {
-        if(displayArea === 2){
+        if (displayArea === 2) {
             setDisplayArea(0);
             setParameterData({ gamecode: '', querydate: '' });
-        }        
+        }
     };
 
 
@@ -37,26 +38,41 @@ const BettingHistory = () => {
     useEffect(() => {
         // 點擊區域外則關閉
         const handleDocumentClick_BettingHistory = (e) => {
-            if (settingsRef.current && !settingsRef.current.contains(e.target)) {
-                // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
-                setDisplayArea(2);
-                setIsButtonClicked(false);
+            if (settingsRef.current !== null) {
+                const targetDOM = settingsRef.current.querySelector(".visible");
+
+                if (targetDOM && !targetDOM.contains(e.target)) {
+                    // 當點擊 settings 以外的地方時，設定 setHoveredItem(null)
+                    targetDOM.classList.remove("visible");
+                    setIsButtonClicked(false);
+                }
             }
         };
 
         // 在 component mount 時加入 click 事件監聽器
-        if(displayArea !== 2){
+        if (displayArea !== 2) {
             setTimeout(() => {
                 document.addEventListener('click', handleDocumentClick_BettingHistory);
-            }, 100);            
+            }, 100);
         }
-    
+
         // 在 component unmount 時移除 click 事件監聽器
         return () => {
             document.removeEventListener('click', handleDocumentClick_BettingHistory);
         };
 
     }, [displayArea]);
+
+    useEffect(() => {
+        if (isButtonClicked) {
+            setDisplayArea(1);
+        } else {
+            setTimeout(() => {
+                setDisplayArea(2);
+            }, 500);
+
+        }
+    }, [isButtonClicked])
 
     // 設置起始日(當日前七天)與終止日(當日)
     useEffect(() => {
@@ -68,56 +84,58 @@ const BettingHistory = () => {
         setEndDate(today.toISOString().split('T')[0]);
     }, []);
 
+
     const updateDate = (beginDate, endDate) => {
         setBeginDate(beginDate);
         setEndDate(endDate);
     };
 
-
-
-
     const topBtnClick = (e) => {
-        if(displayArea === 2){
-            if (e.currentTarget === e.target) {
+        if (displayArea === 2) {
+            setTimeout(() => {
                 setIsButtonClicked(true);
-                setDisplayArea(1);
-            }
-        }        
+            }, 10);
+        }
     };
 
     return (
-        <div className='betting-history-box forpc' onMouseEnter={(event) => { showTooltip(event.currentTarget, "投注紀錄") }} onMouseLeave={() => { hideTooltip() }}>
-            <div
-                className={`betting-history ${isButtonClicked ? 'active' : ''}`}
-                onClick={topBtnClick}
-                ref={settingsRef}
-            >
+        <>
+            <div className='betting-history-box' onMouseEnter={(event) => { showTooltip(event.currentTarget, "投注紀錄") }} onMouseLeave={() => { hideTooltip() }}>
+                <div
+                    className={`betting-history ${isButtonClicked ? 'active' : ''}`}
+                    onClick={topBtnClick}
+                >
 
-                <div>
-                    <div className={`hover-box ${displayArea === 1 ? 'visible' : ''}`}>
-                        <SummaryTable
-                            beginDate={beginDate}
-                            endDate={endDate}
-                            updateDate={updateDate}
-                            passGamecodeAndQuerydate={passGamecodeAndQuerydate}
-                        />
 
-                    </div>
 
-                    <div className={`hover-box-detail ${displayArea === 0 ? 'visible' : ''}`}>
-                        <BettingHistoryDetail
-                            beginDate={beginDate}
-                            endDate={endDate}
-                            setDisplayArea={setDisplayArea}
-                            parameterData={parameterData}
-                            passGamecodeAndQuerydate={passGamecodeAndQuerydate}
-                        />
-
-                    </div>
                 </div>
-
             </div>
-        </div>
+            {
+                displayArea !== 2 &&
+                ReactDOM.createPortal(
+                    <div ref={settingsRef} className='betting-history-hover'>
+                        <div className={`hover-box ${displayArea === 1 ? 'visible' : ''}`}>
+                            <SummaryTable
+                                beginDate={beginDate}
+                                endDate={endDate}
+                                updateDate={updateDate}
+                                passGamecodeAndQuerydate={passGamecodeAndQuerydate}
+                            />
+                        </div>
+                        <div className={`hover-box-detail ${displayArea === 0 ? 'visible' : ''}`}>
+                            <BettingHistoryDetail
+                                beginDate={beginDate}
+                                endDate={endDate}
+                                setDisplayArea={setDisplayArea}
+                                parameterData={parameterData}
+                                passGamecodeAndQuerydate={passGamecodeAndQuerydate}
+                            />
+                        </div>
+                    </div>
+                    , document.querySelector("." + props.parentClass))
+            }
+        </>
+
     )
 }
 

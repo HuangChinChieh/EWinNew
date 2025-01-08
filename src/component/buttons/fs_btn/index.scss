@@ -48,31 +48,31 @@
     }
 }
 
-@media screen and (max-width: 67.625rem) {
-    .screen-box {
+// @media screen and (max-width: 67.625rem) {
+//     .screen-box {
 
-        width: 90%;
-        margin: 0.625rem 0 0.625rem 1.5625rem;
+//         width: 90%;
+//         margin: 0.625rem 0 0.625rem 1.5625rem;
 
-        .flex-box {
+//         .flex-box {
 
-            .fullscreen,
-            .exitfullscreen {
-                width: 1.75rem;
-                height: 1.75rem;
-            }
+//             .fullscreen,
+//             .exitfullscreen {
+//                 width: 1.75rem;
+//                 height: 1.75rem;
+//             }
 
-            .fullscreen {
-                &+span {
-                    font-size: 1rem;
-                }
-            }
+//             .fullscreen {
+//                 &+span {
+//                     font-size: 1rem;
+//                 }
+//             }
 
-            .exitfullscreen {
-                &+span {
-                    font-size: 1rem;
-                }
-            }
-        }
-    }
-}
+//             .exitfullscreen {
+//                 &+span {
+//                     font-size: 1rem;
+//                 }
+//             }
+//         }
+//     }
+// }

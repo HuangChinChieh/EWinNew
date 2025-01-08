@@ -101,8 +101,8 @@ const Header = (props) => {
         <div className="toolbar">
           <FullscreenButton />
           <MuteButton />
-          <BettingHistory />
-          <SettingButton />
+          <BettingHistory parentClass={"wrap-box"} />
+          <SettingButton parentClass={"wrap-box"}/>
         </div>
       </div>
       {isLightboxOpen &&

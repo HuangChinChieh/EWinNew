@@ -61,7 +61,7 @@ const MsgMaskResult = forwardRef((props, ref) => {
                     {msgMaskAlertTipMsg}
                 </label>
                 <div className='backEffect'></div>
-            </div>, document.querySelector('.game-view-wrap'))
+            </div>, document.querySelector('.game-view-box'))
             : <div></div>
     )
 })

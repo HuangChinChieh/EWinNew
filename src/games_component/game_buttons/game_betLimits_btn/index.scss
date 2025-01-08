@@ -72,7 +72,7 @@
         justify-content: flex-start;
         flex-direction: row;
         align-content: center;
-        backdrop-filter: blur(0.625rem);
+        backdrop-filter: blur(0.375rem);
 
         .gameBetLimit-box-main{
             display: flex;
@@ -173,7 +173,7 @@
         font-size: 0.875rem;
         color: #8d8d9f;
         animation: slideIn 0.4s ease forwards;
-        backdrop-filter: blur(0.625rem);
+        backdrop-filter: blur(0.375rem);
         &.hide {
             animation: slideOut 0.4s ease forwards;
         }
@@ -327,9 +327,10 @@
 .options-tip{
     position: absolute;
     right: -0.625rem;
-    top: 0;
+    top: 100%;
     transform: translateX(100%);
     width: 100%;
+    margin: 0.3125rem 0px;
 }
 
 .sel-opt-tip{
@@ -348,7 +349,7 @@
     font-size: 0.875rem;
     color: #8d8d9f;    
     cursor: initial;
-    backdrop-filter: blur(0.625rem);
+    backdrop-filter: blur(0.375rem);
 
     
     &.can-close{

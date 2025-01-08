@@ -5,7 +5,7 @@ import { BaccaratSubscribeContext } from "provider/GameBaccaratProvider";
 //import Tooltip from "component/tooltip";
 import { CashUnitContext, BetLimitContext } from "provider/GameLobbyProvider";
 import { ToolTipContext } from "provider/tooltipProvider";
-
+import ReactDOM from 'react-dom';
 
 const BetLimitInfo = (props) => {
     const { isShowInfo, setIsShowInfo } = props;
@@ -42,58 +42,67 @@ const BetLimitInfo = (props) => {
         return retValue;
     };
 
+    const generateJsx = () => {
+        const Jsx = (<div ref={infoRef} className={`betLimitInfo-box ${moveDirection === 0 ? "left-to-right" : "top-to-bottom"} ${canClose ? "can-close" : ""}`} onMouseEnter={show} onMouseLeave={hide}>
+            <div className='betLimitInfo-header'>限紅詳情</div>
+            <div className='betLimitInfo-content'>
+                <div className='betLimitInfo-option'>
+                    <div className='betLimitInfo-option-title'>庄</div>
+                    <div className='betLimitInfo-option-content'>
+                        <div>{numberTranslate(betLimitData.Banker.Min)}</div>
+                        <div>-</div>
+                        <div>{numberTranslate(betLimitData.Banker.Max)}</div>
+                    </div>
+                </div>
+                <div className='betLimitInfo-option'>
+                    <div className='betLimitInfo-option-title'>閒</div>
+                    <div className='betLimitInfo-option-content'>
+                        <div>{numberTranslate(betLimitData.Player.Min)}</div>
+                        <div>-</div>
+                        <div>{numberTranslate(betLimitData.Player.Max)}</div>
+                    </div>
+                </div>
+                <div className='betLimitInfo-option'>
+                    <div className='betLimitInfo-option-title'>對子</div>
+                    <div className='betLimitInfo-option-content'>
+                        <div>{numberTranslate(betLimitData.Pair.Min)}</div>
+                        <div>-</div>
+                        <div>{numberTranslate(betLimitData.Pair.Max)}</div>
+                    </div>
+                </div>
+                <div className='betLimitInfo-option'>
+                    <div className='betLimitInfo-option-title'>和</div>
+                    <div className='betLimitInfo-option-content'>
+                        <div>{numberTranslate(betLimitData.Tie.Min)}</div>
+                        <div>-</div>
+                        <div>{numberTranslate(betLimitData.Tie.Max)}</div>
+                    </div>
+                </div>
+            </div>
+            <div className='betLimitInfo-footer'>
+                <div className='betLimitInfo-close' onClick={() => {
+                    infoRef.current.classList.add('hide');
+                    setTimeout(() => {
+                        setIsShowInfo(false);
+                    }, 400)
+
+                }}><i></i>關閉
+
+                </div>
+            </div>
+
+        </div>);
+
+        if (props.tipTargetClass) {
+            return ReactDOM.createPortal(Jsx, document.querySelector(props.tipTargetClass));
+        } else {
+            return Jsx;
+        }
+    };
 
     return (
         getShowValue() ?
-            <div ref={infoRef} className={`betLimitInfo-box ${moveDirection === 0 ? "left-to-right" : "top-to-bottom"} ${canClose ? "can-close" : ""}`} onMouseEnter={show} onMouseLeave={hide}>
-                <div className='betLimitInfo-header'>限紅詳情</div>
-                <div className='betLimitInfo-content'>
-                    <div className='betLimitInfo-option'>
-                        <div className='betLimitInfo-option-title'>庄</div>
-                        <div className='betLimitInfo-option-content'>
-                            <div>{numberTranslate(betLimitData.Banker.Min)}</div>
-                            <div>-</div>
-                            <div>{numberTranslate(betLimitData.Banker.Max)}</div>
-                        </div>
-                    </div>
-                    <div className='betLimitInfo-option'>
-                        <div className='betLimitInfo-option-title'>閒</div>
-                        <div className='betLimitInfo-option-content'>
-                            <div>{numberTranslate(betLimitData.Player.Min)}</div>
-                            <div>-</div>
-                            <div>{numberTranslate(betLimitData.Player.Max)}</div>
-                        </div>
-                    </div>
-                    <div className='betLimitInfo-option'>
-                        <div className='betLimitInfo-option-title'>對子</div>
-                        <div className='betLimitInfo-option-content'>
-                            <div>{numberTranslate(betLimitData.Pair.Min)}</div>
-                            <div>-</div>
-                            <div>{numberTranslate(betLimitData.Pair.Max)}</div>
-                        </div>
-                    </div>
-                    <div className='betLimitInfo-option'>
-                        <div className='betLimitInfo-option-title'>和</div>
-                        <div className='betLimitInfo-option-content'>
-                            <div>{numberTranslate(betLimitData.Tie.Min)}</div>
-                            <div>-</div>
-                            <div>{numberTranslate(betLimitData.Tie.Max)}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className='betLimitInfo-footer'>
-                    <div className='betLimitInfo-close' onClick={() => {
-                        infoRef.current.classList.add('hide');
-                        setTimeout(() => {
-                            setIsShowInfo(false);
-                        }, 400)
-
-                    }}><i></i>關閉
-
-                    </div>
-                </div>
-
-            </div>
+            generateJsx()
             :
             <></>
     );
@@ -119,8 +128,8 @@ const GameBetLimitOption = (props) => {
 
     return (
         <>
-            <div className='options-tip'><BetLimitInfo betLimitData={betLimit} moveDirection={0} isShowInfo={isShowInfo} setIsShowInfo={setIsShowInfo} canClose={false}></BetLimitInfo></div>
-            <div className={isSelected ? 'gameBetLimit-box-option  selected' : 'gameBetLimit-box-option'} onClick={() => { selectBetLimit(betLimit) }} onMouseEnter={showInfo} >
+            <BetLimitInfo betLimitData={betLimit} moveDirection={0} isShowInfo={isShowInfo} setIsShowInfo={setIsShowInfo} canClose={false} tipTargetClass={props.tipTargetClass}></BetLimitInfo>
+            <div className={isSelected ? 'gameBetLimit-box-option  selected' : 'gameBetLimit-box-option'} onClick={() => { selectBetLimit(betLimit) }} onMouseEnter={showInfo} onMouseLeave={hideInfo}>
                 <div className="gameBetLimit-box-icon"></div>
                 <div className='gameBetLimit-box-no'>{index + 1}.</div>
                 <div className='gameBetLimit-box-title'>
@@ -263,13 +272,15 @@ const GameBetLimitsButton = (props) => {
                 </div>
                 <div className='gameBetLimit-box-icon-arrow'
                     onClick={(e) => {
-                        setTipActive(true);
+                        if (!tipActive) {
+                            setTipActive(true);
+                        }
                     }}
                     onMouseEnter={(event) => { showTooltip(event.currentTarget, "限紅詳情") }}
                     onMouseLeave={() => { hideTooltip() }}>
                 </div>
             </div>
-
+            <div className='options-tip'></div>
             {listActive &&
                 <div className='gameBetLimit-box-options' ref={listPopRef}>
 
@@ -283,7 +294,9 @@ const GameBetLimitsButton = (props) => {
                                 isSelected={item.BetLimitID === useBetLimit.BetLimitID}
                                 index={index}
                                 betLimit={item}
-                                selectBetLimit={selectBetLimit}></GameBetLimitOption>))}
+                                selectBetLimit={selectBetLimit}
+                                tipTargetClass={".gameBetLimit-box .options-tip"}
+                            ></GameBetLimitOption>))}
 
 
 

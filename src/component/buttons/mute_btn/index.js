@@ -45,7 +45,7 @@ const MuteButton = () => {
     };
 
     return (    
-        <div className='mute-box forpc' onMouseEnter={(event) => { showTooltip(event.currentTarget, musicIsPlaying ? "靜音" : "取消靜音") }} onMouseLeave={() => { hideTooltip() }} >
+        <div className='mute-box' onMouseEnter={(event) => { showTooltip(event.currentTarget, musicIsPlaying ? "靜音" : "取消靜音") }} onMouseLeave={() => { hideTooltip() }} >
             {musicIsPlaying ?
                 <div onClick={toggleMute} className='unmute' />
                 :

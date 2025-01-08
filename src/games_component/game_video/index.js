@@ -26,7 +26,7 @@ const GameVideo = forwardRef((props, ref) => {
     const width = "120rem";
 
 
-    const getVideoURL = useCallback((_ct, _tableNumber, vs, s, cb) => {        
+    const getVideoURL = useCallback((_ct, _tableNumber, vs, s, cb) => {
         let sh;
         let obj;
         let SID = window.sessionStorage.getItem("SID");
@@ -226,15 +226,17 @@ const GameVideo = forwardRef((props, ref) => {
 
                 player.current = new kingkeyPlayer(o.Server);
 
-                player.current.initialize("/Scripts/Video/", playerType.current, function () {
+                player.current.initialize("/Scripts/Video/", playerType.current, () => {
                     let videoPlayDate = new Date();
                     player.current.playVideo(o.StreamName, o.Token, playerTryCount, videoDom.current);
 
-                    window.setTimeout(function () {
-                        player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
+                    window.setTimeout(() => {
+                        if (player.current !== null) {
+                            player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
+                        }
                     }, 1000);
 
-                    videoIntervalNumber.current = setInterval(function () {
+                    videoIntervalNumber.current = setInterval(() => {
                         let recvDate = player.current.getLastReceiveDate();
                         let playing = player.current.playingState();
                         let currDate = new Date();
@@ -253,7 +255,7 @@ const GameVideo = forwardRef((props, ref) => {
                                         // if (badVideoMessageShow)
                                         //     idBadVideoMessage.style.display = "block";
 
-                                        setTimeout(function () {
+                                        setTimeout(()=> {
                                             videoOn();
                                         }, 1000);
                                     } else {
@@ -272,7 +274,7 @@ const GameVideo = forwardRef((props, ref) => {
                                 // if (badVideoMessageShow)
                                 //     idBadVideoMessage.style.display = "block";
 
-                                setTimeout(function () {
+                                setTimeout(() => {
                                     videoOn();
                                 }, 1000);
                             }
@@ -322,7 +324,9 @@ const GameVideo = forwardRef((props, ref) => {
 
     useEffect(() => {
         const resize = (event) => {
-            player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
+            if (player.current !== null) {
+                player.current.resize(videoDom.current.clientWidth, videoDom.current.clientHeight);
+            }
         };
 
         window.addEventListener('resize', resize);

@@ -37,10 +37,10 @@ const FullscreenButton = () => {
 
     return (
         <div onMouseEnter={(event) => { showTooltip(event.currentTarget, "全屏縮放") }} onMouseLeave={() => { hideTooltip() }}>
-            <div className='forpc'>
+            <div className=''>
                 {isFullscreen ? <span onClick={toggleFullscreen} className='exitfullscreen'></span> : <span onClick={toggleFullscreen} className='fullscreen'></span>}
             </div>
-            <div className='formb'>
+            {/* <div className='formb'>
                 <div className='screen-box'>
                     {isFullscreen ?
                         <span onClick={toggleFullscreen} className='flex-box'>
@@ -53,7 +53,7 @@ const FullscreenButton = () => {
                         </span>
                     }
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };
